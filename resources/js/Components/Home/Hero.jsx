@@ -13,8 +13,8 @@ const Hero = () => {
             <div className="bg-background relative mx-auto max-w-screen-2xl overflow-hidden lg:flex lg:justify-between lg:gap-8">
                 <div className="p-4 lg:flex lg:flex-1 lg:flex-col lg:justify-center lg:py-16 lg:pl-16">
                     <h1 className="mb-2 font-serif text-4xl font-extrabold tracking-wide xl:text-5xl">
-                        Know what to expect.
-                        <span className="text-primary ml-2 block sm:inline">
+                        Know what to expect. {" "}
+                        <span className="text-primary block sm:inline">
                             Enjoy what you love.
                         </span>
                     </h1>
@@ -24,10 +24,10 @@ const Hero = () => {
                         what matters to you.
                     </p>
                     <div className="mt-6 hidden gap-4 lg:flex lg:flex-row">
-                        <button className="mm-btn-primary bg-primary text-surface flex items-center justify-center gap-2 rounded-md px-6 py-3 font-semibold transition hover:opacity-90">
+                        <button className="mm-btn-primary bg-primary text-surface flex items-center justify-center gap-2 rounded-md px-6 py-3 font-semibold transition hover:cursor-pointer hover:opacity-90">
                             <LuSearch /> Browse Anime
                         </button>
-                        <button className="mm-btn-secondary bg-surface text-primary border-primary flex items-center justify-center gap-2 rounded-md border px-6 py-3 font-semibold transition hover:bg-gray-50">
+                        <button className="mm-btn-secondary bg-surface text-primary border-primary flex items-center justify-center gap-2 rounded-md border px-6 py-3 font-semibold transition hover:cursor-pointer hover:bg-gray-50">
                             <LuList /> View Trigger List
                         </button>
                     </div>
@@ -76,7 +76,7 @@ const Hero = () => {
                                         Community Driven
                                     </p>
                                     <p className="text-xs text-gray-600">
-                                        Built by anime fans, by anime fans.
+                                        Built for anime fans, by anime fans.
                                     </p>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@ const Hero = () => {
                     <img
                         src="/assets/img/img-anime.png"
                         alt="hero image"
-                        className="h-full min-h-[500px] w-full rounded-l-4xl object-cover"
+                        className="h-full min-h-125 w-full rounded-l-4xl object-cover"
                     />
                 </div>
             </div>
@@ -118,7 +118,7 @@ const Hero = () => {
             </div>
 
             {/* Mobile / Tablet features */}
-            <div className="flex flex-col gap-2 p-4 lg:hidden">
+            <div className="flex flex-col gap-2 p-4 mt-4 lg:hidden">
                 <div className="bg-background border-primary-soft flex flex-col gap-4 rounded-md border p-4">
                     <div className="border-primary-soft flex items-center gap-4 border-b pb-4">
                         <LuShield
@@ -149,7 +149,7 @@ const Hero = () => {
                         <div className="flex flex-col">
                             <p className="font-bold">Community Driven</p>
                             <p className="text-sm">
-                                Built by anime fans, by anime fans.
+                                Built for anime fans, by anime fans.
                             </p>
                         </div>
                     </div>

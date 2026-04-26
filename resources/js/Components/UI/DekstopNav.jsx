@@ -35,7 +35,7 @@ const DekstopNav = () => {
                     placeholder="Search anime..."
                 />
                 <Link className="bg-primary text-surface rounded-md p-2 text-sm">
-                    Sign Up/In
+                    Sign Up
                 </Link>
             </div>
         </div>
