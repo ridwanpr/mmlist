@@ -1,4 +1,3 @@
-import React from "react";
 import { LuBookmark, LuHouse, LuList, LuSearch, LuUser } from "react-icons/lu";
 
 const MobileNav = () => {
@@ -8,23 +7,23 @@ const MobileNav = () => {
                 <ul className="flex justify-between items-center gap-4">
                     <li className="flex flex-col items-center">
                         <LuHouse size="20px" />
-                        <span className="text-xs">Home</span>
+                        <span className="text-xs text-text">Home</span>
                     </li>
                     <li className="flex flex-col items-center">
                         <LuSearch size="20px" />
-                        <span className="text-xs">Browse</span>
+                        <span className="text-xs text-text">Browse</span>
                     </li>
                     <li className="flex flex-col items-center">
                         <LuList size="20px" />
-                        <span className="text-xs">Trigger List</span>
+                        <span className="text-xs text-text">Trigger List</span>
                     </li>
                     <li className="flex flex-col items-center">
                         <LuBookmark size="20px" />
-                        <span className="text-xs">Watchlist</span>
+                        <span className="text-xs text-text">Watchlist</span>
                     </li>
                     <li className="flex flex-col items-center">
                         <LuUser size="20px" />
-                        <span className="text-xs">Profile</span>
+                        <span className="text-xs text-text">Profile</span>
                     </li>
                 </ul>
             </nav>

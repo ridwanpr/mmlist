@@ -1,9 +1,14 @@
+import Hero from "../../Components/Home/Hero";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const Home = () => {
-    return <div>Home</div>;
+    return (
+        <>
+            <Hero />
+        </>
+    );
 };
 
-Home.layout = FrontLayout;
+Home.layout = (page) => <FrontLayout>{page}</FrontLayout>;
 
 export default Home;
