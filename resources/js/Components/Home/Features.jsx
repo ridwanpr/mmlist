@@ -7,7 +7,7 @@ const Features = () => {
         <h2 className="mb-2 font-serif text-2xl font-bold lg:text-3xl">
           Everything you need to watch with confidence
         </h2>
-        <p className="text-sm lg:text-base">
+        <p className="text-sm lg:text-base text-text-muted">
           Built by anime fans, for anime fans
         </p>
       </div>
@@ -15,7 +15,7 @@ const Features = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
           <div className="bg-background shrink-0 rounded-full p-6">
-            <LuSearch size={32} className="text-primary" />
+            <LuSearch size={40} className="text-primary" />
           </div>
           <h3 className="text-xl font-semibold text-text">Search and Discover</h3>
           <p className="text-base leading-relaxed text-text-muted">
@@ -26,7 +26,7 @@ const Features = () => {
 
         <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
           <div className="bg-background shrink-0 rounded-full p-6">
-            <LuShieldCheck size={32} className="text-primary" />
+            <LuShieldCheck size={40} className="text-primary" />
           </div>
           <h3 className="text-xl font-semibold text-text">Detailed Trigger Info</h3>
           <p className="text-base leading-relaxed text-text-muted">
@@ -37,7 +37,7 @@ const Features = () => {
 
         <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
           <div className="bg-background shrink-0 rounded-full p-6">
-            <LuUsers size={32} className="text-primary" />
+            <LuUsers size={40} className="text-primary" />
           </div>
           <h3 className="text-xl font-semibold text-text">Community Driven</h3>
           <p className="text-base leading-relaxed text-text-muted">
@@ -48,7 +48,7 @@ const Features = () => {
 
         <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
           <div className="bg-background shrink-0 rounded-full p-6">
-            <LuBookmark size={32} className="text-primary" />
+            <LuBookmark size={40} className="text-primary" />
           </div>
           <h3 className="text-xl font-semibold text-text">Save & Track</h3>
           <p className="text-base leading-relaxed text-text-muted">
