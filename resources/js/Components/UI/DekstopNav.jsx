@@ -3,11 +3,11 @@ import { Link } from "@inertiajs/react";
 const DekstopNav = () => {
   return (
     <div className="bg-surface flex w-full items-center justify-between p-4">
-      <Link className="font-serif text-2xl font-bold tracking-wider">
+      <Link className="text-primary font-serif text-2xl font-bold tracking-wider">
         Mamorulist
       </Link>
       <nav>
-        <ul className="flex items-center gap-6">
+        <ul className="flex items-center gap-8">
           <li>
             <Link className="text-accent-gold text-sm">Home</Link>
           </li>
@@ -16,9 +16,6 @@ const DekstopNav = () => {
           </li>
           <li>
             <Link className="text-sm">Trigger List</Link>
-          </li>
-          <li>
-            <Link className="text-sm">FAQ</Link>
           </li>
         </ul>
       </nav>
