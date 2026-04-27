@@ -9,7 +9,7 @@ const FrontLayout = ({ children }) => {
         <div>
           <DekstopNav />
         </div>
-        <main>{children}</main>
+        <main className="max-w-7xl mx-auto">{children}</main>
         <div className="lg:hidden">
           <MobileNav />
         </div>

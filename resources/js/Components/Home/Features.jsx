@@ -2,7 +2,7 @@ import { LuBookmark, LuSearch, LuShieldCheck, LuUsers } from "react-icons/lu";
 
 const Features = () => {
   return (
-    <div className="p-4 lg:px-16 lg:py-8">
+    <div className="p-4 lg:py-8">
       <div className="mb-8 text-center">
         <h2 className="mb-2 font-serif text-2xl font-bold lg:text-3xl">
           Everything you need to watch with confidence

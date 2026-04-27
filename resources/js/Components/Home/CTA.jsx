@@ -3,7 +3,7 @@ import { LuShieldAlert } from "react-icons/lu";
 
 const CTA = () => {
   return (
-    <div className="p-4 lg:px-16 lg:py-8 mb-6">
+    <div className="p-4 lg:py-8 mb-6">
       <div className="bg-primary-soft border-surface-alt mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 rounded-lg border p-6 text-center md:flex-row md:p-8 md:text-left">
         <div className="shrink-0">
           <LuShieldAlert size={70} className="text-primary" />

@@ -7,7 +7,7 @@ import {
 
 const HowItWork = () => {
   return (
-    <div className="mx-auto max-w-5xl p-4 lg:px-8 lg:py-12">
+    <div className="mx-auto max-w-5xl p-4 lg:py-12">
       <h2 className="text-text mb-12 text-center font-serif text-2xl font-bold lg:text-3xl">
         How it works
       </h2>

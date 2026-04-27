@@ -1,7 +1,12 @@
+import SearchSection from "../../Components/Browse/SearchSection";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const Browse = () => {
-  return <div>Browse Page</div>;
+  return (
+    <>
+      <SearchSection />
+    </>
+  );
 };
 
 Browse.layout = (page) => <FrontLayout>{page}</FrontLayout>;
