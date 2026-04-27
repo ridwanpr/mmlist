@@ -1,30 +1,67 @@
 import { Link } from "@inertiajs/react";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="bg-background pb-20 lg:pb-0">
-      <div className="p-4 md:flex md:items-center md:justify-between md:gap-4 lg:px-16">
-        <Link className="text-primary text-3xl font-bold">Mamorulist</Link>
-        <p className="text-primary-dark my-4 text-sm">
-          Mamorulist is a website created to help anime fans make informed
-          choices about the content they watch.
-        </p>
-        <div className="flex gap-4">
-          <ul>
-            <li>
-              <Link className="text-primary-dark text-sm">FAQ</Link>
-            </li>
-            <li>
-              <Link className="text-primary-dark text-sm">About</Link>
-            </li>
-            <li>
-              <Link className="text-primary-dark text-sm">Contact</Link>
-            </li>
-          </ul>
+    <footer className="bg-background border-primary/10 border-t pb-20 lg:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-6 lg:px-16">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/"
+              className="text-primary text-xl font-bold tracking-tight"
+            >
+              Mamorulist
+            </Link>
+            <p className="text-primary-dark max-w-sm text-xs">
+              Helping anime fans make informed content choices.
+            </p>
+          </div>
+
+          <nav className="flex flex-wrap gap-x-8 gap-y-2">
+            <div className="flex gap-4">
+              <Link
+                href="/faq"
+                className="text-primary-dark hover:text-primary text-sm transition-colors"
+              >
+                FAQ
+              </Link>
+              <Link
+                href="/about"
+                className="text-primary-dark hover:text-primary text-sm transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-primary-dark hover:text-primary text-sm transition-colors"
+              >
+                Contact
+              </Link>
+            </div>
+            <div className="border-primary/10 flex gap-4 lg:border-l lg:pl-8">
+              <Link
+                href="/tos"
+                className="text-primary-dark hover:text-primary text-sm transition-colors"
+              >
+                Terms
+              </Link>
+              <Link
+                href="/privacy"
+                className="text-primary-dark hover:text-primary text-sm transition-colors"
+              >
+                Privacy
+              </Link>
+            </div>
+          </nav>
+
+          <div className="text-primary-dark text-xs opacity-70">
+            &copy; {currentYear} Mamorulist
+          </div>
         </div>
-        <p></p>
       </div>
-    </div>
+    </footer>
   );
 };
 
