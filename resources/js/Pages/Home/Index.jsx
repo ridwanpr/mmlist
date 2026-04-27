@@ -3,12 +3,12 @@ import AnimeList from "../../Components/Home/AnimeList";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const Home = () => {
-    return (
-        <>
-            <Hero />
-            <AnimeList />
-        </>
-    );
+  return (
+    <>
+      <Hero />
+      <AnimeList />
+    </>
+  );
 };
 
 Home.layout = (page) => <FrontLayout>{page}</FrontLayout>;
