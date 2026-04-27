@@ -27,7 +27,7 @@ const AnimeCard = () => {
 
           <div className="mb-2 flex flex-wrap gap-1">
             <span className="truncate text-xs">
-              Action, Adventure, Drama, Romance
+              Action, Adventure, Drama
             </span>
           </div>
           <div className="flex flex-wrap gap-1 overflow-hidden">
