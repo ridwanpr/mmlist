@@ -5,7 +5,7 @@ import SectionHeader from "./SectionHeader";
 
 const AnimeList = () => {
   return (
-    <div className="p-4 lg:py-8">
+    <div className="mx-auto max-w-7xl p-4 lg:py-8">
       <SectionHeader
         title="Now Airing"
         icon={<LuRadio size="32px" className="text-primary" />}
