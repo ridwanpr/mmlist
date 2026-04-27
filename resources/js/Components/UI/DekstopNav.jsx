@@ -12,6 +12,7 @@ const DekstopNav = () => {
         >
           Mamorulist
         </Link>
+
         <nav>
           <ul className="flex items-center gap-8">
             <li>
@@ -39,10 +40,13 @@ const DekstopNav = () => {
               </Link>
             </li>
             <li>
-              <Link className="text-sm">Trigger List</Link>
+              <Link href="#" className="text-sm">
+                Trigger List
+              </Link>
             </li>
           </ul>
         </nav>
+
         <div className="flex items-center gap-4">
           <input
             type="text"
@@ -50,10 +54,16 @@ const DekstopNav = () => {
             placeholder="Search anime..."
           />
           <div>
-            <Link className="bg-primary text-surface mr-2 rounded-md p-2 text-sm">
+            <Link
+              href="#"
+              className="bg-primary text-surface mr-2 rounded-md p-2 text-sm"
+            >
               Register
             </Link>
-            <Link className="bg-accent-gold text-surface rounded-md p-2 text-sm">
+            <Link
+              href="#"
+              className="bg-accent-gold text-surface rounded-md p-2 text-sm"
+            >
               Login
             </Link>
           </div>
