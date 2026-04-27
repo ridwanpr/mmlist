@@ -7,6 +7,10 @@ createInertiaApp({
     extension: ".jsx",
     lazy: true,
   },
+  progress: {
+    color: "#445439",
+    showSpinner: true,
+  },
   withApp(app) {
     return <>{app}</>;
   },

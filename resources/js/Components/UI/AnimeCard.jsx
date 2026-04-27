@@ -17,7 +17,7 @@ const AnimeCard = () => {
             className="mb-2 line-clamp-2 leading-tight font-bold"
             title="Anime Title Here Lorem ipsum dolor sit amet."
           >
-            Anime Title Here Lorem ipsum dolor sit amet.
+            Anime Title Here Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, eaque.
           </p>
           <p className="mb-2 text-xs">2021</p>
           <p className="mb-2 text-xs">12 Episodes <span>- Movie</span></p>

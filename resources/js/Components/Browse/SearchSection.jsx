@@ -19,7 +19,7 @@ const SearchSection = () => {
 
   return (
     <div className="bg-surface">
-      <div className="mx-auto max-w-7xl p-4 lg:pt-8">
+      <div className="mx-auto max-w-7xl p-4 lg:pt-8 lg:pb-6">
         <h1 className="text-text mb-2 font-serif text-2xl font-bold">
           Browse Anime
         </h1>
