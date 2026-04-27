@@ -1,19 +1,42 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 const DekstopNav = () => {
+  const { component } = usePage();
+
   return (
     <div className="bg-surface hidden lg:flex">
-      <div className="flex w-full max-w-7xl mx-auto items-center justify-between p-4">
-        <Link className="text-primary font-serif text-2xl font-bold tracking-wider">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
+        <Link
+          href={route("home.index")}
+          className="text-primary font-serif text-2xl font-bold tracking-wider"
+        >
           Mamorulist
         </Link>
         <nav>
           <ul className="flex items-center gap-8">
             <li>
-              <Link className="text-accent-gold text-sm">Home</Link>
+              <Link
+                href={route("home.index")}
+                className={
+                  component === "Home/Index"
+                    ? "text-accent-gold text-sm font-bold"
+                    : "text-sm"
+                }
+              >
+                Home
+              </Link>
             </li>
             <li>
-              <Link className="text-sm">Browse Anime</Link>
+              <Link
+                href={route("browse.index")}
+                className={
+                  component.startsWith("Browse/")
+                    ? "text-accent-gold text-sm font-bold"
+                    : "text-sm"
+                }
+              >
+                Browse Anime
+              </Link>
             </li>
             <li>
               <Link className="text-sm">Trigger List</Link>

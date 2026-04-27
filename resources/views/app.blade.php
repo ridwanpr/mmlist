@@ -10,8 +10,8 @@
         rel="stylesheet">
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
-    <x-inertia::head />
     @routes
+    <x-inertia::head />
 </head>
 
 <body>
