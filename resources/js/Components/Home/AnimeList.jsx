@@ -29,7 +29,7 @@ const AnimeList = () => {
         icon={<LuFlame size="32px" className="text-primary" />}
       />
 
-      <section id="hot" className="mb-8">
+      <section id="hot" className="mb-4">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           <AnimeCard />
           <AnimeCard />

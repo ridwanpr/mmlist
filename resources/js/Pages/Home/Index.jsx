@@ -2,6 +2,7 @@ import Hero from "../../Components/Home/Hero";
 import AnimeList from "../../Components/Home/AnimeList";
 import FrontLayout from "../../Layouts/FrontLayout";
 import Status from "../../Components/Home/Status";
+import Features from "../../Components/Home/Features";
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       <Hero />
       <Status />
       <AnimeList />
+      <Features />
     </>
   );
 };
