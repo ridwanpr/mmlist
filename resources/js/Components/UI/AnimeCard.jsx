@@ -10,9 +10,6 @@ const AnimeCard = () => {
             alt="image"
             className="aspect-2/3 h-full object-cover"
           />
-          <span className="bg-accent-orange absolute top-0 left-0 rounded-tl-lg rounded-br p-1 text-xs font-semibold">
-            TV
-          </span>
         </div>
 
         <div className="flex flex-1 flex-col overflow-hidden p-3">
@@ -23,7 +20,7 @@ const AnimeCard = () => {
             Anime Title Here Lorem ipsum dolor sit amet.
           </p>
           <p className="mb-2 text-xs">2021</p>
-          <p className="mb-2 text-xs">12 Episodes</p>
+          <p className="mb-2 text-xs">12 Episodes <span>- Movie</span></p>
 
           <div className="mb-2 flex flex-wrap gap-1">
             <span className="truncate text-xs">

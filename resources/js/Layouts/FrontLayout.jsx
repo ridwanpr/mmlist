@@ -6,7 +6,7 @@ const FrontLayout = ({ children }) => {
   return (
     <>
       <div className="relative min-h-screen">
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex max-w-7xl">
           <DekstopNav />
         </div>
         <main>{children}</main>
