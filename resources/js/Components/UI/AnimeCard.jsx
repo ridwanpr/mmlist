@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 
 const AnimeCard = () => {
   return (
-    <Link>
+    <Link href="#">
       <div className="bg-surface border-surface-alt mb-4 flex h-40 overflow-hidden rounded-lg border lg:mb-0">
         <div className="relative h-full shrink-0">
           <img

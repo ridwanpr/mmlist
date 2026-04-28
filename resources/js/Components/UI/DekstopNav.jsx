@@ -1,13 +1,14 @@
 import { Link, usePage } from "@inertiajs/react";
 
 const DekstopNav = () => {
+  const { routes } = usePage().props;
   const { component } = usePage();
 
   return (
     <div className="bg-surface hidden lg:flex">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
         <Link
-          href={route("home.index")}
+          href={routes["home.index"]}
           className="text-primary font-serif text-2xl font-bold tracking-wider"
         >
           Mamorulist
@@ -17,7 +18,7 @@ const DekstopNav = () => {
           <ul className="flex items-center gap-8">
             <li>
               <Link
-                href={route("home.index")}
+                href={routes["home.index"]}
                 className={
                   component === "Home/Index"
                     ? "text-accent-gold text-sm font-bold"
@@ -29,7 +30,7 @@ const DekstopNav = () => {
             </li>
             <li>
               <Link
-                href={route("browse.index")}
+                href={routes["browse.index"]}
                 className={
                   component.startsWith("Browse/")
                     ? "text-accent-gold text-sm font-bold"
@@ -40,7 +41,7 @@ const DekstopNav = () => {
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-sm">
+              <Link href="" className="text-sm">
                 Trigger List
               </Link>
             </li>

@@ -1,6 +1,8 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 const Hero = () => {
+  const { routes } = usePage().props;
+
   return (
     <div className="w-full">
       <div className="relative mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-18">
@@ -24,7 +26,7 @@ const Hero = () => {
               Get Started
             </Link>
             <Link
-              href={route("browse.index")}
+              href={routes["browse.index"]}
               className="bg-surface text-primary border-primary flex w-full items-center justify-center gap-2 rounded-md border px-6 py-3 font-semibold transition hover:cursor-pointer hover:bg-gray-50 sm:w-auto"
             >
               Browse Anime

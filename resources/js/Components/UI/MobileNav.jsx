@@ -2,6 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { LuBookmark, LuHouse, LuList, LuSearch, LuUser } from "react-icons/lu";
 
 const MobileNav = () => {
+  const { routes } = usePage().props;
   const { component } = usePage();
 
   return (
@@ -10,7 +11,7 @@ const MobileNav = () => {
         <ul className="flex items-center justify-between gap-4">
           <li>
             <Link
-              href={route("home.index")}
+              href={routes["home.index"]}
               className={`flex flex-col items-center ${
                 component === "Home/Index" ? "text-primary" : "text-text"
               }`}
@@ -21,7 +22,7 @@ const MobileNav = () => {
           </li>
           <li>
             <Link
-              href={route("browse.index")}
+              href={routes["browse.index"]}
               className={`flex flex-col items-center ${
                 component.startsWith("Browse/") ? "text-primary" : "text-text"
               }`}
