@@ -13,7 +13,7 @@ const AnimeList = () => {
 
       <section id="now-airing" className="mb-8">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-          <AnimeCard />
+          <AnimeCard  />
           <AnimeCard />
           <AnimeCard />
           <AnimeCard />
