@@ -25,20 +25,21 @@ const RefineResults = () => {
   };
 
   return (
-    <div className="bg-background hidden self-start rounded-lg p-4 lg:flex lg:flex-1 lg:flex-col lg:gap-6">
-      <div className="flex w-full items-center justify-between">
-        <p className="font-bold">Refine Results</p>
+    <div className="bg-background border-border hidden self-start rounded-lg border p-5 lg:flex lg:w-64 lg:flex-col lg:gap-6">
+      <div className="border-border flex w-full items-center justify-between border-b pb-4">
+        <h2 className="text-text font-bold">Refine Results</h2>
         <button
           onClick={handleClearAll}
-          className="text-primary text-sm font-semibold hover:underline focus:outline-none"
+          className="text-primary hover:text-primary-dark text-sm font-semibold transition-colors focus:outline-none"
         >
           Clear All
         </button>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col justify-between gap-4">
-          <p className="font-bold">Genre</p>
+      {/* Genre Section */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-text text-sm font-bold">Genre</h3>
+        <div className="flex flex-col gap-2.5">
           <RefineCheckbox label="Action" count="142" />
           <RefineCheckbox label="Adventure" count="389" />
           <RefineCheckbox label="Drama" count="501" />
@@ -47,24 +48,24 @@ const RefineResults = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col justify-between gap-4">
-          <p className="font-bold">Year</p>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex-1">
-              <DropdownMenu title={fromYear} items={fromItems} />
-            </div>
-            <span className="text-muted-foreground font-medium">-</span>
-            <div className="flex-1">
-              <DropdownMenu title={toYear} items={toItems} />
-            </div>
+      {/* Year Section */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-text text-sm font-bold">Year</h3>
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <DropdownMenu title={fromYear} items={fromItems} />
+          </div>
+          <span className="text-border font-medium">-</span>
+          <div className="flex-1">
+            <DropdownMenu title={toYear} items={toItems} />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col justify-between gap-4">
-          <p className="font-bold">Number of Episodes</p>
+      {/* Episodes Section */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-text text-sm font-bold">Number of Episodes</h3>
+        <div className="flex flex-col gap-2.5">
           <RefineCheckbox label="1 - 25" />
           <RefineCheckbox label="25 - 50" />
           <RefineCheckbox label="51 - 100" />

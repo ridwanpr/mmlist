@@ -2,15 +2,15 @@ import { Checkbox, Field, Label } from "@headlessui/react";
 
 const RefineCheckbox = ({ label, count, checked, onChange }) => {
   return (
-    <div className="flex items-center justify-between">
-      <Field className="flex items-center gap-6">
+    <div className="group/row flex items-center justify-between">
+      <Field className="flex cursor-pointer items-center gap-3">
         <Checkbox
           checked={checked}
           onChange={onChange}
-          className="group bg-surface-alt data-checked:bg-primary block size-4 rounded border"
+          className="bg-surface-alt border-border data-checked:bg-primary data-checked:border-primary focus-visible:ring-primary-soft block size-4 rounded border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
         >
           <svg
-            className="stroke-white opacity-0 group-data-checked:opacity-100"
+            className="stroke-surface opacity-0 transition-opacity data-checked:opacity-100"
             viewBox="0 0 14 14"
             fill="none"
           >
@@ -22,9 +22,12 @@ const RefineCheckbox = ({ label, count, checked, onChange }) => {
             />
           </svg>
         </Checkbox>
-        <Label>{label}</Label>
+        <Label className="text-text group-hover/row:text-primary-dark cursor-pointer text-sm font-medium transition-colors select-none">
+          {label}
+        </Label>
       </Field>
-      {count && <p className="text-text-muted">{count}</p>}
+
+      {count && <p className="text-text-muted text-xs">{count}</p>}
     </div>
   );
 };

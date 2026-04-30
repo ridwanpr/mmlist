@@ -10,7 +10,9 @@ const AnimeList = () => {
         <div className="lg:flex lg:gap-4">
           <RefineResults />
           <div className="lg:flex-3">
-            <div className="gap-4 md:grid md:grid-cols-2">
+            <div className="gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+              <AnimeCard />
+              <AnimeCard />
               <AnimeCard />
               <AnimeCard />
               <AnimeCard />

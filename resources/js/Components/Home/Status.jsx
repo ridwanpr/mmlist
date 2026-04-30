@@ -2,7 +2,7 @@ import { LuShieldCheck, LuStar, LuUsers, LuVote } from "react-icons/lu";
 
 const Status = () => {
   return (
-    <div className="mb-4 flex justify-center px-4 lg:px-16">
+    <div className="mb-4 flex justify-center px-4 lg:px-16 lg:-mt-6">
       <div className="bg-background border-surface grid grid-cols-2 rounded-lg border sm:grid-cols-4">
         <div className="border-surface flex items-center gap-3.5 border-r border-b px-6 py-4 sm:border-b-0">
           <LuUsers size={24} className="text-primary shrink-0" />
