@@ -22,7 +22,7 @@ const DekstopNav = () => {
                 className={
                   component === "Home/Index"
                     ? "text-accent-gold text-sm font-bold"
-                    : "text-sm"
+                    : "text-sm font-semibold"
                 }
               >
                 Home
@@ -34,14 +34,14 @@ const DekstopNav = () => {
                 className={
                   component.startsWith("Browse/")
                     ? "text-accent-gold text-sm font-bold"
-                    : "text-sm"
+                    : "text-sm font-semibold"
                 }
               >
                 Browse Anime
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-sm">
+              <Link href="#" className="text-sm font-semibold">
                 Trigger List
               </Link>
             </li>
@@ -57,13 +57,13 @@ const DekstopNav = () => {
           <div>
             <Link
               href="#"
-              className="bg-primary text-surface mr-2 rounded-md p-2 text-sm"
+              className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
             >
               Register
             </Link>
             <Link
               href="#"
-              className="bg-accent-gold text-surface rounded-md p-2 text-sm"
+              className="bg-accent-gold text-surface rounded-md p-2 text-sm font-medium"
             >
               Login
             </Link>

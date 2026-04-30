@@ -1,7 +1,38 @@
-import { LuBookmark, LuChevronRight, LuShare2 } from "react-icons/lu";
+import {
+  LuBookmark,
+  LuChevronRight,
+  LuShare2,
+  LuStar,
+  LuStarHalf,
+} from "react-icons/lu";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const ShowAnime = () => {
+  const triggerData = [
+    { name: "Death", level: 5, label: "Overwhelming" },
+    { name: "Graphic Gore", level: 4, label: "Distressing" },
+    { name: "Self-Harm", level: 3, label: "Notable" },
+    { name: "Sexual Assault", level: 2, label: "Barely Noticeable" },
+    { name: "NTR / Cheating", level: 1, label: "None" },
+  ];
+
+  const getColorTheme = (level) => {
+    switch (level) {
+      case 1:
+        return { bg: "bg-emerald-500", text: "text-emerald-500" };
+      case 2:
+        return { bg: "bg-yellow-500", text: "text-yellow-500" };
+      case 3:
+        return { bg: "bg-amber-500", text: "text-amber-500" };
+      case 4:
+        return { bg: "bg-orange-500", text: "text-orange-500" };
+      case 5:
+        return { bg: "bg-red-600", text: "text-red-600" };
+      default:
+        return { bg: "bg-text-muted", text: "text-text-muted" };
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl p-4 lg:pt-6 lg:pb-6">
       {/* Breadcrumb */}
@@ -86,7 +117,7 @@ const ShowAnime = () => {
                   <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
                     Studio
                   </span>
-                  <span className="text-text text-sm font-semibold">
+                  <span className="text-text/90 text-sm font-semibold">
                     WIT Studio
                   </span>
                 </div>
@@ -94,7 +125,7 @@ const ShowAnime = () => {
                   <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
                     Status
                   </span>
-                  <span className="text-text text-sm font-semibold">
+                  <span className="text-text/90 text-sm font-semibold">
                     Completed
                   </span>
                 </div>
@@ -102,13 +133,15 @@ const ShowAnime = () => {
                   <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
                     Source
                   </span>
-                  <span className="text-text text-sm font-semibold">Manga</span>
+                  <span className="text-text/90 text-sm font-semibold">
+                    Manga
+                  </span>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
                     Air Date
                   </span>
-                  <span className="text-text text-sm font-semibold">
+                  <span className="text-text/90 text-sm font-semibold">
                     Apr 2013 - Nov 2023
                   </span>
                 </div>
@@ -118,7 +151,62 @@ const ShowAnime = () => {
         </div>
 
         {/* Right Info */}
-        <div className="lg:col-span-1"></div>
+        <div className="lg:col-span-1">
+          {/* Community Rating */}
+          <div className="border-border bg-surface mb-4 rounded-lg border p-4">
+            <p className="mb-2 font-semibold">Community Rating</p>
+            <div className="mb-1 flex items-center gap-2">
+              <p className="mb-2 text-2xl font-semibold md:text-3xl">4.6</p>
+              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
+              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
+              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
+              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
+              <LuStarHalf
+                size={22}
+                className="fill-accent-gold text-accent-gold"
+              />
+            </div>
+            <p className="mb-2 text-sm">based on 2,842 votes</p>
+            <p className="text-text/90 text-sm font-bold">What is this?</p>
+            <p className="text-text/90 mb-2 text-sm">
+              Our community reviews how frequent or intense each trigger
+              appears.
+            </p>
+          </div>
+
+          {/* At a Glance */}
+          <div className="border-border bg-surface mb-4 rounded-lg border p-4">
+            <div className="mb-4">
+              <p className="text-text font-semibold">At a Glance</p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {triggerData.map((trigger, idx) => {
+                const theme = getColorTheme(trigger.level);
+                return (
+                  <div
+                    key={idx}
+                    className="border-border/50 flex items-center justify-between border-b pb-2 last:border-0 last:pb-0"
+                  >
+                    <span className="text-text/90 text-sm font-medium">
+                      {trigger.name}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`h-2 w-2 rounded-full ${theme.bg}`}
+                      ></span>
+                      <span
+                        className={`text-[11px] font-bold tracking-wider uppercase ${theme.text}`}
+                      >
+                        {trigger.label}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
