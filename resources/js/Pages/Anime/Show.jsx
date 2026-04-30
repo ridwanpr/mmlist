@@ -6,6 +6,7 @@ import {
   LuStarHalf,
 } from "react-icons/lu";
 import FrontLayout from "../../Layouts/FrontLayout";
+import TriggerWarningSection from "../../Components/Anime/TriggerWarningSection";
 
 const ShowAnime = () => {
   const triggerData = [
@@ -51,7 +52,7 @@ const ShowAnime = () => {
       {/* Anime Information */}
       <div className="grid gap-6 lg:grid-cols-4">
         {/* Left Main Info */}
-        <div className="lg:col-span-3">
+        <div className="min-w-0 lg:col-span-3">
           <div className="flex flex-col gap-5 md:flex-row">
             {/* Cover Image */}
             <div className="shrink-0">
@@ -148,10 +149,11 @@ const ShowAnime = () => {
               </div>
             </div>
           </div>
+          <TriggerWarningSection />
         </div>
 
         {/* Right Info */}
-        <div className="lg:col-span-1">
+        <div className="min-w-0 lg:col-span-1">
           {/* Community Rating */}
           <div className="border-border bg-surface mb-4 rounded-lg border p-4">
             <p className="mb-2 font-semibold">Community Rating</p>
