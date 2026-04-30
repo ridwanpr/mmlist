@@ -3,68 +3,74 @@ import FrontLayout from "../../Layouts/FrontLayout";
 
 const ShowAnime = () => {
   return (
-    <div className="mx-auto max-w-7xl p-4 lg:pt-8 lg:pb-6">
+    <div className="mx-auto max-w-7xl p-4 lg:pt-6 lg:pb-6">
       {/* Breadcrumb */}
-      <div className="mb-6 flex items-center gap-2 text-sm font-semibold">
-        <span>Home</span>
-        <LuChevronRight />
-        <span>Anime</span>
-        <LuChevronRight />
-        <span>Attack on Titan</span>
+      <div className="text-text-muted mb-4 flex items-center gap-2 text-sm font-semibold">
+        <span className="hover:text-primary cursor-pointer transition-colors">
+          Home
+        </span>
+        <LuChevronRight size={16} />
+        <span className="hover:text-primary cursor-pointer transition-colors">
+          Anime
+        </span>
+        <LuChevronRight size={16} />
+        <span className="text-text">Attack on Titan</span>
       </div>
 
       {/* Anime Information */}
-      <div className="grid lg:grid-cols-4">
+      <div className="grid gap-6 lg:grid-cols-4">
         {/* Left Main Info */}
         <div className="lg:col-span-3">
-          <div className="flex flex-col gap-4 lg:flex-row lg:gap-6">
-            <img
-              src="/assets/img/dummy-cover.jpg"
-              alt="cover anime image"
-              className="mx-auto w-48 rounded-lg object-cover md:w-64"
-            />
-            <div>
-              <h1 className="text-2xl font-bold lg:text-3xl">
+          <div className="flex flex-col gap-5 md:flex-row">
+            {/* Cover Image */}
+            <div className="shrink-0">
+              <img
+                src="/assets/img/dummy-cover.jpg"
+                alt="cover anime image"
+                className="mx-auto w-40 rounded-lg object-cover shadow-sm md:w-56"
+              />
+            </div>
+
+            {/* Details */}
+            <div className="flex flex-col">
+              <h1 className="text-text text-2xl leading-tight font-bold lg:text-3xl">
                 Attack on Titan
               </h1>
-              <p className="text-primary mb-2 text-sm font-semibold lg:text-base">
+              <p className="text-primary mb-1.5 text-sm font-semibold lg:text-base">
                 Shingeki no Kyojin
               </p>
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="border-border bg-primary text-primary-soft rounded-lg border px-2 py-1 text-xs">
+
+              <div className="mb-4 flex flex-wrap items-center gap-1.5">
+                <span className="border-border bg-primary text-primary-soft rounded-md border px-2 py-0.5 text-[11px] font-bold tracking-wide uppercase">
                   Movie
                 </span>
-                <span className="border-border text-text rounded-lg border px-2 py-1 text-xs">
+                <span className="border-border bg-surface text-text rounded-md border px-2 py-0.5 text-[11px] font-medium">
                   2021
                 </span>
-                <span className="border-border text-text rounded-lg border px-2 py-1 text-xs">
+                <span className="border-border bg-surface text-text rounded-md border px-2 py-0.5 text-[11px] font-medium">
                   Action, Drama, Fantasy
                 </span>
-                <span className="border-border text-text rounded-lg border px-2 py-1 text-xs">
+                <span className="border-border bg-surface text-text rounded-md border px-2 py-0.5 text-[11px] font-medium">
                   4 Seasons
                 </span>
-                <span className="border-border text-text rounded-lg border px-2 py-1 text-xs">
+                <span className="border-border bg-surface text-text rounded-md border px-2 py-0.5 text-[11px] font-medium">
                   94 Episodes
                 </span>
               </div>
 
-              <div className="mb-4 flex gap-2">
-                <button
-                  href="/"
-                  className="bg-primary text-surface flex items-center gap-1 rounded-lg px-6 py-3 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90"
-                >
-                  <LuBookmark size={20} />
+              <div className="mb-5 flex gap-2.5">
+                <button className="bg-primary text-surface flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95">
+                  <LuBookmark size={18} />
                   Add to Watchlist
                 </button>
-                <button
-                  href="/"
-                  className="text-primary border-primary-soft flex items-center gap-1 rounded-lg border-2 px-6 py-3 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90"
-                >
-                  <LuShare2 size={20} />
+                <button className="text-primary border-primary-soft hover:bg-surface-alt flex items-center gap-1.5 rounded-lg border-2 px-4 py-2 text-sm font-semibold transition active:scale-95">
+                  <LuShare2 size={18} />
                   Share
                 </button>
               </div>
-              <p className="text-text/90 text-sm leading-relaxed text-pretty md:text-base">
+
+              {/* Synopsis */}
+              <p className="text-text/90 mb-5 text-sm leading-relaxed text-pretty md:text-[15px]">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Pariatur odit ullam possimus culpa? Quam aliquam, officiis sit
                 quo facere deserunt asperiores totam ad, eius ducimus, quae
@@ -73,11 +79,46 @@ const ShowAnime = () => {
                 ipsa dolorem perferendis, excepturi pariatur, temporibus quam
                 ullam voluptas quis.
               </p>
+
+              {/* Metadata */}
+              <div className="border-border grid grid-cols-2 gap-y-4 border-y py-4 sm:grid-cols-4 sm:gap-x-4">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
+                    Studio
+                  </span>
+                  <span className="text-text text-sm font-semibold">
+                    WIT Studio
+                  </span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
+                    Status
+                  </span>
+                  <span className="text-text text-sm font-semibold">
+                    Completed
+                  </span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
+                    Source
+                  </span>
+                  <span className="text-text text-sm font-semibold">Manga</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
+                    Air Date
+                  </span>
+                  <span className="text-text text-sm font-semibold">
+                    Apr 2013 - Nov 2023
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
         {/* Right Info */}
-        <div></div>
+        <div className="lg:col-span-1"></div>
       </div>
     </div>
   );
