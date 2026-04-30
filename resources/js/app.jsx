@@ -5,7 +5,7 @@ createInertiaApp({
   pages: {
     path: "./Pages",
     extension: ".jsx",
-    lazy: true,
+    lazy: false,
   },
   progress: {
     color: "#445439",

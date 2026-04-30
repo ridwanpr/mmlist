@@ -41,7 +41,7 @@ const DekstopNav = () => {
               </Link>
             </li>
             <li>
-              <Link href="" className="text-sm">
+              <Link href="#" className="text-sm">
                 Trigger List
               </Link>
             </li>

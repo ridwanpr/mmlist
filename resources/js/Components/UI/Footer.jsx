@@ -1,8 +1,6 @@
 import { Link } from "@inertiajs/react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
     <footer className="bg-background border-primary/10 border-t pb-20 lg:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-6">
@@ -57,7 +55,7 @@ const Footer = () => {
           </nav>
 
           <div className="text-primary-dark text-xs opacity-70">
-            &copy; {currentYear} Mamorulist
+            &copy; Mamorulist
           </div>
         </div>
       </div>

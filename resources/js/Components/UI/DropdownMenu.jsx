@@ -4,7 +4,7 @@ import { LuChevronDown } from "react-icons/lu";
 const DropdownMenu = ({ title, items }) => {
   return (
     <Menu>
-      <MenuButton className="bg-surface border-border hover:bg-surface-alt flex items-center justify-center gap-2 rounded-lg border px-4 py-2 transition-colors focus:ring-2 focus:ring-blue-500/50 focus:outline-none">
+      <MenuButton className="bg-surface border-border hover:bg-surface-alt flex items-center justify-center gap-2 rounded-lg border px-4 py-2 transition-colors focus:ring-2 focus:ring-blue-500/50 focus:outline-none w-full">
         {title}
         <LuChevronDown className="text-muted-foreground h-4 w-4" />
       </MenuButton>

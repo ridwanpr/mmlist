@@ -4,10 +4,10 @@ import FrontLayout from "../../Layouts/FrontLayout";
 
 const Browse = () => {
   return (
-    <>
+    <div className="mb-8">
       <SearchSection />
       <AnimeList />
-    </>
+    </div>
   );
 };
 
