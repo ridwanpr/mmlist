@@ -1,22 +1,22 @@
 import {
   LuBookmark,
   LuChevronRight,
+  LuInfo,
   LuShare2,
   LuStar,
   LuStarHalf,
 } from "react-icons/lu";
 import FrontLayout from "../../Layouts/FrontLayout";
-import TriggerWarningSection from "../../Components/Anime/TriggerWarningSection";
+import TriggerWarning from "../../Components/Anime/TriggerWarning";
 
 const ShowAnime = () => {
   const triggerData = [
-    { name: "Death", level: 5, label: "Overwhelming" },
-    { name: "Graphic Gore", level: 4, label: "Distressing" },
-    { name: "Self-Harm", level: 3, label: "Notable" },
-    { name: "Sexual Assault", level: 2, label: "Barely Noticeable" },
-    { name: "NTR / Cheating", level: 1, label: "None" },
+    { name: "Violence & Gore", level: 5, label: "Overwhelming" },
+    { name: "Sexual Violence", level: 5, label: "Overwhelming" },
+    { name: "Suicide & Self-Harm", level: 4, label: "Distressing" },
+    { name: "Body Horror", level: 4, label: "Distressing" },
+    { name: "Bullying & Abuse", level: 3, label: "Notable" },
   ];
-
   const getColorTheme = (level) => {
     switch (level) {
       case 1:
@@ -149,7 +149,8 @@ const ShowAnime = () => {
               </div>
             </div>
           </div>
-          <TriggerWarningSection />
+
+          <TriggerWarning />
         </div>
 
         {/* Right Info */}
@@ -158,21 +159,15 @@ const ShowAnime = () => {
           <div className="border-border bg-surface mb-4 rounded-lg border p-4">
             <p className="mb-2 font-semibold">Community Rating</p>
             <div className="mb-1 flex items-center gap-2">
-              <p className="mb-2 text-2xl font-semibold md:text-3xl">4.6</p>
-              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
-              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
-              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
-              <LuStar size={22} className="fill-accent-gold text-accent-gold" />
-              <LuStarHalf
-                size={22}
-                className="fill-accent-gold text-accent-gold"
-              />
+              <p className="mb-2 text-2xl font-semibold text-red-500 md:text-3xl">
+                Severe
+              </p>
             </div>
             <p className="mb-2 text-sm">based on 2,842 votes</p>
             <p className="text-text/90 text-sm font-bold">What is this?</p>
             <p className="text-text/90 mb-2 text-sm">
-              Our community reviews how frequent or intense each trigger
-              appears.
+              Our community reviews how frequent or intense a trigger appears.
+              See trigger list for individual ratings.
             </p>
           </div>
 
@@ -207,6 +202,22 @@ const ShowAnime = () => {
                 );
               })}
             </div>
+          </div>
+
+          {/* Content Advisory */}
+          <div className="border-border bg-surface mb-4 rounded-lg border p-4">
+            <div className="mb-4">
+              <p className="text-text font-semibold">Content Advisory</p>
+            </div>
+            <p className="text-text/90 text-sm text-pretty">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Explicabo ratione eveniet excepturi sint, sit, inventore
+              necessitatibus tempore dolorum delectus aliquam earum dolor nam
+              culpa tenetur laborum! Porro non eius nisi!
+            </p>
+            <p className="text-text-muted mt-1 flex items-center gap-1 text-xs">
+              <LuInfo /> AI Generated
+            </p>
           </div>
         </div>
       </div>
