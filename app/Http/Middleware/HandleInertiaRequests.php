@@ -39,7 +39,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'routes' => [
                 'home.index' => route('home.index'),
-                'browse.index' => route('browse.index')
+                'browse.index' => route('browse.index'),
+                'auth.register' => route('auth.register'),
+                'auth.login' => route('auth.login'),
                 // 'posts.show' => fn($id) => route('posts.show', $id),
             ],
         ];

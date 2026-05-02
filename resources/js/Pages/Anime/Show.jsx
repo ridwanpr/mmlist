@@ -11,11 +11,11 @@ import TriggerWarning from "../../Components/Anime/TriggerWarning";
 
 const ShowAnime = () => {
   const triggerData = [
-    { name: "Violence & Gore", level: 5, label: "Overwhelming" },
-    { name: "Sexual Violence", level: 5, label: "Overwhelming" },
-    { name: "Suicide & Self-Harm", level: 4, label: "Distressing" },
-    { name: "Body Horror", level: 4, label: "Distressing" },
-    { name: "Bullying & Abuse", level: 3, label: "Notable" },
+    { name: "Violence & Gore", level: 5, label: "Very Severe" },
+    { name: "Sexual Violence", level: 5, label: "Severe" },
+    { name: "Suicide & Self-Harm", level: 4, label: "Moderate" },
+    { name: "Body Horror", level: 4, label: "Mild" },
+    { name: "Bullying & Abuse", level: 3, label: "None" },
   ];
   const getColorTheme = (level) => {
     switch (level) {

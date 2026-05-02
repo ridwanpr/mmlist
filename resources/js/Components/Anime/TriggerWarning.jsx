@@ -8,87 +8,27 @@ import {
   TabPanel,
   TabPanels,
 } from "@headlessui/react";
-import Accordion from "../UI/Accordion";
 import { LuInfo, LuSword, LuSwords } from "react-icons/lu";
 
 const TriggerWarning = () => {
-  const tablistItems = [
-    "All",
-    "Violence & Gore",
-    "Sexual Content",
-    "Mental Health",
-    "Child Safety",
-  ];
-
-  const triggerContent = [
-    {
-      category: "All",
-      items: [
-        { id: 1, label: "Graphic Gore", category: "Violence & Gore" },
-        { id: 2, label: "Major Character Death", category: "Violence & Gore" },
-        { id: 3, label: "Sexual Assault", category: "Sexual Content" },
-        { id: 4, label: "NTR / Cheating", category: "Sexual Content" },
-        { id: 5, label: "Suicide / Self-Harm", category: "Mental Health" },
-        { id: 6, label: "Depression", category: "Mental Health" },
-        { id: 7, label: "Child Abuse", category: "Child Safety" },
-        { id: 8, label: "Grooming", category: "Child Safety" },
-      ],
-    },
-    {
-      category: "Violence & Gore",
-      items: [
-        { id: 1, label: "Graphic Gore", category: "Violence & Gore" },
-        { id: 2, label: "Major Character Death", category: "Violence & Gore" },
-        { id: 9, label: "Torture", category: "Violence & Gore" },
-      ],
-    },
-    {
-      category: "Sexual Content",
-      items: [
-        { id: 3, label: "Sexual Assault", category: "Sexual Content" },
-        { id: 4, label: "NTR / Cheating", category: "Sexual Content" },
-        { id: 10, label: "Dubious Consent", category: "Sexual Content" },
-      ],
-    },
-    {
-      category: "Mental Health",
-      items: [
-        { id: 5, label: "Suicide / Self-Harm", category: "Mental Health" },
-        { id: 6, label: "Depression", category: "Mental Health" },
-        { id: 11, label: "PTSD Flashbacks", category: "Mental Health" },
-      ],
-    },
-    {
-      category: "Child Safety",
-      items: [
-        { id: 7, label: "Child Abuse", category: "Child Safety" },
-        { id: 8, label: "Grooming", category: "Child Safety" },
-        { id: 12, label: "Child Soldiers", category: "Child Safety" },
-      ],
-    },
-  ];
-
   return (
     <div className="mt-8 flex flex-col gap-4">
       {/* Trigger Header */}
       <div>
         <h2 className="text-text text-xl font-semibold">Trigger Warnings</h2>
         <p className="text-text-muted flex flex-wrap items-center gap-1 text-sm">
-          <LuInfo /> The community helps identify and rate the presence of
-          potentially distressing content in this anime.
+          The community helps identify and rate the presence of potentially
+          distressing content in this anime.
           <span className="font-bold italic">
-            Click each trigger for more details. Might contain spoiler
+            Click each trigger for more details.
           </span>
         </p>
       </div>
       {/* Trigger Content */}
       <div className="flex w-full flex-col gap-2">
         <Disclosure as="div" className="border-border w-full rounded-lg border">
-          <DisclosureButton className="border-border hover:bg-surface-alt bg-surface flex w-full flex-col items-start justify-between gap-4 rounded-lg border p-3 text-left hover:cursor-pointer md:flex-row md:items-center md:gap-2 md:p-4">
+          <DisclosureButton className="border-border hover:bg-surface-alt bg-surface flex w-full flex-col items-start justify-between gap-4 rounded-lg border p-3 text-left hover:cursor-pointer md:flex-row md:items-center md:gap-2">
             <div className="flex items-start gap-3 md:items-center">
-              <div className="shrink-0 rounded-full bg-red-200 p-3">
-                <LuSwords size="25" />
-              </div>
               <div>
                 <h3 className="text-lg font-semibold">Violence and Gore</h3>
                 <p className="text-text/90 mt-1 text-sm md:mt-0">
@@ -100,7 +40,7 @@ const TriggerWarning = () => {
 
             <div className="border-border mt-1 flex w-full items-center justify-between gap-3 border-t pt-3 md:mt-0 md:w-auto md:justify-end md:border-none md:pt-0">
               <div className="rounded bg-red-100 px-2 py-1 text-sm font-bold text-red-400">
-                Very Frequent
+                Severe
               </div>
               <p className="text-sm font-semibold whitespace-nowrap">
                 1,829 Votes
