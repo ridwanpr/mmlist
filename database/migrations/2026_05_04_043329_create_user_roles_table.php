@@ -25,11 +25,11 @@ return new class extends Migration
         $userRoleData = [
             [
                 'user_id' => '1',
-                'role_id' => 'admin'
+                'role_id' => 'admin',
             ],
             [
                 'user_id' => '2',
-                'role_id' => 'moderator'
+                'role_id' => 'moderator',
             ],
         ];
 

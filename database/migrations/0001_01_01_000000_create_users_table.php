@@ -50,7 +50,7 @@ return new class extends Migration
                 'username' => 'moderator',
                 'email' => 'moderator@mamorulist.com',
                 'password' => bcrypt(12345678),
-            ]
+            ],
         ];
 
         DB::table('users')->insert($userData);

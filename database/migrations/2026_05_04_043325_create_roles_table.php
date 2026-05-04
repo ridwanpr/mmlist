@@ -23,18 +23,18 @@ return new class extends Migration
             [
                 'id' => 'admin',
                 'name' => 'Admin',
-                'description' => 'Admin roles'
+                'description' => 'Admin roles',
             ],
             [
                 'id' => 'user',
                 'name' => 'User',
-                'description' => 'User roles'
+                'description' => 'User roles',
             ],
             [
                 'id' => 'moderator',
                 'name' => 'Moderator',
-                'description' => 'Moderator roles'
-            ]
+                'description' => 'Moderator roles',
+            ],
         ];
 
         DB::table('roles')->insert($roleData);

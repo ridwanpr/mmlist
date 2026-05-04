@@ -1,4 +1,4 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Form, Link, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
 import InputField from "../../Components/UI/InputField";
@@ -25,7 +25,7 @@ const Register = () => {
           </p>
         </div>
 
-        <form action="#" className="space-y-4">
+        <Form action="/register" method="POST" className="space-y-4">
           <InputField
             label="Name"
             name="name"
@@ -38,6 +38,13 @@ const Register = () => {
             name="username"
             type="text"
             placeholder="Account username"
+          />
+
+          <InputField
+            label="Email"
+            name="email"
+            type="text"
+            placeholder="Your email account"
           />
 
           <InputField
@@ -79,7 +86,7 @@ const Register = () => {
               Log in
             </Link>
           </p>
-        </form>
+        </Form>
       </div>
     </div>
   );
