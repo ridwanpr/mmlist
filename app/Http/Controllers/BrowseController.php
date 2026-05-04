@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class BrowseController extends Controller
 {
-    public function Index()
+    public function Index(): Response
     {
         return Inertia::render('Browse/Index');
     }
