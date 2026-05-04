@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^3.0",
+        "jikan-me/jikan": "^1.15",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
     },
