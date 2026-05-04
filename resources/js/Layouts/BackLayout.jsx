@@ -1,11 +1,17 @@
 import { LuChevronLeft, LuMenu } from "react-icons/lu";
 import AdminSidebar from "../Components/UI/AdminSidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Link } from "@inertiajs/react";
 
 const BackLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
+  }, []);
 
   const toggleSidebar = () => {
     if (isSidebarOpen) {
@@ -15,8 +21,20 @@ const BackLayout = ({ children }) => {
     }
   };
 
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <div className="relative flex min-h-screen">
+      {/* Mobile sidebar backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
       {/* Sidebar */}
       <AdminSidebar isOpen={isSidebarOpen} />
       {/* Content */}

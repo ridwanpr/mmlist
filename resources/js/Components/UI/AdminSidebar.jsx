@@ -19,7 +19,9 @@ const AdminSidebar = ({ isOpen }) => {
 
   return (
     <div
-      className={`bg-background border-border z-50 flex-col gap-4 border-r p-4 ${isOpen ? "absolute flex h-full w-67.5 lg:static" : "hidden"} `}
+      className={`bg-background border-border z-50 min-h-screen w-[270px] flex-col gap-4 border-r p-4 ${
+        isOpen ? "absolute flex lg:static" : "hidden"
+      }`}
     >
       <Link
         href={routes["dashboard.index"]}
