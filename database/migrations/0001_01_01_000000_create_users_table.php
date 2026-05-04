@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,7 +15,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('username')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -35,6 +37,23 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        $userData = [
+            [
+                'name' => 'MML Admin',
+                'username' => 'admin',
+                'email' => 'admin@mamorulist.com',
+                'password' => bcrypt(12345678),
+            ],
+            [
+                'name' => 'MML Moderator',
+                'username' => 'moderator',
+                'email' => 'moderator@mamorulist.com',
+                'password' => bcrypt(12345678),
+            ]
+        ];
+
+        DB::table('users')->insert($userData);
     }
 
     /**
