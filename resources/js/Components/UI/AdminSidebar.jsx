@@ -14,11 +14,13 @@ import {
 } from "react-icons/lu";
 import SidebarLink from "./SidebarLink";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ isOpen }) => {
   const { routes } = usePage().props;
 
   return (
-    <div className="bg-background border-border hidden border-r lg:flex lg:flex-col lg:gap-4 lg:p-4">
+    <div
+      className={`bg-background border-border z-50 flex-col gap-4 border-r p-4 ${isOpen ? "absolute flex h-full w-67.5 lg:static" : "hidden"} `}
+    >
       <Link
         href={routes["dashboard.index"]}
         className="text-primary mb-2 text-center font-serif text-2xl font-bold"
