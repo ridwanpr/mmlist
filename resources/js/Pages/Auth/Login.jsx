@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
-import { Field, Input, Label } from "@headlessui/react";
 import { FaGoogle } from "react-icons/fa";
+import InputField from "../../Components/UI/InputField";
 
 const Login = () => {
   const { routes } = usePage().props;
@@ -25,27 +25,20 @@ const Login = () => {
         </div>
 
         <form action="#" className="space-y-4">
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">Username</Label>
-            <Input
-              name="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Your username"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Username"
+            name="username"
+            type="text"
+            placeholder="Your username"
+          />
 
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">Password</Label>
-            <Input
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="Your password"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Your password"
+          />
 
           <button
             type="submit"

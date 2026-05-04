@@ -14,5 +14,7 @@ Route::get('anime/show', [AnimeController::class, 'show'])->name('anime.show');
 
 Route::get('register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
+Route::post('login', [AuthController::class, 'loginAction'])->name('auth.login.action');
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');

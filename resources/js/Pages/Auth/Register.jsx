@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
-import { Field, Input, Label } from "@headlessui/react";
 import { FaGoogle } from "react-icons/fa";
+import InputField from "../../Components/UI/InputField";
 
 const Register = () => {
   const { routes } = usePage().props;
@@ -17,7 +17,7 @@ const Register = () => {
             Join{" "}
             <Link
               href={routes["home.index"]}
-              className="text-primary hover:text-primary-dark font-semibold transition-colors font-serif"
+              className="text-primary hover:text-primary-dark font-serif font-semibold transition-colors"
             >
               mamorulist
             </Link>{" "}
@@ -26,51 +26,35 @@ const Register = () => {
         </div>
 
         <form action="#" className="space-y-4">
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">Name</Label>
-            <Input
-              name="name"
-              type="text"
-              autoComplete="name"
-              placeholder="Public display name"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Name"
+            name="name"
+            type="text"
+            placeholder="Public display name"
+          />
 
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">Username</Label>
-            <Input
-              name="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Account username"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Username"
+            name="username"
+            type="text"
+            placeholder="Account username"
+          />
 
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">Password</Label>
-            <Input
-              name="password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Create a password"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Create a password"
+          />
 
-          <Field className="space-y-1.5">
-            <Label className="text-text text-sm font-medium">
-              Confirm password
-            </Label>
-            <Input
-              name="password_confirmation"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Repeat your password"
-              className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
-            />
-          </Field>
+          <InputField
+            label="Confirm password"
+            name="password_confirmation"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Repeat your password"
+          />
 
           <button
             type="submit"
