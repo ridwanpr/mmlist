@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,7 +27,7 @@ class AuthController extends Controller
 
         $this->authService->createNewUser($dto);
 
-        return redirect()->route('auth.login');
+        return redirect()->route('login');
     }
 
     public function login(): Response
@@ -45,5 +46,14 @@ class AuthController extends Controller
         }
 
         return back();
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        $this->authService->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home.index');
     }
 }

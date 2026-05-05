@@ -62,7 +62,7 @@ const DekstopNav = () => {
               Register
             </Link>
             <Link
-              href={routes["auth.login"]}
+              href={routes["login"]}
               className="bg-accent-gold text-surface rounded-md p-2 text-sm font-medium"
             >
               Login

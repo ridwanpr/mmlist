@@ -44,14 +44,19 @@ const BackLayout = ({ children }) => {
             <LuMenu size={24} />
           </div>
           <Popover className="relative">
-            <PopoverButton className="px-2 font-medium outline-none">
+            <PopoverButton className="px-2 font-medium outline-none hover:cursor-pointer">
               Admin 1
             </PopoverButton>
             <PopoverPanel
               anchor="bottom start"
-              className="bg-background border-border flex flex-col rounded-lg border p-2 opacity-100 shadow"
+              className="bg-background border-border flex flex-col rounded-lg border p-2 opacity-100 shadow hover:cursor-pointer"
             >
-              <Link href="/" className="text-sm font-semibold text-red-500">
+              <Link
+                href="/logout"
+                method="POST"
+                as="button"
+                className="text-sm font-semibold text-red-500 hover:cursor-pointer"
+              >
                 Logout
               </Link>
             </PopoverPanel>

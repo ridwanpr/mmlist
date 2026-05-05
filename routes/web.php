@@ -13,12 +13,16 @@ Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
 Route::get('anime/show', [AnimeController::class, 'show'])->name('anime.show');
 
 Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::get('register', [AuthController::class, 'register'])->name('auth.register');
-    Route::get('login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
-    Route::post('login', [AuthController::class, 'loginAction'])->name('auth.login.action');
+    Route::post('login', [AuthController::class, 'loginAction'])->name('login.action');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'home.index' => route('home.index'),
                 'browse.index' => route('browse.index'),
                 'auth.register' => route('auth.register'),
-                'auth.login' => route('auth.login'),
+                'login' => route('login'),
                 'dashboard.index' => route('dashboard.index'),
                 // 'posts.show' => fn($id) => route('posts.show', $id),
             ],

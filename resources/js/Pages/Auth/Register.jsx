@@ -80,7 +80,7 @@ const Register = () => {
           <p className="text-text-muted pt-1 text-center text-sm">
             Already have an account?{" "}
             <Link
-              href={routes["auth.login"]}
+              href={routes["login"]}
               className="text-primary hover:text-primary-dark font-semibold transition-colors"
             >
               Log in
