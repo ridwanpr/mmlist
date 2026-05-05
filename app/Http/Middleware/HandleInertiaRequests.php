@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -43,9 +44,20 @@ class HandleInertiaRequests extends Middleware
                 'auth.register' => route('auth.register'),
                 'login' => route('login'),
                 'dashboard.index' => route('dashboard.index'),
+                'user.dash.index' => route('user.dash.index'),
                 // 'posts.show' => fn($id) => route('posts.show', $id),
             ],
             'currentRoute' => optional($request->route())->getName(),
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'username' => $request->user()->username,
+                    'role_id' => DB::table('user_roles')
+                        ->where('user_id', $request->user()->id)
+                        ->value('role_id'),
+                ] : null,
+            ],
         ];
     }
 }

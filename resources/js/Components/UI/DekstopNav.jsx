@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 
 const DekstopNav = () => {
-  const { routes } = usePage().props;
+  const { routes, auth } = usePage().props;
   const { component } = usePage();
 
   return (
@@ -55,18 +55,29 @@ const DekstopNav = () => {
             placeholder="Search anime..."
           />
           <div>
-            <Link
-              href={routes["auth.register"]}
-              className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
-            >
-              Register
-            </Link>
-            <Link
-              href={routes["login"]}
-              className="bg-accent-gold text-surface rounded-md p-2 text-sm font-medium"
-            >
-              Login
-            </Link>
+            {!auth.user ? (
+              <>
+                <Link
+                  href={routes["auth.register"]}
+                  className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
+                >
+                  Register
+                </Link>
+                <Link
+                  href={routes["login"]}
+                  className="bg-accent-gold text-surface rounded-md p-2 text-sm font-medium"
+                >
+                  Login
+                </Link>
+              </>
+            ) : (
+              <Link
+                href={routes["user.dash.index"]}
+                className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
+              >
+                My Account
+              </Link>
+            )}
           </div>
         </div>
       </div>
