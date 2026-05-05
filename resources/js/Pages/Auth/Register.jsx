@@ -67,7 +67,7 @@ const Register = () => {
               label="Username"
               name="username"
               type="text"
-              placeholder="Account username"
+              placeholder="Account username (used for login)"
               handleChange={handleChange}
             />
             {errors.username && (
@@ -79,10 +79,10 @@ const Register = () => {
 
           <div>
             <InputField
-              label="Email"
+              label="Email (optional)"
               name="email"
               type="text"
-              placeholder="Your email account"
+              placeholder="Required for account recovery"
               handleChange={handleChange}
             />
             {errors.email && (

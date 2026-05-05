@@ -1,4 +1,11 @@
-import { LuBookmark, LuCheck, LuCog, LuHouse, LuStar } from "react-icons/lu";
+import {
+  LuBookmark,
+  LuCheck,
+  LuCog,
+  LuHouse,
+  LuLogOut,
+  LuStar,
+} from "react-icons/lu";
 import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
@@ -18,6 +25,9 @@ const SideMenu = () => {
       </SidebarLink>
       <SidebarLink href="#" routeName="watchlist.index">
         <LuCog size={18} /> Settings
+      </SidebarLink>
+      <SidebarLink href="#" routeName="watchlist.index">
+        <LuLogOut size={18} /> Logout
       </SidebarLink>
       <div className="bg-surface-alt my-4 rounded-lg p-4">
         <p className="text-text font-semibold">Your Impact</p>

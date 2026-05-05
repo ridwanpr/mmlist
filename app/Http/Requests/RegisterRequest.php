@@ -24,9 +24,16 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:255',
-            'username' => 'required|min:3|max:255|unique:users,username',
-            'email' => 'required|email:dns|min:3|max:255|unique:users,email',
+            'username' => 'required|min:3|max:255|alpha_num|unique:users,username',
+            'email' => 'nullable|email:dns|min:3|max:255|unique:users,email|disposable_email',
             'password' => 'required|confirmed:password_confirmation|min:6|max:255',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'disposable_email' => 'Temporary or disposable emails are not allowed',
         ];
     }
 }
