@@ -79,10 +79,10 @@ const Register = () => {
 
           <div>
             <InputField
-              label="Email (optional)"
+              label="Email"
               name="email"
               type="text"
-              placeholder="Required for account recovery"
+              placeholder="Optional, but required for recovery"
               handleChange={handleChange}
             />
             {errors.email && (
