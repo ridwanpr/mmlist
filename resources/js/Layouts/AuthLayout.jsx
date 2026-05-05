@@ -1,4 +1,4 @@
-import { router, usePage } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 
@@ -6,17 +6,11 @@ const AuthLayout = ({ children }) => {
   const { flash } = usePage();
 
   useEffect(() => {
-    const cleanup = router.on("flash", (event) => {
-      const { success, error, warning, info } = event.detail.flash;
-
-      if (success) toast.success(success);
-      if (error) toast.error(error);
-      if (warning) toast.warning(warning);
-      if (info) toast.info(info);
-    });
-
-    return () => cleanup();
-  }, []);
+    if (flash.success) toast.success(flash.success);
+    if (flash.error) toast.error(flash.error);
+    if (flash.warning) toast.warning(flash.warning);
+    if (flash.info) toast.info(flash.info);
+  }, [flash]);
 
   return (
     <div className="bg-background">

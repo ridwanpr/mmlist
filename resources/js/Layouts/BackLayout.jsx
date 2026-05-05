@@ -2,7 +2,7 @@ import { LuChevronLeft, LuMenu } from "react-icons/lu";
 import AdminSidebar from "../Components/UI/AdminSidebar";
 import { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { Link, router, usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { toast, Toaster } from "sonner";
 
 const BackLayout = ({ children }) => {
@@ -13,17 +13,14 @@ const BackLayout = ({ children }) => {
     if (window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }
-    const cleanup = router.on("flash", (event) => {
-      const { success, error, warning, info } = event.detail.flash;
-
-      if (success) toast.success(success);
-      if (error) toast.error(error);
-      if (warning) toast.warning(warning);
-      if (info) toast.info(info);
-    });
-
-    return () => cleanup();
   }, []);
+
+  useEffect(() => {
+    if (flash.success) toast.success(flash.success);
+    if (flash.error) toast.error(flash.error);
+    if (flash.warning) toast.warning(flash.warning);
+    if (flash.info) toast.info(flash.info);
+  }, [flash]);
 
   const toggleSidebar = () => {
     if (isSidebarOpen) {
