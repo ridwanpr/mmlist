@@ -73,18 +73,26 @@ const Login = () => {
                 {errors.password}
               </span>
             )}
+            <div className="mt-1 text-right">
+              <Link
+                href="#"
+                className="text-primary hover:text-primary-dark text-xs font-medium transition-colors hover:cursor-pointer"
+              >
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           <button
             type="submit"
-            className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:ring-4 focus:outline-none"
+            className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none"
           >
             Log in
           </button>
 
           <button
             type="button"
-            className="border-border bg-surface hover:bg-surface-alt text-text flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition"
+            className="border-border bg-surface hover:bg-surface-alt text-text flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition hover:cursor-pointer"
           >
             <FaGoogle /> Continue with Google
           </button>
