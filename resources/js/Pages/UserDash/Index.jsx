@@ -1,9 +1,14 @@
+import MainContent from "../../Components/UserDash/MainContent";
+import SideMenu from "../../Components/UserDash/SideMenu";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const UserDash = () => {
   return (
-    <div className="mx-auto max-w-7xl p-4">
-      <h1>User Dashboard</h1>
+    <div className="mx-auto flex w-full max-w-7xl flex-1">
+      {/* Side Menu */}
+      <SideMenu />
+      {/* Main Content */}
+      <MainContent />
     </div>
   );
 };

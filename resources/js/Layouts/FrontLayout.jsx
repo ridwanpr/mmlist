@@ -17,12 +17,12 @@ const FrontLayout = ({ children }) => {
 
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className="relative flex min-h-screen flex-col">
         <Toaster position="top-right" richColors />
         <div>
           <DekstopNav />
         </div>
-        <main>{children}</main>
+        <main className="flex flex-1 flex-col">{children}</main>
         <div className="lg:hidden">
           <MobileNav />
         </div>
