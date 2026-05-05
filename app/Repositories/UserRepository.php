@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
-use App\DTOs\Auth\RegisterData;
+use App\DTOs\RegisterData;
+use App\DTOs\UserData;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,5 +30,29 @@ class UserRepository
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, UserData>
+     */
+    public function getAll(int $itemPerPage = 10): LengthAwarePaginator
+    {
+        $paginator = DB::table('users')
+            ->join('user_roles', 'user_roles.user_id', 'users.id')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.username',
+                'users.email',
+                'users.created_at',
+                'user_roles.role_id'
+            )
+            ->paginate($itemPerPage);
+
+        $paginator->through(function ($row) {
+            return UserData::fromDatabase($row);
+        });
+
+        return $paginator;
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
-use App\DTOs\Auth\RegisterData;
+use App\DTOs\LoginData;
+use App\DTOs\RegisterData;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthService
@@ -16,5 +18,15 @@ class AuthService
             $userId = $this->userRepository->create($data);
             $this->userRepository->assignRole($userId, 'user');
         });
+    }
+
+    public function authenticate(LoginData $data): bool
+    {
+        $credentials = [
+            'username' => $data->username,
+            'password' => $data->password,
+        ];
+
+        return Auth::attempt($credentials);
     }
 }

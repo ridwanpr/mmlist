@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Auth\RegisterData;
+use App\DTOs\LoginData;
+use App\DTOs\RegisterData;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
@@ -32,5 +34,16 @@ class AuthController extends Controller
         return Inertia::render('Auth/Login');
     }
 
-    public function loginAction(): void {}
+    public function loginAction(LoginRequest $request): RedirectResponse
+    {
+        $dto = LoginData::fromRequest($request);
+
+        if ($this->authService->authenticate($dto)) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('/dashboard');
+        }
+
+        return back();
+    }
 }
