@@ -1,10 +1,29 @@
-import { Form, Link, usePage } from "@inertiajs/react";
+import { Form, Link, router, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
 import InputField from "../../Components/UI/InputField";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const Login = () => {
-  const { routes } = usePage().props;
+  const { routes, errors } = usePage().props;
+
+  const [values, setValues] = useState({
+    username: null,
+    password: null,
+  });
+
+  function handleChange(e) {
+    setValues((values) => ({
+      ...values,
+      [e.target.id]: e.target.value,
+    }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    router.post("/login", values, { preserveState: true });
+  }
 
   return (
     <div className="bg-background flex min-h-screen items-center justify-center">
@@ -24,21 +43,37 @@ const Login = () => {
           </p>
         </div>
 
-        <Form action="/login" method="POST" className="space-y-4">
-          <InputField
-            label="Username"
-            name="username"
-            type="text"
-            placeholder="Your username"
-          />
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div>
+            <InputField
+              label="Username"
+              name="username"
+              type="text"
+              placeholder="Your username"
+              handleChange={handleChange}
+            />
+            {errors.username && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.username}
+              </span>
+            )}
+          </div>
 
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Your password"
-          />
+          <div>
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Your password"
+              handleChange={handleChange}
+            />
+            {errors.password && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.password}
+              </span>
+            )}
+          </div>
 
           <button
             type="submit"
@@ -63,7 +98,7 @@ const Login = () => {
               Create one
             </Link>
           </p>
-        </Form>
+        </form>
       </div>
     </div>
   );

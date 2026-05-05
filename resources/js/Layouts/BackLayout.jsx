@@ -2,15 +2,27 @@ import { LuChevronLeft, LuMenu } from "react-icons/lu";
 import AdminSidebar from "../Components/UI/AdminSidebar";
 import { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { toast, Toaster } from "sonner";
 
 const BackLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { flash } = usePage();
 
   useEffect(() => {
     if (window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }
+    const cleanup = router.on("flash", (event) => {
+      const { success, error, warning, info } = event.detail.flash;
+
+      if (success) toast.success(success);
+      if (error) toast.error(error);
+      if (warning) toast.warning(warning);
+      if (info) toast.info(info);
+    });
+
+    return () => cleanup();
   }, []);
 
   const toggleSidebar = () => {
@@ -27,6 +39,7 @@ const BackLayout = ({ children }) => {
 
   return (
     <div className="relative flex min-h-screen">
+      <Toaster position="top-right" richColors />
       {/* Mobile sidebar backdrop */}
       {isSidebarOpen && (
         <div

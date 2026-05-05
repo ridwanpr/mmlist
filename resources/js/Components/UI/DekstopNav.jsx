@@ -5,7 +5,7 @@ const DekstopNav = () => {
   const { component } = usePage();
 
   return (
-    <div className="bg-surface hidden lg:flex">
+    <div className="bg-surface hidden lg:flex border border-border">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
         <Link
           href={routes["home.index"]}

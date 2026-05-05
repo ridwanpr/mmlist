@@ -1,10 +1,31 @@
-import { Form, Link, usePage } from "@inertiajs/react";
+import { Form, Link, router, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
 import InputField from "../../Components/UI/InputField";
+import { useState } from "react";
 
 const Register = () => {
-  const { routes } = usePage().props;
+  const { routes, errors } = usePage().props;
+
+  const [values, setValues] = useState({
+    username: null,
+    email: null,
+    name: null,
+    password: null,
+    password_confirmation: null,
+  });
+
+  function handleChange(e) {
+    setValues((values) => ({
+      ...values,
+      [e.target.id]: e.target.value,
+    }));
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.post("/register", values, { preserveState: true });
+  };
 
   return (
     <div className="bg-background flex min-h-screen items-center justify-center">
@@ -25,47 +46,87 @@ const Register = () => {
           </p>
         </div>
 
-        <Form action="/register" method="POST" className="space-y-4">
-          <InputField
-            label="Name"
-            name="name"
-            type="text"
-            placeholder="Public display name"
-          />
+        <form onSubmit={handleSubmit} className="space-y-1">
+          <div>
+            <InputField
+              label="Name"
+              name="name"
+              type="text"
+              placeholder="Public display name"
+              handleChange={handleChange}
+            />
+            {errors.name && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.name}
+              </span>
+            )}
+          </div>
 
-          <InputField
-            label="Username"
-            name="username"
-            type="text"
-            placeholder="Account username"
-          />
+          <div>
+            <InputField
+              label="Username"
+              name="username"
+              type="text"
+              placeholder="Account username"
+              handleChange={handleChange}
+            />
+            {errors.username && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.username}
+              </span>
+            )}
+          </div>
 
-          <InputField
-            label="Email"
-            name="email"
-            type="text"
-            placeholder="Your email account"
-          />
+          <div>
+            <InputField
+              label="Email"
+              name="email"
+              type="text"
+              placeholder="Your email account"
+              handleChange={handleChange}
+            />
+            {errors.email && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.email}
+              </span>
+            )}
+          </div>
 
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Create a password"
-          />
+          <div>
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Create a password"
+              handleChange={handleChange}
+            />
+            {errors.password && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.password}
+              </span>
+            )}
+          </div>
 
-          <InputField
-            label="Confirm password"
-            name="password_confirmation"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Repeat your password"
-          />
+          <div>
+            <InputField
+              label="Confirm password"
+              name="password_confirmation"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Repeat your password"
+              handleChange={handleChange}
+            />
+            {errors.password_confirmation && (
+              <span className="mt-1 block text-xs text-red-500">
+                {errors.password_confirmation}
+              </span>
+            )}
+          </div>
 
           <button
             type="submit"
-            className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:ring-4 focus:outline-none"
+            className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 mt-2 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition focus:ring-4 focus:outline-none"
           >
             Create account
           </button>
@@ -86,7 +147,7 @@ const Register = () => {
               Log in
             </Link>
           </p>
-        </Form>
+        </form>
       </div>
     </div>
   );
