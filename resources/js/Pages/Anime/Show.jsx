@@ -140,10 +140,10 @@ const ShowAnime = () => {
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <span className="text-text-muted text-[11px] font-bold tracking-wider uppercase">
-                    Air Date
+                    Aired At
                   </span>
                   <span className="text-text/90 text-sm font-semibold">
-                    Apr 2013 - Nov 2023
+                    Spring 2026
                   </span>
                 </div>
               </div>
