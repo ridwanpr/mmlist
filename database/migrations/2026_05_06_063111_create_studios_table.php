@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('studios', function (Blueprint $table) {
             $table->id();
-            $table->int('mal_id');
+            $table->integer('mal_id');
             $table->string('type', 20);
             $table->string('name', 20);
             $table->string('url');
