@@ -123,4 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'jikan_url' => env('JIKAN_BASE_URL', 'https://api.jikan.moe/v4')
 ];
