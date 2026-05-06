@@ -6,53 +6,49 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('animes', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('mal_id');
-            $table->string('url');
+            $table->unsignedBigInteger('mal_id')->unique();
+            $table->string('url', 500)->unique();
 
             $table->enum('season', ['summer', 'winter', 'spring', 'fall'])->nullable();
-            $table->integer('year')->nullable();
+            $table->unsignedSmallInteger('year')->nullable();
 
             $table->json('images')->nullable();
             $table->json('trailer')->nullable();
-            $table->boolean('approved');
+            $table->boolean('approved')->index();
 
             $table->json('titles')->nullable();
 
-            $table->string('title');
-            $table->string('title_english')->nullable();
-            $table->string('title_japanese')->nullable();
+            $table->string('title')->index();
+            $table->string('title_english')->nullable()->index();
+            $table->string('title_japanese')->nullable()->index();
             $table->json('title_synonyms')->nullable();
 
-            $table->string('type')->nullable();
+            $table->string('type')->nullable()->index();
             $table->string('source')->nullable();
-            $table->integer('episodes')->nullable();
-            $table->string('status')->nullable();
-            $table->boolean('airing');
+            $table->unsignedSmallInteger('episodes')->nullable();
+            $table->string('status')->nullable()->index();
+            $table->boolean('airing')->index();
 
             $table->json('aired')->nullable();
 
             $table->string('duration')->nullable();
-            $table->string('rating')->nullable();
-            $table->decimal('score', 4, 2)->nullable();
+            $table->string('rating')->nullable()->index();
+            $table->decimal('score', 4, 2)->nullable()->index();
 
             $table->text('synopsis')->nullable();
             $table->text('background')->nullable();
 
             $table->timestamps();
+
+            $table->index(['year', 'season']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('animes');
