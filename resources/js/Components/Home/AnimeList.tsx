@@ -1,5 +1,4 @@
-import { Link } from "@inertiajs/react";
-import { LuChevronRight, LuFlame, LuRadio, LuSkull } from "react-icons/lu";
+import { LuFlame, LuRadio } from "react-icons/lu";
 import SectionHeader from "./SectionHeader";
 import AnimeCard from "../UI/AnimeCard";
 

@@ -1,4 +1,4 @@
-import { Form, Link, router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
 import InputField from "../../Components/UI/InputField";

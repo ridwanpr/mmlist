@@ -5,7 +5,10 @@ interface UserDashLayoutProps {
 }
 
 const UserDashLayout = ({ children }: UserDashLayoutProps) => {
-  return <div>UserDashLayout</div>;
+  return <div>
+    <h1>UserDashLayout</h1>
+    <div>{children}</div>
+  </div>;
 };
 
 export default UserDashLayout;

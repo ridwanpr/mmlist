@@ -3,8 +3,6 @@ import {
   LuChevronRight,
   LuInfo,
   LuShare2,
-  LuStar,
-  LuStarHalf,
 } from "react-icons/lu";
 import FrontLayout from "../../Layouts/FrontLayout";
 import TriggerWarning from "../../Components/Anime/TriggerWarning";

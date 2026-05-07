@@ -1,4 +1,4 @@
-import { Form, Link, router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import AuthLayout from "../../Layouts/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
 import InputField from "../../Components/UI/InputField";
@@ -96,7 +96,7 @@ function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
           </button>
 
           <p className="text-text-muted pt-1 text-center text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href={routes["auth.register"]}
               className="text-primary hover:text-primary-dark font-semibold transition-colors"

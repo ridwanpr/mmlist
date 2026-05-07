@@ -3,7 +3,7 @@ import RefineCheckbox from "../UI/RefineCheckbox";
 import DropdownMenu from "../UI/DropdownMenu";
 
 const RefineResults = () => {
-  const [clear, setClear] = useState(false);
+  // const [clear, setClear] = useState(false);
   const [fromYear, setFromYear] = useState("From");
   const [toYear, setToYear] = useState("To");
 

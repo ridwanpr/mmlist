@@ -11,10 +11,10 @@ const CTA = () => {
 
         <div className="flex flex-1 flex-col gap-2">
           <h2 className="text-text font-serif text-2xl font-bold md:text-3xl">
-            You're not Alone.
+            You&apos;re not Alone.
           </h2>
           <p className="text-base opacity-80 md:text-lg">
-            Together, we're creating a safer space for anime fans everywhere.
+            Together, we&apos;re creating a safer space for anime fans everywhere.
           </p>
         </div>
 

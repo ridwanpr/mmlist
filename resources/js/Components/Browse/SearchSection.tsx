@@ -4,7 +4,7 @@ import DropdownMenu from "../UI/DropdownMenu";
 import ModalDialog from "../UI/ModalDialog";
 
 const SearchSection = () => {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const genreOptions = [
     { label: "Action", onClick: () => console.log("Action clicked") },

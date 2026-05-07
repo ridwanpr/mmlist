@@ -1,4 +1,3 @@
-import React from "react";
 import RefineResults from "./RefineResults";
 
 const AnimeList = () => {

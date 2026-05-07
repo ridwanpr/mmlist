@@ -2,11 +2,6 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
 } from "@headlessui/react";
 
 const TriggerWarning = () => {

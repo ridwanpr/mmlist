@@ -1,4 +1,4 @@
-import { LuChevronLeft, LuMenu } from "react-icons/lu";
+import { LuMenu } from "react-icons/lu";
 import AdminSidebar from "../Components/UI/AdminSidebar";
 import React, { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
@@ -10,14 +10,14 @@ interface BackLayoutProps {
 }
 
 const BackLayout = ({ children }: BackLayoutProps) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const { flash } = usePage();
-
-  useEffect(() => {
-    if (window.innerWidth < 1024) {
-      setIsSidebarOpen(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1024;
     }
-  }, []);
+    return true;
+  });
+
+  const { flash } = usePage();
 
   useEffect(() => {
     if (flash.success) toast.success(flash.success);
