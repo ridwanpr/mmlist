@@ -57,14 +57,11 @@ const AnimeCard = ({ animeData }: AnimeCardProps) => {
           </p>
 
           {/* Meta — season+year · eps · type */}
-          <div className="text-text/70 mb-1.5 flex min-w-0 items-center gap-1 text-xs">
+          <div className="text-text/70 mb-1.5 flex flex-wrap items-center gap-x-1 gap-y-0.5 text-xs">
             {metaParts.map((part, i) => (
-              <span
-                key={i}
-                className={`flex items-center gap-1 ${i === 0 ? "min-w-0 truncate" : "shrink-0"}`}
-              >
+              <span key={i} className="flex items-center gap-1">
                 {i > 0 && <span className="opacity-40">·</span>}
-                <span className={i === 0 ? "truncate" : ""}>{part}</span>
+                {part}
               </span>
             ))}
           </div>
