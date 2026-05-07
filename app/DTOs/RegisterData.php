@@ -3,7 +3,9 @@
 namespace App\DTOs;
 
 use Illuminate\Http\Request;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 readonly class RegisterData
 {
     public function __construct(

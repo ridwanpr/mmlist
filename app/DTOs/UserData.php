@@ -2,6 +2,9 @@
 
 namespace App\DTOs;
 
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+
+#[TypeScript]
 readonly class UserData
 {
     public function __construct(
