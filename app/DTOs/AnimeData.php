@@ -5,6 +5,11 @@ namespace App\DTOs;
 readonly class AnimeData
 {
     /**
+     * @param  array<string, mixed>  $aired
+     * @param  array<string, mixed>  $images
+     * @param  array<string, mixed>  $trailer
+     * @param  array<int, mixed>  $title_synonyms
+     * @param  AnimeTitleData[]  $titles
      * @param  AnimeMetaData[]  $themes
      * @param  AnimeMetaData[]  $studios
      * @param  AnimeMetaData[]  $producers
@@ -43,6 +48,9 @@ readonly class AnimeData
         public ?array $themes,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -53,7 +61,6 @@ readonly class AnimeData
             images: $data['images'] ?? null,
             trailer: $data['trailer'] ?? null,
             approved: $data['approved'] ?? false,
-            titles: $data['titles'] ?? null,
             title: $data['title'],
             titleEnglish: $data['title_english'] ?? null,
             titleJapanese: $data['title_japanese'] ?? null,
@@ -69,6 +76,12 @@ readonly class AnimeData
             score: isset($data['score']) ? (float) $data['score'] : null,
             synopsis: $data['synopsis'] ?? null,
             background: $data['background'] ?? null,
+
+            titles: isset($data['titles']) ?
+                array_map(
+                    fn (array $item) => AnimeTitleData::fromArray($item),
+                    $data['titles']
+                ) : null,
 
             demographics: isset($data['demographics'])
                 ? array_map(
