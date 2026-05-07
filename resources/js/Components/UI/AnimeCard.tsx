@@ -1,11 +1,10 @@
 import { Link } from "@inertiajs/react";
 
 interface AnimeCardProps {
-  animeData: App.DTOs.AnimeData
+  animeData: App.DTOs.AnimeData;
 }
 
 const AnimeCard = ({ animeData }: AnimeCardProps) => {
-  // console.log(animeData.images.jpg.image_url);
   return (
     <Link href="/anime/show" className="group mb-4 block lg:mb-0">
       <div className="bg-surface border-surface-alt group-hover:border-primary-soft flex h-40 overflow-hidden rounded-lg border transition duration-200 group-hover:shadow-sm">
