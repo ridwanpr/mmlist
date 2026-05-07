@@ -1,8 +1,9 @@
 import { Link, router, usePage } from "@inertiajs/react";
-import AuthLayout from "../../Layouts/AuthLayout";
-import { FaGoogle } from "react-icons/fa";
-import InputField from "../../Components/UI/InputField";
 import React, { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
+
+import InputField from "../../Components/UI/InputField";
+import AuthLayout from "../../Layouts/AuthLayout";
 
 const Login = () => {
   const { routes, errors } = usePage().props;

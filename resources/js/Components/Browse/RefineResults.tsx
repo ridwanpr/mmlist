@@ -1,6 +1,7 @@
 import { useState } from "react";
-import RefineCheckbox from "../UI/RefineCheckbox";
+
 import DropdownMenu from "../UI/DropdownMenu";
+import RefineCheckbox from "../UI/RefineCheckbox";
 
 const RefineResults = () => {
   // const [clear, setClear] = useState(false);

@@ -1,9 +1,10 @@
-import { LuMenu } from "react-icons/lu";
-import AdminSidebar from "../Components/UI/AdminSidebar";
-import React, { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Link, usePage } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
+import { LuMenu } from "react-icons/lu";
 import { toast, Toaster } from "sonner";
+
+import AdminSidebar from "../Components/UI/AdminSidebar";
 
 interface BackLayoutProps {
   children: React.ReactNode;

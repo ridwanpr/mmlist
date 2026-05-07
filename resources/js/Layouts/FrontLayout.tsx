@@ -1,9 +1,10 @@
 import { usePage } from "@inertiajs/react";
+import React, { useEffect } from "react";
+import { toast, Toaster } from "sonner";
+
 import DekstopNav from "../Components/UI/DekstopNav";
 import Footer from "../Components/UI/Footer";
 import MobileNav from "../Components/UI/MobileNav";
-import React, { useEffect } from "react";
-import { toast, Toaster } from "sonner";
 
 interface FrontLayoutProps {
   children: React.ReactNode

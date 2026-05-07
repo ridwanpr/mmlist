@@ -1,6 +1,7 @@
 import { LuFlame, LuRadio } from "react-icons/lu";
-import SectionHeader from "./SectionHeader";
+
 import AnimeCard from "../UI/AnimeCard";
+import SectionHeader from "./SectionHeader";
 
 interface AnimeListProps {
   nowAiring: {

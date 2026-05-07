@@ -1,12 +1,13 @@
+import type React from "react";
 import {
   LuBookmark,
   LuChevronRight,
   LuInfo,
   LuShare2,
 } from "react-icons/lu";
-import FrontLayout from "../../Layouts/FrontLayout";
+
 import TriggerWarning from "../../Components/Anime/TriggerWarning";
-import type React from "react";
+import FrontLayout from "../../Layouts/FrontLayout";
 
 const ShowAnime = () => {
   const triggerData = [

@@ -6,6 +6,7 @@ import {
   LuLogOut,
   LuStar,
 } from "react-icons/lu";
+
 import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
