@@ -18,7 +18,7 @@ class AnimeRepository
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            Log::error('Failed to create new anime data' . $e);
+            Log::error('Failed to create new anime data'.$e);
             throw $e;
         }
     }

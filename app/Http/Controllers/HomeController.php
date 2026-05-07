@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AnimeService;
-use Http;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Concurrency;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,10 +13,14 @@ class HomeController extends Controller
 
     public function Index(): Response
     {
-        $nowAiring = $this->animeService->fetchNowAiring();
+        [$nowAiring, $topAnime] = Concurrency::run([
+            fn () => $this->animeService->fetchNowAiring(),
+            fn () => $this->animeService->fetchTopAnime(),
+        ]);
 
         return Inertia::render('Home/Index', [
-            'nowAiring' => $nowAiring
+            'nowAiring' => $nowAiring,
+            'topAnime' => $topAnime,
         ]);
     }
 }

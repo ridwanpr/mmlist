@@ -6,12 +6,12 @@ import Features from "../../Components/Home/Features";
 import HowItWork from "../../Components/Home/HowItWork";
 import CTA from "../../Components/Home/CTA";
 
-const Home = () => {
+const Home = ({ nowAiring, topAnime }) => {
   return (
     <>
       <Hero />
       <Status />
-      <AnimeList />
+      <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <Features />
       <HowItWork />
       <CTA />

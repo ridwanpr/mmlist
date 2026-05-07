@@ -3,7 +3,7 @@ import { LuChevronRight, LuFlame, LuRadio, LuSkull } from "react-icons/lu";
 import AnimeCard from "../UI/AnimeCard";
 import SectionHeader from "./SectionHeader";
 
-const AnimeList = () => {
+const AnimeList = ({ nowAiring, topAnime }) => {
   return (
     <div className="mx-auto max-w-7xl p-4 lg:py-8">
       <SectionHeader
@@ -13,28 +13,24 @@ const AnimeList = () => {
 
       <section id="now-airing" className="mb-8">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-          <AnimeCard  />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
+          {nowAiring &&
+            nowAiring.data.map((airing) => (
+              <AnimeCard key={airing.mal_id} animeData={airing} />
+            ))}
         </div>
       </section>
 
       <SectionHeader
-        title="Hot Anime"
+        title="Top Anime"
         icon={<LuFlame size="32px" className="text-primary" />}
       />
 
-      <section id="hot" className="mb-4">
+      <section id="top" className="mb-4">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
-          <AnimeCard />
+          {topAnime &&
+            topAnime.data.map((top) => (
+              <AnimeCard key={top.mal_id} animeData={top} />
+            ))}
         </div>
       </section>
     </div>

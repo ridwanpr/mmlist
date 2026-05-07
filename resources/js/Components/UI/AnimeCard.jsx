@@ -1,14 +1,15 @@
 import { Link } from "@inertiajs/react";
 
-const AnimeCard = () => {
+const AnimeCard = ({ animeData }) => {
+  // console.log(animeData.images.jpg.image_url);
   return (
     <Link href="/anime/show" className="group mb-4 block lg:mb-0">
       <div className="bg-surface border-surface-alt group-hover:border-primary-soft flex h-40 overflow-hidden rounded-lg border transition duration-200 group-hover:shadow-sm">
         {/* Image Wrapper */}
         <div className="relative h-full w-26.5 shrink-0 overflow-hidden">
           <img
-            src="/assets/img/dummy-cover.jpg"
-            alt="cover image"
+            src={animeData && animeData.images.jpg.image_url}
+            alt={animeData && `${animeData.title} cover image`}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         </div>
@@ -20,18 +21,24 @@ const AnimeCard = () => {
             className="mb-1 line-clamp-2 text-sm leading-snug font-bold md:text-base"
             title="Anime Title Here Lorem ipsum dolor sit amet."
           >
-            Anime Title Here Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Quo, eaque.
+            {animeData && animeData.title}
           </p>
 
           {/* Combined Meta Info */}
           <p className="text-text/80 mb-1 truncate text-xs">
-            2021 &bull; 12 Episodes &bull; Movie
+            {animeData && (animeData.year ? `${animeData.year} |` : "")}{" "}
+            {animeData &&
+              (animeData.episodes
+                ? `${animeData.episodes} episodes |`
+                : "")}{" "}
+            {animeData && (animeData.type ?? "")}
           </p>
 
           {/* Genres */}
           <div className="text-text/80 mb-2 truncate text-xs">
-            Action, Adventure, Drama
+            {animeData && animeData.genres
+              ? animeData.genres.map((genre) => `${genre.name} `)
+              : ""}
           </div>
 
           {/* Tags */}

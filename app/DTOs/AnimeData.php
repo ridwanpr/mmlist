@@ -2,15 +2,14 @@
 
 namespace App\DTOs;
 
-
 readonly class AnimeData
 {
     /**
-     * @param AnimeMetaData[] $themes
-     * @param AnimeMetaData[] $studios
-     * @param AnimeMetaData[] $producers
-     * @param AnimeMetaData[] $demographics
-     * @param AnimeMetaData[] $genres
+     * @param  AnimeMetaData[]  $themes
+     * @param  AnimeMetaData[]  $studios
+     * @param  AnimeMetaData[]  $producers
+     * @param  AnimeMetaData[]  $demographics
+     * @param  AnimeMetaData[]  $genres
      */
     public function __construct(
         public int $malId,
@@ -44,7 +43,6 @@ readonly class AnimeData
         public ?array $themes,
     ) {}
 
-
     public static function fromArray(array $data): self
     {
         return new self(
@@ -74,35 +72,35 @@ readonly class AnimeData
 
             demographics: isset($data['demographics'])
                 ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
+                    fn (array $item) => AnimeMetaData::fromArray($item),
                     $data['demographics']
                 )
                 : null,
 
             genres: isset($data['genres'])
                 ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
+                    fn (array $item) => AnimeMetaData::fromArray($item),
                     $data['genres']
                 )
                 : null,
 
             producers: isset($data['producers'])
                 ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
+                    fn (array $item) => AnimeMetaData::fromArray($item),
                     $data['producers']
                 )
                 : null,
 
             studios: isset($data['studios'])
                 ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
+                    fn (array $item) => AnimeMetaData::fromArray($item),
                     $data['studios']
                 )
                 : null,
 
             themes: isset($data['themes'])
                 ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
+                    fn (array $item) => AnimeMetaData::fromArray($item),
                     $data['themes']
                 )
                 : null,
