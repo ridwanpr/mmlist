@@ -20,7 +20,7 @@ readonly class AnimeData
      * @param  AnimeMetaData[]  $genres
      */
     public function __construct(
-        public int $malId,
+        public int $mal_id,
         public string $url,
         public ?string $season,
         public ?int $year,
@@ -29,8 +29,8 @@ readonly class AnimeData
         public bool $approved,
         public ?array $titles,
         public string $title,
-        public ?string $titleEnglish,
-        public ?string $titleJapanese,
+        public ?string $title_english,
+        public ?string $title_japanese,
         public ?array $title_synonyms,
         public ?string $type,
         public ?string $source,
@@ -57,7 +57,7 @@ readonly class AnimeData
     public static function fromArray(array $data): self
     {
         return new self(
-            malId: $data['mal_id'],
+            mal_id: $data['mal_id'],
             url: $data['url'],
             season: $data['season'] ?? null,
             year: $data['year'] ?? null,
@@ -65,8 +65,8 @@ readonly class AnimeData
             trailer: $data['trailer'] ?? null,
             approved: $data['approved'] ?? false,
             title: $data['title'],
-            titleEnglish: $data['title_english'] ?? null,
-            titleJapanese: $data['title_japanese'] ?? null,
+            title_english: $data['title_english'] ?? null,
+            title_japanese: $data['title_japanese'] ?? null,
             title_synonyms: $data['title_synonyms'] ?? null,
             type: $data['type'] ?? null,
             source: $data['source'] ?? null,
@@ -134,7 +134,7 @@ readonly class AnimeData
         $decodedTitles = $decodeJson($data->titles ?? null);
 
         return new self(
-            malId: (int) $data->mal_id,
+            mal_id: (int) $data->mal_id,
             url: $data->url,
             season: $data->season ?? null,
             year: $data->year ?? null,
@@ -142,8 +142,8 @@ readonly class AnimeData
             trailer: $decodeJson($data->trailer ?? null),
             approved: (bool) ($data->approved ?? false),
             title: $data->title,
-            titleEnglish: $data->title_english ?? null,
-            titleJapanese: $data->title_japanese ?? null,
+            title_english: $data->title_english ?? null,
+            title_japanese: $data->title_japanese ?? null,
             title_synonyms: $decodeJson($data->title_synonyms ?? null),
             type: $data->type ?? null,
             source: $data->source ?? null,

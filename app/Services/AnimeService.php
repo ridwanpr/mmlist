@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AnimeData;
+use App\DTOs\AnimeMetaData;
 use App\Repositories\AnimeRepository;
 use Exception;
 use Illuminate\Support\Collection;
@@ -428,73 +429,70 @@ class AnimeService
         ],
     ];
 
-    /**
-     * @return array<int, AnimeData>
-     */
-    public function fetchNowAiring(int $limit = 12, string $forPage = 'home'): array
+    // /**
+    //  * @return array<int, AnimeData>
+    //  */
+    public function fetchNowAiring(int $limit = 12, string $forPage = 'home')
     {
-        try {
-            $cachedData = Cache::get("airing_anime_limit:{$limit}_page:{$forPage}");
-            if ($cachedData) {
-                return $cachedData;
-            }
+        // try {
+        //     $dataFromDb = $this->animeRepository->getAiringData($limit);
 
-            // Fetch from DB
-            $dataFromDb = $this->animeRepository->getAiringData($limit);
+        //     if ($dataFromDb->count() > 0) {
+        //         $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromDatabase($item))->all();
+        //         return $mappedDbData;
+        //     }
 
-            if ($dataFromDb->count() > 0) {
-                $mappedDbData = $dataFromDb->map(fn ($item) => AnimeData::fromDatabase($item))->all();
+        //     // Fallback to API
+        //     $response = Http::withQueryParameters([
+        //         'limit' => $limit,
+        //     ])->get(config('app.jikan_url') . '/seasons/now');
 
-                Cache::set("airing_anime_limit:{$limit}_page:{$forPage}", $mappedDbData, 3600);
+        //     if ($response->failed()) {
+        //         Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
+        //             'body' => $response->body(),
+        //         ]);
+        //         $response->throw();
+        //     }
 
-                return $mappedDbData;
-            }
+        //     $apiPayload = $response->json();
+        //     $animeDataDtos = [];
 
-            // Fallback to API
-            $response = Http::withQueryParameters([
-                'limit' => $limit,
-            ])->get(config('app.jikan_url').'/seasons/now');
+        //     if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
 
-            if ($response->failed()) {
-                Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
-                    'body' => $response->body(),
-                ]);
-                $response->throw();
-            }
+        //         $animeDataDtos = collect($apiPayload['data'])
+        //             ->unique('mal_id')
+        //             ->map(fn(array $item) => AnimeData::fromArray($item))
+        //             ->values()
+        //             ->all();
 
-            $apiPayload = $response->json();
-            $animeDataDtos = [];
+        //         // dd($animeDataDtos);
+        //         $this->bulkInsertAnimeWithMetaData($animeDataDtos);
+        //     }
 
-            if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
-                $this->bulkInsertAnimeWithMetaData($apiPayload['data']);
+        //     return $animeDataDtos;
+        // } catch (Exception $e) {
+        //     Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
+        //     throw $e;
+        // }
 
-                $animeDataDtos = collect($apiPayload['data'])
-                    ->unique('mal_id')
-                    ->map(fn (array $item) => AnimeData::fromArray($item))
-                    ->values()
-                    ->all();
-            }
-
-            Cache::set("airing_anime_limit:{$limit}_page:{$forPage}", $animeDataDtos, 3600);
-
-            return $animeDataDtos;
-        } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: '.$e->getMessage());
-            throw $e;
-        }
+        $dummyDtos = collect($this->dummy)
+            ->map(fn(array $item) => AnimeData::fromArray($item))->values()->all();
+        // dd($dummyDtos);
+        $this->bulkInsertAnimeWithMetaData($dummyDtos);
     }
 
     /**
-     * @param  array<int, AnimeData>  $animeApiData
+     * @param  array<AnimeData>  $animeApiData
      */
     public function bulkInsertAnimeWithMetaData(array $animeApiData): void
     {
         $animeRecordsToInsert = [];
         $animeMalIds = [];
+        // dd($animeApiData);
 
         foreach ($animeApiData as $apiAnime) {
             $animeRecordsToInsert[] = [
-                'mal_id' => $apiAnime->malId,
+                'mal_id' => $apiAnime->mal_id,
                 'url' => $apiAnime->url,
                 'season' => $apiAnime->season,
                 'year' => $apiAnime->year,
@@ -503,8 +501,8 @@ class AnimeService
                 'approved' => $apiAnime->approved,
                 'titles' => json_encode($apiAnime->titles),
                 'title' => $apiAnime->title,
-                'title_english' => $apiAnime->titleEnglish,
-                'title_japanese' => $apiAnime->titleJapanese,
+                'title_english' => $apiAnime->title_english,
+                'title_japanese' => $apiAnime->title_japanese,
                 'title_synonyms' => json_encode($apiAnime->title_synonyms),
                 'type' => $apiAnime->type,
                 'source' => $apiAnime->source,
@@ -520,14 +518,15 @@ class AnimeService
                 'created_at' => now(),
             ];
 
-            $animeMalIds[] = $apiAnime->malId;
+            $animeMalIds[] = $apiAnime->mal_id;
         }
 
         $this->animeRepository->insert($animeRecordsToInsert);
 
         $insertedAnimeRecords = $this->animeRepository->getAnimeMapFromMalId($animeMalIds);
 
-        $this->processAndInsertDemographics($animeApiData, $insertedAnimeRecords);
+        // $this->processAndInsertDemographics($animeApiData, $insertedAnimeRecords);
+        $this->processAndInsertGenres($animeApiData, $insertedAnimeRecords);
     }
 
     /**
@@ -548,15 +547,15 @@ class AnimeService
             }
 
             foreach ($apiAnime->demographics as $apiDemographic) {
-                $allDemographicMalIdsFromApi[] = $apiDemographic->malId;
-                
+                $allDemographicMalIdsFromApi[] = $apiDemographic->mal_id;
+
                 // Map this specific anime to this specific demographic (using MAL IDs)
-                $animeToDemographicMalIdMap[$apiAnime->malId][] = [
-                    'malId' => $apiDemographic->malId,
+                $animeToDemographicMalIdMap[$apiAnime->mal_id][] = [
+                    'malId' => $apiDemographic->mal_id,
                 ];
 
                 // Prepare the demographic payload in case we need to insert it as a new row
-                $uniqueDemographicsPayload[$apiDemographic->malId] = [
+                $uniqueDemographicsPayload[$apiDemographic->mal_id] = [
                     'name' => $apiDemographic->name,
                     'type' => $apiDemographic->type,
                     'url' => $apiDemographic->url,
@@ -621,6 +620,55 @@ class AnimeService
         }
     }
 
+    private function processAndInsertGenres(array $animeApiData, Collection $insertedAnimeRecords): void
+    {
+        // dd($animeApiData, $insertedAnimeRecords);
+        $rawGenresData = [];
+        $animeMalWithGenres = [];
+        $genreIds = [];
+        foreach ($animeApiData as $anime) {
+            if (empty($anime->genres)) {
+                return;
+            }
+
+            /** @var AnimeMetaData $genres */
+            $genres = $anime->genres;
+            foreach ($genres as $genre) {
+                $rawGenresData[$genre->mal_id] = $genre;
+
+                $genreIds[] = $genre->mal_id;
+
+                $animeMalWithGenres[$anime->mal_id][] = $genre;
+            }
+        }
+
+        $uniqueGenreIds = array_unique($genreIds);
+        $existingGenres = $this->animeRepository->findGenresIds($uniqueGenreIds);
+
+        $existingGenreMalIds = [];
+        foreach ($existingGenres as $existingGenre) {
+            $existingGenreMalIds[] = $existingGenre->mal_id;
+        }
+
+        $newGenreMalIdsToInsert = array_diff($uniqueGenreIds, $existingGenreMalIds);
+
+        $genreData = [];
+        foreach ($newGenreMalIdsToInsert as $newGenre) {
+            // dd($rawGenresData[$newGenre]->mal_id);
+            $genreData[] = [
+                'mal_id' => $rawGenresData[$newGenre]->mal_id,
+                'type' => $rawGenresData[$newGenre]->type,
+                'name' => $rawGenresData[$newGenre]->name,
+                'url' => $rawGenresData[$newGenre]->url,
+                'created_at' => now()
+            ];
+        }
+
+        // dd($rawGenresData, $animeMalWithGenres, $newGenreMalIdsToInsert, $genreData);
+
+        $this->animeRepository->insertGenres($genreData);
+    }
+
     /**
      * Fetch top anime.
      *
@@ -632,7 +680,7 @@ class AnimeService
             return Cache::remember("top_anime_limit:{$limit}", 3600, function () use ($limit) {
                 $response = Http::timeout(10)->withQueryParameters([
                     'limit' => $limit,
-                ])->get(config('app.jikan_url').'/top/anime');
+                ])->get(config('app.jikan_url') . '/top/anime');
 
                 if ($response->failed()) {
                     Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
@@ -642,9 +690,9 @@ class AnimeService
                 $animeData = $response->json();
 
                 if (isset($animeData['data']) && is_array($animeData['data'])) {
-                    $animeData['data'] = collect($animeData['data'])
+                    $animeData = collect($animeData['data'])
                         ->unique('mal_id')
-                        ->map(fn (array $item) => AnimeData::fromArray($item))
+                        ->map(fn(array $item) => AnimeData::fromArray($item))
                         ->values()
                         ->all();
                 }
@@ -652,7 +700,7 @@ class AnimeService
                 return $animeData;
             });
         } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: '.$e->getMessage());
+            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
 
             return ['data' => []];
         }

@@ -82,4 +82,16 @@ class AnimeRepository
     {
         DB::table('anime_demographics')->insertOrIgnore($data);
     }
+
+    public function insertGenres(array $data): void
+    {
+        DB::table('genres')->insertOrIgnore($data);
+    }
+
+    public function findGenresIds(array $genreIds)
+    {
+        return DB::table('genres')
+            ->whereIn('mal_id', $genreIds)
+            ->get();
+    }
 }

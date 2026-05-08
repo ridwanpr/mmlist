@@ -8,7 +8,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class AnimeMetaData
 {
     public function __construct(
-        public int $malId,
+        public int $mal_id,
         public string $type,
         public string $name,
         public string $url,
@@ -20,7 +20,7 @@ readonly class AnimeMetaData
     public static function fromArray(array $data): self
     {
         return new self(
-            malId: $data['mal_id'],
+            mal_id: $data['mal_id'],
             type: $data['type'],
             name: $data['name'],
             url: $data['url'],
