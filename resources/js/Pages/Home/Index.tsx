@@ -9,12 +9,8 @@ import Status from "../../Components/Home/Status";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface HomeProps {
-  nowAiring: {
-    data: App.DTOs.AnimeData[]
-  };
-  topAnime: {
-    data: App.DTOs.AnimeData[]
-  };
+  nowAiring: App.DTOs.AnimeData[];
+  topAnime: App.DTOs.AnimeData[];
 }
 
 const Home = ({ nowAiring, topAnime }: HomeProps) => {

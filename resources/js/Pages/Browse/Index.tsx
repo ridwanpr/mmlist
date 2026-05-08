@@ -5,9 +5,7 @@ import SearchSection from "../../Components/Browse/SearchSection";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface BrowseProps {
-  animes: {
-    data: App.DTOs.AnimeData[];
-  };
+  animes: App.DTOs.AnimeData[];
 }
 
 const Browse = ({ animes }: BrowseProps) => {

@@ -4,12 +4,8 @@ import AnimeCard from "../UI/AnimeCard";
 import SectionHeader from "./SectionHeader";
 
 interface AnimeListProps {
-  nowAiring: {
-    data: App.DTOs.AnimeData[]
-  };
-  topAnime: {
-    data: App.DTOs.AnimeData[]
-  };
+  nowAiring: App.DTOs.AnimeData[];
+  topAnime: App.DTOs.AnimeData[];
 }
 
 const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
@@ -23,7 +19,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       <section id="now-airing" className="mb-8">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           {nowAiring &&
-            nowAiring.data.map((airing) => (
+            nowAiring.map((airing) => (
               <AnimeCard key={airing.malId} animeData={airing} />
             ))}
         </div>
@@ -37,7 +33,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       <section id="top" className="mb-4">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           {topAnime &&
-            topAnime.data.map((top) => (
+            topAnime.map((top) => (
               <AnimeCard key={top.malId} animeData={top} />
             ))}
         </div>
