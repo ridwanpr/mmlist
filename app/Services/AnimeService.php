@@ -465,7 +465,6 @@ class AnimeService
                     ->values()
                     ->all();
 
-                // dd($animeDataDtos);
                 $this->bulkInsertAnimeWithMetaData($animeDataDtos);
             }
 
@@ -622,13 +621,12 @@ class AnimeService
 
     private function processAndInsertGenres(array $animeApiData, Collection $insertedAnimeRecords): void
     {
-        // dd($animeApiData, $insertedAnimeRecords);
         $rawGenresData = [];
         $animeMalWithGenres = [];
         $genreIds = [];
         foreach ($animeApiData as $anime) {
             if (empty($anime->genres)) {
-                return;
+                continue;
             }
 
             /** @var AnimeMetaData $genres */
