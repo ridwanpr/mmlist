@@ -10,7 +10,6 @@ class BrowseController extends Controller
 {
     public function __construct(private AnimeService $animeService) {}
 
-
     public function Index(): Response
     {
         $animes = $this->animeService->fetchNowAiring();

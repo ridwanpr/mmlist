@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\AnimeData;
 use App\Repositories\AnimeRepository;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +14,8 @@ class AnimeService
 {
     public function __construct(private AnimeRepository $animeRepository) {}
 
-    public $dummy = [
+    /** @var list<array<string, mixed>> */
+    public array $dummy = [
         [
             'mal_id' => 51553,
             'url' => 'https://myanimelist.net/anime/51553/Tongari_Boushi_no_Atelier',
@@ -224,7 +226,7 @@ class AnimeService
             'popularity' => 143,
             'members' => 1012351,
             'favorites' => 45672,
-            'synopsis' => "The demon king has been defeated, and the victorious hero party returns home before disbanding. The four mages, heroes, and warriors reflect on their decade-long journey and bid each other farewell.",
+            'synopsis' => 'The demon king has been defeated, and the victorious hero party returns home before disbanding. The four mages, heroes, and warriors reflect on their decade-long journey and bid each other farewell.',
             'background' => 'Sousou no Frieren was awarded the 14th Manga Taisho in 2021.',
             'season' => 'fall',
             'year' => 2023,
@@ -426,7 +428,10 @@ class AnimeService
         ],
     ];
 
-    public function fetchNowAiring(int $limit = 12, $forPage = 'home')
+    /**
+     * @return array<int, AnimeData>
+     */
+    public function fetchNowAiring(int $limit = 12, string $forPage = 'home'): array
     {
         try {
             $cachedData = Cache::get("airing_anime_limit:{$limit}_page:{$forPage}");
@@ -435,19 +440,20 @@ class AnimeService
             }
 
             // Fetch from DB
-            $dataFromDb = $this->animeRepository->getAiringData(limit: $limit);
+            $dataFromDb = $this->animeRepository->getAiringData($limit);
 
             if ($dataFromDb->count() > 0) {
-                $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromDatabase($item))->all();
+                $mappedDbData = $dataFromDb->map(fn ($item) => AnimeData::fromDatabase($item))->all();
 
                 Cache::set("airing_anime_limit:{$limit}_page:{$forPage}", $mappedDbData, 3600);
+
                 return $mappedDbData;
             }
 
             // Fallback to API
             $response = Http::withQueryParameters([
                 'limit' => $limit,
-            ])->get(config('app.jikan_url') . '/seasons/now');
+            ])->get(config('app.jikan_url').'/seasons/now');
 
             if ($response->failed()) {
                 Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
@@ -464,7 +470,7 @@ class AnimeService
 
                 $animeDataDtos = collect($apiPayload['data'])
                     ->unique('mal_id')
-                    ->map(fn(array $item) => AnimeData::fromArray($item))
+                    ->map(fn (array $item) => AnimeData::fromArray($item))
                     ->values()
                     ->all();
             }
@@ -473,13 +479,15 @@ class AnimeService
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
+            Log::error('Failed to fetch Now Airing anime: '.$e->getMessage());
             throw $e;
         }
     }
 
-    /** @param AnimeData[] $animeApiData */
-    public function bulkInsertAnimeWithMetaData(array $animeApiData)
+    /**
+     * @param  array<int, AnimeData>  $animeApiData
+     */
+    public function bulkInsertAnimeWithMetaData(array $animeApiData): void
     {
         $animeRecordsToInsert = [];
         $animeMalIds = [];
@@ -524,20 +532,24 @@ class AnimeService
 
     /**
      * Extracts, inserts, and maps demographic data for the given anime payload.
-     * 
-     * @param array $animeApiData
-     * @param mixed $insertedAnimeRecords
+     *
+     * @param  array<int, AnimeData>  $animeApiData
+     * @param  Collection<int, \stdClass>  $insertedAnimeRecords
      */
-    private function processAndInsertDemographics(array $animeApiData, $insertedAnimeRecords)
+    private function processAndInsertDemographics(array $animeApiData, Collection $insertedAnimeRecords): void
     {
         $uniqueDemographicsPayload = [];
         $allDemographicMalIdsFromApi = [];
         $animeToDemographicMalIdMap = [];
 
         foreach ($animeApiData as $apiAnime) {
+            if (empty($apiAnime->demographics)) {
+                continue;
+            }
+
             foreach ($apiAnime->demographics as $apiDemographic) {
                 $allDemographicMalIdsFromApi[] = $apiDemographic->malId;
-
+                
                 // Map this specific anime to this specific demographic (using MAL IDs)
                 $animeToDemographicMalIdMap[$apiAnime->malId][] = [
                     'malId' => $apiDemographic->malId,
@@ -548,19 +560,24 @@ class AnimeService
                     'name' => $apiDemographic->name,
                     'type' => $apiDemographic->type,
                     'url' => $apiDemographic->url,
-                    'created_at' => now()
+                    'created_at' => now(),
                 ];
             }
         }
 
         // Get unique demographic MAL IDs from the API payload to avoid checking duplicates
         $uniqueDemographicMalIds = array_unique($allDemographicMalIdsFromApi);
+
+        if (empty($uniqueDemographicMalIds)) {
+            return;
+        }
+
         $existingDemographicsInDb = $this->animeRepository->findDemographicsIds($uniqueDemographicMalIds);
 
         $existingDemographicMalIds = [];
         foreach ($existingDemographicsInDb as $dbDemographic) {
             $existingDemographicMalIds[] = $dbDemographic->mal_id;
-        };
+        }
 
         $newDemographicMalIdsToInsert = array_diff($uniqueDemographicMalIds, $existingDemographicMalIds);
 
@@ -571,18 +588,19 @@ class AnimeService
                 'name' => $uniqueDemographicsPayload[$missingMalId]['name'],
                 'type' => $uniqueDemographicsPayload[$missingMalId]['type'],
                 'url' => $uniqueDemographicsPayload[$missingMalId]['url'],
-                'created_at' => now()
+                'created_at' => now(),
             ];
         }
 
-        if (!empty($newDemographicsPayload)) {
+        if (! empty($newDemographicsPayload)) {
             $this->animeRepository->insertDemographic($newDemographicsPayload);
         }
 
         $allDemographicsInDb = $this->animeRepository->findDemographicsIds($uniqueDemographicMalIds);
 
-        // Create an easy lookup table to translate MAL IDs into Database IDs: [mal_id => db_id]
+        // Create an easy lookup table to translate MAL IDs into Database IDs: [mal_id => id]
         $demographicDbIdByMalId = $allDemographicsInDb->pluck('id', 'mal_id');
+
         // Link the internal Anime DB IDs with the internal Demographic DB IDs
         $pivotRecordsToInsert = [];
 
@@ -592,13 +610,13 @@ class AnimeService
                     $pivotRecordsToInsert[] = [
                         'anime_id' => $dbAnime->id,
                         'demographic_id' => $demographicDbIdByMalId[$mappedDemographic['malId']],
-                        'created_at' => now()
+                        'created_at' => now(),
                     ];
                 }
             }
         }
 
-        if (!empty($pivotRecordsToInsert)) {
+        if (! empty($pivotRecordsToInsert)) {
             $this->animeRepository->insertAnimeDemographic($pivotRecordsToInsert);
         }
     }
@@ -606,7 +624,7 @@ class AnimeService
     /**
      * Fetch top anime.
      *
-     * @return array{data: AnimeData[]}
+     * @return array{data: array<int, AnimeData>}
      */
     public function fetchTopAnime(int $limit = 8): array
     {
@@ -614,7 +632,7 @@ class AnimeService
             return Cache::remember("top_anime_limit:{$limit}", 3600, function () use ($limit) {
                 $response = Http::timeout(10)->withQueryParameters([
                     'limit' => $limit,
-                ])->get(config('app.jikan_url') . '/top/anime');
+                ])->get(config('app.jikan_url').'/top/anime');
 
                 if ($response->failed()) {
                     Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
@@ -624,9 +642,9 @@ class AnimeService
                 $animeData = $response->json();
 
                 if (isset($animeData['data']) && is_array($animeData['data'])) {
-                    $animeData = collect($animeData['data'])
+                    $animeData['data'] = collect($animeData['data'])
                         ->unique('mal_id')
-                        ->map(fn(array $item) => AnimeData::fromArray($item))
+                        ->map(fn (array $item) => AnimeData::fromArray($item))
                         ->values()
                         ->all();
                 }
@@ -634,7 +652,7 @@ class AnimeService
                 return $animeData;
             });
         } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
+            Log::error('Failed to fetch Top Anime: '.$e->getMessage());
 
             return ['data' => []];
         }

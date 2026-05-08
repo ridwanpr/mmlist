@@ -125,10 +125,8 @@ readonly class AnimeData
 
     /**
      * Map data from a standard database object to the DTO.
-     * 
-     * @param  object  $data (stdClass from DB::table)
      */
-    public static function fromDatabase(object $data): self
+    public static function fromDatabase(\stdClass $data): self
     {
         // Helper to safely decode JSON strings from the database
         $decodeJson = fn(?string $json) => $json ? json_decode($json, true) : null;
