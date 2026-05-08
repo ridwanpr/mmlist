@@ -94,4 +94,12 @@ class AnimeRepository
             ->whereIn('mal_id', $genreIds)
             ->get();
     }
+
+    /**
+     * @param  list<array<string, mixed>>  $data
+     */
+    public function insertAnimeGenres(array $data): void
+    {
+        DB::table('anime_genres')->insertOrIgnore($data);
+    }
 }

@@ -646,15 +646,16 @@ class AnimeService
         $existingGenres = $this->animeRepository->findGenresIds($uniqueGenreIds);
 
         $existingGenreMalIds = [];
+        $genreIdFromDbMapMalIds = [];
         foreach ($existingGenres as $existingGenre) {
             $existingGenreMalIds[] = $existingGenre->mal_id;
+            $genreIdFromDbMapMalIds[$existingGenre->id] = $existingGenre->mal_id;
         }
 
         $newGenreMalIdsToInsert = array_diff($uniqueGenreIds, $existingGenreMalIds);
 
         $genreData = [];
         foreach ($newGenreMalIdsToInsert as $newGenre) {
-            // dd($rawGenresData[$newGenre]->mal_id);
             $genreData[] = [
                 'mal_id' => $rawGenresData[$newGenre]->mal_id,
                 'type' => $rawGenresData[$newGenre]->type,
@@ -664,9 +665,21 @@ class AnimeService
             ];
         }
 
-        // dd($rawGenresData, $animeMalWithGenres, $newGenreMalIdsToInsert, $genreData);
-
         $this->animeRepository->insertGenres($genreData);
+        $uptodateGenre = $this->animeRepository->findGenresIds($uniqueGenreIds);
+        $pluckGenreIdMal = $uptodateGenre->pluck('id', 'mal_id');
+
+        $animeGenreData = [];
+        foreach ($insertedAnimeRecords as $animeRecord) {
+            foreach ($animeMalWithGenres[$animeRecord->mal_id] as $mappedGenres) {
+                $animeGenreData[] = [
+                    'anime_id' => $animeRecord->id,
+                    'genre_id' => $pluckGenreIdMal[$mappedGenres->mal_id]
+                ];
+            }
+        }
+
+        $this->animeRepository->insertAnimeGenres($animeGenreData);
     }
 
     /**
