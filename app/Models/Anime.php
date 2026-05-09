@@ -2,9 +2,48 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+
+#[Fillable([
+    'mal_id',
+    'url',
+    'season',
+    'year',
+    'images',
+    'trailer',
+    'approved',
+    'titles',
+    'title',
+    'title_english',
+    'title_japanese',
+    'title_synonyms',
+    'type',
+    'source',
+    'episodes',
+    'status',
+    'airing',
+    'aired',
+    'duration',
+    'rating',
+    'score',
+    'synopsis',
+    'background',
+])]
 
 class Anime extends Model
 {
-    //
+    protected function casts(): array
+    {
+        return [
+            'images' => 'array',
+            'trailer' => 'array',
+            'titles' => 'array',
+            'title_synonyms' => 'array',
+            'aired' => 'array',
+            'approved' => 'boolean',
+            'airing' => 'boolean',
+            'score' => 'decimal:2',
+        ];
+    }
 }
