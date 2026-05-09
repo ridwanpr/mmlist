@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anime;
 use App\Services\AnimeService;
 use Illuminate\Support\Facades\Concurrency;
 use Inertia\Inertia;

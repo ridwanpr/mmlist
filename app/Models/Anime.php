@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 #[Fillable([
     'mal_id',
@@ -45,5 +46,11 @@ class Anime extends Model
             'airing' => 'boolean',
             'score' => 'decimal:2',
         ];
+    }
+
+    public function demographics(): BelongsToMany
+    {
+        return $this->belongsToMany(Demographic::class, 'anime_demographics', 'anime_id', 'demographic_id')
+            ->withTimestamps();
     }
 }
