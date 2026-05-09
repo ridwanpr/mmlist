@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(UserRole::class, 'user_roles', 'user_id', 'roles_id')
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
             ->withTimestamps();
     }
 }
