@@ -37,7 +37,7 @@ class AnimeService
                 $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
                 return $mappedDbData;
             }
-            
+
             // Fallback to API
             $response = Http::withQueryParameters([
                 'limit' => $limit,
@@ -100,7 +100,7 @@ class AnimeService
                 $response->throw();
             }
 
-            $animeData = $response->json();
+            $apiPayload = $response->json();
             $animeDataDtos = [];
             if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
 
