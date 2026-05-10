@@ -14,13 +14,13 @@ class HomeController extends Controller
 
     public function Index(): Response
     {
-        // [$nowAiring, $topAnime] = Concurrency::run([
-        //     fn() => $this->animeService->fetchNowAiring(),
-        //     fn() => $this->animeService->fetchTopAnime(),
-        // ]);
+        [$nowAiring, $topAnime] = Concurrency::run([
+            fn() => $this->animeService->fetchNowAiring(),
+            fn() => $this->animeService->fetchTopAnime(),
+        ]);
 
-        $nowAiring = $this->animeService->fetchNowAiring();
-        $topAnime = $this->animeService->fetchTopAnime();
+        // $nowAiring = $this->animeService->fetchNowAiring();
+        // $topAnime = $this->animeService->fetchTopAnime();
 
         return Inertia::render('Home/Index', [
             'nowAiring' => $nowAiring,

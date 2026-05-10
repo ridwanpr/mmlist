@@ -2,7 +2,9 @@
 
 namespace App\DTOs;
 
+use App\Models\Anime;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+use stdClass;
 
 #[TypeScript]
 readonly class AnimeData
@@ -44,7 +46,6 @@ readonly class AnimeData
         public ?string $synopsis,
         public ?string $background,
         public ?int $rank,
-
         public ?array $demographics,
         public ?array $genres,
         public ?array $producers,
@@ -82,55 +83,37 @@ readonly class AnimeData
             background: $data['background'] ?? null,
             rank: $data['rank'] ?? null,
 
-            titles: isset($data['titles']) ?
-                array_map(
-                    fn(array $item) => AnimeTitleData::fromArray($item),
-                    $data['titles']
-                ) : null,
+            titles: isset($data['titles'])
+                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $data['titles'])
+                : null,
 
             demographics: isset($data['demographics'])
-                ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
-                    $data['demographics']
-                )
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['demographics'])
                 : null,
 
             genres: isset($data['genres'])
-                ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
-                    $data['genres']
-                )
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['genres'])
                 : null,
 
             producers: isset($data['producers'])
-                ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
-                    $data['producers']
-                )
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['producers'])
                 : null,
 
             studios: isset($data['studios'])
-                ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
-                    $data['studios']
-                )
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['studios'])
                 : null,
 
             themes: isset($data['themes'])
-                ? array_map(
-                    fn(array $item) => AnimeMetaData::fromArray($item),
-                    $data['themes']
-                )
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['themes'])
                 : null,
         );
     }
 
     /**
-     * Map data from a standard database object to the DTO.
+     * Map data from a raw stdClass (e.g. DB::select()) to the DTO.
      */
-    public static function fromDatabase(\stdClass $data): self
+    public static function fromDatabase(stdClass $data): self
     {
-        // Helper to safely decode JSON strings from the database
         $decodeJson = fn(?string $json) => $json ? json_decode($json, true) : null;
 
         $decodedTitles = $decodeJson($data->titles ?? null);
@@ -164,25 +147,89 @@ readonly class AnimeData
                 ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
                 : null,
 
-            demographics: isset($data->demographics) && is_string($data->demographics)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decodeJson($data->demographics))
-                : ($data->demographics ?? null),
+            demographics: isset($data->demographics)
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->demographics, true))
+                : null,
 
-            genres: isset($data->genres) && is_string($data->genres)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decodeJson($data->genres))
-                : ($data->genres ?? null),
+            genres: isset($data->genres)
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->genres, true))
+                : null,
 
-            producers: isset($data->producers) && is_string($data->producers)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decodeJson($data->producers))
-                : ($data->producers ?? null),
+            producers: isset($data->producers)
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->producers, true))
+                : null,
 
-            studios: isset($data->studios) && is_string($data->studios)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decodeJson($data->studios))
-                : ($data->studios ?? null),
+            studios: isset($data->studios)
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->studios, true))
+                : null,
 
-            themes: isset($data->themes) && is_string($data->themes)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decodeJson($data->themes))
-                : ($data->themes ?? null),
+            themes: isset($data->themes)
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->themes, true))
+                : null,
+        );
+    }
+
+    /**
+     * Map data from an Eloquent Anime model to the DTO.
+     */
+    public static function fromModel(Anime $model): self
+    {
+        $decode = fn(mixed $value): ?array => match (true) {
+            is_array($value)  => $value,
+            is_string($value) => json_decode($value, true),
+            default           => null,
+        };
+
+        $decodedTitles = $decode($model->titles);
+
+        return new self(
+            mal_id: (int) $model->mal_id,
+            url: $model->url,
+            season: $model->season ?? null,
+            year: $model->year ?? null,
+            images: $decode($model->images),
+            trailer: $decode($model->trailer),
+            approved: (bool) ($model->approved ?? false),
+            title: $model->title,
+            title_english: $model->title_english ?? null,
+            title_japanese: $model->title_japanese ?? null,
+            title_synonyms: $decode($model->title_synonyms),
+            type: $model->type ?? null,
+            source: $model->source ?? null,
+            episodes: $model->episodes ?? null,
+            status: $model->status ?? null,
+            airing: (bool) ($model->airing ?? false),
+            aired: $decode($model->aired),
+            duration: $model->duration ?? null,
+            rating: $model->rating ?? null,
+            score: isset($model->score) ? (float) $model->score : null,
+            synopsis: $model->synopsis ?? null,
+            background: $model->background ?? null,
+            rank: $model->rank ?? null,
+
+            titles: $decodedTitles
+                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
+                : null,
+
+            demographics: ($decoded = $decode($model->demographics))
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
+                : null,
+
+            genres: ($decoded = $decode($model->genres))
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
+                : null,
+
+            producers: ($decoded = $decode($model->producers))
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
+                : null,
+
+            studios: ($decoded = $decode($model->studios))
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
+                : null,
+
+            themes: ($decoded = $decode($model->themes))
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
+                : null,
         );
     }
 }
