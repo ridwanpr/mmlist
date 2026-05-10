@@ -11,6 +11,7 @@ use App\Models\Genre;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Anime;
 use App\Models\AnimeProducer;
 use App\Models\AnimeStudio;
@@ -22,20 +23,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnimeService
 {
-    // /**
-    //  * @return array<int, AnimeData>
-    //  */
+    /**
+     * @return array<int, AnimeData>
+     */
     public function fetchNowAiring(int $limit = 12, string $forPage = 'home')
     {
         try {
-            $dataFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
-                ->where('airing', true)
-                ->limit($limit)
-                ->get();
+            $cacheKey = "anime_now_airing_ids_{$limit}";
 
-            if ($dataFromDb->count() > 0) {
-                $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
-                return $mappedDbData;
+            // Check Cache for IDs
+            if (Cache::has($cacheKey)) {
+                $cachedMalIds = Cache::get($cacheKey);
+
+                $dataFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+                    ->whereIn('mal_id', $cachedMalIds)
+                    ->get();
+
+                if ($dataFromDb->count() > 0) {
+                    $dataFromDb = $dataFromDb->sortBy(fn($anime) => array_search($anime->mal_id, $cachedMalIds));
+                    return $dataFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+                }
             }
 
             // Fallback to API
@@ -54,14 +61,17 @@ class AnimeService
             $animeDataDtos = [];
 
             if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
-
                 $animeDataDtos = collect($apiPayload['data'])
                     ->unique('mal_id')
                     ->map(fn(array $item) => AnimeData::fromArray($item))
                     ->values()
                     ->all();
 
-                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos));
+                // Cache the IDs for 12 hours
+                $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->toArray();
+                Cache::put($cacheKey, $malIdsToCache, now()->addHours(12));
+
+                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos, true));
             }
 
             return $animeDataDtos;
@@ -79,17 +89,20 @@ class AnimeService
     public function fetchTopAnime(int $limit = 8): array
     {
         try {
-            $topAnimeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
-                ->whereNotNull('rank')
-                ->orderBy('rank')
-                ->take($limit)
-                ->get();
+            $cacheKey = "anime_top_ids_{$limit}";
 
-            if ($topAnimeFromDb->count() > 0) {
-                $mappedDbData = $topAnimeFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
-                return $mappedDbData;
+            if (Cache::has($cacheKey)) {
+                $cachedMalIds = Cache::get($cacheKey);
+
+                $topAnimeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+                    ->whereIn('mal_id', $cachedMalIds)
+                    ->get();
+
+                if ($topAnimeFromDb->count() > 0) {
+                    $topAnimeFromDb = $topAnimeFromDb->sortBy(fn($anime) => array_search($anime->mal_id, $cachedMalIds));
+                    return $topAnimeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+                }
             }
-
 
             $response = Http::timeout(10)->withQueryParameters([
                 'limit' => $limit,
@@ -102,15 +115,19 @@ class AnimeService
 
             $apiPayload = $response->json();
             $animeDataDtos = [];
-            if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
 
+            if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
                 $animeDataDtos = collect($apiPayload['data'])
                     ->unique('mal_id')
                     ->map(fn(array $item) => AnimeData::fromArray($item))
                     ->values()
                     ->all();
 
-                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos));
+                // Cache the top IDs for 24 hours
+                $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->toArray();
+                Cache::put($cacheKey, $malIdsToCache, now()->addHours(24));
+
+                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos, false));
             }
 
             return $animeDataDtos;
@@ -123,12 +140,24 @@ class AnimeService
 
     /**
      * @param  array<AnimeData>  $animeApiData
+     * @param  bool  $isNowAiringSync
      */
-    public function bulkInsertAnimeWithMetaData(array $animeApiData): void
+    public function bulkInsertAnimeWithMetaData(array $animeApiData, bool $isNowAiringSync = false): void
     {
         $buildedAnimeRecords = $this->buildAnimeRecords($animeApiData);
 
-        Anime::insertOrIgnore($buildedAnimeRecords['animeRecords']);
+        Anime::upsert(
+            $buildedAnimeRecords['animeRecords'],
+            ['mal_id'],
+            ['episodes', 'status', 'airing', 'score', 'rank', 'rating', 'images']
+        );
+
+        //  Fix stale airing statuses when seasons change
+        if ($isNowAiringSync) {
+            Anime::where('airing', true)
+                ->whereNotIn('mal_id', $buildedAnimeRecords['animeMalIds'])
+                ->update(['airing' => false]);
+        }
 
         $insertedAnimeRecords = Anime::whereIn('mal_id', $buildedAnimeRecords['animeMalIds'])->get();
 
