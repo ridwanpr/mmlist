@@ -9,7 +9,6 @@ use App\Models\AnimeGenre;
 use App\Models\Demographic;
 use App\Models\Genre;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\Anime;
@@ -20,7 +19,6 @@ use App\Models\Producer;
 use App\Models\Studio;
 use App\Models\Theme;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class AnimeService
 {
@@ -39,7 +37,7 @@ class AnimeService
                 $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
                 return $mappedDbData;
             }
-            dd('c');
+            
             // Fallback to API
             $response = Http::withQueryParameters([
                 'limit' => $limit,
