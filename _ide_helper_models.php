@@ -18,20 +18,20 @@ namespace App\Models{
  * @property string $url
  * @property string|null $season
  * @property int|null $year
- * @property string|null $images
- * @property string|null $trailer
- * @property int $approved
- * @property string|null $titles
+ * @property array<array-key, mixed>|null $images
+ * @property array<array-key, mixed>|null $trailer
+ * @property bool $approved
+ * @property array<array-key, mixed>|null $titles
  * @property string $title
  * @property string|null $title_english
  * @property string|null $title_japanese
- * @property string|null $title_synonyms
+ * @property array<array-key, mixed>|null $title_synonyms
  * @property string|null $type
  * @property string|null $source
  * @property int|null $episodes
  * @property string|null $status
- * @property int $airing
- * @property string|null $aired
+ * @property bool $airing
+ * @property array<array-key, mixed>|null $aired
  * @property string|null $duration
  * @property string|null $rating
  * @property numeric|null $score
@@ -39,6 +39,8 @@ namespace App\Models{
  * @property string|null $background
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Demographic> $demographics
+ * @property-read int|null $demographics_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime query()
@@ -68,8 +70,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereYear($value)
+ * @mixin \Eloquent
  */
-	class Anime extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnime {}
 }
 
 namespace App\Models{
@@ -87,8 +91,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereDemographicId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class AnimeDemographic extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnimeDemographic {}
 }
 
 namespace App\Models{
@@ -106,8 +112,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeGenre whereGenreId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeGenre whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeGenre whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class AnimeGenre extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnimeGenre {}
 }
 
 namespace App\Models{
@@ -125,8 +133,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereProducerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class AnimeProducer extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnimeProducer {}
 }
 
 namespace App\Models{
@@ -144,8 +154,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereStudioId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class AnimeStudio extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnimeStudio {}
 }
 
 namespace App\Models{
@@ -163,8 +175,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereThemeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class AnimeTheme extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperAnimeTheme {}
 }
 
 namespace App\Models{
@@ -176,6 +190,8 @@ namespace App\Models{
  * @property string $url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Anime> $animes
+ * @property-read int|null $animes_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic query()
@@ -186,8 +202,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Demographic whereUrl($value)
+ * @mixin \Eloquent
  */
-	class Demographic extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperDemographic {}
 }
 
 namespace App\Models{
@@ -209,8 +227,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereUrl($value)
+ * @mixin \Eloquent
  */
-	class Genre extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperGenre {}
 }
 
 namespace App\Models{
@@ -232,17 +252,21 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereUrl($value)
+ * @mixin \Eloquent
  */
-	class Producer extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperProducer {}
 }
 
 namespace App\Models{
 /**
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role query()
@@ -251,8 +275,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-	class Role extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperRole {}
 }
 
 namespace App\Models{
@@ -274,8 +300,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Studio whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Studio whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Studio whereUrl($value)
+ * @mixin \Eloquent
  */
-	class Studio extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperStudio {}
 }
 
 namespace App\Models{
@@ -297,8 +325,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereUrl($value)
+ * @mixin \Eloquent
  */
-	class Theme extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperTheme {}
 }
 
 namespace App\Models{
@@ -314,6 +344,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
+ * @property-read int|null $roles_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
@@ -327,8 +359,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
+ * @mixin \Eloquent
  */
-	class User extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperUser {}
 }
 
 namespace App\Models{
@@ -346,7 +380,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserRole whereUserId($value)
+ * @mixin \Eloquent
  */
-	class UserRole extends \Eloquent {}
+	#[\AllowDynamicProperties]
+	class IdeHelperUserRole {}
 }
 

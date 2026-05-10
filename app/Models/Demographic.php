@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @mixin IdeHelperDemographic
+ */
 #[Fillable(['mal_id', 'type', 'name', 'url'])]
 class Demographic extends Model
 {

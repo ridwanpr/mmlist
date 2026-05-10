@@ -27,7 +27,7 @@ const SideMenu = () => {
       <SidebarLink href="#" routeName="watchlist.index">
         <LuCog size={18} /> Settings
       </SidebarLink>
-      <SidebarLink href="#" routeName="watchlist.index">
+      <SidebarLink href="/logout" method="post" routeName="watchlist.index">
         <LuLogOut size={18} /> Logout
       </SidebarLink>
       <div className="bg-surface-alt my-4 rounded-lg p-4">

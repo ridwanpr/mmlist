@@ -2,14 +2,26 @@
 
 namespace App\Services;
 
-use App\DTOs\AnimeData;
-use App\DTOs\AnimeMetaData;
-use App\Repositories\AnimeRepository;
 use Exception;
+use App\DTOs\AnimeData;
+use App\Models\AnimeDemographic;
+use App\Models\AnimeGenre;
+use App\Models\Demographic;
+use App\Models\Genre;
+use App\Repositories\AnimeRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Models\Anime;
+use App\Models\AnimeProducer;
+use App\Models\AnimeStudio;
+use App\Models\AnimeTheme;
+use App\Models\Producer;
+use App\Models\Studio;
+use App\Models\Theme;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class AnimeService
 {
@@ -434,50 +446,50 @@ class AnimeService
     //  */
     public function fetchNowAiring(int $limit = 12, string $forPage = 'home')
     {
-        try {
-            $dataFromDb = $this->animeRepository->getAiringData($limit);
+        // try {
+        //     $dataFromDb = $this->animeRepository->getAiringData($limit);
 
-            if ($dataFromDb->count() > 0) {
-                $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromDatabase($item))->all();
-                return $mappedDbData;
-            }
+        //     if ($dataFromDb->count() > 0) {
+        //         $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromDatabase($item))->all();
+        //         return $mappedDbData;
+        //     }
 
-            // Fallback to API
-            $response = Http::withQueryParameters([
-                'limit' => $limit,
-            ])->get(config('app.jikan_url') . '/seasons/now');
+        //     // Fallback to API
+        //     $response = Http::withQueryParameters([
+        //         'limit' => $limit,
+        //     ])->get(config('app.jikan_url') . '/seasons/now');
 
-            if ($response->failed()) {
-                Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
-                    'body' => $response->body(),
-                ]);
-                $response->throw();
-            }
+        //     if ($response->failed()) {
+        //         Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
+        //             'body' => $response->body(),
+        //         ]);
+        //         $response->throw();
+        //     }
 
-            $apiPayload = $response->json();
-            $animeDataDtos = [];
+        //     $apiPayload = $response->json();
+        //     $animeDataDtos = [];
 
-            if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
+        //     if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
 
-                $animeDataDtos = collect($apiPayload['data'])
-                    ->unique('mal_id')
-                    ->map(fn(array $item) => AnimeData::fromArray($item))
-                    ->values()
-                    ->all();
+        //         $animeDataDtos = collect($apiPayload['data'])
+        //             ->unique('mal_id')
+        //             ->map(fn(array $item) => AnimeData::fromArray($item))
+        //             ->values()
+        //             ->all();
 
-                $this->bulkInsertAnimeWithMetaData($animeDataDtos);
-            }
+        //         $this->bulkInsertAnimeWithMetaData($animeDataDtos);
+        //     }
 
-            return $animeDataDtos;
-        } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
-            throw $e;
-        }
+        //     return $animeDataDtos;
+        // } catch (Exception $e) {
+        //     Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
+        //     throw $e;
+        // }
 
-        // $dummyDtos = collect($this->dummy)
-        //     ->map(fn(array $item) => AnimeData::fromArray($item))->values()->all();
-        // // dd($dummyDtos);
-        // $this->bulkInsertAnimeWithMetaData($dummyDtos);
+        $dummyDtos = collect($this->dummy)
+            ->map(fn(array $item) => AnimeData::fromArray($item))->values()->all();
+        // dd($dummyDtos);
+        $this->bulkInsertAnimeWithMetaData($dummyDtos);
     }
 
     /**
@@ -485,10 +497,65 @@ class AnimeService
      */
     public function bulkInsertAnimeWithMetaData(array $animeApiData): void
     {
+        $buildedAnimeRecords = $this->buildAnimeRecords($animeApiData);
+
+        Anime::insertOrIgnore($buildedAnimeRecords['animeRecords']);
+
+        $insertedAnimeRecords = Anime::whereIn('mal_id', $buildedAnimeRecords['animeMalIds'])->get();
+
+        $this->processAndInsertAnimeMetadata(
+            animeApiData: $animeApiData,
+            insertedAnimeRecords: $insertedAnimeRecords,
+            apiProperty: 'demographics',
+            relatedModel: Demographic::class,
+            pivotModel: AnimeDemographic::class,
+            pivotForeignKey: 'demographic_id'
+        );
+
+        $this->processAndInsertAnimeMetadata(
+            animeApiData: $animeApiData,
+            insertedAnimeRecords: $insertedAnimeRecords,
+            apiProperty: 'genres',
+            relatedModel: Genre::class,
+            pivotModel: AnimeGenre::class,
+            pivotForeignKey: 'genre_id'
+        );
+
+        $this->processAndInsertAnimeMetadata(
+            animeApiData: $animeApiData,
+            insertedAnimeRecords: $insertedAnimeRecords,
+            apiProperty: 'producers',
+            relatedModel: Producer::class,
+            pivotModel: AnimeProducer::class,
+            pivotForeignKey: 'producer_id'
+        );
+
+        $this->processAndInsertAnimeMetadata(
+            animeApiData: $animeApiData,
+            insertedAnimeRecords: $insertedAnimeRecords,
+            apiProperty: 'studios',
+            relatedModel: Studio::class,
+            pivotModel: AnimeStudio::class,
+            pivotForeignKey: 'studio_id'
+        );
+
+        $this->processAndInsertAnimeMetadata(
+            animeApiData: $animeApiData,
+            insertedAnimeRecords: $insertedAnimeRecords,
+            apiProperty: 'themes',
+            relatedModel: Theme::class,
+            pivotModel: AnimeTheme::class,
+            pivotForeignKey: 'theme_id'
+        );
+    }
+
+    /**
+     * @param  array<AnimeData>  $animeApiData
+     */
+    private function buildAnimeRecords(array $animeApiData)
+    {
         $animeRecordsToInsert = [];
         $animeMalIds = [];
-        // dd($animeApiData);
-
         foreach ($animeApiData as $apiAnime) {
             $animeRecordsToInsert[] = [
                 'mal_id' => $apiAnime->mal_id,
@@ -520,164 +587,69 @@ class AnimeService
             $animeMalIds[] = $apiAnime->mal_id;
         }
 
-        $this->animeRepository->insert($animeRecordsToInsert);
-
-        $insertedAnimeRecords = $this->animeRepository->getAnimeMapFromMalId($animeMalIds);
-
-        $this->processAndInsertDemographics($animeApiData, $insertedAnimeRecords);
-        $this->processAndInsertGenres($animeApiData, $insertedAnimeRecords);
+        return [
+            'animeRecords' => $animeRecordsToInsert,
+            'animeMalIds' => $animeMalIds
+        ];
     }
 
     /**
-     * Extracts, inserts, and maps demographic data for the given anime payload.
+     * Extracts, inserts, and maps related metadata (genres, demographics, etc.) for the anime payload.
      *
-     * @param  array<int, AnimeData>  $animeApiData
-     * @param  Collection<int, \stdClass>  $insertedAnimeRecords
+     * @param array<int, AnimeData> $animeApiData
+     * @param Collection<int, \stdClass> $insertedAnimeRecords
+     * @param string $apiProperty The key from the Jikan API (e.g., 'genres', 'demographics')
+     * @param class-string<Model> $relatedModel The Eloquent model class for the entity (e.g., Genre::class)
+     * @param class-string<Model> $pivotModel The Eloquent model class for the pivot table (e.g., AnimeGenre::class)
+     * @param string $pivotForeignKey The column name in the pivot table (e.g., 'genre_id')
      */
-    private function processAndInsertDemographics(array $animeApiData, Collection $insertedAnimeRecords): void
-    {
-        $uniqueDemographicsPayload = [];
-        $allDemographicMalIdsFromApi = [];
-        $animeToDemographicMalIdMap = [];
+    private function processAndInsertAnimeMetadata(
+        array $animeApiData,
+        Collection $insertedAnimeRecords,
+        string $apiProperty,
+        string $relatedModel,
+        string $pivotModel,
+        string $pivotForeignKey
+    ): void {
+        $relatedModelDatas = [];
+        $malAnimeIdWithPivotData = [];
 
-        foreach ($animeApiData as $apiAnime) {
-            if (empty($apiAnime->demographics)) {
+        foreach ($animeApiData as $apiData) {
+            if (empty($apiData->$apiProperty)) {
                 continue;
             }
 
-            foreach ($apiAnime->demographics as $apiDemographic) {
-                $allDemographicMalIdsFromApi[] = $apiDemographic->mal_id;
-
-                // Map this specific anime to this specific demographic (using MAL IDs)
-                $animeToDemographicMalIdMap[$apiAnime->mal_id][] = [
-                    'malId' => $apiDemographic->mal_id,
-                ];
-
-                // Prepare the demographic payload in case we need to insert it as a new row
-                $uniqueDemographicsPayload[$apiDemographic->mal_id] = [
-                    'name' => $apiDemographic->name,
-                    'type' => $apiDemographic->type,
-                    'url' => $apiDemographic->url,
-                    'created_at' => now(),
+            foreach ($apiData->$apiProperty as $property) {
+                $malAnimeIdWithPivotData[$apiData->mal_id][] = $property->mal_id;
+                $relatedModelDatas[$property->mal_id] = [
+                    'mal_id' => $property->mal_id,
+                    'type' => $property->type,
+                    'name' => $property->name,
+                    'url' => $property->url,
+                    'created_at' => now()
                 ];
             }
         }
 
-        // Get unique demographic MAL IDs from the API payload to avoid checking duplicates
-        $uniqueDemographicMalIds = array_unique($allDemographicMalIdsFromApi);
+        $relatedModel::insertOrIgnore($relatedModelDatas);
 
-        if (empty($uniqueDemographicMalIds)) {
-            return;
-        }
+        $insertedRelatedDatas = $relatedModel::whereIn('mal_id', array_keys($relatedModelDatas))->get();
+        $relatedIdsLookup = $insertedRelatedDatas->pluck('id', 'mal_id')->toArray();
 
-        $existingDemographicsInDb = $this->animeRepository->findDemographicsIds($uniqueDemographicMalIds);
-
-        $existingDemographicMalIds = [];
-        foreach ($existingDemographicsInDb as $dbDemographic) {
-            $existingDemographicMalIds[] = $dbDemographic->mal_id;
-        }
-
-        $newDemographicMalIdsToInsert = array_diff($uniqueDemographicMalIds, $existingDemographicMalIds);
-
-        $newDemographicsPayload = [];
-        foreach ($newDemographicMalIdsToInsert as $missingMalId) {
-            $newDemographicsPayload[] = [
-                'mal_id' => $missingMalId,
-                'name' => $uniqueDemographicsPayload[$missingMalId]['name'],
-                'type' => $uniqueDemographicsPayload[$missingMalId]['type'],
-                'url' => $uniqueDemographicsPayload[$missingMalId]['url'],
-                'created_at' => now(),
-            ];
-        }
-
-        if (! empty($newDemographicsPayload)) {
-            $this->animeRepository->insertDemographic($newDemographicsPayload);
-        }
-
-        $allDemographicsInDb = $this->animeRepository->findDemographicsIds($uniqueDemographicMalIds);
-
-        // Create an easy lookup table to translate MAL IDs into Database IDs: [mal_id => id]
-        $demographicDbIdByMalId = $allDemographicsInDb->pluck('id', 'mal_id');
-
-        // Link the internal Anime DB IDs with the internal Demographic DB IDs
-        $pivotRecordsToInsert = [];
-
-        foreach ($insertedAnimeRecords as $dbAnime) {
-            if (isset($animeToDemographicMalIdMap[$dbAnime->mal_id])) {
-                foreach ($animeToDemographicMalIdMap[$dbAnime->mal_id] as $mappedDemographic) {
-                    $pivotRecordsToInsert[] = [
-                        'anime_id' => $dbAnime->id,
-                        'demographic_id' => $demographicDbIdByMalId[$mappedDemographic['malId']],
-                        'created_at' => now(),
-                    ];
-                }
-            }
-        }
-
-        if (! empty($pivotRecordsToInsert)) {
-            $this->animeRepository->insertAnimeDemographic($pivotRecordsToInsert);
-        }
-    }
-
-    private function processAndInsertGenres(array $animeApiData, Collection $insertedAnimeRecords): void
-    {
-        $rawGenresData = [];
-        $animeMalWithGenres = [];
-        $genreIds = [];
-        foreach ($animeApiData as $anime) {
-            if (empty($anime->genres)) {
+        $pivotTableDatas = [];
+        foreach ($insertedAnimeRecords as $dbAnimeRecord) {
+            if (!isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
                 continue;
             }
-
-            /** @var AnimeMetaData $genres */
-            $genres = $anime->genres;
-            foreach ($genres as $genre) {
-                $rawGenresData[$genre->mal_id] = $genre;
-
-                $genreIds[] = $genre->mal_id;
-
-                $animeMalWithGenres[$anime->mal_id][] = $genre;
-            }
-        }
-
-        $uniqueGenreIds = array_unique($genreIds);
-        $existingGenres = $this->animeRepository->findGenresIds($uniqueGenreIds);
-
-        $existingGenreMalIds = [];
-        $genreIdFromDbMapMalIds = [];
-        foreach ($existingGenres as $existingGenre) {
-            $existingGenreMalIds[] = $existingGenre->mal_id;
-            $genreIdFromDbMapMalIds[$existingGenre->id] = $existingGenre->mal_id;
-        }
-
-        $newGenreMalIdsToInsert = array_diff($uniqueGenreIds, $existingGenreMalIds);
-
-        $genreData = [];
-        foreach ($newGenreMalIdsToInsert as $newGenre) {
-            $genreData[] = [
-                'mal_id' => $rawGenresData[$newGenre]->mal_id,
-                'type' => $rawGenresData[$newGenre]->type,
-                'name' => $rawGenresData[$newGenre]->name,
-                'url' => $rawGenresData[$newGenre]->url,
-                'created_at' => now()
-            ];
-        }
-
-        $this->animeRepository->insertGenres($genreData);
-        $uptodateGenre = $this->animeRepository->findGenresIds($uniqueGenreIds);
-        $pluckGenreIdMal = $uptodateGenre->pluck('id', 'mal_id');
-
-        $animeGenreData = [];
-        foreach ($insertedAnimeRecords as $animeRecord) {
-            foreach ($animeMalWithGenres[$animeRecord->mal_id] as $mappedGenres) {
-                $animeGenreData[] = [
-                    'anime_id' => $animeRecord->id,
-                    'genre_id' => $pluckGenreIdMal[$mappedGenres->mal_id]
+            foreach ($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id] as $malId) {
+                $pivotTableDatas[] = [
+                    'anime_id' => $dbAnimeRecord->id,
+                    $pivotForeignKey => $relatedIdsLookup[$malId]
                 ];
             }
         }
 
-        $this->animeRepository->insertAnimeGenres($animeGenreData);
+        $pivotModel::insertOrIgnore($pivotTableDatas);
     }
 
     /**

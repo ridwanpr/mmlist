@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('producers', function (Blueprint $table) {
             $table->id();
-            $table->integer('mal_id');
+            $table->integer('mal_id')->unique();
             $table->string('type', 20);
             $table->string('name', 20);
             $table->string('url');
