@@ -30,13 +30,16 @@ class AnimeService
     public function fetchNowAiring(int $limit = 12, string $forPage = 'home')
     {
         try {
-            $dataFromDb = Anime::where('airing', true)->limit($limit)->get();
+            $dataFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+                ->where('airing', true)
+                ->limit($limit)
+                ->get();
 
             if ($dataFromDb->count() > 0) {
                 $mappedDbData = $dataFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
                 return $mappedDbData;
             }
-
+            dd('c');
             // Fallback to API
             $response = Http::withQueryParameters([
                 'limit' => $limit,
@@ -60,7 +63,7 @@ class AnimeService
                     ->values()
                     ->all();
 
-                $this->bulkInsertAnimeWithMetaData($animeDataDtos);
+                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos));
             }
 
             return $animeDataDtos;
@@ -78,7 +81,8 @@ class AnimeService
     public function fetchTopAnime(int $limit = 8): array
     {
         try {
-            $topAnimeFromDb = Anime::whereNotNull('rank')
+            $topAnimeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+                ->whereNotNull('rank')
                 ->orderBy('rank')
                 ->take($limit)
                 ->get();
@@ -87,6 +91,7 @@ class AnimeService
                 $mappedDbData = $topAnimeFromDb->map(fn($item) => AnimeData::fromModel($item))->all();
                 return $mappedDbData;
             }
+
 
             $response = Http::timeout(10)->withQueryParameters([
                 'limit' => $limit,
@@ -99,15 +104,15 @@ class AnimeService
 
             $animeData = $response->json();
             $animeDataDtos = [];
+            if (isset($apiPayload['data']) && is_array($apiPayload['data'])) {
 
-            if (isset($animeData['data']) && is_array($animeData['data'])) {
-                $animeDataDtos = collect($animeData['data'])
+                $animeDataDtos = collect($apiPayload['data'])
                     ->unique('mal_id')
                     ->map(fn(array $item) => AnimeData::fromArray($item))
                     ->values()
                     ->all();
 
-                $this->bulkInsertAnimeWithMetaData($animeDataDtos);
+                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos));
             }
 
             return $animeDataDtos;
@@ -207,6 +212,7 @@ class AnimeService
                 'score' => $apiAnime->score,
                 'synopsis' => $apiAnime->synopsis,
                 'background' => $apiAnime->background,
+                'rank' => $apiAnime->rank,
                 'created_at' => now(),
             ];
 

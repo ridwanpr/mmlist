@@ -57,4 +57,28 @@ class Anime extends Model
         return $this->belongsToMany(Demographic::class, 'anime_demographics', 'anime_id', 'demographic_id')
             ->withTimestamps();
     }
+
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class, 'anime_genres', 'anime_id', 'genre_id')
+            ->withTimestamps();
+    }
+
+    public function producers(): BelongsToMany
+    {
+        return $this->belongsToMany(Producer::class, 'anime_producers', 'anime_id', 'producer_id')
+            ->withTimestamps();
+    }
+
+    public function studios(): BelongsToMany
+    {
+        return $this->belongsToMany(Studio::class, 'anime_studios', 'anime_id', 'studio_id')
+            ->withTimestamps();
+    }
+
+    public function themes(): BelongsToMany
+    {
+        return $this->belongsToMany(Theme::class, 'anime_themes', 'anime_id', 'theme_id')
+            ->withTimestamps();
+    }
 }
