@@ -1,7 +1,7 @@
 declare namespace App {
   namespace DTOs {
     export type AnimeData = {
-      readonly malId: number;
+      readonly mal_id: number;
       readonly url: string;
       readonly season: string | null;
       readonly year: number | null;
@@ -10,8 +10,8 @@ declare namespace App {
       readonly approved: boolean;
       readonly titles: App.DTOs.AnimeTitleData[];
       readonly title: string;
-      readonly titleEnglish: string | null;
-      readonly titleJapanese: string | null;
+      readonly title_english: string | null;
+      readonly title_japanese: string | null;
       readonly title_synonyms: any[];
       readonly type: string | null;
       readonly source: string | null;
@@ -24,6 +24,7 @@ declare namespace App {
       readonly score: number | null;
       readonly synopsis: string | null;
       readonly background: string | null;
+      readonly rank: number | null;
       readonly demographics: App.DTOs.AnimeMetaData[];
       readonly genres: App.DTOs.AnimeMetaData[];
       readonly producers: App.DTOs.AnimeMetaData[];
@@ -31,7 +32,7 @@ declare namespace App {
       readonly themes: App.DTOs.AnimeMetaData[];
     };
     export type AnimeMetaData = {
-      readonly malId: number;
+      readonly mal_id: number;
       readonly type: string;
       readonly name: string;
       readonly url: string;
