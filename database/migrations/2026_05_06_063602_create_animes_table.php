@@ -42,6 +42,7 @@ return new class extends Migration
 
             $table->text('synopsis')->nullable();
             $table->text('background')->nullable();
+            $table->unsignedInteger('rank')->nullable();
 
             $table->timestamps();
 

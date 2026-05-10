@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @mixin IdeHelperAnime
- * @method static \Illuminate\Database\Eloquent\Builder whereIn(string $column, mixed $values, string $boolean = 'and', bool $not = false)
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 #[Fillable([
     'mal_id',
@@ -27,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'source',
     'episodes',
     'status',
+    'rank',
     'airing',
     'aired',
     'duration',

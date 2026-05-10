@@ -660,28 +660,38 @@ class AnimeService
     public function fetchTopAnime(int $limit = 8): array
     {
         try {
-            return Cache::remember("top_anime_limit:{$limit}", 3600, function () use ($limit) {
-                $response = Http::timeout(10)->withQueryParameters([
-                    'limit' => $limit,
-                ])->get(config('app.jikan_url') . '/top/anime');
+            $topAnimeFromDb = Anime::whereNotNull('rank')
+                ->orderBy('rank')
+                ->take($limit)
+                ->get();
 
-                if ($response->failed()) {
-                    Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
-                    $response->throw();
-                }
+            if ($topAnimeFromDb->count > 0) {
+                return $topAnimeFromDb;
+            }
 
-                $animeData = $response->json();
+            $response = Http::timeout(10)->withQueryParameters([
+                'limit' => $limit,
+            ])->get(config('app.jikan_url') . '/top/anime');
 
-                if (isset($animeData['data']) && is_array($animeData['data'])) {
-                    $animeData = collect($animeData['data'])
-                        ->unique('mal_id')
-                        ->map(fn(array $item) => AnimeData::fromArray($item))
-                        ->values()
-                        ->all();
-                }
+            if ($response->failed()) {
+                Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
+                $response->throw();
+            }
 
-                return $animeData;
-            });
+            $animeData = $response->json();
+            $animeDataDtos = [];
+
+            if (isset($animeData['data']) && is_array($animeData['data'])) {
+                $animeDataDtos = collect($animeData['data'])
+                    ->unique('mal_id')
+                    ->map(fn(array $item) => AnimeData::fromArray($item))
+                    ->values()
+                    ->all();
+
+                $this->bulkInsertAnimeWithMetaData($animeDataDtos);
+            }
+
+            return $animeDataDtos;
         } catch (Exception $e) {
             Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
 

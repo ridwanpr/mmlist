@@ -43,6 +43,7 @@ readonly class AnimeData
         public ?float $score,
         public ?string $synopsis,
         public ?string $background,
+        public ?int $rank,
 
         public ?array $demographics,
         public ?array $genres,
@@ -79,6 +80,7 @@ readonly class AnimeData
             score: isset($data['score']) ? (float) $data['score'] : null,
             synopsis: $data['synopsis'] ?? null,
             background: $data['background'] ?? null,
+            rank: $data['rank'] ?? null,
 
             titles: isset($data['titles']) ?
                 array_map(
@@ -156,6 +158,7 @@ readonly class AnimeData
             score: isset($data->score) ? (float) $data->score : null,
             synopsis: $data->synopsis ?? null,
             background: $data->background ?? null,
+            rank: $data->rank ?? null,
 
             titles: $decodedTitles
                 ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
