@@ -36,7 +36,7 @@ readonly class AnimeData
         public ?array $title_synonyms,
         public ?string $type,
         public ?string $source,
-        public ?string $episodes,
+        public ?int $episodes,
         public ?string $status,
         public bool $airing,
         public ?array $aired,
@@ -84,27 +84,27 @@ readonly class AnimeData
             rank: $data['rank'] ?? null,
 
             titles: isset($data['titles'])
-                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $data['titles'])
+                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $data['titles'])
                 : null,
 
             demographics: isset($data['demographics'])
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['demographics'])
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['demographics'])
                 : null,
 
             genres: isset($data['genres'])
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['genres'])
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['genres'])
                 : null,
 
             producers: isset($data['producers'])
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['producers'])
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['producers'])
                 : null,
 
             studios: isset($data['studios'])
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['studios'])
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['studios'])
                 : null,
 
             themes: isset($data['themes'])
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['themes'])
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['themes'])
                 : null,
         );
     }
@@ -114,7 +114,7 @@ readonly class AnimeData
      */
     public static function fromDatabase(stdClass $data): self
     {
-        $decodeJson = fn(?string $json) => $json ? json_decode($json, true) : null;
+        $decodeJson = fn (?string $json) => $json ? json_decode($json, true) : null;
 
         $decodedTitles = $decodeJson($data->titles ?? null);
 
@@ -144,27 +144,27 @@ readonly class AnimeData
             rank: $data->rank ?? null,
 
             titles: $decodedTitles
-                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
+                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
                 : null,
 
             demographics: isset($data->demographics)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->demographics, true))
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->demographics, true))
                 : null,
 
             genres: isset($data->genres)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->genres, true))
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->genres, true))
                 : null,
 
             producers: isset($data->producers)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->producers, true))
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->producers, true))
                 : null,
 
             studios: isset($data->studios)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->studios, true))
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->studios, true))
                 : null,
 
             themes: isset($data->themes)
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), json_decode($data->themes, true))
+                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->themes, true))
                 : null,
         );
     }
@@ -175,15 +175,15 @@ readonly class AnimeData
     public static function fromModel(Anime $model): self
     {
         // Helper for JSON cast columns
-        $decodeJsonColumn = fn(mixed $value): ?array => match (true) {
-            is_array($value)  => $value,
+        $decodeJsonColumn = fn (mixed $value): ?array => match (true) {
+            is_array($value) => $value,
             is_string($value) => json_decode($value, true),
-            default           => null,
+            default => null,
         };
 
         // Helper to safely load and map Eloquent relationship Collections
-        $mapRelation = fn(string $relation) => $model->relationLoaded($relation) && $model->{$relation}
-            ? $model->{$relation}->map(fn($item) => AnimeMetaData::fromArray($item->toArray()))->toArray()
+        $mapRelation = fn (string $relation) => $model->relationLoaded($relation) && $model->{$relation}
+            ? $model->{$relation}->map(fn ($item) => AnimeMetaData::fromArray($item->toArray()))->toArray()
             : null;
 
         $decodedTitles = $decodeJsonColumn($model->titles);
@@ -214,7 +214,7 @@ readonly class AnimeData
             rank: $model->rank ?? null,
 
             titles: $decodedTitles
-                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
+                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
                 : null,
 
             demographics: $mapRelation('demographics'),

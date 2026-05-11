@@ -11,9 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-/**
- * @mixin IdeHelperUser
- */
 #[Fillable(['name', 'username', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -34,9 +31,13 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * @return BelongsToMany<Role, $this, UserRole>
+     */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
+            ->using(UserRole::class)
             ->withTimestamps();
     }
 }

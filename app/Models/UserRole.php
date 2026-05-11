@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-/**
- * @mixin IdeHelperUserRole
- */
 #[Fillable(['user_id', 'role_id'])]
-class UserRole extends Model
+class UserRole extends Pivot
 {
-    //
+    public $timestamps = true;
+
+    public $incrementing = true;
 }

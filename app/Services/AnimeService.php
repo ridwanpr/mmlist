@@ -34,13 +34,13 @@ class AnimeService
 
             $cachedAnime = $this->getAnimeFromCache($cacheKey);
 
-            if (!empty($cachedAnime)) {
+            if (! empty($cachedAnime)) {
                 return $cachedAnime;
             }
 
             $response = Http::withQueryParameters([
                 'limit' => $limit,
-            ])->get(config('app.jikan_url') . '/seasons/now');
+            ])->get(config('app.jikan_url').'/seasons/now');
 
             if ($response->failed()) {
                 Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
@@ -52,16 +52,16 @@ class AnimeService
             $apiPayload = $response->json();
             $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
 
-            if (!empty($animeDataDtos)) {
+            if (! empty($animeDataDtos)) {
                 $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->all();
                 Cache::put($cacheKey, $malIdsToCache, now()->addHours(12));
 
-                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos, true));
+                defer(fn () => $this->bulkInsertAnimeWithMetaData($animeDataDtos, true));
             }
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
+            Log::error('Failed to fetch Now Airing anime: '.$e->getMessage());
             throw $e;
         }
     }
@@ -76,7 +76,7 @@ class AnimeService
 
             $cachedAnime = $this->getAnimeFromCache($cacheKey);
 
-            if (!empty($cachedAnime)) {
+            if (! empty($cachedAnime)) {
                 return $cachedAnime;
             }
 
@@ -84,7 +84,7 @@ class AnimeService
                 ->withQueryParameters([
                     'limit' => $limit,
                 ])
-                ->get(config('app.jikan_url') . '/top/anime');
+                ->get(config('app.jikan_url').'/top/anime');
 
             if ($response->failed()) {
                 Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
@@ -94,16 +94,17 @@ class AnimeService
             $apiPayload = $response->json();
             $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
 
-            if (!empty($animeDataDtos)) {
+            if (! empty($animeDataDtos)) {
                 $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->all();
                 Cache::put($cacheKey, $malIdsToCache, now()->addHours(24));
 
-                defer(fn() => $this->bulkInsertAnimeWithMetaData($animeDataDtos, false));
+                defer(fn () => $this->bulkInsertAnimeWithMetaData($animeDataDtos, false));
             }
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
+            Log::error('Failed to fetch Top Anime: '.$e->getMessage());
+
             return [];
         }
     }
@@ -233,18 +234,18 @@ class AnimeService
     }
 
     /**
-     * @param  array<int, mixed>  $apiPayload
+     * @param  array<string, mixed>  $apiPayload
      * @return array<int, AnimeData>
      */
     private function mapApiPayloadToAnimeData(array $apiPayload): array
     {
-        if (!isset($apiPayload['data']) || !is_array($apiPayload['data'])) {
+        if (! isset($apiPayload['data']) || ! is_array($apiPayload['data'])) {
             return [];
         }
 
         return collect($apiPayload['data'])
             ->unique('mal_id')
-            ->map(fn(array $item) => AnimeData::fromArray($item))
+            ->map(fn (array $item) => AnimeData::fromArray($item))
             ->values()
             ->all();
     }
@@ -254,7 +255,7 @@ class AnimeService
      */
     private function getAnimeFromCache(string $cacheKey): array
     {
-        if (!Cache::has($cacheKey)) {
+        if (! Cache::has($cacheKey)) {
             return [];
         }
 
@@ -272,16 +273,16 @@ class AnimeService
             return [];
         }
 
-        $sorted = $dataFromDb->sortBy(fn($anime) => array_search($anime->mal_id, $cachedMalIds));
+        $sorted = $dataFromDb->sortBy(fn ($anime) => array_search($anime->mal_id, $cachedMalIds));
 
-        return $sorted->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        return $sorted->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**
      * Extracts, inserts, and maps related metadata for the anime payload.
      *
      * @param  array<int, AnimeData>  $animeApiData
-     * @param  Collection<int, \App\Models\Anime>  $insertedAnimeRecords
+     * @param  Collection<int, Anime>  $insertedAnimeRecords
      * @param  class-string<Model>  $relatedModel
      * @param  class-string<Model>  $pivotModel
      */
@@ -327,12 +328,12 @@ class AnimeService
         $pivotTableDatas = [];
 
         foreach ($insertedAnimeRecords as $dbAnimeRecord) {
-            if (!isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
+            if (! isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
                 continue;
             }
 
             foreach ($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id] as $malId) {
-                if (!isset($relatedIdsLookup[$malId])) {
+                if (! isset($relatedIdsLookup[$malId])) {
                     continue;
                 }
 
@@ -345,7 +346,7 @@ class AnimeService
             }
         }
 
-        if (!empty($pivotTableDatas)) {
+        if (! empty($pivotTableDatas)) {
             $pivotModel::insertOrIgnore($pivotTableDatas);
         }
     }

@@ -24,7 +24,7 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
 
   return (
     <div
-      className={`bg-background border-border z-50 min-h-screen w-[270px] flex-col gap-4 border-r p-4 ${
+      className={`bg-background border-border z-50 min-h-screen w-67.5 flex-col gap-4 border-r p-4 ${
         isOpen ? "absolute flex lg:static" : "hidden"
       }`}
     >

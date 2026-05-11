@@ -3,18 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-/**
- * @mixin IdeHelperAnimeDemographic
- */
 #[Fillable(['anime_id', 'demographic_id'])]
-class AnimeDemographic extends Model
+class AnimeDemographic extends Pivot
 {
-    public function animes(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, 'anime_demographics', 'anime_id', 'demographic_id')
-            ->withTimestamps();
-    }
+    public $timestamps = true;
+
+    public $incrementing = true;
 }
