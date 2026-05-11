@@ -25,7 +25,9 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Tentacle Assault',           'importance' => 90,  'description' => 'Assault or sexual framing involving monsters or tentacles.'],
                     ['name' => 'Sexual Slavery',             'importance' => 85,  'description' => 'Characters owned, traded, or controlled for sexual exploitation.'],
                     ['name' => 'Forced Gender Bending',      'importance' => 80,  'description' => 'Forced physical sex change against a character\'s will.'],
-                    ['name' => 'Voyeurism / Peeping',        'importance' => 75,  'description' => 'Non-consensual watching, spying, or recording for sexual purposes.'],
+                    ['name' => 'Groping / Molestation',      'importance' => 75,  'description' => 'Unwanted sexual touching or harassment, often in public.'],
+                    ['name' => 'Drug-Facilitated Assault',   'importance' => 70,  'description' => 'Use of aphrodisiacs or drugs to bypass consent.'],
+                    ['name' => 'Forced Nudity',              'importance' => 65,  'description' => 'Public humiliation involving being stripped against one\'s will.'],
                 ],
             ],
             [
@@ -38,7 +40,9 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Loli / Shota Framing',       'importance' => 90,  'description' => 'Sexualized framing or portrayal of young looking children.'],
                     ['name' => 'Age Gap Romance',            'importance' => 85,  'description' => 'Romance involving a severe age disparity, often involving minors.'],
                     ['name' => 'Teacher-Student Romance',    'importance' => 80,  'description' => 'Romantic tension or relations between school staff and a student.'],
-                    ['name' => 'Ugly Bastard Trope',         'importance' => 75,  'description' => 'Predatory visual tropes involving extreme power imbalances.'],
+                    ['name' => 'Master-Servant Romance',     'importance' => 75,  'description' => 'Romance involving extreme power imbalances or ownership.'],
+                    ['name' => 'Forced Marriage',            'importance' => 70,  'description' => 'Arranged or politically forced marriage against a character\'s will.'],
+                    ['name' => 'Stalking',                   'importance' => 65,  'description' => 'Obsessive pursuit, surveillance, or invasion of privacy.'],
                 ],
             ],
             [
@@ -46,12 +50,10 @@ class TriggerSeeder extends Seeder
                 'importance' => 90,
                 'description' => 'Graphic, highly detailed violence, severe bodily trauma, and disturbing physical transformations.',
                 'contents' => [
-                    ['name' => 'Dismemberment',              'importance' => 100, 'description' => 'Graphic severing of limbs, heads, or body parts.'],
+                    ['name' => 'Graphic Dismemberment',      'importance' => 100, 'description' => 'Graphic severing of limbs, heads, and heavy bloodshed.'],
                     ['name' => 'Torture',                    'importance' => 95,  'description' => 'Prolonged, graphic physical or psychological torture scenes.'],
                     ['name' => 'Body Horror',                'importance' => 90,  'description' => 'Disturbing physical mutations, flesh corruption, or monster transformations.'],
-                    ['name' => 'Eye Trauma',                 'importance' => 85,  'description' => 'Graphic injury, removal, or destruction of eyes.'],
                     ['name' => 'Graphic Vomiting',           'importance' => 80,  'description' => 'Detailed, onscreen vomiting (Emetophobia warning).'],
-                    ['name' => 'Heavy Bloodshed',            'importance' => 75,  'description' => 'Extreme amounts of blood spray and gore without necessarily losing limbs.'],
                 ],
             ],
             [
@@ -64,7 +66,9 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Grooming',                   'importance' => 90,  'description' => 'Predatory dynamics or manipulating someone into a relationship via trust.'],
                     ['name' => 'Self-Harm',                  'importance' => 85,  'description' => 'Deliberate physical injury to oneself (e.g., cutting, scratching).'],
                     ['name' => 'Domestic Abuse',             'importance' => 80,  'description' => 'Physical or extreme emotional abuse within a household or relationship.'],
-                    ['name' => 'Mind Control',               'importance' => 75,  'description' => 'Total loss of bodily autonomy via hypnosis, magic, or brainwashing.'],
+                    ['name' => 'Gaslighting',                'importance' => 75,  'description' => 'Manipulating someone into questioning their own sanity or reality.'],
+                    ['name' => 'PTSD / Trauma Flashbacks',   'importance' => 70,  'description' => 'Characters vividly reliving or suffering from severe past trauma.'],
+                    ['name' => 'Panic Attacks',              'importance' => 65,  'description' => 'Onscreen depictions of severe anxiety or hyperventilation.'],
                 ],
             ],
             [
@@ -76,8 +80,6 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Pet / Animal Death',         'importance' => 95,  'description' => 'Onscreen death of a dog, cat, or companion animal.'],
                     ['name' => 'Human-Animal Hybridization', 'importance' => 90,  'description' => 'Forced scientific fusion of humans and animals.'],
                     ['name' => 'Animal Experimentation',     'importance' => 85,  'description' => 'Laboratory testing or scientific abuse of animals.'],
-                    ['name' => 'Animal Sacrifice',           'importance' => 80,  'description' => 'Killing animals for occult rituals or magic.'],
-                    ['name' => 'Hunting / Poaching',         'importance' => 75,  'description' => 'Killing animals for sport or profit.'],
                 ],
             ],
             [
@@ -89,8 +91,6 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Trypophobia',                'importance' => 90,  'description' => 'Disturbing imagery involving dense clusters of small holes.'],
                     ['name' => 'Swarm / Bug Horror',         'importance' => 85,  'description' => 'Massive swarms of insects or parasites (Entomophobia warning).'],
                     ['name' => 'Asphyxiation',               'importance' => 80,  'description' => 'Graphic choking, strangulation, or drowning.'],
-                    ['name' => 'Terminal Illness',           'importance' => 75,  'description' => 'Slow physical deterioration and death from disease.'],
-                    ['name' => 'Claustrophobia',             'importance' => 70,  'description' => 'Scenes involving being trapped or confined in extremely tight spaces.'],
                 ],
             ],
         ];
