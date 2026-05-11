@@ -7,10 +7,11 @@ import FrontLayout from "../../Layouts/FrontLayout";
 
 interface ShowAnimeProps {
   result: App.DTOs.AnimeData;
+  triggers: App.DTOs.TriggerData;
 }
 
-const ShowAnime = ({ result }: ShowAnimeProps) => {
-  console.log(result);
+const ShowAnime = ({ result, triggers }: ShowAnimeProps) => {
+  console.log(triggers);
   const triggerData = [
     { name: "Violence & Gore", level: 5, label: "Very Severe" },
     { name: "Sexual Violence", level: 5, label: "Severe" },
@@ -18,6 +19,7 @@ const ShowAnime = ({ result }: ShowAnimeProps) => {
     { name: "Body Horror", level: 4, label: "Mild" },
     { name: "Bullying & Abuse", level: 3, label: "None" },
   ];
+
   const getColorTheme = (level: number) => {
     switch (level) {
       case 1:

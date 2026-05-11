@@ -49,8 +49,24 @@ declare namespace App {
     export type RegisterData = {
       readonly username: string;
       readonly name: string;
-      readonly email: string;
+      readonly email: string | null;
       readonly password: string;
+    };
+    export type TriggerContentData = {
+      readonly trigger_id: number;
+      readonly name: string;
+      readonly importance: number;
+      readonly description: string | null;
+      readonly created_at: string | null;
+      readonly updated_at: string | null;
+    };
+    export type TriggerData = {
+      readonly name: string;
+      readonly importance: number;
+      readonly description: string | null;
+      readonly created_at: string | null;
+      readonly updated_at: string | null;
+      readonly triggerContents: App.DTOs.TriggerContentData[];
     };
     export type UserData = {
       readonly id: number;

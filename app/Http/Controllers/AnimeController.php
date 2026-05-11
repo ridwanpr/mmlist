@@ -13,7 +13,11 @@ class AnimeController extends Controller
     public function show(string $slug): Response
     {
         $result = $this->animeService->getAnimeInfo($slug);
+        $triggers = $this->animeService->getAnimeTriggers($result->id);
 
-        return Inertia::render('Anime/Show', ['result' => $result]);
+        return Inertia::render('Anime/Show', [
+            'result' => $result,
+            'triggers' => $triggers
+        ]);
     }
 }

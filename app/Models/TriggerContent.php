@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'description', 'trigger_id'])]
+#[Fillable(['name', 'description', 'trigger_id', 'importance'])]
 class TriggerContent extends Model
 {
     /**

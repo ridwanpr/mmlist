@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\DTOs\AnimeData;
+use App\DTOs\TriggerContentData;
+use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\AnimeDemographic;
 use App\Models\AnimeGenre;
@@ -11,9 +13,11 @@ use App\Models\AnimeStudio;
 use App\Models\AnimeTheme;
 use App\Models\Demographic;
 use App\Models\Genre;
+use App\Models\MasterTrigger;
 use App\Models\Producer;
 use App\Models\Studio;
 use App\Models\Theme;
+use App\Models\TriggerContent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -41,7 +45,7 @@ class AnimeService
 
             $response = Http::withQueryParameters([
                 'limit' => $limit,
-            ])->get(config('app.jikan_url').'/seasons/now');
+            ])->get(config('app.jikan_url') . '/seasons/now');
 
             if ($response->failed()) {
                 Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
@@ -62,7 +66,7 @@ class AnimeService
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: '.$e->getMessage());
+            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -85,7 +89,7 @@ class AnimeService
                 ->withQueryParameters([
                     'limit' => $limit,
                 ])
-                ->get(config('app.jikan_url').'/top/anime');
+                ->get(config('app.jikan_url') . '/top/anime');
 
             if ($response->failed()) {
                 Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
@@ -104,7 +108,7 @@ class AnimeService
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: '.$e->getMessage());
+            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
 
             return [];
         }
@@ -190,6 +194,21 @@ class AnimeService
     }
 
     /**
+     * @return array{
+     *     triggers: Collection<MasterTrigger>
+     * }
+     */
+    public function getAnimeTriggers(int $animeId): array
+    {
+        $triggersFromDb = MasterTrigger::with('triggerContents')->orderBy('importance', 'desc')->get();
+        $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+
+        return [
+            'triggers' => $triggers,
+        ];
+    }
+
+    /**
      * @param  array<int, AnimeData>  $animeApiData
      * @return array{
      *     animeRecords: array<int, array<string, mixed>>,
@@ -209,7 +228,7 @@ class AnimeService
             // Limit the slug to 60 characters and remove any dangling hyphens
             $truncatedSlug = rtrim(substr($baseSlug, 0, 60), '-');
             // Append the unique short ID
-            $finalSlug = $truncatedSlug.'-'.$shortId;
+            $finalSlug = $truncatedSlug . '-' . $shortId;
 
             $animeRecordsToInsert[] = [
                 'mal_id' => $apiAnime->mal_id,
@@ -262,7 +281,7 @@ class AnimeService
 
         return collect($apiPayload['data'])
             ->unique('mal_id')
-            ->map(fn (array $item) => AnimeData::fromArray($item))
+            ->map(fn(array $item) => AnimeData::fromArray($item))
             ->values()
             ->all();
     }
@@ -290,9 +309,9 @@ class AnimeService
             return [];
         }
 
-        $sorted = $dataFromDb->sortBy(fn ($anime) => array_search($anime->mal_id, $cachedMalIds));
+        $sorted = $dataFromDb->sortBy(fn($anime) => array_search($anime->mal_id, $cachedMalIds));
 
-        return $sorted->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
+        return $sorted->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**
