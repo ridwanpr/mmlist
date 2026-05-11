@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
 
-Route::get('anime/show', [AnimeController::class, 'show'])->name('anime.show');
+Route::get('anime/{slug}', [AnimeController::class, 'show'])->name('anime.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');

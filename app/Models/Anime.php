@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
     'score',
     'synopsis',
     'background',
+    'slug'
 ])]
 
 class Anime extends Model

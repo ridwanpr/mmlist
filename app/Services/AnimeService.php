@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AnimeService
 {
@@ -195,6 +196,15 @@ class AnimeService
         $animeMalIds = [];
 
         foreach ($animeApiData as $apiAnime) {
+            // Convert the numeric ID to short alphanumeric string
+            $shortId = base_convert($apiAnime->mal_id, 10, 36);
+            // Generate the full slug from the title
+            $baseSlug = Str::slug($apiAnime->title);
+            // Limit the slug to 60 characters and remove any dangling hyphens
+            $truncatedSlug = rtrim(substr($baseSlug, 0, 60), '-');
+            // Append the unique short ID
+            $finalSlug = $truncatedSlug . '-' . $shortId;
+
             $animeRecordsToInsert[] = [
                 'mal_id' => $apiAnime->mal_id,
                 'url' => $apiAnime->url,
@@ -220,6 +230,7 @@ class AnimeService
                 'synopsis' => $apiAnime->synopsis,
                 'background' => $apiAnime->background,
                 'rank' => $apiAnime->rank,
+                'slug' => $finalSlug,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

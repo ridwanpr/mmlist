@@ -16,7 +16,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
             <div className="gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
               {animes &&
                 animes.map((anime) => (
-                  <AnimeCard key={anime.malId} animeData={anime} />
+                  <AnimeCard key={anime.mal_id} animeData={anime} />
                 ))}
             </div>
           </div>

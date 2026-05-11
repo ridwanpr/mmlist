@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('mal_id')->unique();
+            $table->string('slug')->unique();
             $table->string('url', 500)->unique();
 
             $table->enum('season', ['summer', 'winter', 'spring', 'fall'])->nullable();

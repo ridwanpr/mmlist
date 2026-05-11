@@ -20,7 +20,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           {nowAiring &&
             nowAiring.map((airing) => (
-              <AnimeCard key={airing.malId} animeData={airing} />
+              <AnimeCard key={airing.mal_id} animeData={airing} />
             ))}
         </div>
       </section>
@@ -34,7 +34,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           {topAnime &&
             topAnime.map((top) => (
-              <AnimeCard key={top.malId} animeData={top} />
+              <AnimeCard key={top.mal_id} animeData={top} />
             ))}
         </div>
       </section>

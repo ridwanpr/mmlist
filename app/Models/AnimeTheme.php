@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class AnimeTheme extends Pivot
 {
     protected $table = 'anime_themes';
-    
+
     public $timestamps = true;
 
     public $incrementing = true;

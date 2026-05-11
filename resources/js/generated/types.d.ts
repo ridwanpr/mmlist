@@ -15,7 +15,7 @@ declare namespace App {
       readonly title_synonyms: any[];
       readonly type: string | null;
       readonly source: string | null;
-      readonly episodes: string | null;
+      readonly episodes: number | null;
       readonly status: string | null;
       readonly airing: boolean;
       readonly aired: Record<string, any>;
@@ -30,6 +30,7 @@ declare namespace App {
       readonly producers: App.DTOs.AnimeMetaData[];
       readonly studios: App.DTOs.AnimeMetaData[];
       readonly themes: App.DTOs.AnimeMetaData[];
+      readonly slug: string | null;
     };
     export type AnimeMetaData = {
       readonly mal_id: number;

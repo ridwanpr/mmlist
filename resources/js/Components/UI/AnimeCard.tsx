@@ -35,7 +35,10 @@ const AnimeCard = ({ animeData }: AnimeCardProps) => {
   const genres = animeData?.genres?.slice(0, 3) ?? [];
 
   return (
-    <Link href="/anime/show" className="group mb-4 block lg:mb-0">
+    <Link
+      href={`/anime/${animeData.slug}`}
+      className="group mb-4 block lg:mb-0"
+    >
       <div className="bg-surface border-surface-alt group-hover:border-primary-soft flex min-h-40 overflow-hidden rounded-lg border transition duration-200 group-hover:shadow-sm">
         {/* Image Wrapper */}
         <div className="relative w-26.5 shrink-0 overflow-hidden">
