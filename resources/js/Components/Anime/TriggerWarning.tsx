@@ -11,10 +11,10 @@ const TriggerWarning = () => {
       <div>
         <h2 className="text-text text-xl font-semibold">Trigger Warnings</h2>
         <p className="text-text-muted flex flex-wrap items-center gap-1 text-sm">
-          The community helps identify and rate the presence of potentially
-          distressing content in this anime.
-          <span className="font-bold italic">
-            Click each trigger for more details.
+          <span>Click for more details.</span>
+
+          <span className="font-bold whitespace-nowrap italic">
+            Might contain spoilers.
           </span>
         </p>
       </div>

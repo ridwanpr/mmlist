@@ -99,4 +99,14 @@ class Anime extends Model
             ->using(AnimeTheme::class)
             ->withTimestamps();
     }
+
+    /**
+     * @return BelongsToMany<TriggerContent, $this, AnimeTrigger>
+     */
+    public function triggers(): BelongsToMany
+    {
+        return $this->belongsToMany(TriggerContent::class, 'anime_triggers', 'anime_id', 'trigger_id')
+            ->using(AnimeTrigger::class)
+            ->withTimestamps();
+    }
 }
