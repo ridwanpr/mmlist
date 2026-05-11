@@ -174,32 +174,38 @@ readonly class AnimeData
      */
     public static function fromModel(Anime $model): self
     {
-        $decode = fn(mixed $value): ?array => match (true) {
+        // Helper for JSON cast columns
+        $decodeJsonColumn = fn(mixed $value): ?array => match (true) {
             is_array($value)  => $value,
             is_string($value) => json_decode($value, true),
             default           => null,
         };
 
-        $decodedTitles = $decode($model->titles);
+        // Helper to safely load and map Eloquent relationship Collections
+        $mapRelation = fn(string $relation) => $model->relationLoaded($relation) && $model->{$relation}
+            ? $model->{$relation}->map(fn($item) => AnimeMetaData::fromArray($item->toArray()))->toArray()
+            : null;
+
+        $decodedTitles = $decodeJsonColumn($model->titles);
 
         return new self(
             mal_id: (int) $model->mal_id,
             url: $model->url,
             season: $model->season ?? null,
             year: $model->year ?? null,
-            images: $decode($model->images),
-            trailer: $decode($model->trailer),
+            images: $decodeJsonColumn($model->images),
+            trailer: $decodeJsonColumn($model->trailer),
             approved: (bool) ($model->approved ?? false),
             title: $model->title,
             title_english: $model->title_english ?? null,
             title_japanese: $model->title_japanese ?? null,
-            title_synonyms: $decode($model->title_synonyms),
+            title_synonyms: $decodeJsonColumn($model->title_synonyms),
             type: $model->type ?? null,
             source: $model->source ?? null,
             episodes: $model->episodes ?? null,
             status: $model->status ?? null,
             airing: (bool) ($model->airing ?? false),
-            aired: $decode($model->aired),
+            aired: $decodeJsonColumn($model->aired),
             duration: $model->duration ?? null,
             rating: $model->rating ?? null,
             score: isset($model->score) ? (float) $model->score : null,
@@ -211,25 +217,11 @@ readonly class AnimeData
                 ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
                 : null,
 
-            demographics: ($decoded = $decode($model->demographics))
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
-                : null,
-
-            genres: ($decoded = $decode($model->genres))
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
-                : null,
-
-            producers: ($decoded = $decode($model->producers))
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
-                : null,
-
-            studios: ($decoded = $decode($model->studios))
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
-                : null,
-
-            themes: ($decoded = $decode($model->themes))
-                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $decoded)
-                : null,
+            demographics: $mapRelation('demographics'),
+            genres: $mapRelation('genres'),
+            producers: $mapRelation('producers'),
+            studios: $mapRelation('studios'),
+            themes: $mapRelation('themes'),
         );
     }
 }
