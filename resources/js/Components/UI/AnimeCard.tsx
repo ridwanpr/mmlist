@@ -54,9 +54,13 @@ const AnimeCard = ({ animeData }: AnimeCardProps) => {
           {/* Title */}
           <p
             className="mb-1 line-clamp-2 pb-px text-sm leading-snug font-bold md:text-base"
-            title={animeData?.title}
+            title={
+              animeData?.titles?.find((t) => t.type === "English")?.title ||
+              animeData?.titles?.[0]?.title
+            }
           >
-            {animeData?.title}
+            {animeData?.titles?.find((t) => t.type === "English")?.title ||
+              animeData?.titles?.[0]?.title}
           </p>
 
           {/* Meta — season+year · eps · type */}

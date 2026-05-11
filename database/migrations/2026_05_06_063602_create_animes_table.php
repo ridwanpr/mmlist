@@ -38,8 +38,8 @@ return new class extends Migration
             $table->json('aired')->nullable();
 
             $table->string('duration')->nullable();
-            $table->string('rating')->nullable()->index();
-            $table->decimal('score', 4, 2)->nullable()->index();
+            $table->string('rating')->nullable();
+            $table->decimal('score', 4, 2)->nullable();
 
             $table->text('synopsis')->nullable();
             $table->text('background')->nullable();

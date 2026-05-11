@@ -183,6 +183,12 @@ class AnimeService
         });
     }
 
+    public function getAnimeInfo(string $slug): Anime
+    {
+        return Anime::with(['demographics', 'genres', 'producers', 'studios', 'themes'])
+            ->where('slug', $slug)->firstOrFail();
+    }
+
     /**
      * @param  array<int, AnimeData>  $animeApiData
      * @return array{
@@ -197,7 +203,7 @@ class AnimeService
 
         foreach ($animeApiData as $apiAnime) {
             // Convert the numeric ID to short alphanumeric string
-            $shortId = base_convert($apiAnime->mal_id, 10, 36);
+            $shortId = base_convert((string) $apiAnime->mal_id, 10, 36);
             // Generate the full slug from the title
             $baseSlug = Str::slug($apiAnime->title);
             // Limit the slug to 60 characters and remove any dangling hyphens
