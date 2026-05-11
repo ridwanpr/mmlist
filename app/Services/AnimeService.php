@@ -194,18 +194,14 @@ class AnimeService
     }
 
     /**
-     * @return array{
-     *     triggers: Collection<MasterTrigger>
-     * }
+     * @return Collection<TriggerData>
      */
-    public function getAnimeTriggers(int $animeId): array
+    public function getAnimeTriggers(int $animeId): Collection
     {
         $triggersFromDb = MasterTrigger::with('triggerContents')->orderBy('importance', 'desc')->get();
         $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
 
-        return [
-            'triggers' => $triggers,
-        ];
+        return $triggers;
     }
 
     /**

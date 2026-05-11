@@ -5,6 +5,7 @@ import TriggerWarning from "./TriggerWarning";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
+  triggers: App.DTOs.TriggerData[];
 }
 
 const MetaList = ({
@@ -49,7 +50,7 @@ const MetaCell = ({
   </div>
 );
 
-const MainInfo = ({ anime }: MainInfoProps) => {
+const MainInfo = ({ anime, triggers }: MainInfoProps) => {
   const coverImage =
     anime.images?.webp?.image_url ?? anime.images?.jpg?.image_url;
 
@@ -174,7 +175,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
         </div>
       </div>
 
-      <TriggerWarning />
+      <TriggerWarning triggers={triggers} />
     </div>
   );
 };
