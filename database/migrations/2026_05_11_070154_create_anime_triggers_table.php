@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('anime_triggers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('trigger_content_id');
-            $table->foreignId('anime_id')->constrained('animes');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('anime_id')->constrained('animes')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_appear');
             $table->enum('severity', ['Mild', 'Moderate', 'Severe', 'Extreme'])->nullable();
             $table->enum('framing', ['Serious', 'Neutral', 'Romanticized', 'Comedic'])->nullable();

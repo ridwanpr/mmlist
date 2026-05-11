@@ -3,6 +3,7 @@ import type React from "react";
 import Breadcrumb from "../../Components/Anime/Breadcrumb";
 import MainInfo from "../../Components/Anime/MainInfo";
 import { SideInfo } from "../../Components/Anime/SideInfo";
+import TriggerWarning from "../../Components/Anime/TriggerWarning";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface ShowAnimeProps {
@@ -19,11 +20,12 @@ const ShowAnime = ({ result, triggers }: ShowAnimeProps) => {
       {/* Anime Information */}
       <div className="grid gap-6 lg:grid-cols-4">
         {/* Left Main Info */}
-        <MainInfo anime={result && result} triggers={triggers} />
+        <MainInfo anime={result && result} />
 
         {/* Right Info */}
         <SideInfo />
       </div>
+      <TriggerWarning triggers={triggers} />
     </div>
   );
 };

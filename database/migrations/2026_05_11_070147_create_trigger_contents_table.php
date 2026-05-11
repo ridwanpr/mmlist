@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trigger_contents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trigger_id')->constrained('master_triggers');
+            $table->foreignId('trigger_id')->constrained('master_triggers')->cascadeOnDelete();
             $table->string('name');
             $table->unsignedInteger('importance');
             $table->text('description')->nullable();
