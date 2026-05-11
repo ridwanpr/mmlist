@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('anime_triggers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trigger_id')->constrained('master_triggers');
+            $table->unsignedBigInteger('trigger_content_id');
             $table->foreignId('anime_id')->constrained('animes');
             $table->foreignId('user_id')->constrained('users');
             $table->boolean('is_appear');
             $table->enum('severity', ['Mild', 'Moderate', 'Severe', 'Extreme'])->nullable();
-            $table->enum('framing', ['Treated seriously', 'Just exists', 'Romanticized', 'Used as comedy'])->nullable();
+            $table->enum('framing', ['Serious', 'Neutral', 'Romanticized', 'Comedic'])->nullable();
             $table->timestamps();
+
+            $table->foreign('trigger_content_id')->references('id')->on('trigger_contents')->cascadeOnDelete();
+            $table->unique(['user_id', 'anime_id', 'trigger_content_id']);
         });
     }
 

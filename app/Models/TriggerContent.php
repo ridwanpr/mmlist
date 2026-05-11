@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'description', 'trigger_id'])]
 class TriggerContent extends Model
@@ -19,12 +19,10 @@ class TriggerContent extends Model
     }
 
     /**
-     * @return BelongsToMany<Anime, $this, AnimeTrigger>
+     * @return HasMany<AnimeTrigger, $this>
      */
-    public function animes(): BelongsToMany
+    public function animeTriggers(): HasMany
     {
-        return $this->belongsToMany(Anime::class, 'anime_triggers', 'trigger_id', 'anime_id')
-            ->using(AnimeTrigger::class)
-            ->withTimestamps();
+        return $this->hasMany(AnimeTrigger::class);
     }
 }
