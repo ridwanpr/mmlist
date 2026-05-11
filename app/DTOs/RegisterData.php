@@ -11,7 +11,7 @@ readonly class RegisterData
     public function __construct(
         public string $username,
         public string $name,
-        public string $email,
+        public ?string $email,
         public string $password,
     ) {}
 
@@ -20,7 +20,7 @@ readonly class RegisterData
         return new self(
             $request->username,
             $request->name,
-            $request->email,
+            $request->email ?? null,
             $request->password,
         );
     }

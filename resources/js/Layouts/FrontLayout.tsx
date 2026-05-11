@@ -7,7 +7,7 @@ import Footer from "../Components/UI/Footer";
 import MobileNav from "../Components/UI/MobileNav";
 
 interface FrontLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const FrontLayout = ({ children }: FrontLayoutProps) => {
