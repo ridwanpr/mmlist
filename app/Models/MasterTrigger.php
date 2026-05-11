@@ -14,6 +14,6 @@ class MasterTrigger extends Model
      */
     public function triggerContents(): HasMany
     {
-        return $this->hasMany(TriggerContent::class);
+        return $this->hasMany(TriggerContent::class, 'trigger_id');
     }
 }

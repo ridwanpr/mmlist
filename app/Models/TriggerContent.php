@@ -15,7 +15,7 @@ class TriggerContent extends Model
      */
     public function masterTrigger(): BelongsTo
     {
-        return $this->belongsTo(MasterTrigger::class);
+        return $this->belongsTo(MasterTrigger::class, 'trigger_id');
     }
 
     /**
