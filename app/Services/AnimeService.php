@@ -18,6 +18,7 @@ use App\Models\Producer;
 use App\Models\Studio;
 use App\Models\Theme;
 use App\Models\TriggerContent;
+use App\Utils\GenerateSlug;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -217,14 +218,7 @@ class AnimeService
         $animeMalIds = [];
 
         foreach ($animeApiData as $apiAnime) {
-            // Convert the numeric ID to short alphanumeric string
-            $shortId = base_convert((string) $apiAnime->mal_id, 10, 36);
-            // Generate the full slug from the title
-            $baseSlug = Str::slug($apiAnime->title);
-            // Limit the slug to 60 characters and remove any dangling hyphens
-            $truncatedSlug = rtrim(substr($baseSlug, 0, 60), '-');
-            // Append the unique short ID
-            $finalSlug = $truncatedSlug . '-' . $shortId;
+            $slug = GenerateSlug::generate($apiAnime->title, $apiAnime->mal_id);
 
             $animeRecordsToInsert[] = [
                 'mal_id' => $apiAnime->mal_id,
@@ -251,7 +245,7 @@ class AnimeService
                 'synopsis' => $apiAnime->synopsis,
                 'background' => $apiAnime->background,
                 'rank' => $apiAnime->rank,
-                'slug' => $finalSlug,
+                'slug' => $slug,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
