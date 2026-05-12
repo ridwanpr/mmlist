@@ -1,21 +1,28 @@
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
-import { LuChevronDown, LuThumbsDown, LuThumbsUp } from "react-icons/lu";
+import {
+  LuChevronDown,
+  LuLogIn,
+  LuThumbsDown,
+  LuThumbsUp,
+} from "react-icons/lu";
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
 }
 
 const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
-  const { auth } = usePage().props;
+  const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
+
+  const isLoggedIn = auth.user !== null;
 
   const toggleTrigger = () => setIsOpen((prev) => !prev);
 
   return (
     <div className="border-border bg-surface overflow-hidden rounded-lg border">
-      {/* Header Row — always visible, fully clickable */}
+      {/* Header Row */}
       <button
         type="button"
         onClick={toggleTrigger}
@@ -125,21 +132,32 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
 
           {/* Vote Section */}
           <div className="flex flex-col gap-3 p-4">
-            <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
-              Share your experience
-            </p>
-
-            <div className="flex flex-col gap-3">
-              <VoteGroup label="Does this appear?" options={["Yes", "No"]} />
-              <VoteGroup
-                label="Severity level"
-                options={["Mild", "Moderate", "Severe", "Extreme"]}
+            {isLoggedIn ? (
+              <>
+                <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
+                  Share your experience
+                </p>
+                <div className="flex flex-col gap-3">
+                  <VoteGroup
+                    label="Does this appear?"
+                    options={["Yes", "No"]}
+                  />
+                  <VoteGroup
+                    label="Severity level"
+                    options={["Mild", "Moderate", "Severe", "Extreme"]}
+                  />
+                  <VoteGroup
+                    label="How is it framed?"
+                    options={["Serious", "Neutral", "Romanticized", "Comedic"]}
+                  />
+                </div>
+              </>
+            ) : (
+              <AuthGate
+                loginHref={routes["login"]}
+                registerHref={routes["auth.register"]}
               />
-              <VoteGroup
-                label="How is it framed?"
-                options={["Serious", "Neutral", "Romanticized", "Comedic"]}
-              />
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -147,7 +165,47 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   );
 };
 
-// Vote Group
+/* ------------------------------------------------------------------ */
+/* AuthGate — shown in the vote panel when user is not logged in       */
+/* ------------------------------------------------------------------ */
+interface AuthGateProps {
+  loginHref: string;
+  registerHref: string;
+}
+
+const AuthGate = ({ loginHref, registerHref }: AuthGateProps) => (
+  <div className="flex flex-col items-start justify-center gap-3 py-1">
+    <div className="flex items-start gap-2.5">
+      <LuLogIn className="text-text-muted mt-0.5 shrink-0 text-sm" />
+      <div>
+        <p className="text-text text-xs font-semibold">
+          Sign in to share your experience
+        </p>
+        <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
+          Only members can vote. Your votes help
+          others make informed decisions.
+        </p>
+      </div>
+    </div>
+
+    <div className="flex items-center gap-2">
+      <Link
+        href={loginHref}
+        className="border-primary bg-primary text-surface hover:bg-primary-dark hover:border-primary-dark focus-visible:ring-border rounded-md border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+      >
+        Log in
+      </Link>
+      <Link
+        href={registerHref}
+        className="border-border text-text-muted hover:border-primary-dark hover:text-primary-dark focus-visible:ring-border rounded-md border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+      >
+        Create an account
+      </Link>
+    </div>
+  </div>
+);
+
+// VoteGroup
 interface VoteGroupProps {
   label: string;
   options: string[];
