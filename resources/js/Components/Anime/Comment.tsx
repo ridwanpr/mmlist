@@ -1,4 +1,4 @@
-import { LuArrowBigDown, LuArrowBigUp, LuChevronRight } from "react-icons/lu";
+import { LuArrowBigUp, LuChevronRight } from "react-icons/lu";
 
 const comments = [
   {
@@ -64,11 +64,6 @@ const Comment = () => {
                 <button className="text-text-muted flex items-center gap-1 text-sm transition hover:text-green-500">
                   <LuArrowBigUp size={18} />
                   <span>{comment.up}</span>
-                </button>
-
-                <button className="text-text-muted flex items-center gap-1 text-sm transition hover:text-red-500">
-                  <LuArrowBigDown size={18} />
-                  <span>{comment.down}</span>
                 </button>
               </div>
             </div>

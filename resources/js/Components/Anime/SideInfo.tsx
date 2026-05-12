@@ -9,7 +9,7 @@ export const SideInfo = () => {
           <h3 className="text-text flex items-center gap-2 font-bold">
             Content Advisory
           </h3>
-          <span className="flex shrink-0 items-center gap-1 rounded bg-blue-500/10 px-2 py-1 text-[10px] font-bold tracking-wider text-blue-500 uppercase">
+          <span className="flex shrink-0 items-center gap-1 rounded bg-primary px-2 py-1 text-[10px] font-bold tracking-wider text-white uppercase">
             <LuInfo size={12} />
             AI Powered
           </span>
@@ -34,9 +34,11 @@ export const SideInfo = () => {
         </div>
         <div className="flex flex-col gap-2.5">
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">
-              Extreme / Severe
-            </span>
+            <span className="text-text/90 text-sm font-medium">Extreme</span>
+            <span className="text-xs font-bold">4 items</span>
+          </div>
+          <div className="bg-background flex items-center justify-between rounded px-3 py-2">
+            <span className="text-text/90 text-sm font-medium">Severe</span>
             <span className="text-xs font-bold">4 items</span>
           </div>
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
@@ -54,13 +56,13 @@ export const SideInfo = () => {
         <div className="bg-primary/10 mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full">
           <LuUsers className="text-primary" size={20} />
         </div>
-        <h3 className="text-text mb-1 font-bold">Help the Community</h3>
+        <h3 className="text-text mb-1 font-bold">Message Us</h3>
         <p className="text-text-muted mb-4 text-xs leading-relaxed">
-          Did we miss something? Your votes keep this database accurate and help
-          other viewers stay safe.
+          Did we miss something? Your message or suggestion help us improve
+          mamorulist.
         </p>
         <button className="bg-primary focus:ring-primary w-full rounded-md py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:outline-none">
-          Suggest a Trigger
+          Leave a Message
         </button>
       </div>
     </div>
