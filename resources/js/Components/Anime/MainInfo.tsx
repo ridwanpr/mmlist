@@ -164,8 +164,8 @@ const MainInfo = ({ anime }: MainInfoProps) => {
           </div>
 
           {/* COMMENTS */}
-          <section className="border-border mt-8 border-t pt-4">
-            <div className="mb-5 flex items-center justify-between">
+          <section className="border-border mt-4 border-t pt-2">
+            <div className="flex items-center justify-between">
               <h2 className="text-text text-lg font-bold">Top Comments</h2>
 
               <button className="text-primary hover:text-primary/80 group flex items-center gap-1 text-sm font-semibold transition">
