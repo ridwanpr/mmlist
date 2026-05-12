@@ -13,7 +13,7 @@ interface ShowAnimeProps {
 
 const ShowAnime = ({ result, triggers }: ShowAnimeProps) => {
   return (
-    <div className="mx-auto max-w-7xl p-4 lg:pt-6 lg:pb-6">
+    <div className="mx-auto max-w-7xl p-4 lg:pt-6 lg:pb-6 mb-8">
       {/* Breadcrumb */}
       <Breadcrumb title={result && result.title} />
 
