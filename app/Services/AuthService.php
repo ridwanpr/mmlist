@@ -4,30 +4,32 @@ namespace App\Services;
 
 use App\DTOs\LoginData;
 use App\DTOs\RegisterData;
-use App\Repositories\UserRepository;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthService
 {
-    public function __construct(private UserRepository $userRepository) {}
-
     public function createNewUser(RegisterData $data): void
     {
         DB::transaction(function () use ($data) {
-            $userId = $this->userRepository->create($data);
-            $this->userRepository->assignRole($userId, 'user');
+            $user = User::create([
+                'name' => $data->name,
+                'username' => $data->username,
+                'email' => $data->email,
+                'password' => $data->password,
+            ]);
+
+            $user->roles()->attach('user');
         });
     }
 
     public function authenticate(LoginData $data): bool
     {
-        $credentials = [
+        return Auth::attempt([
             'username' => $data->username,
             'password' => $data->password,
-        ];
-
-        return Auth::attempt($credentials);
+        ]);
     }
 
     public function logout(): void
