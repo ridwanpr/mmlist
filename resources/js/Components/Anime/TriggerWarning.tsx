@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 
+import FilterButton from "./FilterButton";
 import TriggerItem from "./TriggerItem";
 
 const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
@@ -30,30 +31,32 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
       </div>
       <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
         {/*Trigger Category Filter*/}
-        <section className="border-border bg-surface self-start w-full rounded-lg border p-2 lg:w-67.5">
-          <div className="flex flex-col gap-2">
-            <div className="text-center">
-              <p className="text-text/90 text-sm font-semibold">
-                Filter by Category
+        <section className="border-border bg-surface w-full self-start rounded-lg border p-2 lg:w-67.5">
+          <div className="flex flex-col gap-1">
+            <div className="px-2 py-1.5">
+              <p className="text-text text-xs font-semibold tracking-widest uppercase">
+                Category
               </p>
-              <p className="text-text-muted text-xs">Click to filter</p>
+              <p className="text-text-muted mt-0.5 text-[11px]">
+                Click to filter
+              </p>
             </div>
-            <button
-              onClick={() => handleFilterTrigger("all")}
-              className="bg-surface-alt hover:bg-primary-soft text-text w-full rounded p-2 text-center text-sm font-medium hover:cursor-pointer"
-            >
-              All Category
-            </button>
-            {triggers?.map((trigger) => (
-              <button
-                key={trigger.id}
-                onClick={() => handleFilterTrigger(trigger.id)}
-                id="all-category"
-                className="bg-surface-alt hover:bg-primary-soft txt-text w-full rounded p-2 text-center text-sm font-medium hover:cursor-pointer"
-              >
-                {trigger.name}
-              </button>
-            ))}
+
+            <div className="flex flex-col gap-0.5">
+              <FilterButton
+                label="All Categories"
+                isActive={filterTrigger === "all"}
+                onClick={() => handleFilterTrigger("all")}
+              />
+              {triggers?.map((trigger) => (
+                <FilterButton
+                  key={trigger.id}
+                  label={trigger.name}
+                  isActive={filterTrigger === trigger.id}
+                  onClick={() => handleFilterTrigger(trigger.id)}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
