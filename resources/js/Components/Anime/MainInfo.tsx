@@ -1,5 +1,6 @@
 import { LuBookmark, LuShare2 } from "react-icons/lu";
 
+import { useImageProxy } from "../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 
@@ -8,9 +9,11 @@ interface MainInfoProps {
 }
 
 const MainInfo = ({ anime }: MainInfoProps) => {
-  const coverImage =
-    anime.images?.webp?.image_url || anime.images?.jpg?.image_url || "";
-
+  const { proxyImage } = useImageProxy();
+  const coverImage = proxyImage(
+    anime.images?.webp?.image_url || anime.images?.jpg?.image_url,
+  );
+  
   const displayTitle =
     anime.titles?.find((t) => t.type === "English")?.title ||
     anime.titles?.[0]?.title;

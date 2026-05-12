@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
 
 Route::get('anime/{slug}', [AnimeController::class, 'show'])->name('anime.show');
+Route::get('/asset/image/{hash}', [ImageProxyController::class, 'show'])->name('proxy.image');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
