@@ -11,6 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class TriggerData
 {
     public function __construct(
+        public int $id,
         public string $name,
         public int $importance,
         public ?string $description,
@@ -28,6 +29,7 @@ readonly class TriggerData
             ->all();
 
         return new self(
+            id: $model->id,
             name: $model->name,
             importance: $model->importance,
             description: $model->description,

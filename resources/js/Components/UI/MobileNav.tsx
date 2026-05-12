@@ -6,7 +6,7 @@ const MobileNav = () => {
   const { component } = usePage();
 
   return (
-    <div className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t px-6 py-4">
+    <div className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t px-4 py-3">
       <nav>
         <ul className="flex items-center justify-between gap-4">
           <li>

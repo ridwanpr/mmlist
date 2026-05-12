@@ -10,6 +10,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class TriggerContentData
 {
     public function __construct(
+        public int $id,
         public int $trigger_id,
         public string $name,
         public int $importance,
@@ -21,6 +22,7 @@ readonly class TriggerContentData
     public static function fromModel(TriggerContent $data): self
     {
         return new self(
+            id: $data->id,
             trigger_id: $data->trigger_id,
             name: $data->name,
             importance: $data->importance,

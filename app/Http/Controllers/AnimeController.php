@@ -14,7 +14,6 @@ class AnimeController extends Controller
     {
         $result = $this->animeService->getAnimeInfo($slug);
         $triggers = $this->animeService->getAnimeTriggers($result->id);
-        dd($result);
 
         return Inertia::render('Anime/Show', [
             'result' => $result,

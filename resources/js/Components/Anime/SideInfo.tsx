@@ -1,4 +1,4 @@
-import { LuInfo, LuShieldAlert, LuUsers } from "react-icons/lu";
+import { LuInfo, LuUsers } from "react-icons/lu";
 
 export const SideInfo = () => {
   return (
@@ -26,7 +26,6 @@ export const SideInfo = () => {
       <div className="border-border bg-surface rounded-lg border p-5 shadow-sm">
         <div className="mb-4">
           <h3 className="text-text flex items-center gap-2 font-bold">
-            <LuShieldAlert className="text-red-500" />
             Trigger Profile
           </h3>
           <p className="text-text-muted mt-1 text-xs text-pretty">
@@ -38,21 +37,15 @@ export const SideInfo = () => {
             <span className="text-text/90 text-sm font-medium">
               Extreme / Severe
             </span>
-            <span className="rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-bold text-red-500">
-              4 items
-            </span>
+            <span className="text-xs font-bold">4 items</span>
           </div>
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">Moderate</span>
-            <span className="rounded-full bg-orange-500/10 px-2.5 py-0.5 text-xs font-bold text-orange-500">
-              7 items
-            </span>
+            <span className="text-xs font-bold">7 items</span>
           </div>
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">Mild</span>
-            <span className="rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-bold text-yellow-600">
-              2 items
-            </span>
+            <span className="text-xs font-bold">2 items</span>
           </div>
         </div>
       </div>

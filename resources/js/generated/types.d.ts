@@ -30,7 +30,7 @@ declare namespace App {
       readonly producers: App.DTOs.AnimeMetaData[];
       readonly studios: App.DTOs.AnimeMetaData[];
       readonly themes: App.DTOs.AnimeMetaData[];
-      readonly slug: string | null;
+      readonly slug: string;
     };
     export type AnimeMetaData = {
       readonly mal_id: number;
@@ -53,6 +53,7 @@ declare namespace App {
       readonly password: string;
     };
     export type TriggerContentData = {
+      readonly id: number;
       readonly trigger_id: number;
       readonly name: string;
       readonly importance: number;
@@ -61,6 +62,7 @@ declare namespace App {
       readonly updated_at: string | null;
     };
     export type TriggerData = {
+      readonly id: number;
       readonly name: string;
       readonly importance: number;
       readonly description: string | null;
