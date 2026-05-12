@@ -17,7 +17,7 @@ class AnimeController extends Controller
 
         return Inertia::render('Anime/Show', [
             'result' => $result,
-            'triggers' => $triggers
+            'triggers' => $triggers,
         ]);
     }
 }

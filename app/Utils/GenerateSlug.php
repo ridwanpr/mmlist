@@ -15,7 +15,8 @@ class GenerateSlug
         // Limit the slug to 60 characters and remove any dangling hyphens
         $truncatedSlug = rtrim(substr($baseSlug, 0, 60), '-');
         // Append the unique short ID
-        $finalSlug = $truncatedSlug . '-' . $shortId;
+        $finalSlug = $truncatedSlug.'-'.$shortId;
+
         return $finalSlug;
     }
 }

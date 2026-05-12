@@ -24,7 +24,7 @@ readonly class TriggerData
     public static function fromModel(MasterTrigger $model): self
     {
         $triggerContents = $model->triggerContents
-            ->map(fn(TriggerContent $trigger) => TriggerContentData::fromModel($trigger))
+            ->map(fn (TriggerContent $trigger) => TriggerContentData::fromModel($trigger))
             ->values()
             ->all();
 

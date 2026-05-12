@@ -73,7 +73,7 @@ class TriggerSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Frustrating Protagonist & Lead Traits',
+                'name' => 'Frustrating Lead Traits',
                 'importance' => 70,
                 'description' => 'Subjective but highly avoided character archetypes and writing tropes.',
                 'contents' => [
