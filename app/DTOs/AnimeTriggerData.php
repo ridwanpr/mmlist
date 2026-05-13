@@ -3,7 +3,10 @@
 namespace App\DTOs;
 
 use App\Http\Requests\VoteAnimeTriggerRequest;
+use App\Models\AnimeTrigger;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 readonly class AnimeTriggerData
 {
     public function __construct(
@@ -30,6 +33,18 @@ readonly class AnimeTriggerData
             is_appear: $request->boolean('appears'),
             severity: $validated['severity'] ?? null,
             framing: $validated['framing'] ?? null
+        );
+    }
+
+    public static function fromModel(AnimeTrigger $model): self
+    {
+        return new self(
+            trigger_content_id: $model->trigger_content_id,
+            anime_id: $model->anime_id,
+            user_id: $model->user_id,
+            is_appear: (bool) $model->is_appear,
+            severity: $model->severity,
+            framing: $model->framing,
         );
     }
 

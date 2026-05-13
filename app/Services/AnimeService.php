@@ -43,7 +43,7 @@ class AnimeService
 
             $response = Http::withQueryParameters([
                 'limit' => $limit,
-            ])->get(config('app.jikan_url').'/seasons/now');
+            ])->get(config('app.jikan_url') . '/seasons/now');
 
             if ($response->failed()) {
                 Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
@@ -64,7 +64,7 @@ class AnimeService
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: '.$e->getMessage());
+            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -87,7 +87,7 @@ class AnimeService
                 ->withQueryParameters([
                     'limit' => $limit,
                 ])
-                ->get(config('app.jikan_url').'/top/anime');
+                ->get(config('app.jikan_url') . '/top/anime');
 
             if ($response->failed()) {
                 Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
@@ -106,7 +106,7 @@ class AnimeService
 
             return $animeDataDtos;
         } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: '.$e->getMessage());
+            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
 
             return [];
         }
@@ -196,9 +196,14 @@ class AnimeService
      */
     public function getAnimeTriggers(int $animeId): Collection
     {
-        $triggersFromDb = MasterTrigger::with('triggerContents')->orderBy('importance', 'desc')->get();
-        $triggers = $triggersFromDb->map(fn (MasterTrigger $trigger) => TriggerData::fromModel($trigger));
-
+        $triggersFromDb = MasterTrigger::with([
+            'triggerContents',
+            'triggerContents.animeTriggers' => function ($query) use ($animeId) {
+                $query->where('anime_id', $animeId);
+            }
+        ])
+            ->orderBy('importance', 'desc')->get();
+        $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
         return $triggers;
     }
 
@@ -268,7 +273,7 @@ class AnimeService
 
         return collect($apiPayload['data'])
             ->unique('mal_id')
-            ->map(fn (array $item) => AnimeData::fromArray($item))
+            ->map(fn(array $item) => AnimeData::fromArray($item))
             ->values()
             ->all();
     }
@@ -296,9 +301,9 @@ class AnimeService
             return [];
         }
 
-        $sorted = $dataFromDb->sortBy(fn ($anime) => array_search($anime->mal_id, $cachedMalIds));
+        $sorted = $dataFromDb->sortBy(fn($anime) => array_search($anime->mal_id, $cachedMalIds));
 
-        return $sorted->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
+        return $sorted->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**

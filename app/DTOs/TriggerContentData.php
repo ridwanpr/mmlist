@@ -17,10 +17,21 @@ readonly class TriggerContentData
         public ?string $description,
         public ?CarbonInterface $created_at,
         public ?CarbonInterface $updated_at,
+        /** @var AnimeTriggerData[] */
+        public array $animeTriggers = [],
     ) {}
 
     public static function fromModel(TriggerContent $data): self
     {
+        $animeTriggers = [];
+
+        if ($data->relationLoaded('animeTriggers')) {
+            $animeTriggers = $data->animeTriggers
+                ->map(fn($animeTrigger) => AnimeTriggerData::fromModel($animeTrigger))
+                ->values()
+                ->all();
+        }
+
         return new self(
             id: $data->id,
             trigger_id: $data->trigger_id,
@@ -29,6 +40,7 @@ readonly class TriggerContentData
             description: $data->description,
             created_at: $data->created_at,
             updated_at: $data->updated_at,
+            animeTriggers: $animeTriggers,
         );
     }
 }
