@@ -1,7 +1,12 @@
 import { useForm, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
-import { LuChevronDown, LuThumbsDown, LuThumbsUp } from "react-icons/lu";
+import {
+  LuCheck,
+  LuChevronDown,
+  LuThumbsDown,
+  LuThumbsUp,
+} from "react-icons/lu";
 
 import AuthGate from "./AuthGate";
 import VoteGroup from "./VoteGroup";
@@ -62,7 +67,13 @@ const TriggerItem = ({
   const toggleTrigger = () => setIsOpen((prev) => !prev);
 
   return (
-    <div className="border-border bg-surface overflow-hidden rounded-lg border">
+    <div
+      className={`overflow-hidden rounded-lg border border-l-4 ${
+        findUserTriggerVote
+          ? "border-primary border-l-primary-dark bg-surface"
+          : "border-border bg-surface border-l-transparent"
+      }`}
+    >
       {/* Header Row */}
       <button
         type="button"
@@ -125,7 +136,7 @@ const TriggerItem = ({
           </div>
         </div>
 
-        {/* Right — Appears? + Chevron */}
+        {/* Right — Appears? + Voted badge + Chevron */}
         <div className="flex items-center justify-between sm:shrink-0 sm:justify-normal sm:gap-4">
           <div className="flex flex-col items-center gap-2">
             <span className="text-text-muted text-[10px] font-medium tracking-widest uppercase">
@@ -147,11 +158,19 @@ const TriggerItem = ({
             </div>
           </div>
 
-          <LuChevronDown
-            className={`text-text-muted shrink-0 text-base transition-transform duration-200 ${
-              isOpen ? "rotate-180" : "rotate-0"
-            }`}
-          />
+          <div className="flex items-center gap-2">
+            {findUserTriggerVote && (
+              <span className="bg-primary text-surface flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide">
+                <LuCheck className="text-xs" aria-hidden="true" />
+                Voted
+              </span>
+            )}
+            <LuChevronDown
+              className={`shrink-0 text-base transition-transform duration-200 ${
+                findUserTriggerVote ? "text-primary-dark" : "text-text-muted"
+              } ${isOpen ? "rotate-180" : "rotate-0"}`}
+            />
+          </div>
         </div>
       </button>
 
