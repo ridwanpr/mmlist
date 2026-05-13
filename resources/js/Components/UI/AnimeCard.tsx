@@ -4,6 +4,7 @@ import { useImageProxy } from "../../utils/image-proxy";
 
 interface AnimeCardProps {
   animeData: App.DTOs.AnimeData;
+  index: number;
 }
 
 const SEASON_ICON: Record<string, string> = {
@@ -13,7 +14,7 @@ const SEASON_ICON: Record<string, string> = {
   winter: "❄️",
 };
 
-const AnimeCard = ({ animeData }: AnimeCardProps) => {
+const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const { proxyImage } = useImageProxy();
   const season = animeData?.season?.toLowerCase();
   const seasonIcon = season ? (SEASON_ICON[season] ?? "") : "";
@@ -48,6 +49,8 @@ const AnimeCard = ({ animeData }: AnimeCardProps) => {
           <img
             src={proxyImage(animeData?.images.jpg.image_url)}
             alt={animeData ? `${animeData.title} cover image` : ""}
+            loading={index >= 8 ? "lazy" : "eager"}
+            fetchPriority={index < 4 ? "high" : "auto"}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
         </div>
