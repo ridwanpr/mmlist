@@ -173,35 +173,40 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       </p>
                     )}
 
-                    <VoteGroup
-                      label="Severity level"
-                      options={["Mild", "Moderate", "Severe", "Extreme"]}
-                      category="severity"
-                      votes={data}
-                      handleVoteChange={handleVoteChange}
-                    />
-                    {errors.severity && (
-                      <p className="text-accent-red -mt-2 text-xs">
-                        {errors.severity}
-                      </p>
-                    )}
-
-                    <VoteGroup
-                      label="How is it framed?"
-                      options={[
-                        "Serious",
-                        "Neutral",
-                        "Romanticized",
-                        "Comedic",
-                      ]}
-                      category="framing"
-                      votes={data}
-                      handleVoteChange={handleVoteChange}
-                    />
-                    {errors.framing && (
-                      <p className="text-accent-red -mt-2 text-xs">
-                        {errors.framing}
-                      </p>
+                    {data.appears && data.appears === "Yes" ? (
+                      <>
+                        <VoteGroup
+                          label="Severity level"
+                          options={["Mild", "Moderate", "Severe", "Extreme"]}
+                          category="severity"
+                          votes={data}
+                          handleVoteChange={handleVoteChange}
+                        />
+                        {errors.severity && (
+                          <p className="text-accent-red -mt-2 text-xs">
+                            {errors.severity}
+                          </p>
+                        )}
+                        <VoteGroup
+                          label="How is it framed?"
+                          options={[
+                            "Serious",
+                            "Neutral",
+                            "Romanticized",
+                            "Comedic",
+                          ]}
+                          category="framing"
+                          votes={data}
+                          handleVoteChange={handleVoteChange}
+                        />
+                        {errors.framing && (
+                          <p className="text-accent-red -mt-2 text-xs">
+                            {errors.framing}
+                          </p>
+                        )}
+                      </>
+                    ) : (
+                      ""
                     )}
 
                     {data.appears && data.severity && data.framing && (
