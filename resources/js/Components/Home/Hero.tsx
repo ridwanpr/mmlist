@@ -20,19 +20,19 @@ const warnings = [
 
 const covers = [
   {
-    title: "Perfect Blue",
-    image: "https://placehold.co/320x460/e2dac8/222a23?text=Perfect+Blue",
-    className: "left-2 top-16 z-10 w-[170px] -rotate-[10deg] opacity-80",
+    title: "Tensei Shitara Slime Datta Ken 4th Season",
+    image: "/assets/img/hero-1.jpg",
+    className: "left-0 top-14 z-10 w-[165px] -rotate-[9deg] opacity-80",
   },
   {
-    title: "Frieren",
-    image: "https://placehold.co/360x520/dde4cf/222a23?text=Frieren",
-    className: "left-[120px] top-0 z-30 w-[230px] rotate-[3deg]",
+    title: "Sousou no Frieren 2nd Season",
+    image: "/assets/img/hero-2.jpg",
+    className: "left-[115px] top-0 z-30 w-[220px] rotate-[2deg]",
   },
   {
-    title: "Evangelion",
-    image: "https://placehold.co/300x430/c9a24a/222a23?text=Eva",
-    className: "right-2 top-20 z-20 w-[165px] rotate-[11deg] opacity-90",
+    title: "Witch Hat Atelier",
+    image: "/assets/img/hero-3.jpg",
+    className: "right-0 top-18 z-20 w-[160px] rotate-[10deg] opacity-90",
   },
 ];
 
@@ -119,12 +119,13 @@ const Hero = () => {
             {covers.map((cover) => (
               <div
                 key={cover.title}
-                className={`bg-surface absolute overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 transition duration-500 hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(0,0,0,0.22)] ${cover.className}`}
+                className={`absolute overflow-hidden rounded-[26px] shadow-[0_24px_60px_rgba(0,0,0,0.22)] ring-1 ring-black/5 transition duration-500 hover:z-50 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(0,0,0,0.28)] ${cover.className}`}
               >
                 <img
                   src={cover.image}
                   alt={cover.title}
                   className="aspect-2/3 w-full object-cover"
+                  loading="lazy"
                 />
               </div>
             ))}
