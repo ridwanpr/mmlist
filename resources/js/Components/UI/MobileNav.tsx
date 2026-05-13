@@ -1,54 +1,95 @@
 import { Link, usePage } from "@inertiajs/react";
 import { LuBookmark, LuHouse, LuList, LuSearch, LuUser } from "react-icons/lu";
+import type { IconType } from "react-icons";
+
+interface NavItemProps {
+  href: string;
+  active: boolean;
+  icon: IconType;
+  label: string;
+}
+
+interface PageProps {
+  routes: Record<string, string>;
+  [key: string]: unknown;
+}
+
+const NavItem = ({ href, active, icon: Icon, label }: NavItemProps) => {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="group flex w-16 flex-col items-center justify-center gap-1"
+      >
+        <div
+          className={`flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ${
+            active
+              ? "bg-primary-soft text-primary-dark"
+              : "text-text-muted group-hover:bg-surface-alt group-hover:text-text"
+          }`}
+        >
+          <Icon
+            size="20px"
+            strokeWidth={active ? 2.5 : 2}
+            className={`transition-transform duration-300 ${
+              active ? "scale-110" : "scale-100"
+            }`}
+          />
+        </div>
+
+        <span
+          className={`font-sans text-[10px] font-medium transition-colors duration-300 ${
+            active ? "text-primary-dark" : "text-text-muted"
+          }`}
+        >
+          {label}
+        </span>
+      </Link>
+    </li>
+  );
+};
 
 const MobileNav = () => {
-  const { routes } = usePage().props;
-  const { component } = usePage();
+  const { props, component } = usePage<PageProps>();
+  const { routes } = props;
 
   return (
-    <div className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t px-4 py-3">
+    <div
+      className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t px-2 pt-2 shadow-[0_-4px_20px_-10px_rgba(102,114,74,0.1)]"
+      style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+    >
       <nav>
-        <ul className="flex items-center justify-between gap-4">
-          <li>
-            <Link
-              href={routes["home.index"]}
-              className={`flex flex-col items-center ${
-                component === "Home/Index" ? "text-primary" : "text-text"
-              }`}
-            >
-              <LuHouse size="20px" />
-              <span className="text-xs">Home</span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={routes["browse.index"]}
-              className={`flex flex-col items-center ${
-                component.startsWith("Browse/") ? "text-primary" : "text-text"
-              }`}
-            >
-              <LuSearch size="20px" />
-              <span className="text-xs">Browse</span>
-            </Link>
-          </li>
-          <li>
-            <Link href="#" className="text-text flex flex-col items-center">
-              <LuList size="20px" />
-              <span className="text-xs">Trigger</span>
-            </Link>
-          </li>
-          <li>
-            <Link href="#" className="text-text flex flex-col items-center">
-              <LuBookmark size="20px" />
-              <span className="text-xs">Watchlist</span>
-            </Link>
-          </li>
-          <li>
-            <Link href="#" className="text-text flex flex-col items-center">
-              <LuUser size="20px" />
-              <span className="text-xs">Profile</span>
-            </Link>
-          </li>
+        <ul className="flex items-center justify-around">
+          <NavItem
+            href={routes["home.index"]}
+            active={component === "Home/Index"}
+            icon={LuHouse}
+            label="Home"
+          />
+          <NavItem
+            href={routes["browse.index"]}
+            active={component.startsWith("Browse/")}
+            icon={LuSearch}
+            label="Browse"
+          />
+          <NavItem
+            href="#"
+            active={component.startsWith("Trigger/")}
+            icon={LuList}
+            label="Trigger"
+          />
+          <NavItem
+            href="#"
+            active={component === "Watchlist/Index"}
+            icon={LuBookmark}
+            label="Watchlist"
+          />
+          <NavItem
+            href="#"
+            active={component.startsWith("Profile/")}
+            icon={LuUser}
+            label="Profile"
+          />
         </ul>
       </nav>
     </div>

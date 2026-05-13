@@ -123,7 +123,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
           <section>
             <h2 className="text-text mb-2 text-lg font-bold">Synopsis</h2>
 
-            <p className="text-text/90 text-sm leading-relaxed md:text-[15px]">
+            <p className="text-text/90 text-sm leading-relaxed md:text-sm">
               {anime.synopsis}
             </p>
           </section>

@@ -59,6 +59,8 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Severe Bullying / Ijime',        'importance' => 90,  'description' => 'Intense, prolonged peer abuse, ostracization, or school bullying.'],
                     ['name' => 'Domestic Abuse & Manipulation',  'importance' => 85,  'description' => 'Household abuse, severe gaslighting, or obsessive stalking.'],
                     ['name' => 'Terminal Illness / Death',       'importance' => 70,  'description' => 'Slow, painful decline or tragic death from incurable disease.'],
+                    ['name' => 'Discrimination & Prejudice', 'importance' => 75, 'description' => 'Abuse, marginalization, or slurs based on race, origin, or fantasy species (e.g., demi-humans, mages).'],
+
                 ],
             ],
             [

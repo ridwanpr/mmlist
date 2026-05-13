@@ -59,7 +59,7 @@ const Hero = () => {
 
                 <input
                   type="text"
-                  placeholder="Search anime, studio, or trigger..."
+                  placeholder="Search anime..."
                   className="text-text h-12 w-full bg-transparent pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
                 />
 

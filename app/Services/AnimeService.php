@@ -197,7 +197,9 @@ class AnimeService
     public function getAnimeTriggers(int $animeId): Collection
     {
         $triggersFromDb = MasterTrigger::with([
-            'triggerContents',
+            'triggerContents' => function ($query) {
+                $query->orderBy('importance', 'desc');
+            },
             'triggerContents.animeTriggers' => function ($query) use ($animeId) {
                 $query->where('anime_id', $animeId);
             }
