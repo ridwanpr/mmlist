@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
 import { LuChevronDown, LuThumbsDown, LuThumbsUp } from "react-icons/lu";
 
@@ -10,9 +10,36 @@ interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
 }
 
+export interface VoteProps {
+  appears: string;
+  severity: string;
+  framing: string;
+}
+
 const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
+
+  const [votes, setVotes] = useState<VoteProps>({
+    appears: "",
+    severity: "",
+    framing: "",
+  });
+
+  const handleVoteChange = (category: keyof VoteProps, option: string) => {
+    console.log(category, option);
+    setVotes((prev) => ({
+      ...prev,
+      [category]: option,
+    }));
+  };
+
+  const handleSubmit = (e: React.SubmitEvent, triggerContentId: number) => {
+    e.preventDefault();
+    console.log(triggerContentId, votes);
+    // submit form
+  };
+
   const isLoggedIn = auth.user !== null;
 
   const toggleTrigger = () => setIsOpen((prev) => !prev);
@@ -134,20 +161,43 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                 <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
                   Share your experience
                 </p>
-                <div className="flex flex-col gap-3">
-                  <VoteGroup
-                    label="Does this appear?"
-                    options={["Yes", "No"]}
-                  />
-                  <VoteGroup
-                    label="Severity level"
-                    options={["Mild", "Moderate", "Severe", "Extreme"]}
-                  />
-                  <VoteGroup
-                    label="How is it framed?"
-                    options={["Serious", "Neutral", "Romanticized", "Comedic"]}
-                  />
-                </div>
+                <form onSubmit={(e) => handleSubmit(e, triggerContent.id)}>
+                  <div className="flex flex-col gap-3">
+                    <VoteGroup
+                      label="Does this appear?"
+                      options={["Yes", "No"]}
+                      category="appears"
+                      votes={votes}
+                      handleVoteChange={handleVoteChange}
+                    />
+                    <VoteGroup
+                      label="Severity level"
+                      options={["Mild", "Moderate", "Severe", "Extreme"]}
+                      category="severity"
+                      votes={votes}
+                      handleVoteChange={handleVoteChange}
+                    />
+                    <VoteGroup
+                      label="How is it framed?"
+                      options={[
+                        "Serious",
+                        "Neutral",
+                        "Romanticized",
+                        "Comedic",
+                      ]}
+                      category="framing"
+                      votes={votes}
+                      handleVoteChange={handleVoteChange}
+                    />
+
+                    <button
+                      type="submit"
+                      className="bg-primary rounded px-2 py-1 text-white"
+                    >
+                      Submit Vote
+                    </button>
+                  </div>
+                </form>
               </>
             ) : (
               <AuthGate
