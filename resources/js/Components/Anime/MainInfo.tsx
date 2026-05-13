@@ -13,7 +13,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
   const coverImage = proxyImage(
     anime.images?.webp?.image_url || anime.images?.jpg?.image_url,
   );
-  
+
   const displayTitle =
     anime.titles?.find((t) => t.type === "English")?.title ||
     anime.titles?.[0]?.title;
@@ -50,7 +50,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
         <img
           src={coverImage}
           alt="cover anime image"
-          className="aspect-3/4 w-full max-w-60 rounded-xl object-cover shadow-sm"
+          className="bg-surface aspect-3/4 w-full max-w-60 rounded-xl object-cover shadow-sm"
         />
       </div>
 
@@ -60,7 +60,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
           <img
             src={coverImage}
             alt="cover anime image"
-            className="w-full rounded-xl object-cover shadow-sm"
+            className="bg-surface aspect-3/4 w-full rounded-xl object-cover shadow-sm"
           />
 
           <div className="border-border mt-4 border-t">{metadata}</div>
