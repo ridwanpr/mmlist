@@ -23,20 +23,17 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
           Click each trigger to see detail and vote. Might contain spoilers.
         </p>
       </div>
-      <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
-        {/*Trigger Category Filter*/}
-        <section className="border-border bg-surface w-full self-start rounded-lg border p-2 lg:w-67.5">
-          <div className="flex flex-col gap-1">
-            <div className="px-2 py-1.5">
-              <p className="text-text text-xs font-semibold tracking-widest uppercase">
-                Category
-              </p>
-              <p className="text-text-muted mt-0.5 text-[11px]">
-                Click to filter
-              </p>
-            </div>
 
-            <div className="flex flex-col gap-0.5">
+      <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
+        {/* Trigger Category Filter (Unified with RefineResults style) */}
+        <section className="bg-background border-border w-full self-start rounded-lg border p-5 lg:flex lg:w-72 lg:flex-col lg:gap-6">
+          {" "}
+          <div className="border-border flex w-full items-center justify-between border-b pb-4">
+            <h2 className="text-text font-bold">Filter Triggers</h2>
+            <p className="text-text-muted text-xs">Categories</p>
+          </div>
+          <div className="flex flex-col gap-3 mt-1">
+            <div className="flex flex-col gap-2.5">
               <FilterButton
                 label="All Categories"
                 isActive={filterTrigger === "all"}
@@ -54,15 +51,12 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
           </div>
         </section>
 
-        {/*Trigger Content List*/}
+        {/* Trigger Content List */}
         <section className="flex-1">
-          {/*Trigger Content Header*/}
-          {filterTrigger === "all" ? (
+          {filterTrigger === "all" && (
             <h2 className="text-text mb-4 font-semibold">
               Showing All Categories
             </h2>
-          ) : (
-            ""
           )}
 
           {filteredTriggers?.map((triggers) => (
@@ -73,7 +67,7 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
                   {triggers?.description}
                 </p>
               </div>
-              {/*Trigger Content Item List*/}
+
               <div className="flex flex-col gap-4">
                 {triggers?.triggerContents.map((triggerContent) => (
                   <TriggerItem

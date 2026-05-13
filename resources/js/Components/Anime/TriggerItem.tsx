@@ -20,7 +20,7 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data, setData, post } = useForm<VoteProps>({
+  const { data, setData, post, errors, processing } = useForm<VoteProps>({
     appears: "",
     severity: "",
     framing: "",
@@ -47,7 +47,7 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
       <button
         type="button"
         onClick={toggleTrigger}
-        className="hover:bg-surface-alt focus-visible:ring-border flex w-full flex-col gap-4 self-start p-4 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
+        className="hover:bg-surface-alt focus-visible:ring-border flex w-full flex-col gap-4 self-start p-4 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
       >
         {/* Left — Name & Description */}
         <div className="min-w-0 flex-1 sm:min-w-40">
@@ -167,6 +167,12 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       votes={data}
                       handleVoteChange={handleVoteChange}
                     />
+                    {errors.appears && (
+                      <p className="text-accent-red -mt-2 text-xs">
+                        {errors.appears}
+                      </p>
+                    )}
+
                     <VoteGroup
                       label="Severity level"
                       options={["Mild", "Moderate", "Severe", "Extreme"]}
@@ -174,6 +180,12 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       votes={data}
                       handleVoteChange={handleVoteChange}
                     />
+                    {errors.severity && (
+                      <p className="text-accent-red -mt-2 text-xs">
+                        {errors.severity}
+                      </p>
+                    )}
+
                     <VoteGroup
                       label="How is it framed?"
                       options={[
@@ -186,13 +198,44 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       votes={data}
                       handleVoteChange={handleVoteChange}
                     />
+                    {errors.framing && (
+                      <p className="text-accent-red -mt-2 text-xs">
+                        {errors.framing}
+                      </p>
+                    )}
 
-                    <button
-                      type="submit"
-                      className="bg-primary rounded px-2 py-1 text-white"
-                    >
-                      Submit Vote
-                    </button>
+                    {data.appears && data.severity && data.framing && (
+                      <div className="flex justify-end">
+                        <button
+                          type="submit"
+                          disabled={processing}
+                          className="bg-primary disabled:bg-primary/60 flex items-center gap-1.5 rounded px-3 py-1.5 text-sm text-white transition-opacity disabled:cursor-not-allowed"
+                        >
+                          {processing && (
+                            <svg
+                              className="h-3.5 w-3.5 animate-spin"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8H4z"
+                              />
+                            </svg>
+                          )}
+                          {processing ? "Submitting…" : "Submit Vote"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </form>
               </>
