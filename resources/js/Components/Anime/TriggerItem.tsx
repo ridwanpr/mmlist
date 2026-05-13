@@ -1,13 +1,10 @@
 import { usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
-import {
-  LuChevronDown,
-  LuThumbsDown,
-  LuThumbsUp,
-} from "react-icons/lu";
+import { LuChevronDown, LuThumbsDown, LuThumbsUp } from "react-icons/lu";
 
 import AuthGate from "./AuthGate";
+import VoteGroup from "./VoteGroup";
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
@@ -16,10 +13,15 @@ interface TriggerItemProps {
 const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
 
   const isLoggedIn = auth.user !== null;
 
   const toggleTrigger = () => setIsOpen((prev) => !prev);
+
+  const handleOptionChange = (option: string) => {
+    setSelected(option);
+  };
 
   return (
     <div className="border-border bg-surface overflow-hidden rounded-lg border">
@@ -142,14 +144,20 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                   <VoteGroup
                     label="Does this appear?"
                     options={["Yes", "No"]}
+                    selected={selected}
+                    handleOptionChange={handleOptionChange}
                   />
                   <VoteGroup
                     label="Severity level"
                     options={["Mild", "Moderate", "Severe", "Extreme"]}
+                    selected={selected}
+                    handleOptionChange={handleOptionChange}
                   />
                   <VoteGroup
                     label="How is it framed?"
                     options={["Serious", "Neutral", "Romanticized", "Comedic"]}
+                    selected={selected}
+                    handleOptionChange={handleOptionChange}
                   />
                 </div>
               </>
@@ -162,43 +170,6 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
           </div>
         </div>
       )}
-    </div>
-  );
-};
-
-// VoteGroup
-interface VoteGroupProps {
-  label: string;
-  options: string[];
-}
-
-const VoteGroup = ({ label, options }: VoteGroupProps) => {
-  const [selected, setSelected] = useState<string | null>(null);
-
-  return (
-    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
-      <span className="text-text-muted w-32 shrink-0 text-[10px] font-medium tracking-widest uppercase">
-        {label}
-      </span>
-      <div className="flex flex-wrap gap-1.5">
-        {options.map((option) => {
-          const isSelected = selected === option;
-          return (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setSelected(isSelected ? null : option)}
-              className={`focus-visible:ring-border rounded-md border px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none ${
-                isSelected
-                  ? "border-primary bg-primary text-surface"
-                  : "border-border text-text-muted hover:border-primary-dark hover:text-primary-dark bg-transparent"
-              }`}
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 };

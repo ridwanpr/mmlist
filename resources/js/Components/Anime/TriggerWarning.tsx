@@ -20,7 +20,7 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
       <div className="mt-4">
         <h1 className="font-semibold">Trigger Warning</h1>
         <p className="text-text-muted text-sm">
-          Click each trigger to see detail and vote.
+          Click each trigger to see detail and vote. Might contain spoilers.
         </p>
       </div>
       <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
