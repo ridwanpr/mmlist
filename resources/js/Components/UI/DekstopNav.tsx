@@ -5,7 +5,7 @@ const DekstopNav = () => {
   const { component } = usePage();
 
   return (
-    <div className="bg-surface hidden lg:flex border border-border">
+    <div className="bg-surface border-border hidden border lg:flex">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
         <Link
           href={routes["home.index"]}
@@ -72,7 +72,11 @@ const DekstopNav = () => {
               </>
             ) : (
               <Link
-                href={routes["user.dash.index"]}
+                href={
+                  auth.user.role_id === "user"
+                    ? routes["user.dash.index"]
+                    : routes["dashboard.index"]
+                }
                 className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
               >
                 My Account

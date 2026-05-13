@@ -32,6 +32,13 @@ class AuthService
         ]);
     }
 
+    public function getAuthenticatedUserRole(): ?string
+    {
+        return DB::table('user_roles')
+            ->where('user_id', Auth::id())
+            ->value('role_id');
+    }
+
     public function logout(): void
     {
         Auth::logout();

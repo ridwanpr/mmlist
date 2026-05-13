@@ -28,12 +28,15 @@ class AuthController extends Controller
         $this->authService->createNewUser($dto);
 
         Inertia::flash('success', 'Register success, now you can login');
-
         return redirect()->route('login');
     }
 
-    public function login(): Response
+    public function login()
     {
+        if (!session()->has('url.intended')) {
+            session(['url.intended' => url()->previous()]);
+        }
+
         return Inertia::render('Auth/Login');
     }
 
@@ -46,11 +49,16 @@ class AuthController extends Controller
 
             Inertia::flash('success', 'Login success, welcome');
 
-            return redirect()->intended('/dashboard');
+            $userRole = $this->authService->getAuthenticatedUserRole();
+
+            if ($userRole === 'admin') {
+                return redirect()->route('dashboard.index');
+            }
+
+            return redirect()->intended(route('user.dash.index'));
         }
 
         Inertia::flash('error', 'Login failed, invalid credentials');
-
         return back();
     }
 

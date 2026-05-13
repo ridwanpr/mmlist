@@ -26,7 +26,7 @@ class CheckRole
             ->value('role_id');
 
         if ($userRole !== $role) {
-            return redirect()->route('home.index');
+            return back()->fallback(route('home.index'));
         }
 
         return $next($request);
