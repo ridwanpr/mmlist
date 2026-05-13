@@ -41,7 +41,7 @@ const BackLayout = ({ children }: BackLayoutProps) => {
 
   return (
     <div className="relative flex min-h-screen">
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors closeButton />
       {/* Mobile sidebar backdrop */}
       {isSidebarOpen && (
         <div

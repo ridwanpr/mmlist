@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 
 interface AuthLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
@@ -18,7 +18,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
 
   return (
     <div className="bg-background">
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors closeButton />
       <div className="mx-auto min-h-dvh max-w-xl p-4 md:flex md:flex-col md:items-center md:justify-center">
         {children}
       </div>
