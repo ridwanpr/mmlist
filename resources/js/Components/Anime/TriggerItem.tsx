@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
 import { LuChevronDown, LuThumbsDown, LuThumbsUp } from "react-icons/lu";
@@ -20,24 +20,21 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const [votes, setVotes] = useState<VoteProps>({
+  const { data, setData, post } = useForm<VoteProps>({
     appears: "",
     severity: "",
     framing: "",
   });
 
   const handleVoteChange = (category: keyof VoteProps, option: string) => {
-    console.log(category, option);
-    setVotes((prev) => ({
-      ...prev,
-      [category]: option,
-    }));
+    setData(category, option);
   };
 
   const handleSubmit = (e: React.SubmitEvent, triggerContentId: number) => {
     e.preventDefault();
-    console.log(triggerContentId, votes);
-    // submit form
+    post(`/vote-anime-trigger/${triggerContentId}`, {
+      preserveScroll: true,
+    });
   };
 
   const isLoggedIn = auth.user !== null;
@@ -167,14 +164,14 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       label="Does this appear?"
                       options={["Yes", "No"]}
                       category="appears"
-                      votes={votes}
+                      votes={data}
                       handleVoteChange={handleVoteChange}
                     />
                     <VoteGroup
                       label="Severity level"
                       options={["Mild", "Moderate", "Severe", "Extreme"]}
                       category="severity"
-                      votes={votes}
+                      votes={data}
                       handleVoteChange={handleVoteChange}
                     />
                     <VoteGroup
@@ -186,7 +183,7 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                         "Comedic",
                       ]}
                       category="framing"
-                      votes={votes}
+                      votes={data}
                       handleVoteChange={handleVoteChange}
                     />
 

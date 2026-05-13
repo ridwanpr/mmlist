@@ -7,6 +7,7 @@ use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -30,4 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('dash', [UserDashboardController::class, 'index'])->name('user.dash.index');
+
+    Route::post('vote-anime-trigger/{triggerContentId}', [VoteController::class, 'voteAnimeTrigger'])
+        ->name('vote.anime.trigger');
 });
