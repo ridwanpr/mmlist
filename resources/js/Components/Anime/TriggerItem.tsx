@@ -8,6 +8,7 @@ import VoteGroup from "./VoteGroup";
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
+  animeSlug: string;
 }
 
 export interface VoteProps {
@@ -16,7 +17,7 @@ export interface VoteProps {
   framing: string;
 }
 
-const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
+const TriggerItem = ({ triggerContent, animeSlug }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,7 +33,7 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
 
   const handleSubmit = (e: React.SubmitEvent, triggerContentId: number) => {
     e.preventDefault();
-    post(`/vote-anime-trigger/${triggerContentId}`, {
+    post(`/vote-anime-trigger/${triggerContentId}/${animeSlug}`, {
       preserveScroll: true,
     });
   };
@@ -207,7 +208,10 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       </>
                     )}
 
-                    {data.appears && data.severity && data.framing && (
+                    {(data.appears === "No" ||
+                      (data.appears === "Yes" &&
+                        data.severity &&
+                        data.framing)) && (
                       <div className="flex justify-end">
                         <button
                           type="submit"

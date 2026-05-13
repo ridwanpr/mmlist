@@ -7,25 +7,25 @@ import TriggerWarning from "../../Components/Anime/TriggerWarning";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface ShowAnimeProps {
-  result: App.DTOs.AnimeData;
+  anime: App.DTOs.AnimeData;
   triggers: App.DTOs.TriggerData[];
 }
 
-const ShowAnime = ({ result, triggers }: ShowAnimeProps) => {
+const ShowAnime = ({ anime, triggers }: ShowAnimeProps) => {
   return (
-    <div className="mx-auto max-w-7xl p-4 lg:pt-6 lg:pb-6 mb-8">
+    <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
       {/* Breadcrumb */}
-      <Breadcrumb title={result && result.title} />
+      <Breadcrumb title={anime && anime.title} />
 
       {/* Anime Information */}
       <div className="grid gap-6 lg:grid-cols-4">
         {/* Left Main Info */}
-        <MainInfo anime={result && result} />
+        <MainInfo anime={anime && anime} />
 
         {/* Right Info */}
         <SideInfo />
       </div>
-      <TriggerWarning triggers={triggers} />
+      <TriggerWarning triggers={triggers} anime={anime} />
     </div>
   );
 };

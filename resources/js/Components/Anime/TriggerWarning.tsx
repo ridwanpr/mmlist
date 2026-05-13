@@ -3,7 +3,13 @@ import { useState } from "react";
 import FilterButton from "./FilterButton";
 import TriggerItem from "./TriggerItem";
 
-const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
+const TriggerWarning = ({
+  triggers,
+  anime,
+}: {
+  triggers: App.DTOs.TriggerData[];
+  anime: App.DTOs.AnimeData;
+}) => {
   const [filterTrigger, setFilterTrigger] = useState<string | number>("all");
 
   const handleFilterTrigger = (triggerId: string | number) => {
@@ -32,7 +38,7 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
             <h2 className="text-text font-bold">Filter Triggers</h2>
             <p className="text-text-muted text-xs">Categories</p>
           </div>
-          <div className="flex flex-col gap-3 mt-1">
+          <div className="mt-1 flex flex-col gap-3">
             <div className="flex flex-col gap-2.5">
               <FilterButton
                 label="All Categories"
@@ -73,6 +79,7 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
                   <TriggerItem
                     key={triggerContent.id}
                     triggerContent={triggerContent}
+                    animeSlug={anime.slug}
                   />
                 ))}
               </div>

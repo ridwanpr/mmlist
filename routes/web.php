@@ -32,6 +32,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dash', [UserDashboardController::class, 'index'])->name('user.dash.index');
 
-    Route::post('vote-anime-trigger/{triggerContentId}', [VoteController::class, 'voteAnimeTrigger'])
+    Route::post('vote-anime-trigger/{triggerContentId}/{animeSlug}', [VoteController::class, 'voteAnimeTrigger'])
         ->name('vote.anime.trigger');
 });
