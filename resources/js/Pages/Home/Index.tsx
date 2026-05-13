@@ -5,7 +5,6 @@ import CTA from "../../Components/Home/CTA";
 import Features from "../../Components/Home/Features";
 import Hero from "../../Components/Home/Hero";
 import HowItWork from "../../Components/Home/HowItWork";
-import Status from "../../Components/Home/Status";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface HomeProps {
@@ -17,7 +16,6 @@ const Home = ({ nowAiring, topAnime }: HomeProps) => {
   return (
     <>
       <Hero />
-      <Status />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <Features />
       <HowItWork />
