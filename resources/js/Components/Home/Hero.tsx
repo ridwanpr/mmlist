@@ -93,7 +93,7 @@ const Hero = () => {
 
               <div>
                 <div className="mb-2 text-[11px] font-bold tracking-[0.18em] text-[#73776d] uppercase">
-                  Most reported warnings
+                  Most reported
                 </div>
 
                 <div className="flex flex-wrap gap-2">
