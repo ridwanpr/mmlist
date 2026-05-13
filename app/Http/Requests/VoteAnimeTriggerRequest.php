@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class VoteAnimeTriggerRequest extends FormRequest
 {
@@ -28,9 +29,19 @@ class VoteAnimeTriggerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "appears" => 'required',
-            "severity" => 'required',
-            "framing" => 'required'
+            "appears" => ['required', Rule::in(['Yes', 'No'])],
+
+            "severity" => [
+                'exclude_if:appears,No',
+                'required_if:appears,Yes',
+                Rule::in(['Mild', 'Moderate', 'Severe', 'Extreme']),
+            ],
+
+            "framing" => [
+                'exclude_if:appears,No',
+                'required_if:appears,Yes',
+                Rule::in(['Serious', 'Neutral', 'Romanticized', 'Comedic']),
+            ],
         ];
     }
 }
