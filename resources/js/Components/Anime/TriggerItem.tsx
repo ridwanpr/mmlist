@@ -9,6 +9,7 @@ import VoteGroup from "./VoteGroup";
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
   animeSlug: string;
+  userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
 }
 
 export interface VoteProps {
@@ -17,14 +18,32 @@ export interface VoteProps {
   framing: string;
 }
 
-const TriggerItem = ({ triggerContent, animeSlug }: TriggerItemProps) => {
+const TriggerItem = ({
+  triggerContent,
+  animeSlug,
+  userTriggerVote,
+}: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
+  const findUserTriggerVote = userTriggerVote?.find((userVote) => {
+    if (
+      userVote.user_id === auth.user?.id &&
+      userVote.trigger_content_id === triggerContent.id
+    ) {
+      return true;
+    }
+  });
+
+  let mapAppearsValue;
+  if (findUserTriggerVote !== undefined) {
+    mapAppearsValue = findUserTriggerVote.is_appear ? "Yes" : "No";
+  }
+
   const { data, setData, post, errors, processing } = useForm<VoteProps>({
-    appears: "",
-    severity: "",
-    framing: "",
+    appears: mapAppearsValue || "",
+    severity: findUserTriggerVote?.severity || "",
+    framing: findUserTriggerVote?.framing || "",
   });
 
   const handleVoteChange = (category: keyof VoteProps, option: string) => {

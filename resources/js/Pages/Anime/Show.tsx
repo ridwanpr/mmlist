@@ -9,9 +9,10 @@ import FrontLayout from "../../Layouts/FrontLayout";
 interface ShowAnimeProps {
   anime: App.DTOs.AnimeData;
   triggers: App.DTOs.TriggerData[];
+  userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
 }
 
-const ShowAnime = ({ anime, triggers }: ShowAnimeProps) => {
+const ShowAnime = ({ anime, triggers, userTriggerVote }: ShowAnimeProps) => {
   return (
     <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
       {/* Breadcrumb */}
@@ -25,7 +26,11 @@ const ShowAnime = ({ anime, triggers }: ShowAnimeProps) => {
         {/* Right Info */}
         <SideInfo />
       </div>
-      <TriggerWarning triggers={triggers} anime={anime} />
+      <TriggerWarning
+        triggers={triggers}
+        anime={anime}
+        userTriggerVote={userTriggerVote}
+      />
     </div>
   );
 };

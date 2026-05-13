@@ -6,9 +6,11 @@ import TriggerItem from "./TriggerItem";
 const TriggerWarning = ({
   triggers,
   anime,
+  userTriggerVote,
 }: {
   triggers: App.DTOs.TriggerData[];
   anime: App.DTOs.AnimeData;
+  userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
 }) => {
   const [filterTrigger, setFilterTrigger] = useState<string | number>("all");
 
@@ -80,6 +82,7 @@ const TriggerWarning = ({
                     key={triggerContent.id}
                     triggerContent={triggerContent}
                     animeSlug={anime.slug}
+                    userTriggerVote={userTriggerVote}
                   />
                 ))}
               </div>

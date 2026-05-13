@@ -3,21 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Services\AnimeService;
+use App\Services\VoteService;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AnimeController extends Controller
 {
-    public function __construct(private AnimeService $animeService) {}
+    public function __construct(
+        private AnimeService $animeService,
+        private VoteService $voteService
+    ) {}
 
     public function show(string $slug): Response
     {
-        $result = $this->animeService->getAnimeInfo($slug);
-        $triggers = $this->animeService->getAnimeTriggers($result->id);
+        $anime = $this->animeService->getAnimeInfo($slug);
+        $triggers = $this->animeService->getAnimeTriggers($anime->id);
+
+        $user = Auth::user();
+        if ($user) {
+            $userTriggerVote = $this->voteService->getUserTriggerVote($user->id, $anime->id);
+        }
 
         return Inertia::render('Anime/Show', [
-            'anime' => $result,
+            'anime' => $anime,
             'triggers' => $triggers,
+            'userTriggerVote' => $userTriggerVote ?? null
         ]);
     }
 }
