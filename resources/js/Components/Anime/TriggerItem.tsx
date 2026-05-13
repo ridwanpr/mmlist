@@ -173,7 +173,7 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                       </p>
                     )}
 
-                    {data.appears && data.appears === "Yes" ? (
+                    {data.appears === "Yes" && (
                       <>
                         <VoteGroup
                           label="Severity level"
@@ -205,8 +205,6 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                           </p>
                         )}
                       </>
-                    ) : (
-                      ""
                     )}
 
                     {data.appears && data.severity && data.framing && (
