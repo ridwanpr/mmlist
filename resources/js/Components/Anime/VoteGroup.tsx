@@ -4,17 +4,9 @@ interface VoteGroupProps {
 }
 
 const VoteGroup = ({ label, options }: VoteGroupProps) => {
-  console.log(options);
   return (
-    <div
-      role="radiogroup"
-      aria-label={label}
-      className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3"
-    >
-      <span
-        aria-hidden="true"
-        className="text-text-muted w-32 shrink-0 text-[10px] font-medium tracking-widest uppercase"
-      >
+    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
+      <span className="text-text-muted w-32 shrink-0 text-[10px] font-medium tracking-widest uppercase">
         {label}
       </span>
       <div className="flex flex-wrap gap-1.5">
