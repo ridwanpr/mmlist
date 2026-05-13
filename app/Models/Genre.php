@@ -6,6 +6,29 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property int $id
+ * @property int $mal_id
+ * @property string $type
+ * @property string $name
+ * @property string $url
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AnimeGenre|null $pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Anime> $animes
+ * @property-read int|null $animes_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereMalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Genre whereUrl($value)
+ * @mixin \Eloquent
+ */
 #[Fillable(['mal_id', 'type', 'name', 'url'])]
 class Genre extends Model
 {

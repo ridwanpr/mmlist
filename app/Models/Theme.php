@@ -6,6 +6,29 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property int $id
+ * @property int $mal_id
+ * @property string $type
+ * @property string $name
+ * @property string $url
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\AnimeTheme|null $pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Anime> $animes
+ * @property-read int|null $animes_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereMalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Theme whereUrl($value)
+ * @mixin \Eloquent
+ */
 #[Fillable(['mal_id', 'type', 'name', 'url'])]
 class Theme extends Model
 {

@@ -5,6 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * @property int $id
+ * @property int $anime_id
+ * @property int $demographic_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereAnimeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereDemographicId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 #[Fillable(['anime_id', 'demographic_id'])]
 class AnimeDemographic extends Pivot
 {

@@ -7,6 +7,81 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $mal_id
+ * @property string $slug
+ * @property string $url
+ * @property string|null $season
+ * @property int|null $year
+ * @property array<array-key, mixed>|null $images
+ * @property array<array-key, mixed>|null $trailer
+ * @property bool $approved
+ * @property array<array-key, mixed>|null $titles
+ * @property string $title
+ * @property string|null $title_english
+ * @property string|null $title_japanese
+ * @property array<array-key, mixed>|null $title_synonyms
+ * @property string|null $type
+ * @property string|null $source
+ * @property int|null $episodes
+ * @property string|null $status
+ * @property bool $airing
+ * @property array<array-key, mixed>|null $aired
+ * @property string|null $duration
+ * @property string|null $rating
+ * @property numeric|null $score
+ * @property string|null $synopsis
+ * @property string|null $background
+ * @property int|null $rank
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AnimeTrigger> $animeTriggers
+ * @property-read int|null $anime_triggers_count
+ * @property-read \App\Models\AnimeTheme|\App\Models\AnimeStudio|\App\Models\AnimeProducer|\App\Models\AnimeGenre|\App\Models\AnimeDemographic|null $pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Demographic> $demographics
+ * @property-read int|null $demographics_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Genre> $genres
+ * @property-read int|null $genres_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Producer> $producers
+ * @property-read int|null $producers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Studio> $studios
+ * @property-read int|null $studios_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Theme> $themes
+ * @property-read int|null $themes_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereAired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereAiring($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereBackground($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereEpisodes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereImages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereMalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereRank($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSeason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSynopsis($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleEnglish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleJapanese($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleSynonyms($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitles($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTrailer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereYear($value)
+ * @mixin \Eloquent
+ */
 #[Fillable([
     'mal_id',
     'url',
