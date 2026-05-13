@@ -192,7 +192,7 @@ class AnimeService
     }
 
     /**
-     * @return Collection<TriggerData>
+     * @return Collection<int, TriggerData>
      */
     public function getAnimeTriggers(int $animeId): Collection
     {

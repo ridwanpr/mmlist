@@ -10,7 +10,7 @@ return [
 
     'allowed_hosts' => [
         'myanimelist.net',
-        'mamorulist.test'
+        'mamorulist.test',
     ],
 
     /*

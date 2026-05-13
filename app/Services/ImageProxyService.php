@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Utils\ImageProxy;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ImageProxyService
 {
-    public function stream(string $hash)
+    public function stream(string $hash): StreamedResponse
     {
         $url = ImageProxy::decode($hash);
 
@@ -31,14 +32,14 @@ class ImageProxyService
         }
 
         $contentType = strtolower(
-            $response->header('Content-Type', '')
+            $response->header('Content-Type')
         );
 
         if (! str_starts_with($contentType, 'image/')) {
             abort(415);
         }
 
-        $contentLength = (int) $response->header('Content-Length', 0);
+        $contentLength = (int) $response->header('Content-Length');
 
         if (
             $contentLength > 0 &&
@@ -62,16 +63,14 @@ class ImageProxyService
             [
                 'Content-Type' => $contentType,
                 // Cloudflare CDN Cache
-                'Cache-Control' =>
-                'public, max-age=31536000, immutable',
+                'Cache-Control' => 'public, max-age=31536000, immutable',
                 // Browser Cache
                 'Expires' => gmdate(
                     'D, d M Y H:i:s',
                     time() + 31536000
-                ) . ' GMT',
+                ).' GMT',
                 // Extra CDN Hint
-                'CDN-Cache-Control' =>
-                'public, max-age=31536000',
+                'CDN-Cache-Control' => 'public, max-age=31536000',
                 'X-Content-Type-Options' => 'nosniff',
             ]
         );

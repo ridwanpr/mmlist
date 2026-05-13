@@ -12,6 +12,7 @@ class ImageProxy
     public static function decode(string $hash): ?string
     {
         $url = base64_decode(strtr($hash, '-_', '+/'));
+
         return $url ?: null;
     }
 }
