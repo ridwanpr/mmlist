@@ -1,16 +1,10 @@
 interface VoteGroupProps {
   label: string;
   options: string[];
-  selected: string | null;
-  handleOptionChange: (option: string) => void;
 }
 
-const VoteGroup = ({
-  label,
-  options,
-  selected,
-  handleOptionChange,
-}: VoteGroupProps) => {
+const VoteGroup = ({ label, options }: VoteGroupProps) => {
+  console.log(options);
   return (
     <div
       role="radiogroup"
@@ -28,15 +22,7 @@ const VoteGroup = ({
           return (
             <button
               key={option}
-              type="button"
-              role="radio"
-              aria-checked={selected === option}
-              onClick={() => handleOptionChange(option)}
-              className={`focus-visible:ring-border rounded-md border px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none ${
-                selected === option
-                  ? "border-primary bg-primary text-surface"
-                  : "border-border text-text-muted hover:border-primary-dark hover:text-primary-dark bg-transparent"
-              }`}
+              className={`focus-visible:ring-border rounded-md border px-3 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none`}
             >
               {option}
             </button>

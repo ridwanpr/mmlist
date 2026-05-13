@@ -13,15 +13,9 @@ interface TriggerItemProps {
 const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
-
   const isLoggedIn = auth.user !== null;
 
   const toggleTrigger = () => setIsOpen((prev) => !prev);
-
-  const handleOptionChange = (option: string) => {
-    setSelected(option);
-  };
 
   return (
     <div className="border-border bg-surface overflow-hidden rounded-lg border">
@@ -144,20 +138,14 @@ const TriggerItem = ({ triggerContent }: TriggerItemProps) => {
                   <VoteGroup
                     label="Does this appear?"
                     options={["Yes", "No"]}
-                    selected={selected}
-                    handleOptionChange={handleOptionChange}
                   />
                   <VoteGroup
                     label="Severity level"
                     options={["Mild", "Moderate", "Severe", "Extreme"]}
-                    selected={selected}
-                    handleOptionChange={handleOptionChange}
                   />
                   <VoteGroup
                     label="How is it framed?"
                     options={["Serious", "Neutral", "Romanticized", "Comedic"]}
-                    selected={selected}
-                    handleOptionChange={handleOptionChange}
                   />
                 </div>
               </>
