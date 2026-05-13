@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import FilterButton from "./FilterButton";
 import TriggerItem from "./TriggerItem";
@@ -10,16 +10,10 @@ const TriggerWarning = ({ triggers }: { triggers: App.DTOs.TriggerData[] }) => {
     setFilterTrigger(triggerId);
   };
 
-  const filteredTriggers = useMemo(() => {
-    if (filterTrigger === "all") {
-      return triggers;
-    }
-
-    const selectedTrigger = triggers.filter(
-      (trigger) => trigger.id === filterTrigger,
-    );
-    return selectedTrigger;
-  }, [triggers, filterTrigger]);
+  const filteredTriggers =
+    filterTrigger === "all"
+      ? triggers
+      : triggers.filter((t) => t.id === filterTrigger);
 
   return (
     <>
