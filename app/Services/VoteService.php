@@ -10,7 +10,15 @@ class VoteService
 {
     public function voteAnime(AnimeTriggerData $data): void
     {
-        AnimeTrigger::create($data->toArray());
+        AnimeTrigger::updateOrCreate([
+            'anime_id' => $data->anime_id,
+            'trigger_content_id' => $data->trigger_content_id,
+            'user_id' => $data->user_id
+        ], [
+            'is_appear' => $data->is_appear,
+            'severity' => $data->severity,
+            'framing' => $data->framing
+        ]);
     }
 
     /** @return Collection<int, AnimeTriggerData> */
