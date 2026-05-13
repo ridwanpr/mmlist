@@ -98,18 +98,18 @@ const TriggerItem = ({
               Severity
             </span>
             <div className="flex flex-wrap gap-x-3 gap-y-1">
-              <span className="text-accent-gold text-xs">
+              <span className="text-xs text-emerald-500">
                 Mild <strong className="font-semibold tabular-nums">10</strong>
               </span>
-              <span className="text-accent-orange text-xs">
+              <span className="text-xs text-amber-500">
                 Moderate{" "}
                 <strong className="font-semibold tabular-nums">10</strong>
               </span>
-              <span className="text-accent-red text-xs">
+              <span className="text-xs text-orange-500">
                 Severe{" "}
                 <strong className="font-semibold tabular-nums">10</strong>
               </span>
-              <span className="text-accent-rose text-xs">
+              <span className="text-xs text-red-500">
                 Extreme{" "}
                 <strong className="font-semibold tabular-nums">10</strong>
               </span>
