@@ -57,7 +57,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
           <img
             src={proxyImage(animeData?.images.jpg.image_url)}
             alt={animeData ? `${animeData.title} cover image` : ""}
-            loading={index >= 8 ? "lazy" : "eager"}
+            loading={index >= 6 ? "lazy" : "eager"}
             fetchPriority={index < 4 ? "high" : "auto"}
             className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
           />

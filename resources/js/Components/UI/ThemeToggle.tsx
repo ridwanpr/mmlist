@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       aria-label={
         theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
       }
-      className="border-border bg-surface text-text inline-flex items-center justify-center rounded-full border p-2 shadow-sm"
+      className="border-border bg-surface text-text inline-flex items-center justify-center rounded-full border p-2 shadow-sm hover:cursor-pointer"
     >
       {theme === "dark" ? (
         <LuSun className="h-5 w-5" />

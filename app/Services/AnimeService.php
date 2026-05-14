@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AnimeData;
+use App\DTOs\PaginatedAnimeData;
 use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\AnimeDemographic;
@@ -17,7 +18,6 @@ use App\Models\Producer;
 use App\Models\Studio;
 use App\Models\Theme;
 use App\Utils\GenerateSlug;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -27,46 +27,17 @@ use Illuminate\Support\Facades\Log;
 
 class AnimeService
 {
-    /**
-     * @return array<int, AnimeData>
-     */
-    public function fetchNowAiring(int $limit = 12, string $forPage = 'home'): array
+    public function fetchAnimes(int $paginateLimit = 15): PaginatedAnimeData
     {
-        try {
-            $cacheKey = "anime_now_airing_ids_{$limit}";
+        $paginator = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+            ->orderBy('score', 'desc')
+            ->where('rating', '!=', 'Rx - Hentai')
+            ->paginate($paginateLimit)
+            ->onEachSide(1);
 
-            $cachedAnime = $this->getAnimeFromCache($cacheKey);
+        $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
 
-            if (! empty($cachedAnime)) {
-                return $cachedAnime;
-            }
-
-            $response = Http::withQueryParameters([
-                'limit' => $limit,
-            ])->get(config('app.jikan_url') . '/seasons/now');
-
-            if ($response->failed()) {
-                Log::warning("Fetching Jikan API failed for now airing. Status: {$response->status()}", [
-                    'body' => $response->body(),
-                ]);
-                $response->throw();
-            }
-
-            $apiPayload = $response->json();
-            $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
-
-            if (! empty($animeDataDtos)) {
-                $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->all();
-                Cache::put($cacheKey, $malIdsToCache, now()->addHours(12));
-
-                $this->bulkInsertAnimeWithMetaData($animeDataDtos, true);
-            }
-
-            return $animeDataDtos;
-        } catch (Exception $e) {
-            Log::error('Failed to fetch Now Airing anime: ' . $e->getMessage());
-            throw $e;
-        }
+        return PaginatedAnimeData::fromPaginator($transformed);
     }
 
     /**
