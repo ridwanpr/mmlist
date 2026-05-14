@@ -27,13 +27,17 @@ use Illuminate\Support\Facades\Log;
 
 class AnimeService
 {
-    public function fetchAnimes(int $paginateLimit = 15): PaginatedAnimeData
+    public function fetchAnimes(int $paginateLimit = 15, bool $isAiring = false): PaginatedAnimeData
     {
         $paginator = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
             ->orderBy('score', 'desc')
             ->where('rating', '!=', 'Rx - Hentai')
+            ->where(function ($query) use ($isAiring) {
+                $query->where('airing', $isAiring);
+            })
             ->paginate($paginateLimit)
-            ->onEachSide(1);
+            ->onEachSide(1)
+            ->withQueryString();
 
         $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
 

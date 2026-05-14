@@ -12,6 +12,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
   return (
     <div className="mx-auto max-w-7xl p-4 lg:py-8">
       <SectionHeader
+        href="/browse?airing=true"
         title="Now Airing"
         icon={<LuRadio size="32px" className="text-primary" />}
       />
@@ -26,6 +27,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       </section>
 
       <SectionHeader
+        href="/browse?sort=score"
         title="Top Anime"
         icon={<LuFlame size="32px" className="text-primary" />}
       />

@@ -13,7 +13,9 @@ class BrowseController extends Controller
 
     public function Index(Request $request): Response
     {
-        $animes = $this->animeService->fetchAnimes(15);
+        $isAiring = $request->airing;
+        // dd($isAiring);
+        $animes = $this->animeService->fetchAnimes(paginateLimit: 15, isAiring: $isAiring);
 
         return Inertia::render('Browse/Index', [
             'animes' => $animes,

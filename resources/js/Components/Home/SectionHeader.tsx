@@ -3,17 +3,18 @@ import type React from "react";
 import { LuChevronRight } from "react-icons/lu";
 
 interface SectionHeaderProps {
-  title: string,
-  icon: React.ReactNode 
+  title: string;
+  icon: React.ReactNode;
+  href: string;
 }
 
-const SectionHeader = ({ title, icon }: SectionHeaderProps) => {
+const SectionHeader = ({ title, icon, href }: SectionHeaderProps) => {
   return (
     <div className="flex items-center justify-between">
-      <h2 className="mb-2 flex items-center gap-2 font-bold text-primary">
+      <h2 className="text-primary mb-2 flex items-center gap-2 font-bold">
         {icon} {title}
       </h2>
-      <Link className="flex items-center text-sm">
+      <Link href={href} className="flex items-center text-sm">
         View All <LuChevronRight />
       </Link>
     </div>
