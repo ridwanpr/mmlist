@@ -113,9 +113,98 @@ class AnimeService
     }
 
     /**
+     * Fetches a specific page of airing anime and syncs it to the database.
+     * 
+     * @return array{has_next_page: bool, synced_mal_ids: array<int, int>}
+     */
+    public function syncAiringAnimePage(int $page = 1): array
+    {
+        $response = Http::withQueryParameters([
+            'page' => $page,
+        ])->get(config('app.jikan_url') . '/seasons/now');
+
+        if ($response->failed()) {
+            Log::warning("Jikan API failed for syncing airing anime page {$page}. Status: {$response->status()}");
+            $response->throw();
+        }
+
+        $apiPayload = $response->json();
+        $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
+        $syncedMalIds = [];
+
+        if (! empty($animeDataDtos)) {
+            $syncedMalIds = collect($animeDataDtos)->pluck('mal_id')->all();
+
+            // Pass false to prevent overwriting 'airing' status during the pagination loop
+            $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
+        }
+
+        return [
+            'has_next_page' => $apiPayload['pagination']['has_next_page'] ?? false,
+            'synced_mal_ids' => $syncedMalIds,
+        ];
+    }
+
+    /**
+     * Cleans up anime that are no longer airing.
+     * 
+     * @param array<int, int> $activeMalIds
+     */
+    public function cleanupStaleAiringAnime(array $activeMalIds): void
+    {
+        if (empty($activeMalIds)) {
+            return;
+        }
+
+        Anime::where('airing', true)
+            ->whereNotIn('mal_id', $activeMalIds)
+            ->update(['airing' => false]);
+    }
+
+    /**
+     * Fetch airing anime directly from the local database.
+     * 
+     * @return array<int, AnimeData>
+     */
+    public function getNowAiringFromDatabase(int $limit = 12): array
+    {
+        $animeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+            ->where('airing', true)
+            ->orderBy('score', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+    }
+
+    public function getAnimeInfo(string $slug): Anime
+    {
+        return Anime::with(['demographics', 'genres', 'producers', 'studios', 'themes'])
+            ->where('slug', $slug)->firstOrFail();
+    }
+
+    /**
+     * @return Collection<int, TriggerData>
+     */
+    public function getAnimeTriggers(int $animeId): Collection
+    {
+        $triggersFromDb = MasterTrigger::with([
+            'triggerContents' => function ($query) {
+                $query->orderBy('importance', 'desc');
+            },
+            'triggerContents.animeTriggers' => function ($query) use ($animeId) {
+                $query->where('anime_id', $animeId);
+            }
+        ])
+            ->orderBy('importance', 'desc')->get();
+        $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+        return $triggers;
+    }
+
+    /**
      * @param  array<int, AnimeData>  $animeApiData
      */
-    public function bulkInsertAnimeWithMetaData(array $animeApiData, bool $isNowAiringSync = false): void
+    private function bulkInsertAnimeWithMetaData(array $animeApiData, bool $isNowAiringSync = false): void
     {
         if (empty($animeApiData)) {
             return;
@@ -183,30 +272,6 @@ class AnimeService
                 pivotForeignKey: 'theme_id'
             );
         });
-    }
-
-    public function getAnimeInfo(string $slug): Anime
-    {
-        return Anime::with(['demographics', 'genres', 'producers', 'studios', 'themes'])
-            ->where('slug', $slug)->firstOrFail();
-    }
-
-    /**
-     * @return Collection<int, TriggerData>
-     */
-    public function getAnimeTriggers(int $animeId): Collection
-    {
-        $triggersFromDb = MasterTrigger::with([
-            'triggerContents' => function ($query) {
-                $query->orderBy('importance', 'desc');
-            },
-            'triggerContents.animeTriggers' => function ($query) use ($animeId) {
-                $query->where('anime_id', $animeId);
-            }
-        ])
-            ->orderBy('importance', 'desc')->get();
-        $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
-        return $triggers;
     }
 
     /**

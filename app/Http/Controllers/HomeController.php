@@ -12,7 +12,7 @@ class HomeController extends Controller
 
     public function Index(): Response
     {
-        $nowAiring = $this->animeService->fetchNowAiring();
+        $nowAiring = $this->animeService->getNowAiringFromDatabase();
         $topAnime = $this->animeService->fetchTopAnime();
 
         return Inertia::render('Home/Index', [
