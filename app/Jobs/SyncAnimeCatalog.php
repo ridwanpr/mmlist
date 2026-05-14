@@ -2,26 +2,40 @@
 
 namespace App\Jobs;
 
+use App\Services\AnimeService;
+use Exception;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SyncAnimeCatalog implements ShouldQueue
 {
-    use Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public $timeout = 120;
+    public $tries = 3;
 
-    /**
-     * Execute the job.
-     */
-    public function handle(): void
+    public function __construct(public int $page = 1) {}
+
+    public function handle(AnimeService $animeService): void
     {
-        //
+        Log::info("Syncing catalog page: {$this->page}");
+
+        try {
+            $hasNextPage = $animeService->syncCatalogPage($this->page);
+
+            if ($hasNextPage) {
+                self::dispatch($this->page + 1)->delay(now()->addSeconds(2));
+                return;
+            }
+
+            Log::info("Finished syncing the entire anime catalog on page {$this->page}!");
+        } catch (Exception $e) {
+            Log::error("Failed to sync catalog on page {$this->page}: " . $e->getMessage());
+            throw $e;
+        }
     }
 }

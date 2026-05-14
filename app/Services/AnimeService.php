@@ -162,6 +162,34 @@ class AnimeService
     }
 
     /**
+     * Fetches a specific page of the overall anime catalog and syncs it.
+     * 
+     * @return bool Returns true if there is a next page.
+     */
+    public function syncCatalogPage(int $page = 1): bool
+    {
+        \Log::info('sync anime');
+        $response = Http::timeout(15)->withQueryParameters([
+            'page' => $page,
+        ])->get(config('app.jikan_url') . '/top/anime');
+
+        if ($response->failed()) {
+            Log::warning("Jikan API failed for syncing catalog page {$page}. Status: {$response->status()}");
+            $response->throw();
+        }
+
+        $apiPayload = $response->json();
+        $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
+
+        if (! empty($animeDataDtos)) {
+            // Pass false because we are not syncing current airing status
+            $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
+        }
+
+        return $apiPayload['pagination']['has_next_page'] ?? false;
+    }
+
+    /**
      * Fetch airing anime directly from the local database.
      * 
      * @return array<int, AnimeData>
