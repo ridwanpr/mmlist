@@ -80,7 +80,7 @@ const TriggerItem = ({
         onClick={toggleTrigger}
         className="hover:bg-surface-alt focus-visible:ring-border flex w-full flex-col gap-4 self-start p-4 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
       >
-        {/* Left — Name & Description */}
+        {/* Left - Name & Description */}
         <div className="min-w-0 flex-1 sm:min-w-40">
           <p className="text-text text-sm font-semibold">
             {triggerContent.name}
@@ -90,7 +90,7 @@ const TriggerItem = ({
           </p>
         </div>
 
-        {/* Middle — Severity & Framing */}
+        {/* Middle - Severity & Framing */}
         <div className="flex flex-1 flex-col gap-2">
           {/* Severity */}
           <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
@@ -98,25 +98,25 @@ const TriggerItem = ({
               Severity
             </span>
             <div className="flex flex-wrap gap-x-3 gap-y-1">
-              <span className="text-xs text-emerald-500">
+              <span className="text-severity-mild text-xs">
                 Mild{" "}
                 <strong className="font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Mild}
                 </strong>
               </span>
-              <span className="text-xs text-amber-500">
+              <span className="text-severity-moderate text-xs">
                 Moderate{" "}
                 <strong className="font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Moderate}
                 </strong>
               </span>
-              <span className="text-xs text-orange-500">
+              <span className="text-severity-high text-xs">
                 Severe{" "}
                 <strong className="font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Severe}
                 </strong>
               </span>
-              <span className="text-xs text-red-500">
+              <span className="text-severity-severe text-xs">
                 Extreme{" "}
                 <strong className="font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Extreme}
@@ -159,7 +159,7 @@ const TriggerItem = ({
           </div>
         </div>
 
-        {/* Right — Appears? + Voted badge + Chevron */}
+        {/* Right - Appears? + Voted badge + Chevron */}
         <div className="flex items-center justify-between sm:shrink-0 sm:justify-normal sm:gap-4">
           <div className="flex flex-col items-center gap-2">
             <span className="text-text-muted text-[10px] font-medium tracking-widest uppercase">
@@ -277,7 +277,7 @@ const TriggerItem = ({
                         <button
                           type="submit"
                           disabled={processing}
-                          className="bg-primary disabled:bg-primary/60 flex items-center gap-1.5 rounded px-3 py-1.5 text-sm text-white transition-opacity disabled:cursor-not-allowed"
+                          className="bg-primary disabled:bg-primary/60 text-surface flex items-center gap-1.5 rounded px-3 py-1.5 text-sm transition-opacity disabled:cursor-not-allowed"
                         >
                           {processing && (
                             <svg
@@ -300,7 +300,7 @@ const TriggerItem = ({
                               />
                             </svg>
                           )}
-                          {processing ? "Submitting…" : "Submit Vote"}
+                          {processing ? "Submitting..." : "Submit Vote"}
                         </button>
                       </div>
                     )}

@@ -27,7 +27,7 @@ const VoteGroup = ({
               type="button"
               key={option}
               onClick={() => handleVoteChange(category, option)}
-              className={`focus-visible:ring-border border-primary text-primary hover:bg-primary rounded-md border px-3 py-1 text-xs font-medium transition-colors hover:cursor-pointer hover:text-white focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none ${votes[category] === option ? "bg-primary text-white" : ""}`}
+              className={`focus-visible:ring-border border-primary text-primary hover:bg-primary hover:text-surface rounded-md border px-3 py-1 text-xs font-medium transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none ${votes[category] === option ? "bg-primary text-surface" : ""}`}
             >
               {option}
             </button>

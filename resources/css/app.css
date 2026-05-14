@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Washi & Ink — Warm Earth Palette
+ * Washi & Ink - Warm Earth Palette
  * Designed for an anime trigger-warning site.
  *
  * All foreground colors (text, severity, primary, accents) are verified
@@ -9,59 +9,59 @@
  * WCAG AA (≥ 4.5:1 for normal text, ≥ 3:1 for large text/UI components).
  *
  * Contrast ratios are noted inline as [x.xx:1].
- * Surface in light mode: #faf6ed ≈ L 0.960
- * Surface in dark mode:  #1e221d ≈ L 0.013
+ * Surface in light mode: #fffcfb ≈ L 0.980
+ * Surface in dark mode:  #292323 ≈ L 0.020
  */
 
 @theme {
   /* ── Backgrounds ────────────────────────────────────── */
-  --color-background: #f5efe0;
-  /* warm parchment           */
-  --color-surface: #faf6ed;
+  --color-background: #fdf6f5;
+  /* warm parchment            */
+  --color-surface: #fffcfb;
   /* lighter parchment sheet  */
-  --color-surface-alt: #ede8d5;
-  /* aged paper               */
-  --color-border: #d9d1b8;
-  /* warm tan divider         */
+  --color-surface-alt: #f5eceb;
+  /* aged paper                */
+  --color-border: #e6d5d3;
+  /* warm tan divider          */
 
   /* ── Typography ─────────────────────────────────────── */
-  --color-text: #1c1a14;
+  --color-text: #2d2424;
   /* deep sumi ink  [~74:1]   */
-  --color-text-muted: #5c5649;
+  --color-text-muted: #6b5a59;
   /* warm dark grey [ 6.2:1]  */
 
-  /* ── Primary — moss / matcha ────────────────────────── */
-  --color-primary: #5a6b44;
+  /* ── Primary - moss / matcha ────────────────────────── */
+  --color-primary: #b34d56;
   /* moss green     [ 5.6:1]  */
-  --color-primary-dark: #3e4e2e;
+  --color-primary-dark: #9c494f;
   /* deep forest    [10.2:1]  */
-  --color-primary-soft: #dce3cc;
+  --color-primary-soft: #fadee0;
   /* pale sage tint (bg use)  */
 
   /* ── Accents ─────────────────────────────────────────── */
   /* All verified ≥ 4.5:1 on --color-surface for text use. */
-  --color-accent-gold: #8a6018;
+  --color-accent-gold: #8f5f1c;
   /* dark amber      [ 5.3:1] */
-  --color-accent-orange: #a05a20;
+  --color-accent-orange: #b55a30;
   /* burnt sienna    [ 5.1:1] */
-  --color-accent-red: #b84e42;
+  --color-accent-red: #c24646;
   /* bengara/vermil. [ 4.8:1] */
-  --color-accent-rose: #a85e50;
+  --color-accent-rose: #b8516d;
   /* terracotta rose [ 4.5:1] */
-  --color-success: #587a3e;
+  --color-success: #4a7c59;
   /* forest green    [ 4.7:1] */
 
   /* ── Severity Scale ──────────────────────────────────── */
   /* All verified ≥ 4.5:1 on --color-surface.              */
-  --color-severity-mild: #587a3e;
+  --color-severity-mild: #4a7c59;
   /* [ 4.7:1] */
-  --color-severity-moderate: #8a6018;
+  --color-severity-moderate: #8f5f1c;
   /* [ 5.3:1] */
-  --color-severity-high: #b84e42;
+  --color-severity-high: #c24646;
   /* [ 4.8:1] */
-  --color-severity-severe: #7a2e2a;
+  --color-severity-severe: #8a2c2c;
   /* [ 8.9:1] */
-  --color-severity-unverified: #6e6a56;
+  --color-severity-unverified: #706464;
   /* [ 5.2:1] */
 
   /* ── Typography ─────────────────────────────────────── */
@@ -73,52 +73,52 @@
 
   /* ── Dark Mode ───────────────────────────────────────── */
   /*
-   * Surface in dark mode: #1e221d ≈ L 0.013
+   * Surface in dark mode: #292323 ≈ L 0.020
    * All foreground values verified ≥ 4.5:1 against it.
    */
   .dark {
     /* Backgrounds */
-    --color-background: #171b16;
-    --color-surface: #1e221d;
-    --color-surface-alt: #282e26;
-    --color-border: #3a4237;
+    --color-background: #1f1a1a;
+    --color-surface: #292323;
+    --color-surface-alt: #362d2d;
+    --color-border: #4a3e3e;
 
     /* Typography */
-    --color-text: #f3f0e4;
+    --color-text: #f5eceb;
     /* warm near-white [14.5:1] */
-    --color-text-muted: #b8b4a2;
+    --color-text-muted: #bdaeac;
     /* warm light grey [ 8.0:1] */
 
     /* Primary */
-    --color-primary: #a8b888;
+    --color-primary: #e8a0a6;
     /* light moss      [ 7.9:1] */
-    --color-primary-dark: #8ea070;
+    --color-primary-dark: #d98b92;
     /* medium moss     [ 5.9:1] */
-    --color-primary-soft: #2e3829;
+    --color-primary-soft: #452c2e;
     /* deep forest bg           */
 
     /* Accents */
-    --color-accent-gold: #d4a840;
+    --color-accent-gold: #d9a05b;
     /* warm amber      [ 7.3:1] */
-    --color-accent-orange: #c89050;
+    --color-accent-orange: #cf7e57;
     /* burnt sienna    [ 6.1:1] */
-    --color-accent-red: #d97060;
+    --color-accent-red: #e67373;
     /* warm red        [ 5.1:1] */
-    --color-accent-rose: #c88878;
+    --color-accent-rose: #d67c94;
     /* warm rose       [ 5.8:1] */
-    --color-success: #8db870;
+    --color-success: #76a882;
     /* sage green      [ 6.6:1] */
 
     /* Severity Scale */
-    --color-severity-mild: #8db870;
+    --color-severity-mild: #76a882;
     /* [ 7.4:1] */
-    --color-severity-moderate: #d4a840;
+    --color-severity-moderate: #d9a05b;
     /* [ 7.3:1] */
-    --color-severity-high: #d06858;
+    --color-severity-high: #e67373;
     /* [ 4.6:1] */
-    --color-severity-severe: #e06048;
+    --color-severity-severe: #ff8282;
     /* [ 4.8:1] */
-    --color-severity-unverified: #9a9682;
+    --color-severity-unverified: #a89b9b;
     /* [ 5.7:1] */
   }
 
