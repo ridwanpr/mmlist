@@ -1,67 +1,77 @@
 import { LuBookmark, LuSearch, LuShieldCheck, LuUsers } from "react-icons/lu";
 
+const features = [
+  {
+    icon: LuSearch,
+    title: "Search and Discover",
+    description:
+      "Find any anime and see community-rated trigger warnings before you start.",
+  },
+  {
+    icon: LuShieldCheck,
+    title: "Detailed Trigger Info",
+    description:
+      "See which triggers appear and how frequently based on real user experiences.",
+  },
+  {
+    icon: LuUsers,
+    title: "Community Driven",
+    description:
+      "Vote, review, and help others by sharing your experiences with trigger content.",
+  },
+  {
+    icon: LuBookmark,
+    title: "Save & Track",
+    description:
+      "Save anime to your watchlist, track your progress, and manage what you watch.",
+  },
+];
+
 const Features = () => {
   return (
-    <div className="mx-auto max-w-7xl p-4 lg:py-8">
-      <div className="mb-8 text-center">
-        <h2 className="mb-2 font-serif text-2xl font-bold lg:text-3xl">
-          Everything you need to watch with confidence
-        </h2>
-        <p className="text-text-muted text-sm lg:text-base">
-          Built by anime fans, for anime fans
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
-          <div className="bg-background shrink-0 rounded-full p-6">
-            <LuSearch size={40} className="text-primary" />
-          </div>
-          <h3 className="text-text text-xl font-semibold">
-            Search and Discover
-          </h3>
-          <p className="text-text-muted text-base leading-relaxed">
-            Find any anime and see community-rated trigger warnings before you
-            start.
+    <section className="bg-surface py-16 lg:py-24">
+      <div className="mx-auto max-w-6xl px-4">
+        {/* Split header */}
+        <div className="border-border mb-0 flex flex-col gap-2 border-b pb-7 md:flex-row md:items-end md:justify-between">
+          <h2 className="text-text max-w-xs font-serif text-2xl leading-snug font-bold lg:text-3xl">
+            Everything you need to watch with confidence
+          </h2>
+          <p className="text-text-muted text-sm">
+            Built by anime fans, for anime fans
           </p>
         </div>
 
-        <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
-          <div className="bg-background shrink-0 rounded-full p-6">
-            <LuShieldCheck size={40} className="text-primary" />
-          </div>
-          <h3 className="text-text text-xl font-semibold">
-            Detailed Trigger Info
-          </h3>
-          <p className="text-text-muted text-base leading-relaxed">
-            See which trigger appear and how frequently based on real user
-            experiences.
-          </p>
-        </div>
+        {/* Feature rows */}
+        <div>
+          {features.map(({ icon: Icon, title, description }, i) => (
+            <div
+              key={i}
+              className="border-border flex items-start gap-5 border-b py-7 last:border-b-0"
+            >
+              <Icon
+                size={18}
+                className="text-primary mt-0.5 shrink-0"
+                aria-hidden
+              />
 
-        <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
-          <div className="bg-background shrink-0 rounded-full p-6">
-            <LuUsers size={40} className="text-primary" />
-          </div>
-          <h3 className="text-text text-xl font-semibold">Community Driven</h3>
-          <p className="text-text-muted text-base leading-relaxed">
-            Vote, reviews, help others by sharing your experiences with trigger
-            content.
-          </p>
-        </div>
+              <div className="min-w-0 flex-1 md:flex md:items-baseline md:gap-12">
+                <span className="text-text block shrink-0 text-[15px] font-semibold md:w-52">
+                  {title}
+                </span>
+                <p className="text-text mt-1 text-sm leading-relaxed md:mt-0">
+                  {description}
+                </p>
+              </div>
 
-        <div className="border-border flex flex-col items-center gap-4 rounded-lg border p-8 text-center">
-          <div className="bg-background shrink-0 rounded-full p-6">
-            <LuBookmark size={40} className="text-primary" />
-          </div>
-          <h3 className="text-text text-xl font-semibold">Save & Track</h3>
-          <p className="text-text-muted text-base leading-relaxed">
-            Save anime to your watchlist, track your progress, and manage what
-            you watch.
-          </p>
+              {/* Index counter, desktop only */}
+              <span className="text-text-muted hidden shrink-0 font-mono text-xs tabular-nums md:block">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

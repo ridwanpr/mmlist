@@ -1,77 +1,63 @@
-import {
-  LuChevronRight,
-  LuCircleCheck,
-  LuSearch,
-  LuShieldCheck,
-} from "react-icons/lu";
+import { LuCircleCheck, LuSearch, LuShieldCheck } from "react-icons/lu";
+
+const steps = [
+  {
+    number: "01",
+    icon: LuSearch,
+    title: "Find an anime",
+    description: "Search for any anime you want to watch.",
+  },
+  {
+    number: "02",
+    icon: LuShieldCheck,
+    title: "Check trigger warnings",
+    description: "See community-rated triggers and their intensity.",
+  },
+  {
+    number: "03",
+    icon: LuCircleCheck,
+    title: "Watch with confidence",
+    description: "Make informed choices that are right for you.",
+  },
+];
 
 const HowItWork = () => {
   return (
-    <div className="mx-auto max-w-5xl p-4 lg:py-12">
-      <h2 className="text-text mb-12 text-center font-serif text-2xl font-bold lg:text-3xl">
-        How it works
-      </h2>
+    <section className="py-16 lg:py-24">
+      <div className="mx-auto max-w-5xl px-4">
+        <h2 className="text-text mb-14 text-center font-serif text-2xl font-bold lg:text-3xl">
+          How it works
+        </h2>
 
-      <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:items-start md:gap-4 lg:gap-8">
-        <div className="flex max-w-62.5 flex-1 flex-col items-center justify-center gap-4">
-          <div className="relative">
-            <div className="bg-primary absolute -top-2 -left-2 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white shadow-md">
-              1
-            </div>
-            <div className="bg-surface border-surface-alt flex h-24 w-24 shrink-0 items-center justify-center rounded-full border">
-              <LuSearch size={40} className="text-primary" />
-            </div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-text font-semibold">Find an anime</h3>
-            <p className="text-text-muted mt-1 text-sm">
-              Search for any anime you want to watch.
-            </p>
-          </div>
-        </div>
+        {/* Three panels — vertical dividers on desktop, horizontal on mobile */}
+        <div className="divide-border flex flex-col divide-y md:flex-row md:divide-x md:divide-y-0">
+          {steps.map(({ number, icon: Icon, title, description }) => (
+            <div
+              key={number}
+              className="flex flex-1 flex-row gap-5 px-0 py-8 md:flex-col md:gap-6 md:px-10 md:py-0 md:first:pl-0 md:last:pr-0"
+            >
+              {/* Number + icon cluster */}
+              <div className="flex shrink-0 items-center gap-3 md:items-start">
+                <span className="text-primary font-serif text-5xl leading-none font-bold select-none md:text-6xl">
+                  {number}
+                </span>
+                <div className="border-border bg-surface flex h-10 w-10 shrink-0 items-center justify-center rounded-full border">
+                  <Icon size={18} className="text-primary" aria-hidden />
+                </div>
+              </div>
 
-        <div className="hidden h-24 items-center justify-center md:flex">
-          <LuChevronRight size={40} className="text-text-muted font-light" />
-        </div>
-
-        <div className="flex max-w-62.5 flex-1 flex-col items-center justify-center gap-4">
-          <div className="relative">
-            <div className="bg-primary absolute -top-2 -left-2 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white shadow-md">
-              2
+              {/* Text */}
+              <div className="flex flex-col justify-center md:justify-start">
+                <h3 className="text-text text-[15px] font-semibold">{title}</h3>
+                <p className="text-text-muted mt-1.5 text-sm leading-relaxed">
+                  {description}
+                </p>
+              </div>
             </div>
-            <div className="bg-surface border-surface-alt flex h-24 w-24 shrink-0 items-center justify-center rounded-full border">
-              <LuShieldCheck size={40} className="text-primary" />
-            </div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-text font-semibold">Check trigger warnings</h3>
-            <p className="text-text-muted mt-1 text-sm">
-              See community-rated triggers and their intensity.
-            </p>
-          </div>
-        </div>
-
-        <div className="hidden h-24 items-center justify-center md:flex">
-          <LuChevronRight size={40} className="text-text-muted font-light" />
-        </div>
-        <div className="flex max-w-62.5 flex-1 flex-col items-center justify-center gap-4">
-          <div className="relative">
-            <div className="bg-primary absolute -top-2 -left-2 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white shadow-md">
-              3
-            </div>
-            <div className="bg-surface border-surface-alt flex h-24 w-24 shrink-0 items-center justify-center rounded-full border">
-              <LuCircleCheck size={40} className="text-primary" />
-            </div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-text font-semibold">Watch with confidence</h3>
-            <p className="text-text-muted mt-1 text-sm">
-              Make informed choice that are right for you.
-            </p>
-          </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

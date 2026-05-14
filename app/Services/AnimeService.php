@@ -74,42 +74,13 @@ class AnimeService
      */
     public function fetchTopAnime(int $limit = 8): array
     {
-        try {
-            $cacheKey = "anime_top_ids_{$limit}";
+        $animeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+            ->orderBy('score', 'desc')
+            ->where('rating', '!=', 'Rx - Hentai')
+            ->limit($limit)
+            ->get();
 
-            $cachedAnime = $this->getAnimeFromCache($cacheKey);
-
-            if (! empty($cachedAnime)) {
-                return $cachedAnime;
-            }
-
-            $response = Http::timeout(10)
-                ->withQueryParameters([
-                    'limit' => $limit,
-                ])
-                ->get(config('app.jikan_url') . '/top/anime');
-
-            if ($response->failed()) {
-                Log::warning("Jikan API failed for Top Anime. Status: {$response->status()}");
-                $response->throw();
-            }
-
-            $apiPayload = $response->json();
-            $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
-
-            if (! empty($animeDataDtos)) {
-                $malIdsToCache = collect($animeDataDtos)->pluck('mal_id')->all();
-                Cache::put($cacheKey, $malIdsToCache, now()->addHours(24));
-
-                $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
-            }
-
-            return $animeDataDtos;
-        } catch (Exception $e) {
-            Log::error('Failed to fetch Top Anime: ' . $e->getMessage());
-
-            return [];
-        }
+        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**
@@ -198,6 +169,7 @@ class AnimeService
     {
         $animeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
             ->where('airing', true)
+            ->where('rating', '!=', 'Rx - Hentai')
             ->orderBy('score', 'desc')
             ->limit($limit)
             ->get();
