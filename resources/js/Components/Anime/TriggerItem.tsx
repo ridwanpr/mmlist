@@ -99,19 +99,28 @@ const TriggerItem = ({
             </span>
             <div className="flex flex-wrap gap-x-3 gap-y-1">
               <span className="text-xs text-emerald-500">
-                Mild <strong className="font-semibold tabular-nums">10</strong>
+                Mild{" "}
+                <strong className="font-semibold tabular-nums">
+                  {triggerContent.stats?.severity.Mild}
+                </strong>
               </span>
               <span className="text-xs text-amber-500">
                 Moderate{" "}
-                <strong className="font-semibold tabular-nums">10</strong>
+                <strong className="font-semibold tabular-nums">
+                  {triggerContent.stats?.severity.Moderate}
+                </strong>
               </span>
               <span className="text-xs text-orange-500">
                 Severe{" "}
-                <strong className="font-semibold tabular-nums">10</strong>
+                <strong className="font-semibold tabular-nums">
+                  {triggerContent.stats?.severity.Severe}
+                </strong>
               </span>
               <span className="text-xs text-red-500">
                 Extreme{" "}
-                <strong className="font-semibold tabular-nums">10</strong>
+                <strong className="font-semibold tabular-nums">
+                  {triggerContent.stats?.severity.Extreme}
+                </strong>
               </span>
             </div>
           </div>
@@ -122,16 +131,30 @@ const TriggerItem = ({
               Framing
             </span>
             <div className="flex flex-wrap gap-x-3 gap-y-1">
-              {["Serious", "Neutral", "Romanticized", "Comedic"].map(
-                (label) => (
-                  <span key={label} className="text-text-muted text-xs">
-                    {label}{" "}
-                    <strong className="text-text font-semibold tabular-nums">
-                      10
-                    </strong>
-                  </span>
-                ),
-              )}
+              <span className="text-text-muted text-xs">
+                Serious{" "}
+                <strong className="text-text font-semibold tabular-nums">
+                  {triggerContent.stats?.framing.Serious}
+                </strong>
+              </span>
+              <span className="text-text-muted text-xs">
+                Neutral{" "}
+                <strong className="text-text font-semibold tabular-nums">
+                  {triggerContent.stats?.framing.Neutral}
+                </strong>
+              </span>
+              <span className="text-text-muted text-xs">
+                Romanticized{" "}
+                <strong className="text-text font-semibold tabular-nums">
+                  {triggerContent.stats?.framing.Romanticized}
+                </strong>
+              </span>
+              <span className="text-text-muted text-xs">
+                Comedic{" "}
+                <strong className="text-text font-semibold tabular-nums">
+                  {triggerContent.stats?.framing.Comedic}
+                </strong>
+              </span>
             </div>
           </div>
         </div>
@@ -145,13 +168,13 @@ const TriggerItem = ({
             <div className="flex gap-3">
               <div className="flex w-10 flex-col items-center gap-0.5">
                 <strong className="text-success text-sm font-semibold tabular-nums">
-                  10
+                  {triggerContent.stats?.appear_true}
                 </strong>
                 <LuThumbsUp className="text-success text-base" />
               </div>
               <div className="flex w-10 flex-col items-center gap-0.5">
                 <strong className="text-accent-red text-sm font-semibold tabular-nums">
-                  10
+                  {triggerContent.stats?.appear_false}
                 </strong>
                 <LuThumbsDown className="text-accent-red text-base" />
               </div>

@@ -83,8 +83,18 @@ declare namespace App {
     export type TriggerStatsData = {
       readonly appear_true: number;
       readonly appear_false: number;
-      readonly severity: Array<any>;
-      readonly framing: Array<any>;
+      readonly severity: {
+        Mild: number;
+        Moderate: number;
+        Severe: number;
+        Extreme: number;
+      };
+      readonly framing: {
+        Serious: number;
+        Neutral: number;
+        Romanticized: number;
+        Comedic: number;
+      };
     };
     export type UserData = {
       readonly id: number;
