@@ -1,15 +1,62 @@
+import { useMemo } from "react";
 import { LuInfo, LuUsers } from "react-icons/lu";
 
-export const SideInfo = () => {
+interface SideInfoProps {
+  triggers: App.DTOs.TriggerData[];
+}
+
+export const SideInfo = ({ triggers }: SideInfoProps) => {
+  const triggerContents = useMemo(
+    () => triggers.flatMap((trigger) => trigger.triggerContents ?? []),
+    [triggers],
+  );
+
+  const stats = useMemo(() => {
+    const totalTriggers = triggerContents.length;
+
+    const totalReports = triggerContents.reduce(
+      (sum, content) => sum + (content.animeTriggers?.length ?? 0),
+      0,
+    );
+
+    const presentTriggers = triggerContents.filter((content) => {
+      const appearTrueFromStats = content.stats?.appear_true ?? 0;
+      const appearTrueFromEntries =
+        content.animeTriggers?.some((item) => item.is_appear) ?? false;
+
+      return appearTrueFromStats > 0 || appearTrueFromEntries;
+    }).length;
+
+    const absentTriggers = totalTriggers - presentTriggers;
+
+    const mostUsedTrigger =
+      triggerContents.reduce<App.DTOs.TriggerContentData | null>(
+        (best, current) => {
+          const currentCount = current.animeTriggers?.length ?? 0;
+          const bestCount = best?.animeTriggers?.length ?? 0;
+
+          return currentCount > bestCount ? current : best;
+        },
+        null,
+      );
+
+    return {
+      totalTriggers,
+      totalReports,
+      presentTriggers,
+      absentTriggers,
+      mostUsedTrigger,
+    };
+  }, [triggerContents]);
+
   return (
     <div className="flex min-w-0 flex-col gap-4 lg:col-span-1">
-      {/* 1. AI Content Advisory */}
       <div className="border-border bg-surface rounded-lg border p-5 shadow-sm">
         <div className="mb-3 flex items-start justify-between gap-2">
           <h3 className="text-text flex items-center gap-2 font-bold">
             Content Advisory
           </h3>
-          <span className="flex shrink-0 items-center gap-1 rounded bg-primary px-2 py-1 text-[10px] font-bold tracking-wider text-white uppercase">
+          <span className="bg-primary flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[10px] font-bold tracking-wider text-white uppercase">
             <LuInfo size={12} />
             AI Powered
           </span>
@@ -32,24 +79,51 @@ export const SideInfo = () => {
             Active triggers currently reported by the community.
           </p>
         </div>
+
         <div className="flex flex-col gap-2.5">
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">Extreme</span>
-            <span className="text-xs font-bold">4 items</span>
+            <span className="text-text/90 text-sm font-medium">
+              Total triggers
+            </span>
+            <span className="text-xs font-bold">{stats.totalTriggers}</span>
           </div>
+
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">Severe</span>
-            <span className="text-xs font-bold">4 items</span>
+            <span className="text-text/90 text-sm font-medium">
+              Triggers present
+            </span>
+            <span className="text-xs font-bold">{stats.presentTriggers}</span>
           </div>
+
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">Moderate</span>
-            <span className="text-xs font-bold">7 items</span>
+            <span className="text-text/90 text-sm font-medium">
+              Triggers absent
+            </span>
+            <span className="text-xs font-bold">{stats.absentTriggers}</span>
           </div>
+
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">Mild</span>
-            <span className="text-xs font-bold">2 items</span>
+            <span className="text-text/90 text-sm font-medium">
+              Total reports
+            </span>
+            <span className="text-xs font-bold">{stats.totalReports}</span>
           </div>
         </div>
+
+        {stats.mostUsedTrigger && (
+          <div className="bg-background mt-4 rounded p-3">
+            <div className="text-text-muted text-[11px] font-semibold tracking-wider uppercase">
+              Most used trigger
+            </div>
+            <div className="text-text text-sm font-bold">
+              {stats.mostUsedTrigger.name}
+            </div>
+            <div className="text-text-muted text-xs">
+              {stats.mostUsedTrigger.animeTriggers?.length ?? 0} reported
+              entries
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="border-primary/20 bg-primary/5 rounded-lg border p-5 text-center shadow-sm">
