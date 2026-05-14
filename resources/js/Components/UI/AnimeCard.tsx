@@ -30,7 +30,6 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     return null;
   })();
 
-  // Type is surfaced as a badge on the image; keep season + eps in the meta row
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
@@ -47,14 +46,13 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
       href={`/anime/${animeData.slug}`}
       className="group mb-4 block lg:mb-0"
     >
-      <div className="border-border bg-surface group-hover:border-primary-soft relative flex min-h-44 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(102,114,74,0.18)]">
-        {/* Hover accent — left edge bar */}
+      <div className="border-border bg-surface group-hover:border-primary-soft relative flex min-h-44 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(179,77,86,0.18)]">
         <span
           aria-hidden="true"
           className="bg-primary pointer-events-none absolute inset-y-0 left-0 w-[3px] rounded-l-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         />
 
-        {/* ── Image ────────────────────────────────────────────── */}
+        {/* -- Image -- */}
         <div className="relative w-32 shrink-0 overflow-hidden">
           <img
             src={proxyImage(animeData?.images.jpg.image_url)}
@@ -64,21 +62,20 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
           />
 
-          {/* Gradient veil — gives room for the type badge */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"
+            className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent"
           />
 
           {/* Type badge */}
           {animeData?.type && (
-            <span className="absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-[3px] text-[9px] font-semibold tracking-widest text-white/90 uppercase backdrop-blur-[2px]">
+            <span className="text-surface/90 absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-0.75 text-[9px] font-semibold tracking-widest uppercase backdrop-blur-[2px]">
               {animeData.type}
             </span>
           )}
         </div>
 
-        {/* ── Content ──────────────────────────────────────────── */}
+        {/* -- Content -- */}
         <div className="flex min-w-0 flex-1 flex-col gap-2 p-3">
           {/* Title */}
           <p
@@ -88,7 +85,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             {title}
           </p>
 
-          {/* Meta — season · eps */}
+          {/* Meta - season · eps */}
           {metaParts.length > 0 && (
             <div className="text-text-muted flex flex-wrap items-center gap-y-0.5 text-[11px]">
               {metaParts.map((part, i) => (
@@ -96,7 +93,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   {i > 0 && (
                     <span
                       aria-hidden="true"
-                      className="bg-text-muted/40 mx-1.5 inline-block h-[3px] w-[3px] shrink-0 rounded-full"
+                      className="bg-text-muted/40 mx-1.5 inline-block h-0.75 w-0.75 shrink-0 rounded-full"
                     />
                   )}
                   {part}
@@ -124,13 +121,13 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             </div>
           )}
 
-          {/* ── Trigger warning tags ──────────────────────────── */}
+          {/* -- Trigger warning tags -- */}
           {/*
             Color-coded by severity using your CSS tokens:
-              mild     → severity-mild     (green)
-              moderate → severity-moderate (amber/orange)
-              high     → severity-high     (red)
-              unverified / unknown → severity-unverified (stone)
+              mild     -> severity-mild     (green)
+              moderate -> severity-moderate (amber/orange)
+              high     -> severity-high     (red)
+              unverified / unknown -> severity-unverified (stone)
             Replace the placeholder <span> elements with your real
             trigger data once available.
           */}

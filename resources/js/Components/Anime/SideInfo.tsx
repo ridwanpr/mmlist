@@ -60,7 +60,7 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
           <h3 className="text-text flex items-center gap-2 font-bold">
             Content Advisory
           </h3>
-          <span className="bg-primary flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[10px] font-bold tracking-wider text-white uppercase">
+          <span className="bg-primary text-surface flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[10px] font-bold tracking-wider uppercase">
             <LuInfo size={12} />
             AI Powered
           </span>
@@ -89,28 +89,36 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
             <span className="text-text/90 text-sm font-medium">
               Total triggers
             </span>
-            <span className="text-xs font-bold">{stats.totalTriggers}</span>
+            <span className="text-text text-xs font-bold">
+              {stats.totalTriggers}
+            </span>
           </div>
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
               Triggers present
             </span>
-            <span className="text-xs font-bold">{stats.presentTriggers}</span>
+            <span className="text-text text-xs font-bold">
+              {stats.presentTriggers}
+            </span>
           </div>
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
               Triggers absent
             </span>
-            <span className="text-xs font-bold">{stats.absentTriggers}</span>
+            <span className="text-text text-xs font-bold">
+              {stats.absentTriggers}
+            </span>
           </div>
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
               Total reports
             </span>
-            <span className="text-xs font-bold">{stats.totalReports}</span>
+            <span className="text-text text-xs font-bold">
+              {stats.totalReports}
+            </span>
           </div>
         </div>
 
@@ -141,7 +149,7 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
           Did we miss something? Your message or suggestion help us improve
           mamorulist.
         </p>
-        <button className="bg-primary focus:ring-primary w-full rounded-md py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:outline-none">
+        <button className="bg-primary focus:ring-primary text-surface w-full rounded-md py-2 text-sm font-semibold transition-opacity hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:outline-none">
           Leave a Message
         </button>
       </div>
