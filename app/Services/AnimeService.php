@@ -39,7 +39,8 @@ class AnimeService
         $query->when(!empty($sort['sort']), function ($q) use ($sort) {
             $q->orderBy($sort['sort'], $sort['order'] ?? 'asc');
         }, function ($q) {
-            $q->orderBy('score', 'desc');
+            $q->orderBy('airing', 'desc')
+                ->orderBy('score', 'desc');
         });
 
         $paginator = $query
