@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrowseAnimeRequest;
 use App\Services\AnimeService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -11,11 +11,24 @@ class BrowseController extends Controller
 {
     public function __construct(private AnimeService $animeService) {}
 
-    public function Index(Request $request): Response
+    public function Index(BrowseAnimeRequest $request): Response
     {
-        $isAiring = $request->airing;
-        // dd($isAiring);
-        $animes = $this->animeService->fetchAnimes(paginateLimit: 15, isAiring: $isAiring);
+        $validated = $request->validated();
+
+        $filter = [
+            'airing' => $validated['airing'] ?? null
+        ];
+
+        $sort = [
+            'sort' => $validated['sort'] ?? null,
+            'order' =>  $validated['order'] ?? null
+        ];
+
+        $animes = $this->animeService->fetchAnimes(
+            filter: $filter,
+            sort: $sort,
+            paginateLimit: 15
+        );
 
         return Inertia::render('Browse/Index', [
             'animes' => $animes,

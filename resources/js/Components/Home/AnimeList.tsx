@@ -27,7 +27,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       </section>
 
       <SectionHeader
-        href="/browse?sort=score"
+        href="/browse?sort=score&order=desc"
         title="Top Anime"
         icon={<LuFlame size="32px" className="text-primary" />}
       />
