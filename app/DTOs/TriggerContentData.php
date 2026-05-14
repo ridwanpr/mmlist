@@ -19,18 +19,44 @@ readonly class TriggerContentData
         public ?CarbonInterface $updated_at,
         /** @var AnimeTriggerData[] */
         public array $animeTriggers = [],
+        public ?TriggerStatsData $stats = null,
     ) {}
 
     public static function fromModel(TriggerContent $data): self
     {
         $animeTriggers = [];
 
+        $appearTrue = 0;
+        $appearFalse = 0;
+        $severityCounts = ['Mild' => 0, 'Moderate' => 0, 'Severe' => 0, 'Extreme' => 0];
+        $framingCounts = ['Serious' => 0, 'Neutral' => 0, 'Romanticized' => 0, 'Comedic' => 0];
+
         if ($data->relationLoaded('animeTriggers')) {
-            $animeTriggers = $data->animeTriggers
-                ->map(fn($animeTrigger) => AnimeTriggerData::fromModel($animeTrigger))
-                ->values()
-                ->all();
+            foreach ($data->animeTriggers as $animeTrigger) {
+                $animeTriggers[] = AnimeTriggerData::fromModel($animeTrigger);
+
+                if ($animeTrigger->is_appear) {
+                    $appearTrue++;
+                } else {
+                    $appearFalse++;
+                }
+
+                if ($animeTrigger->severity) {
+                    $severityCounts[$animeTrigger->severity]++;
+                }
+
+                if ($animeTrigger->framing) {
+                    $framingCounts[$animeTrigger->framing]++;
+                }
+            }
         }
+
+        $stats = new TriggerStatsData(
+            appear_true: $appearTrue,
+            appear_false: $appearFalse,
+            severity: $severityCounts,
+            framing: $framingCounts
+        );
 
         return new self(
             id: $data->id,
@@ -41,6 +67,7 @@ readonly class TriggerContentData
             created_at: $data->created_at,
             updated_at: $data->updated_at,
             animeTriggers: $animeTriggers,
+            stats: $stats,
         );
     }
 }

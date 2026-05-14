@@ -69,6 +69,7 @@ declare namespace App {
       readonly created_at: string | null;
       readonly updated_at: string | null;
       readonly animeTriggers: App.DTOs.AnimeTriggerData[];
+      readonly stats: App.DTOs.TriggerStatsData | null;
     };
     export type TriggerData = {
       readonly id: number;
@@ -78,6 +79,12 @@ declare namespace App {
       readonly created_at: string | null;
       readonly updated_at: string | null;
       readonly triggerContents: App.DTOs.TriggerContentData[];
+    };
+    export type TriggerStatsData = {
+      readonly appear_true: number;
+      readonly appear_false: number;
+      readonly severity: Array<any>;
+      readonly framing: Array<any>;
     };
     export type UserData = {
       readonly id: number;
