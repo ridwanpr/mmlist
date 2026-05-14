@@ -132,7 +132,7 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
         )}
       </div>
 
-      <div className="border-primary/20 bg-primary/5 rounded-lg border p-5 text-center shadow-sm">
+      <div className="border-primary/20 bg-primary-soft rounded-lg border p-5 text-center shadow-sm">
         <div className="bg-primary/10 mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full">
           <LuUsers className="text-primary" size={20} />
         </div>

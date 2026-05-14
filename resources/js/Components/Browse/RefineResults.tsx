@@ -26,7 +26,7 @@ const RefineResults = () => {
   };
 
   return (
-    <div className="bg-background border-border hidden self-start rounded-lg border p-5 lg:flex lg:w-64 lg:flex-col lg:gap-6">
+    <div className="bg-surface border-border hidden self-start rounded-lg border p-5 lg:flex lg:w-64 lg:flex-col lg:gap-6">
       <div className="border-border flex w-full items-center justify-between border-b pb-4">
         <h2 className="text-text font-bold">Refine Results</h2>
         <button

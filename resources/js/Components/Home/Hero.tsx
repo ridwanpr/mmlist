@@ -48,7 +48,7 @@ const Hero = () => {
               warnings.
             </h1>
 
-            <p className="mt-3 max-w-lg text-sm leading-7 text-[#5f655d] sm:text-[15px]">
+            <p className="text-text mt-3 max-w-lg text-sm leading-7 sm:text-[15px]">
               Search anime and check community submitted content warnings before
               watching.
             </p>
@@ -74,7 +74,7 @@ const Hero = () => {
 
             <div className="mt-6 space-y-5">
               <div>
-                <div className="mb-2 text-[11px] font-bold tracking-[0.18em] text-[#73776d] uppercase">
+                <div className="text-text-muted mb-2 text-[11px] font-bold tracking-[0.18em] uppercase">
                   Trending
                 </div>
 
@@ -92,7 +92,7 @@ const Hero = () => {
               </div>
 
               <div>
-                <div className="mb-2 text-[11px] font-bold tracking-[0.18em] text-[#73776d] uppercase">
+                <div className="text-text-muted mb-2 text-[11px] font-bold tracking-[0.18em] uppercase">
                   Most reported
                 </div>
 
@@ -101,7 +101,7 @@ const Hero = () => {
                     <Link
                       key={item}
                       href="/"
-                      className="bg-surface-alt hover:bg-primary-soft/40 hover:text-text rounded-lg px-2.5 py-1 text-sm text-[#5f655d] transition"
+                      className="bg-surface-alt hover:bg-primary-soft/40 hover:text-text-muted text-text rounded-lg px-2.5 py-1 text-sm transition"
                     >
                       {item}
                     </Link>

@@ -22,7 +22,7 @@ const FrontLayout = ({ children }: FrontLayoutProps) => {
 
   return (
     <>
-      <div className="relative flex min-h-screen flex-col">
+      <div className="relative flex min-h-screen flex-col bg-background">
         <Toaster position="top-right" richColors closeButton />
         <div>
           <DekstopNav />
