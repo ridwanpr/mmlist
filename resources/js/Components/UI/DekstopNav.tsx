@@ -1,4 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
+import ThemeToggle from "./ThemeToggle";
 
 const DekstopNav = () => {
   const { routes, auth } = usePage().props;
@@ -83,6 +84,7 @@ const DekstopNav = () => {
               </Link>
             )}
           </div>
+          <ThemeToggle />
         </div>
       </div>
     </div>

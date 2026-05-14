@@ -8,6 +8,22 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Manrope:wght@200..800&display=swap"
         rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                const theme = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('theme='))
+                    ?.split('=')[1];
+
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     <x-inertia::head />
