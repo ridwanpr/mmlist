@@ -1,4 +1,4 @@
-<html>
+<html theme="dark">
 
 <head>
     <meta charset="utf-8" />
@@ -11,16 +11,20 @@
     <script>
         (function() {
             try {
-                const theme = document.cookie
+                const saved = document.cookie
                     .split('; ')
                     .find(row => row.startsWith('theme='))
                     ?.split('=')[1];
 
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+                const systemDark = window.matchMedia &&
+                    window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                const theme = saved === 'dark' || saved === 'light' ?
+                    saved :
+                    systemDark ? 'dark' : 'light';
+
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+                document.documentElement.dataset.theme = theme;
             } catch (e) {}
         })();
     </script>
