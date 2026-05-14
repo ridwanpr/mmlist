@@ -29,16 +29,20 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
 
     const absentTriggers = totalTriggers - presentTriggers;
 
-    const mostUsedTrigger =
-      triggerContents.reduce<App.DTOs.TriggerContentData | null>(
-        (best, current) => {
-          const currentCount = current.animeTriggers?.length ?? 0;
-          const bestCount = best?.animeTriggers?.length ?? 0;
+    const mostUsedTrigger = triggerContents
+      .filter(
+        (content) =>
+          content.animeTriggers?.some((item) => item.is_appear) ?? false,
+      )
+      .reduce<App.DTOs.TriggerContentData | null>((best, current) => {
+        const currentCount =
+          current.animeTriggers?.filter((item) => item.is_appear).length ?? 0;
 
-          return currentCount > bestCount ? current : best;
-        },
-        null,
-      );
+        const bestCount =
+          best?.animeTriggers?.filter((item) => item.is_appear).length ?? 0;
+
+        return currentCount > bestCount ? current : best;
+      }, null);
 
     return {
       totalTriggers,
@@ -113,14 +117,16 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
         {stats.mostUsedTrigger && (
           <div className="bg-background mt-4 rounded p-3">
             <div className="text-text-muted text-[11px] font-semibold tracking-wider uppercase">
-              Most used trigger
+              Most appearing trigger
             </div>
             <div className="text-text text-sm font-bold">
-              {stats.mostUsedTrigger.name}
+              {stats.mostUsedTrigger?.name ?? "None"}
             </div>
             <div className="text-text-muted text-xs">
-              {stats.mostUsedTrigger.animeTriggers?.length ?? 0} reported
-              entries
+              {stats.mostUsedTrigger?.animeTriggers?.filter(
+                (item) => item.is_appear,
+              ).length ?? 0}{" "}
+              reported entries
             </div>
           </div>
         )}
