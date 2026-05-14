@@ -30,12 +30,13 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     return null;
   })();
 
+  const genres = animeData?.genres?.slice(0, 3) ?? [];
+
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
+    ...genres.map((g) => g.name),
   ].filter(Boolean);
-
-  const genres = animeData?.genres?.slice(0, 3) ?? [];
 
   const title =
     animeData?.titles?.find((t) => t.type === "English")?.title ||
@@ -67,9 +68,9 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent"
           />
 
-          {/* Type badge */}
+          {/* Type badge — text-white/90 so it stays legible on dark overlay in both modes */}
           {animeData?.type && (
-            <span className="text-surface/90 absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-0.75 text-[9px] font-semibold tracking-widest uppercase backdrop-blur-[2px]">
+            <span className="absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-0.75 text-[9px] font-semibold tracking-widest text-white/90 uppercase backdrop-blur-[2px]">
               {animeData.type}
             </span>
           )}
@@ -85,7 +86,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             {title}
           </p>
 
-          {/* Meta - season · eps */}
+          {/* Meta - season · eps · genres (inline, low weight) */}
           {metaParts.length > 0 && (
             <div className="text-text-muted flex flex-wrap items-center gap-y-0.5 text-[11px]">
               {metaParts.map((part, i) => (
@@ -99,52 +100,27 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   {part}
                 </span>
               ))}
-            </div>
-          )}
-
-          {/* Genre pills */}
-          {genres.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {genres.map((genre) => (
-                <span
-                  key={genre.name}
-                  className="bg-surface-alt text-text-muted rounded px-1.5 py-0.5 text-[10px]"
-                >
-                  {genre.name}
-                </span>
-              ))}
               {(animeData?.genres?.length ?? 0) > 3 && (
-                <span className="text-text/40 py-0.5 text-[10px]">
-                  +{animeData!.genres!.length - 3}
+                <span className="text-text-muted/50 ml-0.5 text-[11px]">
+                  &nbsp;+{animeData!.genres!.length - 3}
                 </span>
               )}
             </div>
           )}
 
           {/* -- Trigger warning tags -- */}
-          {/*
-            Color-coded by severity using your CSS tokens:
-              mild     -> severity-mild     (green)
-              moderate -> severity-moderate (amber/orange)
-              high     -> severity-high     (red)
-              unverified / unknown -> severity-unverified (stone)
-            Replace the placeholder <span> elements with your real
-            trigger data once available.
-          */}
-          <div className="mt-auto flex flex-wrap gap-1 overflow-hidden">
-            {/* Example: mild trigger */}
-            <span className="border-severity-mild/40 bg-severity-mild/10 text-severity-mild w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              Trigger
+          <div className="mt-auto flex flex-wrap gap-1">
+            <span className="border-severity-high/40 bg-severity-high/10 text-severity-high w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
+              Gore
             </span>
-
-            {/* Example: moderate trigger */}
+            <span className="border-severity-severe/40 bg-severity-severe/10 text-severity-severe w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
+              Sexual Violence
+            </span>
             <span className="border-severity-moderate/40 bg-severity-moderate/10 text-severity-moderate w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              Trigger
+              Trauma
             </span>
-
-            {/* Overflow count */}
             <span className="border-border text-text-muted w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              +3
+              +2
             </span>
           </div>
         </div>
