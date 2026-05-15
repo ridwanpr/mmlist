@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DropdownMenu from "../UI/DropdownMenu";
-import { LuFlame, LuTv, LuCalendar, LuShuffle } from "react-icons/lu";
+import { LuFlame, LuTv, LuCalendar, LuShuffle, LuFilter } from "react-icons/lu";
 
 // Assuming these match your App.DTOs
 interface SearchSectionProps {
@@ -41,7 +41,6 @@ const SearchSection = ({
   type,
   season,
 }: SearchSectionProps) => {
-  // State to hold selected values
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedThemes, setSelectedThemes] = useState<number[]>([]);
   const [selectedYears, setSelectedYears] = useState<number[]>([]);
@@ -49,7 +48,9 @@ const SearchSection = ({
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Generic toggle function for arrays
+  // state for mobile filter toggle
+  const [showFilters, setShowFilters] = useState(false);
+
   const toggleSelection = <T,>(
     item: T,
     state: T[],
@@ -65,7 +66,7 @@ const SearchSection = ({
     label: genre.name,
     selected: selectedGenres.includes(genre.id),
     onClick: (e: React.MouseEvent) => {
-      e.preventDefault(); // Keeps menu open
+      e.preventDefault();
       toggleSelection(genre.id, selectedGenres, setSelectedGenres);
     },
   }));
@@ -121,7 +122,18 @@ const SearchSection = ({
     };
 
     console.log("Applying Filters:", filterData);
+    // auto-close filters on mobile after applying
+    if (window.innerWidth < 1024) {
+      setShowFilters(false);
+    }
   };
+
+  const activeFiltersCount =
+    selectedGenres.length +
+    selectedThemes.length +
+    selectedYears.length +
+    selectedSeasons.length +
+    selectedTypes.length;
 
   return (
     <div className="bg-surface">
@@ -133,8 +145,8 @@ const SearchSection = ({
           Find anime and view trigger warnings to make informed choices.
         </p>
 
-        {/* Search Bar */}
-        <div className="relative mb-3">
+        {/* Search Bar & Mobile Filter Toggle */}
+        <div className="relative mb-3 flex gap-2">
           <input
             type="text"
             value={searchQuery}
@@ -142,24 +154,53 @@ const SearchSection = ({
             className="border-border focus:ring-primary/50 w-full rounded-lg border-2 p-3 focus:ring-2 focus:outline-none"
             placeholder="Search anime..."
           />
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex shrink-0 items-center justify-center rounded-lg border-2 px-4 transition-colors lg:hidden ${
+              showFilters || activeFiltersCount > 0
+                ? "border-primary text-primary bg-primary/5"
+                : "border-border text-text-muted hover:border-primary/50"
+            }`}
+            aria-label="Toggle filters"
+          >
+            <span className="relative flex items-center gap-2">
+              <LuFilter size={20} />
+              {activeFiltersCount > 0 && (
+                <span className="bg-primary absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full text-[10px] text-white">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </span>
+          </button>
         </div>
 
-        {/* Quick Actions */}
-        <div className="mb-6 flex flex-wrap gap-2">
-          {QUICK_ACTIONS.map((action) => (
-            <button
-              key={action.id}
-              onClick={() => handleQuickAction(action.id)}
-              className="border-border text-text-muted hover:border-primary hover:text-text flex items-center gap-2 rounded-full border bg-transparent px-4 py-1.5 text-sm font-medium transition-all active:scale-95"
-            >
-              {action.icon}
-              <span>{action.label}</span>
-            </button>
-          ))}
+        {/* Quick Action */}
+        <div className="relative mb-6 sm:mx-0">
+          <div
+            className="from-surface pointer-events-none absolute top-0 right-0 bottom-2 z-10 w-16 bg-linear-to-l to-transparent sm:hidden"
+            aria-hidden="true"
+          />
+
+          <div className="flex w-full snap-x gap-2 overflow-x-auto px-4 pb-2 whitespace-nowrap [scrollbar-width:none] sm:gap-4 sm:px-0 [&::-webkit-scrollbar]:hidden">
+            {QUICK_ACTIONS.map((action) => (
+              <button
+                key={action.id}
+                onClick={() => handleQuickAction(action.id)}
+                className="border-border text-text-muted hover:border-primary hover:text-text flex shrink-0 snap-start items-center gap-2 rounded-full border bg-transparent px-4 py-1.5 text-sm font-medium transition-all active:scale-95"
+              >
+                {action.icon}
+                <span>{action.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Filters and Button Container */}
-        <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+        {/* Filters and Button Container - Conditionally hidden on mobile */}
+        <div
+          className={`${
+            showFilters ? "flex" : "hidden"
+          } w-full flex-col gap-4 lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-6`}
+        >
           {/* Dropdowns Grid */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap lg:gap-4">
             <DropdownMenu title="Genre" items={genreOptions} />
