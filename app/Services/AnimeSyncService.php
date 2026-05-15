@@ -40,6 +40,8 @@ class AnimeSyncService
         if (! empty($animeDataDtos)) {
             $syncedMalIds = collect($animeDataDtos)->pluck('mal_id')->all();
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
+            $masterService = new MasterService();
+            $masterService->clearCache();
         }
 
         return [
@@ -66,6 +68,9 @@ class AnimeSyncService
         if (! empty($animeDataDtos)) {
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
         }
+
+        $masterService = new MasterService();
+        $masterService->clearCache();
 
         return $apiPayload['pagination']['has_next_page'] ?? false;
     }

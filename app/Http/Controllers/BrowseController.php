@@ -45,7 +45,7 @@ class BrowseController extends Controller
         $year = $this->animeService->getAnimeYear();
         $type = $this->masterService->getType();
         $season = $this->masterService->getSeason();
-
+        
         return Inertia::render('Browse/Index', [
             'animes' => $animes,
             'genres' => $genres,
