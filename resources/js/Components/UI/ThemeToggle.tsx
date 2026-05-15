@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
 
 type Theme = "light" | "dark";
@@ -24,12 +24,6 @@ function setTheme(next: Theme) {
 
 export default function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getTheme, () => "light");
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    document.documentElement.dataset.theme = theme;
-    document.cookie = `theme=${theme}; path=/; max-age=31536000; samesite=lax`;
-  }, [theme]);
 
   return (
     <button
