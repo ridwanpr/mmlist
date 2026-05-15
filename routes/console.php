@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ExtractAiredData;
 use App\Jobs\FetchAiringAnime;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -10,3 +11,11 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new FetchAiringAnime)->twiceDaily(1, 13);
+
+Artisan::command('extract:fromto', function () {
+    $this->info('Dispatching extraction job to the queue...');
+
+    ExtractAiredData::dispatch();
+
+    $this->info('Job dispatched! Make sure your queue worker is running.');
+})->purpose('Extract aired JSON data to dedicated columns');
