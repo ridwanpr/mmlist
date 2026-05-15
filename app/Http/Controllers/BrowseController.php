@@ -27,7 +27,7 @@ class BrowseController extends Controller
         $animes = $this->animeService->fetchAnimes(
             filter: $filter,
             sort: $sort,
-            paginateLimit: 15
+            paginateLimit: 24
         );
 
         return Inertia::render('Browse/Index', [

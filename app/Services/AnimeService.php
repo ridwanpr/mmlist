@@ -39,7 +39,8 @@ class AnimeService
         $query->when(!empty($sort['sort']), function ($q) use ($sort) {
             $q->orderBy($sort['sort'], $sort['order'] ?? 'asc');
         }, function ($q) {
-            $q->orderBy('airing', 'desc')
+            $q->orderByRaw("type = 'TV' DESC")
+                ->orderBy('airing', 'desc')
                 ->orderBy('score', 'desc');
         });
 
