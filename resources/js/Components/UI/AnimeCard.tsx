@@ -14,9 +14,6 @@ const SEASON_ICON: Record<string, string> = {
 };
 
 const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
-  // if (index === 4) {
-  //   console.log(animeData);
-  // }
   const { proxyImage } = useImageProxy();
 
   const season = animeData?.season?.toLowerCase();
@@ -35,7 +32,6 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const genres = animeData?.genres?.slice(0, 3) ?? [];
 
-  // 1. Removed genres from metaParts so we can style them separately
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
@@ -50,32 +46,26 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   });
 
   const getTriggerBadgeStyle = (count: number) => {
-    // 1-2 reports: Not enough data to be certain
     if (count < 3)
       return {
         wrapper:
           "border-severity-unverified/40 bg-severity-unverified/10 text-severity-unverified",
       };
-    // 3-9 reports: Verified by a small group
     if (count < 10)
       return {
         wrapper:
           "border-severity-mild/40 bg-severity-mild/10 text-severity-mild",
-        // You might want to rename these severity classes to "confidence-low", etc.
       };
-    // 10-24 reports: Solid consensus
     if (count < 25)
       return {
         wrapper:
           "border-severity-moderate/40 bg-severity-moderate/10 text-severity-moderate",
       };
-    // 25-49 reports: Highly verified
     if (count < 50)
       return {
         wrapper:
           "border-severity-high/40 bg-severity-high/10 text-severity-high",
       };
-    // 50+ reports: Absolute community consensus
     return {
       wrapper:
         "border-severity-severe/40 bg-severity-severe/10 text-severity-severe",
@@ -167,7 +157,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
               <span
                 className={`w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium ${getTriggerBadgeStyle(filterTriggers.length).wrapper}`}
               >
-                {filterTriggers.length} Reports
+                {filterTriggers.length} Trigger Votes
               </span>
             </div>
           )}

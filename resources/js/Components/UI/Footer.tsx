@@ -38,7 +38,7 @@ const Footer = () => {
                 Contact
               </Link>
             </div>
-            <div className="border-primary/10 flex gap-4 lg:border-l lg:pl-8">
+            <div className="border-border flex gap-4 lg:border-l-2 lg:pl-8">
               <Link
                 href="/tos"
                 className="text-primary-dark hover:text-primary text-sm transition-colors"

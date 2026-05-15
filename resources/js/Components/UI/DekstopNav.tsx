@@ -50,11 +50,6 @@ const DekstopNav = () => {
         </nav>
 
         <div className="flex items-center gap-4">
-          <input
-            type="text"
-            className="border-primary rounded-md border px-2 py-1 placeholder:text-sm"
-            placeholder="Search anime..."
-          />
           <div>
             {!auth.user ? (
               <>
