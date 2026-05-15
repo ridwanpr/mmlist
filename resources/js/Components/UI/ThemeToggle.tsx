@@ -1,15 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
 
 type Theme = "light" | "dark";
 
-function getThemeFromDocument(): Theme {
+const THEME_EVENT = "themechange";
+
+function getTheme(): Theme {
   if (typeof document === "undefined") return "light";
   return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
+function subscribe(callback: () => void) {
+  window.addEventListener(THEME_EVENT, callback);
+  return () => window.removeEventListener(THEME_EVENT, callback);
+}
+
+function setTheme(next: Theme) {
+  document.documentElement.classList.toggle("dark", next === "dark");
+  document.documentElement.dataset.theme = next;
+  document.cookie = `theme=${next}; path=/; max-age=31536000; samesite=lax`;
+  window.dispatchEvent(new Event(THEME_EVENT));
+}
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => getThemeFromDocument());
+  const theme = useSyncExternalStore(subscribe, getTheme, () => "light");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -17,14 +31,10 @@ export default function ThemeToggle() {
     document.cookie = `theme=${theme}; path=/; max-age=31536000; samesite=lax`;
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((current) => (current === "dark" ? "light" : "dark"));
-  };
-
   return (
     <button
       type="button"
-      onClick={toggleTheme}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       aria-label={
         theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
       }
