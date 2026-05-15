@@ -149,6 +149,10 @@ const SearchSection = ({
     if (window.innerWidth < 1024) setShowFilters(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleApplyFilter();
+  };
+
   const activeFiltersCount =
     selectedGenres.length +
     selectedThemes.length +
@@ -172,6 +176,7 @@ const SearchSection = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="border-border focus:ring-primary/50 w-full rounded-lg border-2 p-3 focus:ring-2 focus:outline-none"
             placeholder="Search anime..."
           />
@@ -234,7 +239,7 @@ const SearchSection = ({
           {/* Main Action Button */}
           <button
             onClick={handleApplyFilter}
-            className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap transition-all hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2"
+            className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap hover:cursor-pointer transition-all hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2"
           >
             Apply Filter & Search
           </button>
