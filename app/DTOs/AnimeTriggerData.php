@@ -16,6 +16,7 @@ readonly class AnimeTriggerData
         public bool $is_appear,
         public ?string $severity,
         public ?string $framing,
+        public ?TriggerContentData $triggerContent = null,
     ) {}
 
     public static function fromRequest(
@@ -45,6 +46,7 @@ readonly class AnimeTriggerData
             is_appear: (bool) $model->is_appear,
             severity: $model->severity,
             framing: $model->framing,
+            triggerContent: $model->triggerContent ? TriggerContentData::fromModel($model->triggerContent) : null
         );
     }
 

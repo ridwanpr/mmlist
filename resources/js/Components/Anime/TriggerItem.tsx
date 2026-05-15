@@ -116,12 +116,6 @@ const TriggerItem = ({
                   {triggerContent.stats?.severity.Severe}
                 </strong>
               </span>
-              <span className="text-severity-severe text-xs">
-                Extreme{" "}
-                <strong className="font-semibold tabular-nums">
-                  {triggerContent.stats?.severity.Extreme}
-                </strong>
-              </span>
             </div>
           </div>
 
@@ -239,7 +233,7 @@ const TriggerItem = ({
                       <>
                         <VoteGroup
                           label="Severity level"
-                          options={["Mild", "Moderate", "Severe", "Extreme"]}
+                          options={["Mild", "Moderate", "Severe"]}
                           category="severity"
                           votes={data}
                           handleVoteChange={handleVoteChange}

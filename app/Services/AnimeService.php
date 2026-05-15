@@ -29,7 +29,7 @@ class AnimeService
 {
     public function fetchAnimes(array $filter, array $sort, int $paginateLimit = 15): PaginatedAnimeData
     {
-        $query = Anime::with(['genres'])
+        $query = Anime::with(['genres', 'animeTriggers'])
             ->where('rating', '!=', 'Rx - Hentai');
 
         $query->when(isset($filter['airing']), function ($q) use ($filter) {
@@ -59,7 +59,7 @@ class AnimeService
      */
     public function fetchTopAnime(int $limit = 8): array
     {
-        $animeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+        $animeFromDb = Anime::with(['genres', 'animeTriggers'])
             ->orderBy('score', 'desc')
             ->where('rating', '!=', 'Rx - Hentai')
             ->limit($limit)
@@ -152,7 +152,7 @@ class AnimeService
      */
     public function getNowAiringFromDatabase(int $limit = 12): array
     {
-        $animeFromDb = Anime::with(['genres', 'demographics', 'producers', 'studios', 'themes'])
+        $animeFromDb = Anime::with(['genres', 'animeTriggers'])
             ->where('airing', true)
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderBy('score', 'desc')

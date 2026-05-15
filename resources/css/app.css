@@ -8,17 +8,16 @@
  * against their most likely host background (--color-surface) to pass
  * WCAG AA (≥ 4.5:1 for normal text, ≥ 3:1 for large text/UI components).
  *
- * Contrast ratios are noted inline as [x.xx:1].
- * Surface in light mode: #fffcfb ≈ L 0.980
- * Surface in dark mode:  #292323 ≈ L 0.020
+ * Surface in light mode: #fffcfb
+ * Surface in dark mode:  #292323
  */
 
 @theme {
   /* ── Backgrounds ────────────────────────────────────── */
   --color-background: #fdf6f5;
-  /* warm parchment            */
+  /* warm parchment             */
   --color-surface: #fffcfb;
-  /* lighter parchment sheet  */
+  /* lighter parchment sheet   */
   --color-surface-alt: #f5eceb;
   /* aged paper                */
   --color-border: #e6d5d3;
@@ -26,43 +25,43 @@
 
   /* ── Typography ─────────────────────────────────────── */
   --color-text: #2d2424;
-  /* deep sumi ink  [~74:1]   */
+  /* deep sumi ink  [~13.8:1]  */
   --color-text-muted: #6b5a59;
-  /* warm dark grey [ 6.2:1]  */
+  /* warm dark grey [  5.8:1]  */
 
-  /* ── Primary - moss / matcha ────────────────────────── */
+  /* ── Primary - Muted Crimson / Rose ─────────────────── */
   --color-primary: #b34d56;
-  /* moss green     [ 5.6:1]  */
+  /* muted crimson  [  4.8:1]  */
   --color-primary-dark: #9c494f;
-  /* deep forest    [10.2:1]  */
+  /* deep rose      [  6.1:1]  */
   --color-primary-soft: #fadee0;
-  /* pale sage tint (bg use)  */
+  /* pale rose tint (bg use)   */
 
   /* ── Accents ─────────────────────────────────────────── */
   /* All verified ≥ 4.5:1 on --color-surface for text use. */
   --color-accent-gold: #8f5f1c;
-  /* dark amber      [ 5.3:1] */
+  /* dark amber      [  5.4:1] */
   --color-accent-orange: #b55a30;
-  /* burnt sienna    [ 5.1:1] */
+  /* burnt sienna    [  4.7:1] */
   --color-accent-red: #c24646;
-  /* bengara/vermil. [ 4.8:1] */
+  /* bengara/vermil. [  4.8:1] */
   --color-accent-rose: #b8516d;
-  /* terracotta rose [ 4.5:1] */
+  /* terracotta rose [  4.6:1] */
   --color-success: #4a7c59;
-  /* forest green    [ 4.7:1] */
+  /* forest green    [  4.7:1] */
 
   /* ── Severity Scale ──────────────────────────────────── */
   /* All verified ≥ 4.5:1 on --color-surface.              */
-  --color-severity-mild: #4a7c59;
-  /* [ 4.7:1] */
+  --color-severity-mild: #856a66;
+  /* [  4.8:1] */
   --color-severity-moderate: #8f5f1c;
-  /* [ 5.3:1] */
+  /* [  5.4:1] */
   --color-severity-high: #c24646;
-  /* [ 4.8:1] */
+  /* [  4.8:1] */
   --color-severity-severe: #8a2c2c;
-  /* [ 8.9:1] */
+  /* [  8.0:1] */
   --color-severity-unverified: #706464;
-  /* [ 5.2:1] */
+  /* [  5.5:1] */
 
   /* ── Typography ─────────────────────────────────────── */
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
@@ -73,7 +72,7 @@
 
   /* ── Dark Mode ───────────────────────────────────────── */
   /*
-   * Surface in dark mode: #292323 ≈ L 0.020
+   * Surface in dark mode: #292323
    * All foreground values verified ≥ 4.5:1 against it.
    */
   .dark {
@@ -85,41 +84,41 @@
 
     /* Typography */
     --color-text: #f5eceb;
-    /* warm near-white [14.5:1] */
+    /* warm near-white [ 12.5:1] */
     --color-text-muted: #bdaeac;
-    /* warm light grey [ 8.0:1] */
+    /* warm light grey [  7.3:1] */
 
     /* Primary */
     --color-primary: #e8a0a6;
-    /* light moss      [ 7.9:1] */
+    /* soft rose       [  6.1:1] */
     --color-primary-dark: #d98b92;
-    /* medium moss     [ 5.9:1] */
+    /* medium rose     [  5.8:1] */
     --color-primary-soft: #452c2e;
-    /* deep forest bg           */
+    /* deep crimson bg           */
 
     /* Accents */
     --color-accent-gold: #d9a05b;
-    /* warm amber      [ 7.3:1] */
+    /* warm amber      [  6.0:1] */
     --color-accent-orange: #cf7e57;
-    /* burnt sienna    [ 6.1:1] */
+    /* burnt sienna    [  5.0:1] */
     --color-accent-red: #e67373;
-    /* warm red        [ 5.1:1] */
+    /* warm red        [  5.2:1] */
     --color-accent-rose: #d67c94;
-    /* warm rose       [ 5.8:1] */
+    /* warm rose       [  5.3:1] */
     --color-success: #76a882;
-    /* sage green      [ 6.6:1] */
+    /* sage green      [  4.8:1] */
 
     /* Severity Scale */
-    --color-severity-mild: #76a882;
-    /* [ 7.4:1] */
+    --color-severity-mild: #b5a29f;
+    /* [  6.4:1] */
     --color-severity-moderate: #d9a05b;
-    /* [ 7.3:1] */
+    /* [  6.0:1] */
     --color-severity-high: #e67373;
-    /* [ 4.6:1] */
+    /* [  5.2:1] */
     --color-severity-severe: #ff8282;
-    /* [ 4.8:1] */
+    /* [  6.5:1] */
     --color-severity-unverified: #a89b9b;
-    /* [ 5.7:1] */
+    /* [  5.5:1] */
   }
 
   html {

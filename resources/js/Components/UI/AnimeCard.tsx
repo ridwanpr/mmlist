@@ -14,6 +14,9 @@ const SEASON_ICON: Record<string, string> = {
 };
 
 const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
+  // if (index === 4) {
+  //   console.log(animeData);
+  // }
   const { proxyImage } = useImageProxy();
 
   const season = animeData?.season?.toLowerCase();
@@ -32,16 +35,52 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const genres = animeData?.genres?.slice(0, 3) ?? [];
 
+  // 1. Removed genres from metaParts so we can style them separately
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
-    ...genres.map((g) => g.name),
   ].filter(Boolean);
 
   const title =
     animeData?.titles?.find((t) => t.type === "English")?.title ||
     animeData?.titles?.[0]?.title;
 
+  const filterTriggers = animeData?.triggers?.filter((trigger) => {
+    return trigger.is_appear;
+  });
+
+  const getTriggerBadgeStyle = (count: number) => {
+    // 1-2 reports: Not enough data to be certain
+    if (count < 3)
+      return {
+        wrapper:
+          "border-severity-unverified/40 bg-severity-unverified/10 text-severity-unverified",
+      };
+    // 3-9 reports: Verified by a small group
+    if (count < 10)
+      return {
+        wrapper:
+          "border-severity-mild/40 bg-severity-mild/10 text-severity-mild",
+        // You might want to rename these severity classes to "confidence-low", etc.
+      };
+    // 10-24 reports: Solid consensus
+    if (count < 25)
+      return {
+        wrapper:
+          "border-severity-moderate/40 bg-severity-moderate/10 text-severity-moderate",
+      };
+    // 25-49 reports: Highly verified
+    if (count < 50)
+      return {
+        wrapper:
+          "border-severity-high/40 bg-severity-high/10 text-severity-high",
+      };
+    // 50+ reports: Absolute community consensus
+    return {
+      wrapper:
+        "border-severity-severe/40 bg-severity-severe/10 text-severity-severe",
+    };
+  };
   return (
     <Link
       href={`/anime/${animeData.slug}`}
@@ -68,7 +107,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent"
           />
 
-          {/* Type badge — text-white/90 so it stays legible on dark overlay in both modes */}
+          {/* Type badge */}
           {animeData?.type && (
             <span className="absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-0.75 text-[9px] font-semibold tracking-widest text-white/90 uppercase backdrop-blur-[2px]">
               {animeData.type}
@@ -86,43 +125,52 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             {title}
           </p>
 
-          {/* Meta - season · eps · genres (inline, low weight) */}
+          {/* Meta - season and eps */}
           {metaParts.length > 0 && (
-            <div className="text-text-muted flex flex-wrap items-center gap-y-0.5 text-[11px]">
+            <div className="text-text-muted flex flex-wrap items-center gap-x-0.5 gap-y-1 text-[11px]">
               {metaParts.map((part, i) => (
                 <span key={i} className="flex items-center">
                   {i > 0 && (
                     <span
                       aria-hidden="true"
-                      className="bg-text-muted/40 mx-1.5 inline-block h-0.75 w-0.75 shrink-0 rounded-full"
+                      className="bg-text-muted/40 mx-2 inline-block h-0.75 w-0.75 shrink-0 rounded-full"
                     />
                   )}
                   {part}
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* 2. Redesigned Genres as badges */}
+          {genres.length > 0 && (
+            <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+              {genres.map((g, i) => (
+                <span
+                  key={i}
+                  className="bg-text-muted/10 text-text-muted border-text-muted/20 rounded border px-1.5 py-0.5 text-[10px] font-medium"
+                >
+                  {g.name}
+                </span>
+              ))}
               {(animeData?.genres?.length ?? 0) > 3 && (
-                <span className="text-text-muted/50 ml-0.5 text-[11px]">
-                  &nbsp;+{animeData!.genres!.length - 3}
+                <span className="text-text-muted/60 ml-0.5 text-[10px] font-medium">
+                  +{animeData!.genres!.length - 3}
                 </span>
               )}
             </div>
           )}
 
-          {/* -- Trigger warning tags -- */}
-          <div className="mt-auto flex flex-wrap gap-1">
-            <span className="border-severity-high/40 bg-severity-high/10 text-severity-high w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              Gore
-            </span>
-            <span className="border-severity-severe/40 bg-severity-severe/10 text-severity-severe w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              Sexual Violence
-            </span>
-            <span className="border-severity-moderate/40 bg-severity-moderate/10 text-severity-moderate w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              Trauma
-            </span>
-            <span className="border-border text-text-muted w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium">
-              +2
-            </span>
-          </div>
+          {/* -- Trigger warning -- */}
+          {filterTriggers.length !== 0 && (
+            <div className="mt-auto flex flex-wrap gap-1">
+              <span
+                className={`w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium ${getTriggerBadgeStyle(filterTriggers.length).wrapper}`}
+              >
+                {filterTriggers.length} Reports
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </Link>

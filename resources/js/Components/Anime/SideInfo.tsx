@@ -125,7 +125,7 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
         {stats.mostUsedTrigger && (
           <div className="bg-background mt-4 rounded p-3">
             <div className="text-text-muted text-[11px] font-semibold tracking-wider uppercase">
-              Most appearing trigger
+              Most reported trigger
             </div>
             <div className="text-text text-sm font-bold">
               {stats.mostUsedTrigger?.name ?? "None"}
