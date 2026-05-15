@@ -71,12 +71,11 @@ class AnimeService
 
         $query->when(!empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-
             $q->orderBy('animes.' . $sort['sort'], $direction);
         }, function ($q) {
             $q->orderByRaw("animes.type = 'TV' DESC")
-                ->orderBy('animes.airing', 'desc')
                 ->orderBy('animes.year', 'desc')
+                ->orderBy('animes.airing', 'desc')
                 ->orderBy('animes.score', 'desc');
         });
 
