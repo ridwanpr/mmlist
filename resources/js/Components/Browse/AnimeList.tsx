@@ -10,7 +10,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
     <>
       <div className="mx-auto max-w-7xl p-4 lg:pt-4">
         <p className="mb-4 font-semibold">
-          {animes.total.toLocaleString()} anime found
+          {animes.total.toString()} anime found
         </p>
         <div className="lg:flex lg:gap-4">
           <div className="lg:flex-3">
