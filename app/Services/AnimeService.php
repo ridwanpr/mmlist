@@ -41,7 +41,8 @@ class AnimeService
         }, function ($q) {
             $q->orderByRaw("type = 'TV' DESC")
                 ->orderBy('airing', 'desc')
-                ->orderBy('score', 'desc');
+                ->orderBy('score', 'desc')
+                ->orderBy('year', 'desc');
         });
 
         $paginator = $query
