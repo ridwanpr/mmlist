@@ -91,7 +91,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
       href={`/anime/${animeData.slug}`}
       className="group mb-4 block lg:mb-0"
     >
-      <div className="border-border bg-surface group-hover:border-primary-soft relative flex min-h-44 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(179,77,86,0.18)]">
+      <div className="border-border bg-surface group-hover:border-primary-soft relative flex h-48 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(179,77,86,0.18)]">
         <span
           aria-hidden="true"
           className="bg-primary pointer-events-none absolute inset-y-0 left-0 w-0.75 rounded-l-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
