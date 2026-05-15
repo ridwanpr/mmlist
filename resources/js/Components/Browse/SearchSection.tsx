@@ -1,9 +1,11 @@
+import { useState } from "react";
 import DropdownMenu from "../UI/DropdownMenu";
 import { LuFlame, LuTv, LuCalendar, LuShuffle } from "react-icons/lu";
 
+// Assuming these match your App.DTOs
 interface SearchSectionProps {
-  genres: App.DTOs.GenreData[];
-  themes: App.DTOs.ThemeData[];
+  genres: { id: number; name: string }[];
+  themes: { id: number; name: string }[];
   year: number[];
   type: string[];
   season: string[];
@@ -39,33 +41,86 @@ const SearchSection = ({
   type,
   season,
 }: SearchSectionProps) => {
+  // State to hold selected values
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [selectedThemes, setSelectedThemes] = useState<number[]>([]);
+  const [selectedYears, setSelectedYears] = useState<number[]>([]);
+  const [selectedSeasons, setSelectedSeasons] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Generic toggle function for arrays
+  const toggleSelection = <T,>(
+    item: T,
+    state: T[],
+    setState: React.Dispatch<React.SetStateAction<T[]>>,
+  ) => {
+    setState((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
+    );
+  };
+
+  // Map data to Dropdown options
   const genreOptions = genres.map((genre) => ({
     label: genre.name,
-    onClick: () => console.log("clicked"),
+    selected: selectedGenres.includes(genre.id),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault(); // Keeps menu open
+      toggleSelection(genre.id, selectedGenres, setSelectedGenres);
+    },
   }));
 
   const themeOptions = themes.map((theme) => ({
     label: theme.name,
-    onClick: () => console.log("clicked"),
+    selected: selectedThemes.includes(theme.id),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault();
+      toggleSelection(theme.id, selectedThemes, setSelectedThemes);
+    },
   }));
 
   const yearOptions = year.map((item) => ({
     label: item.toString(),
-    onClick: () => console.log("clicked"),
+    selected: selectedYears.includes(item),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault();
+      toggleSelection(item, selectedYears, setSelectedYears);
+    },
   }));
 
   const seasonOptions = season.map((item) => ({
     label: item.toUpperCase(),
-    onClick: () => console.log("clicked"),
+    selected: selectedSeasons.includes(item),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault();
+      toggleSelection(item, selectedSeasons, setSelectedSeasons);
+    },
   }));
 
   const typeOptions = type.map((item) => ({
     label: item.toString(),
-    onClick: () => console.log("clicked"),
+    selected: selectedTypes.includes(item),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault();
+      toggleSelection(item, selectedTypes, setSelectedTypes);
+    },
   }));
 
   const handleQuickAction = (actionId: string) => {
     console.log(`Quick action triggered: ${actionId}`);
+  };
+
+  const handleApplyFilter = () => {
+    const filterData = {
+      query: searchQuery,
+      genres: selectedGenres,
+      themes: selectedThemes,
+      years: selectedYears,
+      seasons: selectedSeasons,
+      types: selectedTypes,
+    };
+
+    console.log("Applying Filters:", filterData);
   };
 
   return (
@@ -82,12 +137,14 @@ const SearchSection = ({
         <div className="relative mb-3">
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="border-border focus:ring-primary/50 w-full rounded-lg border-2 p-3 focus:ring-2 focus:outline-none"
             placeholder="Search anime..."
           />
         </div>
 
-        {/* Quick Actions (Pills) */}
+        {/* Quick Actions */}
         <div className="mb-6 flex flex-wrap gap-2">
           {QUICK_ACTIONS.map((action) => (
             <button
@@ -113,7 +170,10 @@ const SearchSection = ({
           </div>
 
           {/* Main Action Button */}
-          <button className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap transition-all hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2">
+          <button
+            onClick={handleApplyFilter}
+            className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap transition-all hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2"
+          >
             Apply Filter & Search
           </button>
         </div>

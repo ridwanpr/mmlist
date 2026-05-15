@@ -1,10 +1,9 @@
-// DropdownMenu.tsx
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { LuCheck, LuChevronDown } from "react-icons/lu";
 
 interface DropdownItem {
   label: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   selected?: boolean;
 }
 
