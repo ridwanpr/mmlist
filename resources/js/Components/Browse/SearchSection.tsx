@@ -125,7 +125,11 @@ const SearchSection = ({
   }));
 
   const handleQuickAction = (actionId: string) => {
-    console.log(`Quick action triggered: ${actionId}`);
+    if (actionId === "ongoing") {
+      router.get("/browse?airing=true");
+    } else if (actionId == "top") {
+      router.get("/browse?sort=score&order=desc");
+    }
   };
 
   const handleApplyFilter = () => {
@@ -239,7 +243,7 @@ const SearchSection = ({
           {/* Main Action Button */}
           <button
             onClick={handleApplyFilter}
-            className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap hover:cursor-pointer transition-all hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2"
+            className="bg-primary text-surface w-full rounded-lg px-6 py-3 font-semibold whitespace-nowrap transition-all hover:cursor-pointer hover:brightness-110 active:scale-[0.98] lg:w-auto lg:py-2"
           >
             Apply Filter & Search
           </button>
