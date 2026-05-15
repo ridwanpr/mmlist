@@ -11,6 +11,14 @@ interface BrowseProps {
   year: number[];
   type: string[];
   season: string[];
+  filters: {
+    query: string;
+    genres: number[];
+    themes: number[];
+    years: number[];
+    seasons: string[];
+    types: string[];
+  };
 }
 
 const Browse = ({
@@ -20,6 +28,7 @@ const Browse = ({
   year,
   type,
   season,
+  filters,
 }: BrowseProps) => {
   return (
     <div className="mb-8">
@@ -29,6 +38,7 @@ const Browse = ({
         year={year}
         type={type}
         season={season}
+        filters={filters}
       />
       <AnimeList animes={animes} />
     </div>

@@ -52,7 +52,15 @@ class BrowseController extends Controller
             'themes' => $themes,
             'year' => $year,
             'type' => $type,
-            'season' => $season
+            'season' => $season,
+            'filters' => [
+                'query'   => $validated['query'] ?? '',
+                'genres'  => $validated['genres'] ?? [],
+                'themes'  => $validated['themes'] ?? [],
+                'years'   => $validated['years'] ?? [],
+                'seasons' => $validated['seasons'] ?? [],
+                'types'   => $validated['types'] ?? [],
+            ],
         ]);
     }
 }

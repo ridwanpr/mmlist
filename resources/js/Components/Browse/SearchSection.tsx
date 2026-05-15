@@ -9,6 +9,14 @@ interface SearchSectionProps {
   year: number[];
   type: string[];
   season: string[];
+  filters: {
+    query: string;
+    genres: number[];
+    themes: number[];
+    years: number[];
+    seasons: string[];
+    types: string[];
+  };
 }
 
 const QUICK_ACTIONS = [
@@ -40,13 +48,22 @@ const SearchSection = ({
   year,
   type,
   season,
+  filters,
 }: SearchSectionProps) => {
-  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [selectedThemes, setSelectedThemes] = useState<number[]>([]);
-  const [selectedYears, setSelectedYears] = useState<number[]>([]);
-  const [selectedSeasons, setSelectedSeasons] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenres, setSelectedGenres] = useState<number[]>(
+    (filters.genres ?? []).map(Number),
+  );
+  const [selectedThemes, setSelectedThemes] = useState<number[]>(
+    (filters.themes ?? []).map(Number),
+  );
+  const [selectedYears, setSelectedYears] = useState<number[]>(
+    (filters.years ?? []).map(Number),
+  );
+  const [selectedSeasons, setSelectedSeasons] = useState<string[]>(
+    filters.seasons,
+  );
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(filters.types);
+  const [searchQuery, setSearchQuery] = useState(filters.query);
 
   // state for mobile filter toggle
   const [showFilters, setShowFilters] = useState(false);
@@ -112,21 +129,24 @@ const SearchSection = ({
   };
 
   const handleApplyFilter = () => {
-    const filterData = {
-      query: searchQuery,
-      genres: selectedGenres,
-      themes: selectedThemes,
-      years: selectedYears,
-      seasons: selectedSeasons,
-      types: selectedTypes,
-    };
+    const filterData: Record<
+      string,
+      string | number | boolean | (string | number | boolean)[]
+    > = {};
 
-    console.log("Applying Filters:", filterData);
-    router.get("/browse", filterData);
-    // auto-close filters on mobile after applying
-    if (window.innerWidth < 1024) {
-      setShowFilters(false);
-    }
+    if (searchQuery) filterData.query = searchQuery;
+    if (selectedGenres.length) filterData.genres = selectedGenres;
+    if (selectedThemes.length) filterData.themes = selectedThemes;
+    if (selectedYears.length) filterData.years = selectedYears;
+    if (selectedSeasons.length) filterData.seasons = selectedSeasons;
+    if (selectedTypes.length) filterData.types = selectedTypes;
+
+    router.get("/browse", filterData, {
+      preserveScroll: true,
+      replace: true,
+    });
+
+    if (window.innerWidth < 1024) setShowFilters(false);
   };
 
   const activeFiltersCount =

@@ -32,15 +32,36 @@ class AnimeService
         $query = Anime::with(['genres', 'animeTriggers'])
             ->where('animes.rating', '!=', 'Rx - Hentai');
 
-        $query->when(!empty($filter['query']), function ($q) use ($filter) {
-            $searchTerm = $filter['query'];
+        $query->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
+            $rawTerm = trim($filter['query']);
+            $booleanTerm = $this->buildBooleanSearch($rawTerm);
 
-            $q->where(function ($subQuery) use ($searchTerm) {
-                $subQuery->whereFullText(['title', 'title_english', 'title_japanese'], $searchTerm)
-                    ->orWhereJsonContains('title_synonyms', $searchTerm)
-                    ->orWhere('title_synonyms', 'like', "%{$searchTerm}%");
+            $q->where(function ($subQuery) use ($rawTerm, $booleanTerm) {
+                if ($booleanTerm !== null) {
+                    $subQuery->whereRaw(
+                        "MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE)",
+                        [$booleanTerm]
+                    );
+                } else {
+                    $subQuery->where('title', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('title_english', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('title_japanese', 'like', '%' . $rawTerm . '%');
+                }
+
+                $subQuery->orWhereJsonContains('title_synonyms', $rawTerm)
+                    ->orWhere('title_synonyms', 'like', '%' . $rawTerm . '%');
             });
+
+            if ($booleanTerm !== null) {
+                $q->select('*')
+                    ->selectRaw(
+                        "MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE) AS relevance",
+                        [$booleanTerm]
+                    )
+                    ->orderByDesc('relevance');
+            }
         });
+
         $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
             $q->where('animes.airing', (bool) $filter['airing']);
         });
@@ -472,5 +493,28 @@ class AnimeService
         if (! empty($pivotTableDatas)) {
             $pivotModel::insertOrIgnore($pivotTableDatas);
         }
+    }
+
+    private function buildBooleanSearch(string $input): ?string
+    {
+        $input = trim(mb_strtolower($input));
+
+        if ($input === '') {
+            return null;
+        }
+
+        $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        $stopwords = ['a', 'an', 'and', 'as', 'at', 'for', 'in', 'is', 'it', 'of', 'on', 'or', 'the', 'to', 'with'];
+
+        $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
+            return $token !== '' && !in_array($token, $stopwords, true);
+        }));
+
+        if ($tokens === []) {
+            return null;
+        }
+
+        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
     }
 }
