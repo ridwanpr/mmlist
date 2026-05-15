@@ -41,9 +41,24 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     animeData?.titles?.find((t) => t.type === "English")?.title ||
     animeData?.titles?.[0]?.title;
 
-  const filterTriggers = animeData?.triggers?.filter((trigger) => {
-    return trigger.is_appear;
-  });
+  const seenUserIds = new Set<number>();
+  let totalVotes = 0;
+
+  const uniqueTriggers =
+    animeData?.triggers?.filter((trigger) => {
+      if (trigger.is_appear) {
+        totalVotes++;
+
+        if (!seenUserIds.has(trigger.user_id)) {
+          seenUserIds.add(trigger.user_id);
+          return true;
+        }
+      }
+
+      return false;
+    }) ?? [];
+
+  const uniqueUserCount = seenUserIds.size;
 
   const getTriggerBadgeStyle = (count: number) => {
     if (count < 3)
@@ -152,12 +167,18 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
           )}
 
           {/* -- Trigger warning -- */}
-          {filterTriggers.length !== 0 && (
-            <div className="mt-auto flex flex-wrap gap-1">
+          {uniqueTriggers.length !== 0 && (
+            <div className="mt-auto flex flex-wrap items-center gap-1">
               <span
-                className={`w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium ${getTriggerBadgeStyle(filterTriggers.length).wrapper}`}
+                className={`w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                  getTriggerBadgeStyle(uniqueTriggers.length).wrapper
+                }`}
               >
-                {filterTriggers.length} Trigger Votes
+                {totalVotes.toLocaleString()}{" "}
+                {totalVotes === 1 ? "Report" : "Reports"}
+                <span className="mx-1 opacity-50">·</span>
+                {uniqueUserCount.toLocaleString()}{" "}
+                {uniqueUserCount === 1 ? "User" : "Users"}
               </span>
             </div>
           )}
