@@ -51,7 +51,7 @@ class AnimeService
         });
 
         $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
-            $q->where('animes.airing', (bool) $filter['airing']);
+            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now('Y'));
         });
 
         $query->when(!empty($filter['genres']), function ($q) use ($filter) {
@@ -101,8 +101,11 @@ class AnimeService
     public function fetchTopAnime(int $limit = 8): array
     {
         $animeFromDb = Anime::with(['genres', 'animeTriggers'])
-            ->orderBy('score', 'desc')
             ->where('rating', '!=', 'Rx - Hentai')
+            ->orderByRaw("animes.type = 'TV' DESC")
+            ->orderBy('animes.score', 'desc')
+            ->orderBy('animes.year', 'desc')
+            ->orderBy('animes.airing', 'desc')
             ->limit($limit)
             ->get();
 
@@ -113,7 +116,12 @@ class AnimeService
     {
         $animeFromDb = Anime::with(['genres', 'animeTriggers'])
             ->where('airing', true)
+            ->where('year', now('Y'))
             ->where('rating', '!=', 'Rx - Hentai')
+            ->orderByRaw("animes.type = 'TV' DESC")
+            ->orderBy('animes.year', 'desc')
+            ->orderBy('animes.airing', 'desc')
+            ->orderBy('animes.score', 'desc')
             ->orderBy('score', 'desc')
             ->limit($limit)
             ->get();

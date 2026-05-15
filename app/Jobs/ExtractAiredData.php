@@ -18,7 +18,7 @@ class ExtractAiredData implements ShouldQueue
 
     public function handle(): void
     {
-        Anime::whereNotNull('aired')->lazy()->each(function ($anime) {
+        Anime::whereNotNull('aired')->lazyById(200)->each(function ($anime) {
             $aired = is_string($anime->aired) ? json_decode($anime->aired, true) : $anime->aired;
 
             if (!$aired) {
@@ -35,8 +35,9 @@ class ExtractAiredData implements ShouldQueue
             ];
 
             if ($from) {
-                $updateData['season'] = $this->deriveSeason($from);
-                $updateData['year']   = $from->year;
+                $updateData['season']  = $this->deriveSeason($from);
+                $updateData['year']    = $from->year;
+                $updateData['airing']  = $this->deriveAiring($anime->status, $from, $to);
             }
 
             $anime->update($updateData);
@@ -51,5 +52,15 @@ class ExtractAiredData implements ShouldQueue
             $from->month <= 9  => 'summer',
             default            => 'fall',
         };
+    }
+
+    private function deriveAiring(?string $status, Carbon $from, ?Carbon $to): bool
+    {
+        if ($status) {
+            return strtolower($status) === 'currently airing';
+        }
+
+        $now = Carbon::now();
+        return $from->isPast() && ($to === null || $to->isFuture());
     }
 }

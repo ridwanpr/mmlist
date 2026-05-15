@@ -12,10 +12,6 @@ class FetchAiringAnime implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Increase the timeout since this job will sleep between requests
-     * and might take a couple of minutes to finish all pages.
-     */
     public $timeout = 1200;
 
     /**
