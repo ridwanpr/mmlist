@@ -30,19 +30,54 @@ class AnimeService
     public function fetchAnimes(array $filter, array $sort, int $paginateLimit = 15): PaginatedAnimeData
     {
         $query = Anime::with(['genres', 'animeTriggers'])
-            ->where('rating', '!=', 'Rx - Hentai');
+            ->where('animes.rating', '!=', 'Rx - Hentai');
 
-        $query->when(isset($filter['airing']), function ($q) use ($filter) {
-            $q->where('airing', (bool) $filter['airing']);
+        $query->when(!empty($filter['query']), function ($q) use ($filter) {
+            $searchTerm = $filter['query'];
+
+            $q->where(function ($subQuery) use ($searchTerm) {
+                $subQuery->whereFullText(['title', 'title_english', 'title_japanese'], $searchTerm)
+                    ->orWhereJsonContains('title_synonyms', $searchTerm)
+                    ->orWhere('title_synonyms', 'like', "%{$searchTerm}%");
+            });
+        });
+        $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
+            $q->where('animes.airing', (bool) $filter['airing']);
         });
 
-        $query->when(! empty($sort['sort']), function ($q) use ($sort) {
-            $q->orderBy($sort['sort'], $sort['order'] ?? 'asc');
+        $query->when(!empty($filter['genres']), function ($q) use ($filter) {
+            $q->whereHas('genres', function ($q) use ($filter) {
+                $q->whereIn('genres.id', (array) $filter['genres']);
+            });
+        });
+
+        $query->when(!empty($filter['themes']), function ($q) use ($filter) {
+            $q->whereHas('themes', function ($q) use ($filter) {
+                $q->whereIn('themes.id', (array) $filter['themes']);
+            });
+        });
+
+        $query->when(!empty($filter['years']), function ($q) use ($filter) {
+            $q->whereIn('animes.year', (array) $filter['years']);
+        });
+
+        $query->when(!empty($filter['seasons']), function ($q) use ($filter) {
+            $q->whereIn('animes.season', (array) $filter['seasons']);
+        });
+
+        $query->when(!empty($filter['types']), function ($q) use ($filter) {
+            $q->whereIn('animes.type', (array) $filter['types']);
+        });
+
+        $query->when(!empty($sort['sort']), function ($q) use ($sort) {
+            $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+
+            $q->orderBy('animes.' . $sort['sort'], $direction);
         }, function ($q) {
-            $q->orderByRaw("type = 'TV' DESC")
-                ->orderBy('airing', 'desc')
-                ->orderBy('score', 'desc')
-                ->orderBy('year', 'desc');
+            $q->orderByRaw("animes.type = 'TV' DESC")
+                ->orderBy('animes.airing', 'desc')
+                ->orderBy('animes.year', 'desc')
+                ->orderBy('animes.score', 'desc');
         });
 
         $paginator = $query

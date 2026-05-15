@@ -1,8 +1,8 @@
 import { useState } from "react";
 import DropdownMenu from "../UI/DropdownMenu";
 import { LuFlame, LuTv, LuCalendar, LuShuffle, LuFilter } from "react-icons/lu";
+import { router } from "@inertiajs/react";
 
-// Assuming these match your App.DTOs
 interface SearchSectionProps {
   genres: { id: number; name: string }[];
   themes: { id: number; name: string }[];
@@ -122,6 +122,7 @@ const SearchSection = ({
     };
 
     console.log("Applying Filters:", filterData);
+    router.get("/browse", filterData);
     // auto-close filters on mobile after applying
     if (window.innerWidth < 1024) {
       setShowFilters(false);
