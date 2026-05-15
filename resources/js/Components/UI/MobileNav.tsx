@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import { LuBookmark, LuHouse, LuList, LuSearch, LuUser } from "react-icons/lu";
+import { LuBookmark, LuCog, LuHouse, LuSearch, LuUser } from "react-icons/lu";
 import type { IconType } from "react-icons";
 
 interface NavItemProps {
@@ -74,12 +74,6 @@ const MobileNav = () => {
           />
           <NavItem
             href="#"
-            active={component.startsWith("Trigger/")}
-            icon={LuList}
-            label="Trigger"
-          />
-          <NavItem
-            href="#"
             active={component === "Watchlist/Index"}
             icon={LuBookmark}
             label="Watchlist"
@@ -89,6 +83,12 @@ const MobileNav = () => {
             active={component.startsWith("Profile/")}
             icon={LuUser}
             label="Profile"
+          />
+          <NavItem
+            href="#"
+            active={component.startsWith("Settings/")}
+            icon={LuCog}
+            label="Settings"
           />
         </ul>
       </nav>
