@@ -205,7 +205,7 @@ const SearchSection = ({
         </div>
 
         {/* Quick Action */}
-        <div className="relative mb-6 sm:mx-0">
+        <div className="relative sm:mx-0">
           <div
             className="from-surface pointer-events-none absolute top-0 right-0 bottom-2 z-10 w-16 bg-linear-to-l to-transparent sm:hidden"
             aria-hidden="true"
@@ -229,7 +229,7 @@ const SearchSection = ({
         <div
           className={`${
             showFilters ? "flex" : "hidden"
-          } w-full flex-col gap-4 lg:flex lg:flex-row lg:items-center lg:justify-between lg:gap-6`}
+          } w-full flex-col gap-4 lg:flex lg:flex-row lg:items-center lg:gap-6`}
         >
           {/* Dropdowns Grid */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap lg:gap-4">
