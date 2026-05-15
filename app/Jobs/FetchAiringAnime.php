@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Services\AnimeService;
+use App\Services\AnimeSyncService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -29,7 +29,7 @@ class FetchAiringAnime implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(AnimeService $animeService): void
+    public function handle(AnimeSyncService $animeSyncService): void
     {
         $page = 1;
         $hasNextPage = true;
@@ -41,7 +41,7 @@ class FetchAiringAnime implements ShouldQueue
             try {
                 Log::info("Fetching airing anime page: {$page}");
 
-                $result = $animeService->syncAiringAnimePage($page);
+                $result = $animeSyncService->syncAiringAnimePage($page);
 
                 $hasNextPage = $result['has_next_page'];
                 $allSyncedMalIds = array_merge($allSyncedMalIds, $result['synced_mal_ids']);
@@ -62,7 +62,7 @@ class FetchAiringAnime implements ShouldQueue
         // Once all pages are fetched, run a single query to update the airing status
         // of anime that are no longer in the current season's payload.
         if (! empty($allSyncedMalIds)) {
-            $animeService->cleanupStaleAiringAnime($allSyncedMalIds);
+            $animeSyncService->cleanupStaleAiringAnime($allSyncedMalIds);
             Log::info('Cleaned up stale airing statuses.');
         }
 
