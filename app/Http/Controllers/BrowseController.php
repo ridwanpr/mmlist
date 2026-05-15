@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BrowseAnimeRequest;
 use App\Services\AnimeService;
-use App\Services\GenreService;
 use App\Services\MasterService;
 use Inertia\Inertia;
 use Inertia\Response;
