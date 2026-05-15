@@ -41,11 +41,6 @@ const DekstopNav = () => {
                 Browse Anime
               </Link>
             </li>
-            <li>
-              <Link href="#" className="text-sm font-semibold">
-                Trigger List
-              </Link>
-            </li>
           </ul>
         </nav>
 

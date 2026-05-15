@@ -168,18 +168,15 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
           {/* -- Trigger warning -- */}
           {uniqueTriggers.length !== 0 && (
-            <div className="mt-auto flex flex-wrap items-center gap-1">
-              <span
-                className={`w-fit rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                  getTriggerBadgeStyle(uniqueTriggers.length).wrapper
-                }`}
+            <div className="mt-auto pt-1">
+              <div
+                className={`text-[11px] leading-tight font-bold ${getTriggerBadgeStyle(uniqueTriggers.length).wrapper.split(" ")[2]}`}
               >
-                {totalVotes.toLocaleString()}{" "}
-                {totalVotes === 1 ? "Report" : "Reports"}
-                <span className="mx-1 opacity-50">·</span>
-                {uniqueUserCount.toLocaleString()}{" "}
-                {uniqueUserCount === 1 ? "User" : "Users"}
-              </span>
+                {totalVotes.toLocaleString()} Trigger Reports
+              </div>
+              <div className="text-text-muted text-[10px] leading-tight opacity-80">
+                from {uniqueUserCount.toLocaleString()} users
+              </div>
             </div>
           )}
         </div>
