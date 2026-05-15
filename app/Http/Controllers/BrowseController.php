@@ -4,24 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BrowseAnimeRequest;
 use App\Services\AnimeService;
+use App\Services\GenreService;
+use App\Services\MasterService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BrowseController extends Controller
 {
-    public function __construct(private AnimeService $animeService) {}
+    public function __construct(
+        private AnimeService $animeService,
+        private MasterService $masterService
+    ) {}
 
     public function Index(BrowseAnimeRequest $request): Response
     {
         $validated = $request->validated();
 
         $filter = [
-            'airing' => $validated['airing'] ?? null
+            'airing' => $validated['airing'] ?? null,
         ];
 
         $sort = [
             'sort' => $validated['sort'] ?? null,
-            'order' =>  $validated['order'] ?? null
+            'order' => $validated['order'] ?? null,
         ];
 
         $animes = $this->animeService->fetchAnimes(
@@ -30,8 +35,19 @@ class BrowseController extends Controller
             paginateLimit: 24
         );
 
+        $genres = $this->masterService->getGenres();
+        $themes = $this->masterService->getThemes();
+        $year = $this->animeService->getAnimeYear();
+        $type = $this->masterService->getType();
+        $season = $this->masterService->getSeason();
+
         return Inertia::render('Browse/Index', [
             'animes' => $animes,
+            'genres' => $genres,
+            'themes' => $themes,
+            'year' => $year,
+            'type' => $type,
+            'season' => $season
         ]);
     }
 }

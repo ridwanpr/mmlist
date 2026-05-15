@@ -29,15 +29,15 @@ class VoteAnimeTriggerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "appears" => ['required', Rule::in(['Yes', 'No'])],
+            'appears' => ['required', Rule::in(['Yes', 'No'])],
 
-            "severity" => [
+            'severity' => [
                 'exclude_if:appears,No',
                 'required_if:appears,Yes',
                 Rule::in(['Mild', 'Moderate', 'Severe', 'Extreme']),
             ],
 
-            "framing" => [
+            'framing' => [
                 'exclude_if:appears,No',
                 'required_if:appears,Yes',
                 Rule::in(['Serious', 'Neutral', 'Romanticized', 'Comedic']),

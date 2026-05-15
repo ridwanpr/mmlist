@@ -34,6 +34,7 @@ class VoteController extends Controller
         $this->voteService->voteAnime($dto);
 
         Inertia::flash('success', 'Vote submitted');
+
         return back();
     }
 }

@@ -52,6 +52,13 @@ declare namespace App {
       readonly framing: string | null;
       readonly triggerContent: App.DTOs.TriggerContentData | null;
     };
+    export type GenreData = {
+      readonly id: number;
+      readonly mal_id: number;
+      readonly type: string;
+      readonly name: string;
+      readonly url: string;
+    };
     export type LoginData = {
       readonly username: string;
       readonly password: string;
@@ -75,6 +82,13 @@ declare namespace App {
       readonly name: string;
       readonly email: string | null;
       readonly password: string;
+    };
+    export type ThemeData = {
+      readonly id: number;
+      readonly mal_id: number;
+      readonly type: string;
+      readonly name: string;
+      readonly url: string;
     };
     export type TriggerContentData = {
       readonly id: number;

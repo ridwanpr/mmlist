@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -34,21 +36,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $synopsis
  * @property string|null $background
  * @property int|null $rank
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AnimeTrigger> $animeTriggers
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, AnimeTrigger> $animeTriggers
  * @property-read int|null $anime_triggers_count
- * @property-read \App\Models\AnimeTheme|\App\Models\AnimeStudio|\App\Models\AnimeProducer|\App\Models\AnimeGenre|\App\Models\AnimeDemographic|null $pivot
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Demographic> $demographics
+ * @property-read AnimeTheme|AnimeStudio|AnimeProducer|AnimeGenre|AnimeDemographic|null $pivot
+ * @property-read Collection<int, Demographic> $demographics
  * @property-read int|null $demographics_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Genre> $genres
+ * @property-read Collection<int, Genre> $genres
  * @property-read int|null $genres_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Producer> $producers
+ * @property-read Collection<int, Producer> $producers
  * @property-read int|null $producers_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Studio> $studios
+ * @property-read Collection<int, Studio> $studios
  * @property-read int|null $studios_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Theme> $themes
+ * @property-read Collection<int, Theme> $themes
  * @property-read int|null $themes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime query()
@@ -80,6 +83,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereYear($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable([

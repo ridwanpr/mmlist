@@ -13,11 +13,11 @@ class VoteService
         AnimeTrigger::updateOrCreate([
             'anime_id' => $data->anime_id,
             'trigger_content_id' => $data->trigger_content_id,
-            'user_id' => $data->user_id
+            'user_id' => $data->user_id,
         ], [
             'is_appear' => $data->is_appear,
             'severity' => $data->severity,
-            'framing' => $data->framing
+            'framing' => $data->framing,
         ]);
     }
 

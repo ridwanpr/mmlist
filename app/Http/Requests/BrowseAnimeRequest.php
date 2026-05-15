@@ -25,8 +25,8 @@ class BrowseAnimeRequest extends FormRequest
     {
         return [
             'airing' => ['nullable', Rule::in(['true'])],
-            'sort'   => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
-            'order'  => ['nullable', Rule::in(['asc', 'desc'])],
+            'sort' => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
+            'order' => ['nullable', Rule::in(['asc', 'desc'])],
         ];
     }
 }

@@ -36,7 +36,7 @@ class AnimeService
             $q->where('airing', (bool) $filter['airing']);
         });
 
-        $query->when(!empty($sort['sort']), function ($q) use ($sort) {
+        $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $q->orderBy($sort['sort'], $sort['order'] ?? 'asc');
         }, function ($q) {
             $q->orderByRaw("type = 'TV' DESC")
@@ -70,7 +70,7 @@ class AnimeService
 
     /**
      * Fetches a specific page of airing anime and syncs it to the database.
-     * 
+     *
      * @return array{has_next_page: bool, synced_mal_ids: array<int, int>}
      */
     public function syncAiringAnimePage(int $page = 1): array
@@ -103,8 +103,8 @@ class AnimeService
 
     /**
      * Cleans up anime that are no longer airing.
-     * 
-     * @param array<int, int> $activeMalIds
+     *
+     * @param  array<int, int>  $activeMalIds
      */
     public function cleanupStaleAiringAnime(array $activeMalIds): void
     {
@@ -119,7 +119,7 @@ class AnimeService
 
     /**
      * Fetches a specific page of the overall anime catalog and syncs it.
-     * 
+     *
      * @return bool Returns true if there is a next page.
      */
     public function syncCatalogPage(int $page = 1): bool
@@ -147,7 +147,7 @@ class AnimeService
 
     /**
      * Fetch airing anime directly from the local database.
-     * 
+     *
      * @return array<int, AnimeData>
      */
     public function getNowAiringFromDatabase(int $limit = 12): array
@@ -179,11 +179,19 @@ class AnimeService
             },
             'triggerContents.animeTriggers' => function ($query) use ($animeId) {
                 $query->where('anime_id', $animeId);
-            }
+            },
         ])
             ->orderBy('importance', 'desc')->get();
         $triggers = $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+
         return $triggers;
+    }
+
+    public function getAnimeYear()
+    {
+        return Anime::where('year', '!=', null)
+            ->orderBy('year', 'desc')
+            ->distinct()->pluck('year');
     }
 
     /**

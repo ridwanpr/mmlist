@@ -1,22 +1,50 @@
 import { useState } from "react";
-import { LuArrowDownUp, LuChevronDown, LuFilter } from "react-icons/lu";
+import { LuFilter } from "react-icons/lu";
 
 import DropdownMenu from "../UI/DropdownMenu";
 import ModalDialog from "../UI/ModalDialog";
 
-const SearchSection = () => {
+interface SearchSectionProps {
+  genres: App.DTOs.GenreData[];
+  themes: App.DTOs.ThemeData[];
+  year: number[];
+  type: string[];
+  season: string[];
+}
+
+const SearchSection = ({
+  genres,
+  themes,
+  year,
+  type,
+  season,
+}: SearchSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const genreOptions = [
-    { label: "Action", onClick: () => console.log("Action clicked") },
-    { label: "Adventure", onClick: () => console.log("Adventure clicked") },
-    { label: "Comedy", onClick: () => console.log("Comedy clicked") },
-  ];
+  const genreOptions = genres.map((genre) => ({
+    label: genre.name,
+    onClick: () => console.log("clicked"),
+  }));
 
-  const yearOptions = [
-    { label: "2024", onClick: () => console.log("2024 clicked") },
-    { label: "2023", onClick: () => console.log("2023 clicked") },
-  ];
+  const themeOptions = themes.map((theme) => ({
+    label: theme.name,
+    onClick: () => console.log("clicked"),
+  }));
+
+  const yearOptions = year.map((item) => ({
+    label: item.toString(),
+    onClick: () => console.log("clicked"),
+  }));
+
+  const seasonOptions = season.map((item) => ({
+    label: item.toUpperCase(),
+    onClick: () => console.log("clicked"),
+  }));
+
+  const typeOptions = type.map((item) => ({
+    label: item.toString(),
+    onClick: () => console.log("clicked"),
+  }));
 
   return (
     <div className="bg-surface">
@@ -55,15 +83,15 @@ const SearchSection = () => {
                   Genre
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {genreOptions.map((genre) => (
-                    <button
-                      key={genre.label}
-                      onClick={genre.onClick}
-                      className="border-border hover:bg-surface-alt rounded-full border px-4 py-1.5 text-sm transition-colors focus:border-blue-500 focus:bg-blue-100"
-                    >
-                      {genre.label}
-                    </button>
-                  ))}
+                  {genres &&
+                    genres.map((genre) => (
+                      <button
+                        key={genre.id}
+                        className="border-border hover:bg-surface-alt rounded-full border px-4 py-1.5 text-sm transition-colors focus:border-blue-500 focus:bg-blue-100"
+                      >
+                        {genre.name}
+                      </button>
+                    ))}
                 </div>
               </div>
 
@@ -87,30 +115,17 @@ const SearchSection = () => {
             </div>
           </ModalDialog>
 
-          {/* Mobile Sort Button */}
-          <button className="bg-surface border-border flex flex-1 items-center justify-center gap-1 rounded-lg border p-3 lg:hidden">
-            <LuArrowDownUp /> Sort
-          </button>
-
           {/* Desktop Filters */}
-          <div className="hidden lg:flex lg:gap-3">
-            <DropdownMenu title="Genre" items={genreOptions} />
-            <DropdownMenu title="Year" items={yearOptions} />
-
-            <button className="bg-surface border-border flex items-center justify-center gap-2 rounded-lg border px-4 py-2">
-              Studio <LuChevronDown className="text-muted-foreground h-4 w-4" />
-            </button>
-            <button className="bg-surface border-border flex items-center justify-center gap-2 rounded-lg border px-4 py-2">
-              Rating <LuChevronDown className="text-muted-foreground h-4 w-4" />
-            </button>
-          </div>
-
-          {/* Desktop Sort */}
-          <div className="ml-auto hidden lg:flex lg:items-center lg:gap-2">
-            <span className="text-sm font-medium">Sort by</span>
-            <button className="bg-surface border-border flex items-center justify-center gap-2 rounded-lg border px-4 py-2">
-              <LuArrowDownUp className="h-4 w-4" /> Default{" "}
-              <LuChevronDown className="text-muted-foreground h-4 w-4" />
+          <div className="hidden w-full justify-start lg:flex lg:justify-between lg:gap-3">
+            <div className="flex gap-4">
+              <DropdownMenu title="Genre" items={genreOptions} />
+              <DropdownMenu title="Theme" items={themeOptions} />
+              <DropdownMenu title="Year" items={yearOptions} />
+              <DropdownMenu title="Season" items={seasonOptions} />
+              <DropdownMenu title="Type" items={typeOptions} />
+            </div>
+            <button className="bg-primary text-surface rounded-lg px-3 py-1">
+              Apply Filter & Search
             </button>
           </div>
         </div>

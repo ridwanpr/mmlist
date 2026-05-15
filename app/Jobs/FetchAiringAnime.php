@@ -35,7 +35,7 @@ class FetchAiringAnime implements ShouldQueue
         $hasNextPage = true;
         $allSyncedMalIds = [];
 
-        Log::info("Starting background sync for all airing anime.");
+        Log::info('Starting background sync for all airing anime.');
 
         while ($hasNextPage) {
             try {
@@ -54,7 +54,7 @@ class FetchAiringAnime implements ShouldQueue
                     usleep(1500000);
                 }
             } catch (Exception $e) {
-                Log::error("Failed to sync airing anime on page {$page}: " . $e->getMessage());
+                Log::error("Failed to sync airing anime on page {$page}: ".$e->getMessage());
                 throw $e;
             }
         }
@@ -63,9 +63,9 @@ class FetchAiringAnime implements ShouldQueue
         // of anime that are no longer in the current season's payload.
         if (! empty($allSyncedMalIds)) {
             $animeService->cleanupStaleAiringAnime($allSyncedMalIds);
-            Log::info("Cleaned up stale airing statuses.");
+            Log::info('Cleaned up stale airing statuses.');
         }
 
-        Log::info("Finished fetching all airing anime. Total items synced: " . count($allSyncedMalIds));
+        Log::info('Finished fetching all airing anime. Total items synced: '.count($allSyncedMalIds));
     }
 }

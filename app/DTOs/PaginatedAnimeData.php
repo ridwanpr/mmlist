@@ -9,8 +9,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class PaginatedAnimeData
 {
     /**
-     * @param array<int, AnimeData> $data
-     * @param array<int, array{url: ?string, label: string, active: bool}> $links
+     * @param  array<int, AnimeData>  $data
+     * @param  array<int, array{url: ?string, label: string, active: bool}>  $links
      */
     public function __construct(
         public array $data,
@@ -24,7 +24,7 @@ readonly class PaginatedAnimeData
     ) {}
 
     /**
-     * @param LengthAwarePaginator<AnimeData> $paginator
+     * @param  LengthAwarePaginator<AnimeData>  $paginator
      */
     public static function fromPaginator(LengthAwarePaginator $paginator): self
     {

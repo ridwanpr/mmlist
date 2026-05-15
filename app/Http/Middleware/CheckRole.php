@@ -28,7 +28,7 @@ class CheckRole
         if ($userRole !== $role) {
             return back(fallback: route('home.index'));
         }
-        
+
         return $next($request);
     }
 }

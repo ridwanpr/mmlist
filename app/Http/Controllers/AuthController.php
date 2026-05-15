@@ -28,12 +28,13 @@ class AuthController extends Controller
         $this->authService->createNewUser($dto);
 
         Inertia::flash('success', 'Register success, now you can login');
+
         return redirect()->route('login');
     }
 
     public function login()
     {
-        if (!session()->has('url.intended')) {
+        if (! session()->has('url.intended')) {
             session(['url.intended' => url()->previous()]);
         }
 
@@ -59,6 +60,7 @@ class AuthController extends Controller
         }
 
         Inertia::flash('error', 'Login failed, invalid credentials');
+
         return back();
     }
 
