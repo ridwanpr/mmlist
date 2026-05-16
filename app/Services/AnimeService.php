@@ -10,6 +10,8 @@ use App\Models\MasterTrigger;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
+use function Illuminate\Support\now;
+
 class AnimeService
 {
     public function fetchAnimes(
@@ -17,7 +19,7 @@ class AnimeService
         array $sort,
         int $paginateLimit = 15
     ): PaginatedAnimeData {
-        $query = Anime::with(['genres', 'animeTriggers'])
+        $query = Anime::with(['genres', 'animeTriggers.triggerContent'])
             ->where('animes.rating', '!=', 'Rx - Hentai');
 
         $query->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
@@ -52,6 +54,10 @@ class AnimeService
 
         $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
             $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now()->year);
+        });
+
+        $query->when(array_key_exists('upcoming', $filter) && !is_null($filter['upcoming']), function ($q) use ($filter) {
+            $q->where('animes.year', '>', now()->year);
         });
 
         $query->when(!empty($filter['genres']), function ($q) use ($filter) {

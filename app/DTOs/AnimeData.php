@@ -112,70 +112,7 @@ readonly class AnimeData
                 ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['themes'])
                 : null,
 
-            triggers: isset($data['triggers'])
-                ? array_map(fn (array $item) => AnimeTriggerData::fromArray($item), $data['triggers'])
-                : null,
-        );
-    }
-
-    /**
-     * Map data from a raw stdClass (e.g. DB::select()) to the DTO.
-     */
-    public static function fromDatabase(stdClass $data): self
-    {
-        $decodeJson = fn (?string $json) => $json ? json_decode($json, true) : null;
-
-        $decodedTitles = $decodeJson($data->titles ?? null);
-
-        return new self(
-            mal_id: (int) $data->mal_id,
-            url: $data->url,
-            season: $data->season ?? null,
-            year: $data->year ?? null,
-            images: $decodeJson($data->images ?? null),
-            trailer: $decodeJson($data->trailer ?? null),
-            approved: (bool) ($data->approved ?? false),
-            title: $data->title,
-            title_english: $data->title_english ?? null,
-            title_japanese: $data->title_japanese ?? null,
-            title_synonyms: $decodeJson($data->title_synonyms ?? null),
-            type: $data->type ?? null,
-            source: $data->source ?? null,
-            episodes: $data->episodes ?? null,
-            status: $data->status ?? null,
-            airing: (bool) ($data->airing ?? false),
-            aired: $decodeJson($data->aired ?? null),
-            duration: $data->duration ?? null,
-            rating: $data->rating ?? null,
-            score: isset($data->score) ? (float) $data->score : null,
-            synopsis: $data->synopsis ?? null,
-            background: $data->background ?? null,
-            rank: $data->rank ?? null,
-            slug: $data->slug,
-
-            titles: $decodedTitles
-                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
-                : null,
-
-            demographics: isset($data->demographics)
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->demographics, true))
-                : null,
-
-            genres: isset($data->genres)
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->genres, true))
-                : null,
-
-            producers: isset($data->producers)
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->producers, true))
-                : null,
-
-            studios: isset($data->studios)
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->studios, true))
-                : null,
-
-            themes: isset($data->themes)
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), json_decode($data->themes, true))
-                : null,
+            triggers: null,
         );
     }
 

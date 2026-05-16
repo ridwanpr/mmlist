@@ -23,24 +23,19 @@ interface SearchSectionProps {
 
 const QUICK_ACTIONS = [
   {
-    label: "Top Anime",
-    id: "top",
-    icon: <LuFlame size={16} className="text-orange-500" />,
-  },
-  {
     label: "Currently Airing",
     id: "ongoing",
     icon: <LuTv size={16} className="text-blue-500" />,
   },
   {
+    label: "Top Anime",
+    id: "top",
+    icon: <LuFlame size={16} className="text-orange-500" />,
+  },
+  {
     label: "Upcoming",
     id: "upcoming",
     icon: <LuCalendar size={16} className="text-green-500" />,
-  },
-  {
-    label: "Random",
-    id: "random",
-    icon: <LuShuffle size={16} className="text-purple-500" />,
   },
 ];
 
@@ -144,6 +139,8 @@ const SearchSection = ({
       router.get("/browse?airing=true");
     } else if (actionId == "top") {
       router.get("/browse?sort=score&order=desc");
+    } else if (actionId === "upcoming") {
+      router.get("/browse?upcoming=true");
     }
   };
 
@@ -233,7 +230,7 @@ const SearchSection = ({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="border-border text-text-muted hover:border-primary hover:text-text flex shrink-0 snap-start items-center gap-2 rounded-full border bg-transparent px-4 py-1.5 text-sm font-medium transition-all active:scale-95"
+                className="border-border text-text-muted hover:border-primary hover:text-text flex shrink-0 snap-start items-center gap-2 rounded-full border bg-transparent px-4 py-1.5 text-sm font-medium transition-all hover:cursor-pointer active:scale-95"
               >
                 {action.icon}
                 <span>{action.label}</span>

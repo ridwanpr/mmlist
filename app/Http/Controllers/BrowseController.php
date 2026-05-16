@@ -27,6 +27,7 @@ class BrowseController extends Controller
             'seasons' => $validated['seasons'] ?? null,
             'types'   => $validated['types'] ?? null,
             'query'   => $validated['query'] ?? null,
+            'upcoming'   => $validated['upcoming'] ?? null,
         ];
 
         $sort = [
