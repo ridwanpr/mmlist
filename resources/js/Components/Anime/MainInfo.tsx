@@ -1,4 +1,4 @@
-import { LuBookmark, LuMinus, LuPlus, LuShare2 } from "react-icons/lu";
+import { LuBookmark, LuPlus, LuShare2 } from "react-icons/lu";
 
 import { useImageProxy } from "../../utils/image-proxy";
 import Comment from "./Comment";
@@ -16,8 +16,8 @@ export interface WatchlistFormData {
   animeId: number | string;
   userId: number | string;
   status: string;
-  progress: string;
-  score: string;
+  progress: number;
+  score: number;
   note: string;
 }
 
@@ -81,35 +81,70 @@ const MainInfo = ({ anime }: MainInfoProps) => {
     },
   ];
 
+  const labels: Record<string, string> = {
+    10: "Masterpiece",
+    9: "Great",
+    8: "Very Good",
+    7: "Good",
+    6: "Fine",
+    5: "Average",
+    4: "Bad",
+    3: "Very Bad",
+    2: "Horrible",
+    1: "Appalling",
+  };
+
+  const scoreSelectItem = Array.from({ length: 10 }, (_, i) => {
+    const score = String(10 - i);
+    return {
+      value: score,
+      label: `(${score}) ${labels[score]}`,
+    };
+  });
+
   const [watchlistFormData, setWatchlistFormData] = useState({
     animeId: anime.mal_id,
     userId: auth.user?.id || "",
     status: "planned",
-    progress: "",
-    score: "",
+    progress: 0,
+    score: 1,
     note: "",
   });
+
+  console.log(watchlistFormData);
 
   const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("a");
   };
 
-  const handleFormNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const field = e.currentTarget.id;
-    let value = e.currentTarget.value;
+    const rawValue = e.currentTarget.value;
 
-    if (field === "progress") {
+    if (field === "progress" || field === "score") {
+      if (rawValue === "") return;
+      let numValue = Number(e.currentTarget.value);
+      if (isNaN(numValue)) return;
       if (anime.episodes != null) {
-        if (Number(value) > anime.episodes) {
-          value = anime.episodes;
+        if (numValue > anime.episodes) {
+          numValue = anime.episodes;
         }
+
+        setWatchlistFormData((prev) => ({
+          ...prev,
+          [field]: numValue,
+        }));
+
+        return;
       }
     }
 
     setWatchlistFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: rawValue,
     }));
   };
 
@@ -211,7 +246,14 @@ const MainInfo = ({ anime }: MainInfoProps) => {
             >
               {/*Modal dialog children*/}
               <div className="flex flex-col gap-4">
-                <SelectOption label="Status" items={statusSelectItem} />
+                <SelectOption
+                  id="status"
+                  name="status"
+                  label="Status"
+                  items={statusSelectItem}
+                  onChange={handleFormNumberChange}
+                />
+                {/*Progress*/}
                 <div className="flex flex-col gap-1">
                   <label htmlFor="progress" className="text-sm">
                     Episode progress
@@ -221,6 +263,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
                       type="number"
                       name="progress"
                       id="progress"
+                      min={0}
                       value={watchlistFormData.progress}
                       onChange={(e) => handleFormNumberChange(e)}
                       className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
@@ -233,17 +276,17 @@ const MainInfo = ({ anime }: MainInfoProps) => {
                     </div>
                   </div>
                 </div>
+                {/*Score*/}
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="score" className="text-sm">
-                    Score (1-10)
-                  </label>
-                  <input
-                    type="text"
-                    name="score"
+                  <SelectOption
                     id="score"
-                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                    name="score"
+                    label="Score"
+                    items={scoreSelectItem}
+                    onChange={handleFormNumberChange}
                   />
                 </div>
+                {/*Note*/}
                 <div className="flex flex-col gap-1">
                   <label htmlFor="score" className="text-sm">
                     Note

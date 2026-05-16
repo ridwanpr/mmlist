@@ -37,7 +37,7 @@ class AnimeSyncService
         $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
         $syncedMalIds = [];
 
-        if (! empty($animeDataDtos)) {
+        if (!empty($animeDataDtos)) {
             $syncedMalIds = collect($animeDataDtos)->pluck('mal_id')->all();
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
             $masterService = new MasterService();
@@ -65,7 +65,7 @@ class AnimeSyncService
         $apiPayload = $response->json();
         $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
 
-        if (! empty($animeDataDtos)) {
+        if (!empty($animeDataDtos)) {
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
         }
 
@@ -200,7 +200,7 @@ class AnimeSyncService
 
     private function mapApiPayloadToAnimeData(array $apiPayload): array
     {
-        if (! isset($apiPayload['data']) || ! is_array($apiPayload['data'])) {
+        if (!isset($apiPayload['data']) || !is_array($apiPayload['data'])) {
             return [];
         }
 
@@ -253,12 +253,12 @@ class AnimeSyncService
         $pivotTableDatas = [];
 
         foreach ($insertedAnimeRecords as $dbAnimeRecord) {
-            if (! isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
+            if (!isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
                 continue;
             }
 
             foreach ($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id] as $malId) {
-                if (! isset($relatedIdsLookup[$malId])) {
+                if (!isset($relatedIdsLookup[$malId])) {
                     continue;
                 }
 
@@ -271,7 +271,7 @@ class AnimeSyncService
             }
         }
 
-        if (! empty($pivotTableDatas)) {
+        if (!empty($pivotTableDatas)) {
             $pivotModel::insertOrIgnore($pivotTableDatas);
         }
     }
