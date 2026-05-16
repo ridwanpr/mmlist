@@ -1,10 +1,10 @@
 import { Field, Input, Label } from "@headlessui/react";
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   name: string;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

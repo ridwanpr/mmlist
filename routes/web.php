@@ -37,4 +37,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('vote-anime-trigger/{triggerContentId}/{animeSlug}', [VoteController::class, 'voteAnimeTrigger'])
         ->name('vote.anime.trigger');
+
+    // Route::post('watchlist', [])
 });

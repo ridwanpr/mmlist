@@ -1,14 +1,28 @@
-import { LuBookmark, LuShare2 } from "react-icons/lu";
+import { LuBookmark, LuMinus, LuPlus, LuShare2 } from "react-icons/lu";
 
 import { useImageProxy } from "../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
+import React, { useState } from "react";
+import ModalDialog from "../UI/ModalDialog";
+import { useForm } from "@inertiajs/react";
+import { SelectOption } from "../UI/SelectOption";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
 }
 
+export interface WatchlistFormData {
+  animeId: string;
+  userId: string;
+  status: string;
+  progress: string;
+  score: string;
+  note: string;
+}
+
 const MainInfo = ({ anime }: MainInfoProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { proxyImage } = useImageProxy();
   const coverImage = proxyImage(
     anime.images?.webp?.image_url || anime.images?.jpg?.image_url,
@@ -42,6 +56,44 @@ const MainInfo = ({ anime }: MainInfoProps) => {
       <MetaInfo label="Demographics" items={anime.demographics} />
     </>
   );
+
+  const { data, setData, post, processing, errors } =
+    useForm<WatchlistFormData>({
+      animeId: "",
+      userId: "",
+      status: "",
+      progress: "",
+      score: "",
+      note: "",
+    });
+
+  const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("a");
+  };
+
+  const statusSelectItem = [
+    {
+      value: "planned",
+      label: "Planned",
+    },
+    {
+      value: "watching",
+      label: "Watching",
+    },
+    {
+      value: "completed",
+      label: "Completed",
+    },
+    {
+      value: "on_hold",
+      label: "On hold",
+    },
+    {
+      value: "dropped",
+      label: "Dropped",
+    },
+  ];
 
   return (
     <div className="min-w-0 lg:col-span-3">
@@ -108,10 +160,84 @@ const MainInfo = ({ anime }: MainInfoProps) => {
 
           {/* ACTIONS */}
           <div className="mb-6 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-            <button className="bg-primary text-surface flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95 sm:w-auto">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="bg-primary text-surface flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto"
+            >
               <LuBookmark size={18} />
               Add to Watchlist
             </button>
+
+            <ModalDialog
+              title="Add to Watchlist"
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              onSubmit={onSubmitWatchlist}
+              footer={
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="border-border hover:bg-surface-alt flex-1 rounded-lg border py-2.5 font-medium transition-colors hover:cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-primary text-surface hover:bg-primary-dark flex-1 rounded-lg py-2.5 font-medium transition-colors hover:cursor-pointer"
+                  >
+                    Submit
+                  </button>
+                </>
+              }
+            >
+              {/*Modal dialog children*/}
+              <div className="flex flex-col gap-4">
+                <SelectOption label="Status" items={statusSelectItem} />
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="progress" className="text-sm">
+                    Episode progress
+                  </label>
+                  <div className="relative flex items-center gap-1">
+                    <input
+                      type="text"
+                      name="progress"
+                      id="progress"
+                      className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                    />
+                    <div className="absolute right-1.5 flex items-center gap-1">
+                      {anime.episodes && <p>/ {anime.episodes} eps</p>}
+                      <button className="border-border rounded-full border p-2">
+                        <LuPlus />
+                      </button>
+                      <button className="border-border rounded-full border p-2">
+                        <LuMinus />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="score" className="text-sm">
+                    Score (1-10)
+                  </label>
+                  <input
+                    type="text"
+                    name="score"
+                    id="score"
+                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="score" className="text-sm">
+                    Note
+                  </label>
+                  <textarea
+                    cols={2}
+                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                  ></textarea>
+                </div>
+              </div>
+            </ModalDialog>
 
             <button className="text-primary border-primary-soft hover:bg-surface-alt flex w-full items-center justify-center gap-1.5 rounded-lg border-2 px-4 py-2 text-sm font-semibold transition active:scale-95 sm:w-auto">
               <LuShare2 size={18} />
