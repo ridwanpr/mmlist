@@ -15,9 +15,9 @@ class SyncAnimeCatalog implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 120;
+    public int $timeout = 120;
 
-    public $tries = 3;
+    public int $tries = 3;
 
     public function __construct(public int $page = 1) {}
 

@@ -18,8 +18,8 @@ class ExtractAiredData implements ShouldQueue
 
     public function handle(): void
     {
-        Anime::whereNotNull('aired')->lazyById(200)->each(function ($anime) {
-            $aired = is_string($anime->aired) ? json_decode($anime->aired, true) : $anime->aired;
+        Anime::whereNotNull('aired')->lazyById(200)->each(function (Anime $anime) {
+            $aired = $anime->aired;
 
             if (!$aired) {
                 return;

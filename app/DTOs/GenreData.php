@@ -27,6 +27,7 @@ readonly class GenreData
         );
     }
 
+    /** @param array<string, int|string> $data */
     public static function fromArray(array $data): self
     {
         return new self(

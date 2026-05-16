@@ -12,7 +12,7 @@ class FetchAiringAnime implements ShouldQueue
 {
     use Queueable;
 
-    public $timeout = 1200;
+    public int $timeout = 1200;
 
     /**
      * Create a new job instance.

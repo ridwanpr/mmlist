@@ -24,7 +24,7 @@ readonly class PaginatedAnimeData
     ) {}
 
     /**
-     * @param  LengthAwarePaginator<AnimeData>  $paginator
+     * @param  LengthAwarePaginator<int, AnimeData>  $paginator
      */
     public static function fromPaginator(LengthAwarePaginator $paginator): self
     {

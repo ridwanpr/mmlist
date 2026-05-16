@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Log;
 
 class AnimeSyncService
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function syncAiringAnimePage(int $page = 1): array
     {
         $response = Http::withQueryParameters([
@@ -75,6 +78,9 @@ class AnimeSyncService
         return $apiPayload['pagination']['has_next_page'] ?? false;
     }
 
+    /**
+     * @param array<int, int> $activeMalIds
+     */
     public function cleanupStaleAiringAnime(array $activeMalIds): void
     {
         if (empty($activeMalIds)) {

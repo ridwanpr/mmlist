@@ -46,10 +46,12 @@ readonly class AnimeTriggerData
             is_appear: (bool) $model->is_appear,
             severity: $model->severity,
             framing: $model->framing,
-            triggerContent: $model->triggerContent ? TriggerContentData::fromModel($model->triggerContent) : null
+            triggerContent: $model->relationLoaded('triggerContent') ?
+                TriggerContentData::fromModel($model->triggerContent) : null
         );
     }
 
+    /** @return array<string, bool|int|string|null> */
     public function toArray(): array
     {
         return [

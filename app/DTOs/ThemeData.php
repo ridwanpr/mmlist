@@ -27,6 +27,7 @@ readonly class ThemeData
         );
     }
 
+    /** @param array<string, string|int> $data */
     public static function fromArray(array $data): self
     {
         return new self(

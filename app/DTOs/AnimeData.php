@@ -89,27 +89,27 @@ readonly class AnimeData
             slug: GenerateSlug::generate($data['title'], $data['mal_id']),
 
             titles: isset($data['titles'])
-                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $data['titles'])
+                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $data['titles'])
                 : null,
 
             demographics: isset($data['demographics'])
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['demographics'])
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['demographics'])
                 : null,
 
             genres: isset($data['genres'])
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['genres'])
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['genres'])
                 : null,
 
             producers: isset($data['producers'])
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['producers'])
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['producers'])
                 : null,
 
             studios: isset($data['studios'])
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['studios'])
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['studios'])
                 : null,
 
             themes: isset($data['themes'])
-                ? array_map(fn (array $item) => AnimeMetaData::fromArray($item), $data['themes'])
+                ? array_map(fn(array $item) => AnimeMetaData::fromArray($item), $data['themes'])
                 : null,
 
             triggers: null,
@@ -122,15 +122,15 @@ readonly class AnimeData
     public static function fromModel(Anime $model): self
     {
         // Helper for JSON cast columns
-        $decodeJsonColumn = fn (mixed $value): ?array => match (true) {
+        $decodeJsonColumn = fn(mixed $value): ?array => match (true) {
             is_array($value) => $value,
             is_string($value) => json_decode($value, true),
             default => null,
         };
 
         // Helper to safely load and map Eloquent relationship Collections
-        $mapRelation = fn (string $relation) => $model->relationLoaded($relation) && $model->{$relation}
-            ? $model->{$relation}->map(fn ($item) => AnimeMetaData::fromArray($item->toArray()))->toArray()
+        $mapRelation = fn(string $relation) => $model->relationLoaded($relation) && $model->{$relation}
+            ? $model->{$relation}->map(fn($item) => AnimeMetaData::fromArray($item->toArray()))->toArray()
             : null;
 
         $decodedTitles = $decodeJsonColumn($model->titles);
@@ -162,7 +162,7 @@ readonly class AnimeData
             slug: $model->slug,
 
             titles: $decodedTitles
-                ? array_map(fn (array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
+                ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)
                 : null,
 
             demographics: $mapRelation('demographics'),
@@ -171,8 +171,8 @@ readonly class AnimeData
             studios: $mapRelation('studios'),
             themes: $mapRelation('themes'),
 
-            triggers: $model->relationLoaded('animeTriggers') && $model->animeTriggers
-                ? $model->animeTriggers->map(fn ($item) => AnimeTriggerData::fromModel($item))->toArray()
+            triggers: $model->relationLoaded('animeTriggers')
+                ? $model->animeTriggers->map(fn($item) => AnimeTriggerData::fromModel($item))->toArray()
                 : null
         );
     }
