@@ -106,7 +106,7 @@ class AnimeService
 
     public function fetchTopAnime(int $limit = 8): array
     {
-        $animeFromDb = Anime::with(['genres', 'animeTriggers'])
+        $animeFromDb = Anime::with(['genres', 'animeTriggers.triggerContent'])
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderByRaw("animes.type = 'TV' DESC")
             ->orderBy('animes.score', 'desc')
@@ -120,7 +120,7 @@ class AnimeService
 
     public function getNowAiringFromDatabase(int $limit = 12): array
     {
-        $animeFromDb = Anime::with(['genres', 'animeTriggers'])
+        $animeFromDb = Anime::with(['genres', 'animeTriggers.triggerContent'])
             ->where('airing', true)
             ->where('year', now('Y'))
             ->where('rating', '!=', 'Rx - Hentai')
