@@ -11,51 +11,83 @@ import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
   return (
-    <div className="bg-surface border-border border my-8 hidden w-72 flex-col rounded-lg p-4 md:flex">
-      <div className="mb-4 flex items-center gap-2">
+    <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex">
+      <div className="mb-5 flex items-center gap-4">
         <img
           src="https://placehold.co/400x400"
           alt=""
-          className="w-1/3 rounded-full object-cover"
+          className="h-14 w-14 shrink-0 rounded-full object-cover"
         />
-        <div>
-          <p className="text-text text-sm">Lorem ipsum dolor sit amet.</p>
-          <p className="text-text text-xs">Joined 7 May 2026</p>
+        <div className="min-w-0">
+          <p className="text-text truncate text-sm font-medium">
+            Lorem ipsum dolor sit amet.
+          </p>
+          <p className="text-text-muted text-xs">Joined 7 May 2026</p>
         </div>
       </div>
+
       <SidebarLink href="#" routeName="user.dash.index">
-        <LuHouse size={18} /> Dashboard
+        <span className="flex items-center gap-3">
+          <LuHouse size={18} />
+          <span>Dashboard</span>
+        </span>
       </SidebarLink>
+
       <SidebarLink href="#" routeName="watchlist.index">
-        <LuBookmark size={18} /> Watchlist
+        <span className="flex items-center gap-3">
+          <LuBookmark size={18} />
+          <span>Watchlist</span>
+        </span>
       </SidebarLink>
+
       <SidebarLink href="#" routeName="watchlist.index">
-        <LuMessageCircle size={18} /> Comments
+        <span className="flex items-center gap-3">
+          <LuMessageCircle size={18} />
+          <span>Comments</span>
+        </span>
       </SidebarLink>
+
       <SidebarLink href="#" routeName="watchlist.index">
-        <LuCheck size={18} /> My Votes
+        <span className="flex items-center gap-3">
+          <LuCheck size={18} />
+          <span>My Votes</span>
+        </span>
       </SidebarLink>
+
       <SidebarLink href="#" routeName="watchlist.index">
-        <LuCog size={18} /> Settings
+        <span className="flex items-center gap-3">
+          <LuCog size={18} />
+          <span>Settings</span>
+        </span>
       </SidebarLink>
-      <div className="bg-surface-alt my-4 rounded-lg p-4">
-        <p className="text-text font-semibold">Your Impact</p>
-        <p className="text-text-muted text-sm">
+
+      <div className="bg-surface-alt mt-5 rounded-2xl p-4">
+        <p className="text-text mb-2 font-semibold">Your Impact</p>
+        <p className="text-text-muted text-sm leading-relaxed">
           Thank you for helping make anime a safer space for everyone!
         </p>
-        <div className="mt-4">
-          <p className="text-text-muted text-sm">Votes Submitted</p>
-          <p className="text-xl font-semibold">127</p>
-        </div>
-        <div className="mt-4">
-          <p className="text-text-muted text-sm">Reviews Written</p>
-          <p className="text-xl font-semibold">127</p>
+
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div>
+            <p className="text-text-muted text-xs">Votes Submitted</p>
+            <p className="text-text text-lg font-semibold">127</p>
+          </div>
+          <div>
+            <p className="text-text-muted text-xs">Reviews Written</p>
+            <p className="text-text text-lg font-semibold">127</p>
+          </div>
         </div>
       </div>
-      <SidebarLink href="/logout" method="post" routeName="watchlist.index">
-        <LuLogOut size={18} /> Logout
-      </SidebarLink>
-    </div>
+
+      <div className="mt-5">
+        <SidebarLink href="/logout" method="post" routeName="watchlist.index">
+          <span className="flex items-center gap-3">
+            <LuLogOut size={18} />
+            <span>Logout</span>
+          </span>
+        </SidebarLink>
+      </div>
+    </aside>
   );
 };
 
