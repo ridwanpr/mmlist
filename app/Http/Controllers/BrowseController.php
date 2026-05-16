@@ -45,7 +45,8 @@ class BrowseController extends Controller
         $year = $this->animeService->getAnimeYear();
         $type = $this->masterService->getType();
         $season = $this->masterService->getSeason();
-        
+        $rating = $this->masterService->getRating();
+
         return Inertia::render('Browse/Index', [
             'animes' => $animes,
             'genres' => $genres,
@@ -53,6 +54,7 @@ class BrowseController extends Controller
             'year' => $year,
             'type' => $type,
             'season' => $season,
+            'rating' => $rating,
             'filters' => [
                 'query'   => $validated['query'] ?? '',
                 'genres'  => $validated['genres'] ?? [],
@@ -60,6 +62,7 @@ class BrowseController extends Controller
                 'years'   => $validated['years'] ?? [],
                 'seasons' => $validated['seasons'] ?? [],
                 'types'   => $validated['types'] ?? [],
+                'rating'   => $validated['rating'] ?? [],
             ],
         ]);
     }

@@ -9,6 +9,7 @@ interface SearchSectionProps {
   year: number[];
   type: string[];
   season: string[];
+  rating: string[];
   filters: {
     query: string;
     genres: number[];
@@ -16,6 +17,7 @@ interface SearchSectionProps {
     years: number[];
     seasons: string[];
     types: string[];
+    rating: string[];
   };
 }
 
@@ -48,6 +50,7 @@ const SearchSection = ({
   year,
   type,
   season,
+  rating,
   filters,
 }: SearchSectionProps) => {
   const [selectedGenres, setSelectedGenres] = useState<number[]>(
@@ -63,6 +66,9 @@ const SearchSection = ({
     filters.seasons,
   );
   const [selectedTypes, setSelectedTypes] = useState<string[]>(filters.types);
+  const [selectedRating, setSelectedRating] = useState<string[]>(
+    filters.rating,
+  );
   const [searchQuery, setSearchQuery] = useState(filters.query);
 
   // state for mobile filter toggle
@@ -124,6 +130,15 @@ const SearchSection = ({
     },
   }));
 
+  const ratingOptions = rating.map((item) => ({
+    label: item.toString(),
+    selected: selectedRating.includes(item),
+    onClick: (e: React.MouseEvent) => {
+      e.preventDefault();
+      toggleSelection(item, selectedRating, setSelectedRating);
+    },
+  }));
+
   const handleQuickAction = (actionId: string) => {
     if (actionId === "ongoing") {
       router.get("/browse?airing=true");
@@ -144,6 +159,7 @@ const SearchSection = ({
     if (selectedYears.length) filterData.years = selectedYears;
     if (selectedSeasons.length) filterData.seasons = selectedSeasons;
     if (selectedTypes.length) filterData.types = selectedTypes;
+    if (selectedRating.length) filterData.rating = selectedRating;
 
     router.get("/browse", filterData, {
       preserveScroll: true,
@@ -162,6 +178,7 @@ const SearchSection = ({
     selectedThemes.length +
     selectedYears.length +
     selectedSeasons.length +
+    selectedRating.length +
     selectedTypes.length;
 
   return (
@@ -238,6 +255,7 @@ const SearchSection = ({
             <DropdownMenu title="Year" items={yearOptions} />
             <DropdownMenu title="Season" items={seasonOptions} />
             <DropdownMenu title="Type" items={typeOptions} />
+            <DropdownMenu title="Rating" items={ratingOptions} />
           </div>
 
           {/* Main Action Button */}

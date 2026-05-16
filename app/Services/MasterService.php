@@ -84,6 +84,22 @@ class MasterService
         return $season;
     }
 
+    public function getRating()
+    {
+        $cachedRating = Cache::get('rating');
+        if ($cachedRating) {
+            return collect($cachedRating);
+        }
+
+        $rating = Anime::where('rating', '!=', null)
+            ->where('rating', '!=', 'Rx - Hentai')
+            ->orderBy('rating', 'asc')
+            ->distinct()->pluck('rating');
+
+        Cache::put('rating', $rating->toArray(), now()->addDays(30));
+        return $rating;
+    }
+
     public function clearCache(): void
     {
         Cache::forget('genres');
