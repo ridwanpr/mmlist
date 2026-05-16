@@ -13,7 +13,7 @@ interface ModalDialogProps {
   title: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  onSubmit?: React.SubmitEventHandler<HTMLFormElement>;
 }
 
 const ModalDialog = ({
@@ -30,7 +30,7 @@ const ModalDialog = ({
       <button
         type="button"
         onClick={() => setIsOpen(false)}
-        className="hover:bg-surface-alt rounded-full p-2 transition-colors"
+        className="hover:bg-surface-alt rounded-full p-2 transition-colors hover:cursor-pointer"
       >
         <LuX className="h-5 w-5" />
       </button>

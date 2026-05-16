@@ -5,7 +5,7 @@ import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";
 import ModalDialog from "../UI/ModalDialog";
-import { useForm } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 import { SelectOption } from "../UI/SelectOption";
 
 interface MainInfoProps {
@@ -13,8 +13,8 @@ interface MainInfoProps {
 }
 
 export interface WatchlistFormData {
-  animeId: string;
-  userId: string;
+  animeId: number | string;
+  userId: number | string;
   status: string;
   progress: string;
   score: string;
@@ -22,6 +22,7 @@ export interface WatchlistFormData {
 }
 
 const MainInfo = ({ anime }: MainInfoProps) => {
+  const { auth } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
   const { proxyImage } = useImageProxy();
   const coverImage = proxyImage(
@@ -57,21 +58,6 @@ const MainInfo = ({ anime }: MainInfoProps) => {
     </>
   );
 
-  const { data, setData, post, processing, errors } =
-    useForm<WatchlistFormData>({
-      animeId: "",
-      userId: "",
-      status: "",
-      progress: "",
-      score: "",
-      note: "",
-    });
-
-  const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("a");
-  };
-
   const statusSelectItem = [
     {
       value: "planned",
@@ -94,6 +80,38 @@ const MainInfo = ({ anime }: MainInfoProps) => {
       label: "Dropped",
     },
   ];
+
+  const [watchlistFormData, setWatchlistFormData] = useState({
+    animeId: anime.mal_id,
+    userId: auth.user?.id || "",
+    status: "planned",
+    progress: "",
+    score: "",
+    note: "",
+  });
+
+  const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("a");
+  };
+
+  const handleFormNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = e.currentTarget.id;
+    let value = e.currentTarget.value;
+
+    if (field === "progress") {
+      if (anime.episodes != null) {
+        if (Number(value) > anime.episodes) {
+          value = anime.episodes;
+        }
+      }
+    }
+
+    setWatchlistFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="min-w-0 lg:col-span-3">
@@ -200,18 +218,17 @@ const MainInfo = ({ anime }: MainInfoProps) => {
                   </label>
                   <div className="relative flex items-center gap-1">
                     <input
-                      type="text"
+                      type="number"
                       name="progress"
                       id="progress"
+                      value={watchlistFormData.progress}
+                      onChange={(e) => handleFormNumberChange(e)}
                       className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
                     />
-                    <div className="absolute right-1.5 flex items-center gap-1">
+                    <div className="absolute right-4 flex items-center gap-1 md:right-10">
                       {anime.episodes && <p>/ {anime.episodes} eps</p>}
                       <button className="border-border rounded-full border p-2">
                         <LuPlus />
-                      </button>
-                      <button className="border-border rounded-full border p-2">
-                        <LuMinus />
                       </button>
                     </div>
                   </div>
@@ -232,8 +249,8 @@ const MainInfo = ({ anime }: MainInfoProps) => {
                     Note
                   </label>
                   <textarea
-                    cols={2}
-                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                    rows={3}
+                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
                   ></textarea>
                 </div>
               </div>
