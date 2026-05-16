@@ -14,7 +14,9 @@ use Inertia\Response;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $authService) {}
+    public function __construct(private AuthService $authService)
+    {
+    }
 
     public function register(): Response
     {
@@ -32,9 +34,9 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function login()
+    public function login(): Response
     {
-        if (! session()->has('url.intended')) {
+        if (!session()->has('url.intended')) {
             session(['url.intended' => url()->previous()]);
         }
 

@@ -24,8 +24,10 @@ class VoteService
     /** @return Collection<int, AnimeTriggerData> */
     public function getUserTriggerVote(int $userId, int $animeId): Collection
     {
-        return AnimeTrigger::where('user_id', $userId)
+        $data = AnimeTrigger::where('user_id', $userId)
             ->where('anime_id', $animeId)
             ->get();
+
+        return $data->map(fn($item) => AnimeTriggerData::fromModel($item));
     }
 }

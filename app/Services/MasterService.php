@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Cache;
 class MasterService
 {
     /**
-     * @return Collection<GenreData>
+     * @return Collection<int, GenreData>
      */
     public function getGenres(): Collection
     {
@@ -35,7 +35,7 @@ class MasterService
     }
 
     /**
-     * @return Collection<ThemeData>
+     * @return Collection<int, ThemeData>
      */
     public function getThemes(): Collection
     {
@@ -55,6 +55,9 @@ class MasterService
         return collect($raw)->map(fn(array $data) => ThemeData::fromArray($data));
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     public function getType(): Collection
     {
         $raw = Cache::rememberForever('type', function () {
@@ -68,6 +71,9 @@ class MasterService
         return collect($raw);
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     public function getSeason(): Collection
     {
         $raw = Cache::rememberForever('season', function () {
@@ -81,6 +87,9 @@ class MasterService
         return collect($raw);
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     public function getRating(): Collection
     {
         $raw = Cache::rememberForever('rating', function () {

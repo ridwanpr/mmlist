@@ -6,7 +6,7 @@ use App\Http\Requests\StoreWatchlistRequest;
 
 class WatchlistController extends Controller
 {
-    public function store(StoreWatchlistRequest $request)
+    public function store(StoreWatchlistRequest $request): void
     {
         dd($request->all());
     }
