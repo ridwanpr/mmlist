@@ -11,7 +11,7 @@ import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
   return (
-    <div className="bg-surface border-border my-8 flex w-72 flex-col rounded-lg p-4">
+    <div className="bg-surface border-border border my-8 hidden w-72 flex-col rounded-lg p-4 md:flex">
       <div className="mb-4 flex items-center gap-2">
         <img
           src="https://placehold.co/400x400"
