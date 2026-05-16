@@ -51,7 +51,7 @@ class AnimeService
         });
 
         $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
-            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now('Y'));
+            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now()->year);
         });
 
         $query->when(!empty($filter['genres']), function ($q) use ($filter) {

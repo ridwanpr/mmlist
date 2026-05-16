@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\MasterService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,18 +22,19 @@ class BrowseAnimeRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(MasterService $masterService): array
     {
         return [
-            'airing' => ['nullable', Rule::in(['true'])],
-            'sort' => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
-            'order' => ['nullable', Rule::in(['asc', 'desc'])],
-            'query' => ['nullable'],
-            'genres' => ['nullable'],
-            'themes' => ['nullable'],
-            'seasons' => ['nullable'],
-            'types' => ['nullable'],
-            'years' => ['nullable'],
+            'airing'  => ['nullable', Rule::in(['true'])],
+            'sort'    => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
+            'order'   => ['nullable', Rule::in(['asc', 'desc'])],
+            'query'   => ['nullable', 'string', 'max:100'],
+            'genres'  => ['nullable'],
+            'themes'  => ['nullable'],
+            'seasons' => ['nullable', 'exists:animes,season'],
+            'types'   => ['nullable', 'exists:animes,type'],
+            'years'   => ['nullable', 'exists:animes,year'],
+            'rating'  => ['nullable', 'exists:animes,rating'],
         ];
     }
 }

@@ -12,92 +12,87 @@ use Illuminate\Support\Facades\Cache;
 
 class MasterService
 {
-    public function getGenres()
+    /**
+     * @return Collection<GenreData>
+     */
+    public function getGenres(): Collection
     {
-        $cachedGenres = Cache::get('genres');
-        if ($cachedGenres) {
-            return $cachedGenres;
-        }
+        $raw = Cache::remember('genres', now()->addDays(30), function () {
+            return Genre::whereNotIn('name', ['Hentai', 'Erotica'])
+                ->orderBy('name', 'asc')
+                ->get()
+                ->map(fn(Genre $item) => [
+                    'id'     => $item->id,
+                    'mal_id' => $item->mal_id,
+                    'type'   => $item->type,
+                    'name'   => $item->name,
+                    'url'    => $item->url,
+                ])
+                ->all();
+        });
 
-        $genres = Genre::whereNotIn('name', ['Hentai', 'Erotica'])
-            ->orderBy('name', 'asc')
-            ->get();
-
-        $genreDtos = $genres->map(fn($item) => GenreData::fromModel($item))
-            ->values()->toArray();
-
-        Cache::put('genres', $genreDtos, now()->addDays(30));
-
-        return $genreDtos;
+        return collect($raw)->map(fn(array $data) => GenreData::fromArray($data));
     }
 
-    public function getThemes()
+    /**
+     * @return Collection<ThemeData>
+     */
+    public function getThemes(): Collection
     {
-        $cacheThemes = Cache::get('themes');
-        if ($cacheThemes) {
-            return $cacheThemes;
-        }
+        $raw = Cache::remember('themes', now()->addDays(30), function () {
+            return Theme::orderBy('name', 'asc')
+                ->get()
+                ->map(fn(Theme $item) => [
+                    'id'     => $item->id,
+                    'mal_id' => $item->mal_id,
+                    'type'   => $item->type,
+                    'name'   => $item->name,
+                    'url'    => $item->url,
+                ])
+                ->all();
+        });
 
-        $themes = Theme::orderBy('name', 'asc')
-            ->get();
-
-        $themesDtos = $themes->map(fn($item) => ThemeData::fromModel($item))
-            ->values()->toArray();
-
-        Cache::put('themes', $themesDtos, now()->addDays(30));
-
-        return $themesDtos;
+        return collect($raw)->map(fn(array $data) => ThemeData::fromArray($data));
     }
 
     public function getType(): Collection
     {
-        $cachedType = Cache::get('type');
+        $raw = Cache::rememberForever('type', function () {
+            return Anime::whereNotNull('type')
+                ->orderBy('type', 'desc')
+                ->distinct()
+                ->pluck('type')
+                ->all();
+        });
 
-        if ($cachedType) {
-            return collect($cachedType);
-        }
-
-        $type = Anime::where('type', '!=', null)
-            ->orderBy('type', 'desc')
-            ->distinct()
-            ->pluck('type');
-
-        Cache::put('type', $type->toArray(), now()->addDays(30));
-
-        return $type;
+        return collect($raw);
     }
 
     public function getSeason(): Collection
     {
-        $cachedSeason = Cache::get('season');
+        $raw = Cache::rememberForever('season', function () {
+            return Anime::whereNotNull('season')
+                ->orderBy('season', 'asc')
+                ->distinct()
+                ->pluck('season')
+                ->all();
+        });
 
-        if ($cachedSeason) {
-            return collect($cachedSeason);
-        }
-
-        $season = Anime::where('season', '!=', null)
-            ->orderBy('season', 'asc')
-            ->distinct()->pluck('season');
-
-        Cache::put('season', $season->toArray(), now()->addDays(30));
-
-        return $season;
+        return collect($raw);
     }
 
-    public function getRating()
+    public function getRating(): Collection
     {
-        $cachedRating = Cache::get('rating');
-        if ($cachedRating) {
-            return collect($cachedRating);
-        }
+        $raw = Cache::rememberForever('rating', function () {
+            return Anime::whereNotNull('rating')
+                ->where('rating', '!=', 'Rx - Hentai')
+                ->orderBy('rating', 'desc')
+                ->distinct()
+                ->pluck('rating')
+                ->all();
+        });
 
-        $rating = Anime::where('rating', '!=', null)
-            ->where('rating', '!=', 'Rx - Hentai')
-            ->orderBy('rating', 'asc')
-            ->distinct()->pluck('rating');
-
-        Cache::put('rating', $rating->toArray(), now()->addDays(30));
-        return $rating;
+        return collect($raw);
     }
 
     public function clearCache(): void
@@ -106,5 +101,6 @@ class MasterService
         Cache::forget('themes');
         Cache::forget('type');
         Cache::forget('season');
+        Cache::forget('rating');
     }
 }
