@@ -10,7 +10,7 @@ const DesktopNav = () => {
 
   return (
     <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link
           href={routes["home.index"]}

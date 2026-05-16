@@ -11,7 +11,18 @@ import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
   return (
-    <div className="border-border bg-surface flex w-[270px] flex-col border-x p-4">
+    <div className="border-border bg-surface flex w-67.5 flex-col mb-4 border-x p-4">
+      <div className="flex items-center gap-2">
+        <img
+          src="https://placehold.co/400x400"
+          alt=""
+          className="w-1/3 rounded-full object-cover"
+        />
+        <div>
+          <p>User Name</p>
+          <p>Joined 7 May 2026</p>
+        </div>
+      </div>
       <SidebarLink href="#" routeName="user.dash.index">
         <LuHouse size={18} /> Dashboard
       </SidebarLink>

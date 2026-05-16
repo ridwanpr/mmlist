@@ -39,7 +39,7 @@ const covers = [
 const Hero = () => {
   return (
     <section className="border-border bg-surface overflow-hidden border-b">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4">
         <div className="grid items-center gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10">
           <div className="min-w-0">
             <h1 className="text-text max-w-2xl font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
