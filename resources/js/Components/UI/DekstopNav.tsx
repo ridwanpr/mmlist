@@ -1,64 +1,76 @@
 import { Link, usePage } from "@inertiajs/react";
 import ThemeToggle from "./ThemeToggle";
 
-const DekstopNav = () => {
+const DesktopNav = () => {
   const { routes, auth } = usePage().props;
   const { component } = usePage();
 
+  const isHomeActive = component === "Home/Index";
+  const isBrowseActive = component.startsWith("Browse/");
+
   return (
-    <div className="bg-surface border-border hidden border lg:flex">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between p-4">
+    <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6">
+        {/* Logo */}
         <Link
           href={routes["home.index"]}
-          className="text-primary font-serif text-2xl font-bold tracking-wider"
+          className="text-primary font-serif text-2xl font-bold tracking-wider transition-opacity hover:opacity-90"
         >
           Mamorulist
         </Link>
 
-        <nav>
-          <ul className="flex items-center gap-8">
-            <li>
+        {/* Navigation Links */}
+        <nav className="h-full">
+          <ul className="flex h-full items-center gap-8">
+            <li className="relative flex h-full items-center">
               <Link
                 href={routes["home.index"]}
-                className={
-                  component === "Home/Index"
-                    ? "text-accent-gold text-sm font-bold"
-                    : "text-sm font-semibold"
-                }
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  isHomeActive
+                    ? "text-accent-gold"
+                    : "text-text-muted hover:text-text"
+                }`}
               >
                 Home
               </Link>
+              {isHomeActive && (
+                <span className="bg-accent-gold absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
+              )}
             </li>
-            <li>
+            <li className="relative flex h-full items-center">
               <Link
                 href={routes["browse.index"]}
-                className={
-                  component.startsWith("Browse/")
-                    ? "text-accent-gold text-sm font-bold"
-                    : "text-sm font-semibold"
-                }
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  isBrowseActive
+                    ? "text-accent-gold"
+                    : "text-text-muted hover:text-text"
+                }`}
               >
                 Browse Anime
               </Link>
+              {isBrowseActive && (
+                <span className="bg-accent-gold absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
+              )}
             </li>
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <div>
+        {/* Actions / Auth */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             {!auth.user ? (
               <>
                 <Link
-                  href={routes["auth.register"]}
-                  className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
-                >
-                  Register
-                </Link>
-                <Link
                   href={routes["login"]}
-                  className="bg-accent-gold text-surface rounded-md p-2 text-sm font-medium"
+                  className="text-text-muted hover:text-text text-sm font-medium transition-colors duration-200"
                 >
                   Login
+                </Link>
+                <Link
+                  href={routes["auth.register"]}
+                  className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
+                >
+                  Register
                 </Link>
               </>
             ) : (
@@ -68,17 +80,21 @@ const DekstopNav = () => {
                     ? routes["user.dash.index"]
                     : routes["dashboard.index"]
                 }
-                className="bg-primary text-surface mr-2 rounded-md p-2 text-sm font-medium"
+                className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
               >
                 My Account
               </Link>
             )}
           </div>
+
+          {/* Visual Divider */}
+          <div className="border-border h-5 border-l" />
+
           <ThemeToggle />
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
-export default DekstopNav;
+export default DesktopNav;
