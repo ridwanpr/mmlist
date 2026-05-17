@@ -41,6 +41,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $from
  * @property Carbon|null $to
  * @property string|null $from_to_string
+ * @property string|null $ai_advisory
  * @property-read Collection<int, \App\Models\AnimeTrigger> $animeTriggers
  * @property-read int|null $anime_triggers_count
  * @property-read \App\Models\AnimeTheme|\App\Models\AnimeStudio|\App\Models\AnimeProducer|\App\Models\AnimeGenre|\App\Models\AnimeDemographic|null $pivot
@@ -57,6 +58,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereAiAdvisory($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereAired($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereAiring($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereApproved($value)
@@ -118,7 +120,8 @@ use Illuminate\Support\Carbon;
     'slug',
     'from',
     'to',
-    'from_to_string'
+    'from_to_string',
+    'ai_advisory'
 ])]
 
 class Anime extends Model

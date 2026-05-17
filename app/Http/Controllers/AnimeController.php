@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AnimeService;
+use App\Services\GeminiService;
 use App\Services\VoteService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

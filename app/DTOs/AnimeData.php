@@ -54,7 +54,8 @@ readonly class AnimeData
         public ?array $studios,
         public ?array $themes,
         public ?array $triggers,
-        public string $slug
+        public string $slug,
+        public ?string $ai_advisory
     ) {}
 
     /**
@@ -87,6 +88,7 @@ readonly class AnimeData
             background: $data['background'] ?? null,
             rank: $data['rank'] ?? null,
             slug: GenerateSlug::generate($data['title'], $data['mal_id']),
+            ai_advisory: $data['ai_advisory'] ?? null,
 
             titles: isset($data['titles'])
                 ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $data['titles'])
@@ -160,6 +162,7 @@ readonly class AnimeData
             background: $model->background ?? null,
             rank: $model->rank ?? null,
             slug: $model->slug,
+            ai_advisory: $model->ai_advisory,
 
             titles: $decodedTitles
                 ? array_map(fn(array $item) => AnimeTitleData::fromArray($item), $decodedTitles)

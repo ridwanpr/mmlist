@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.3",
         "erag/laravel-disposable-email": "^5.1",
+        "google-gemini-php/laravel": "^2.0",
         "inertiajs/inertia-laravel": "^3.0",
         "jikan-me/jikan": "^1.15",
         "laravel/framework": "^13.0",
