@@ -28,7 +28,11 @@ readonly class TriggerContentData
 
         $appearTrue = 0;
         $appearFalse = 0;
+
+        /** @var array{Mild: int, Moderate: int, Severe: int, Extreme: int} $severityCounts */
         $severityCounts = ['Mild' => 0, 'Moderate' => 0, 'Severe' => 0, 'Extreme' => 0];
+
+        /** @var array{Serious: int, Neutral: int, Romanticized: int, Comedic: int} $framingCounts */
         $framingCounts = ['Serious' => 0, 'Neutral' => 0, 'Romanticized' => 0, 'Comedic' => 0];
 
         if ($data->relationLoaded('animeTriggers')) {
@@ -41,11 +45,11 @@ readonly class TriggerContentData
                     $appearFalse++;
                 }
 
-                if ($animeTrigger->severity) {
+                if (is_string($animeTrigger->severity) && array_key_exists($animeTrigger->severity, $severityCounts)) {
                     $severityCounts[$animeTrigger->severity]++;
                 }
 
-                if ($animeTrigger->framing) {
+                if (is_string($animeTrigger->framing) && array_key_exists($animeTrigger->framing, $framingCounts)) {
                     $framingCounts[$animeTrigger->framing]++;
                 }
             }

@@ -92,6 +92,9 @@ class AnimeSyncService
             ->update(['airing' => false]);
     }
 
+    /**
+     * @param array<int, AnimeData> $animeApiData
+     */
     private function bulkInsertAnimeWithMetaData(
         array $animeApiData,
         bool $isNowAiringSync = false
@@ -160,6 +163,10 @@ class AnimeSyncService
         });
     }
 
+    /**
+     * @param array<int, AnimeData> $animeApiData
+     * @return array{animeRecords: array<int, array<string, mixed>>, animeMalIds: array<int, int>}
+     */
     private function buildAnimeRecords(array $animeApiData): array
     {
         $animeRecordsToInsert = [];
@@ -204,6 +211,10 @@ class AnimeSyncService
         return ['animeRecords' => $animeRecordsToInsert, 'animeMalIds' => $animeMalIds];
     }
 
+    /**
+     * @param array<string, mixed> $apiPayload
+     * @return array<int, AnimeData>
+     */
     private function mapApiPayloadToAnimeData(array $apiPayload): array
     {
         if (!isset($apiPayload['data']) || !is_array($apiPayload['data'])) {
@@ -217,6 +228,10 @@ class AnimeSyncService
             ->all();
     }
 
+    /**
+     * @param array<int, AnimeData> $animeApiData
+     * @param Collection<int, Anime> $insertedAnimeRecords
+     */
     private function processAndInsertAnimeMetadata(
         array $animeApiData,
         Collection $insertedAnimeRecords,

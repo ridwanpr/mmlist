@@ -31,11 +31,11 @@ readonly class ThemeData
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data['id'],
-            mal_id: $data['mal_id'],
-            type: $data['type'],
-            name: $data['name'],
-            url: $data['url'],
+            id: (int) $data['id'],
+            mal_id: (int) $data['mal_id'],
+            type: (string) $data['type'],
+            name: (string) $data['name'],
+            url: (string) $data['url'],
         );
     }
 }
