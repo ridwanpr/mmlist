@@ -2,6 +2,7 @@
 
 use App\Jobs\ExtractAiredData;
 use App\Jobs\FetchAiringAnime;
+use App\Jobs\GenerateGeminiAdvisory;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -11,6 +12,9 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new FetchAiringAnime)->twiceDaily(1, 13);
+
+Schedule::job(new GenerateGeminiAdvisory)->everyMinute();
+
 
 Artisan::command('extract:fromto', function () {
     $this->info('Dispatching extraction job to the queue...');
