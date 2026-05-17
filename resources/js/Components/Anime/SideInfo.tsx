@@ -3,9 +3,10 @@ import { LuInfo, LuUsers } from "react-icons/lu";
 
 interface SideInfoProps {
   triggers: App.DTOs.TriggerData[];
+  anime: App.DTOs.AnimeData;
 }
 
-export const SideInfo = ({ triggers }: SideInfoProps) => {
+export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
   const triggerContents = useMemo(
     () => triggers.flatMap((trigger) => trigger.triggerContents ?? []),
     [triggers],
@@ -66,11 +67,7 @@ export const SideInfo = ({ triggers }: SideInfoProps) => {
           </span>
         </div>
         <p className="text-text/90 text-sm leading-relaxed text-pretty">
-          This series is a dark fantasy that relies heavily on graphic violence
-          and psychological manipulation. Viewers should expect recurring
-          instances of body horror, extreme physical trauma, and bleak themes
-          regarding human survival. The narrative frequently places young
-          characters in highly distressing situations.
+          {anime.ai_advisory || "Not yet available"}
         </p>
       </div>
 

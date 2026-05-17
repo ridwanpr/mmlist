@@ -24,7 +24,7 @@ const ShowAnime = ({ anime, triggers, userTriggerVote }: ShowAnimeProps) => {
         <MainInfo anime={anime && anime} />
 
         {/* Right Info */}
-        <SideInfo triggers={triggers} />
+        <SideInfo triggers={triggers} anime={anime} />
       </div>
       <TriggerWarning
         triggers={triggers}

@@ -32,6 +32,7 @@ declare namespace App {
       readonly themes: App.DTOs.AnimeMetaData[];
       readonly triggers: App.DTOs.AnimeTriggerData[];
       readonly slug: string;
+      readonly ai_advisory: string | null;
     };
     export type AnimeMetaData = {
       readonly mal_id: number;
