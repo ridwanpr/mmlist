@@ -21,14 +21,20 @@ class GenerateGeminiAdvisory implements ShouldQueue
     public function handle(GeminiService $geminiService): void
     {
         $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
-
         $dailyRequests = Cache::get($cacheKey, 0);
 
-        if ($dailyRequests >= 480) {
+        // 1. Calculate how many requests we are still allowed to make today
+        $remainingQuota = 1500 - $dailyRequests;
+
+        if ($remainingQuota <= 0) {
             return;
         }
 
-        $anime = Anime::whereNull('ai_advisory')
+        // 2. Limit to either 15 (our max per minute) or the remaining daily quota
+        $limit = min(15, $remainingQuota);
+
+        // 3. Fetch up to 15 anime instead of just ->first()
+        $animes = Anime::whereNull('ai_advisory')
             ->where('source', '!=', 'Original')
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderByRaw("type = 'TV' DESC")
@@ -36,26 +42,35 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->orderBy('airing', 'desc')
             ->orderBy('score', 'desc')
             ->orderBy('id')
-            ->first();
+            ->limit($limit)
+            ->get();
 
-        if (! $anime) {
+        if ($animes->isEmpty()) {
             return;
         }
 
-        try {
-            $advisory = $geminiService->generateAnimeAdvisory($anime->title);
+        $processedCount = 0;
 
-            $anime->update([
-                'ai_advisory' => $advisory
-            ]);
+        foreach ($animes as $anime) {
+            try {
+                $advisory = $geminiService->generateAnimeAdvisory($anime->title);
 
-            // Increment the daily counter and store it for 24 hours
-            Cache::put($cacheKey, $dailyRequests + 1, now()->addHours(24));
-        } catch (\Exception $e) {
-            Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: " . $e->getMessage());
-            $anime->update([
-                'ai_advisory' => 'AI Advisary not yet generated'
-            ]);
+                $anime->update([
+                    'ai_advisory' => $advisory
+                ]);
+
+                $processedCount++;
+
+                sleep(5);
+            } catch (\Exception $e) {
+                Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: " . $e->getMessage());
+                $anime->update([
+                    'ai_advisory' => 'AI Advisory not yet generated'
+                ]);
+            }
         }
+
+        // 5. Bulk update the cache once at the end of the loop
+        Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
     }
 }
