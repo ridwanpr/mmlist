@@ -170,7 +170,12 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
   };
 
   const removeAnimeFromWatchlist = (watchlistId: number) => {
-    console.log(watchlistId);
+    const confirmed = window.confirm("Remove this anime from watchlist?");
+    if (confirmed) {
+      router.delete(`/watchlist/${watchlistId}`, {
+        preserveScroll: true,
+      });
+    }
   };
 
   return (
@@ -242,9 +247,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
               {userWatchlist !== null ? (
                 <div>
                   <button
-                    onClick={() =>
-                      removeAnimeFromWatchlist(userWatchlist.anime_id)
-                    }
+                    onClick={() => removeAnimeFromWatchlist(userWatchlist.id!)}
                     className="border-primary text-primary mb-6 flex w-full items-center justify-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto md:w-fit"
                   >
                     <LuBookmarkX size={18} />

@@ -136,6 +136,7 @@ declare namespace App {
       readonly roleId: string;
     };
     export type WatchlistData = {
+      readonly id: number | null;
       readonly anime_id: number;
       readonly user_id: number;
       readonly status: string;
