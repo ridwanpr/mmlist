@@ -2,8 +2,10 @@ import { LuBookmark, LuPlus, LuShare2 } from "react-icons/lu";
 import ModalDialog from "../UI/ModalDialog";
 import { SelectOption } from "../UI/SelectOption";
 import type { SetStateAction } from "react";
+import type { FormDataConvertible } from "@inertiajs/core";
 
 export interface WatchlistFormData {
+  [key: string]: FormDataConvertible;
   animeId: number | string;
   userId: number | string;
   status: string;
@@ -24,7 +26,9 @@ type AddToWatchlistProps = {
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
   onSubmitWatchlist: (e: React.SubmitEvent<HTMLFormElement>) => void;
   handleWatchlistFormChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => void;
   scoreSelectItem: SelectItem[];
   statusSelectItem: SelectItem[];
@@ -128,16 +132,14 @@ export const AddToWatchlist = ({
             </label>
             <textarea
               rows={3}
+              name="note"
+              id="note"
               className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+              onChange={handleWatchlistFormChange}
             ></textarea>
           </div>
         </div>
       </ModalDialog>
-
-      <button className="text-primary border-primary-soft hover:bg-surface-alt flex w-full items-center justify-center gap-1.5 rounded-lg border-2 px-4 py-2 text-sm font-semibold transition active:scale-95 sm:w-auto">
-        <LuShare2 size={18} />
-        Share
-      </button>
     </div>
   );
 };

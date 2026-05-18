@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -38,5 +39,5 @@ Route::middleware('auth')->group(function () {
     Route::post('vote-anime-trigger/{triggerContentId}/{animeSlug}', [VoteController::class, 'voteAnimeTrigger'])
         ->name('vote.anime.trigger');
 
-    // Route::post('watchlist', [])
+    Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store');
 });

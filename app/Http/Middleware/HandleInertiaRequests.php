@@ -43,8 +43,8 @@ class HandleInertiaRequests extends Middleware
                 'browse.index' => route('browse.index'),
                 'auth.register' => route('auth.register'),
                 'login' => route('login'),
-                'dashboard.index' => route('dashboard.index'),
                 'user.dash.index' => route('user.dash.index'),
+                'watchlist.store' => route('watchlist.store')
                 // 'posts.show' => fn($id) => route('posts.show', $id),
             ],
             'currentRoute' => optional($request->route())->getName(),

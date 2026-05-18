@@ -2,7 +2,7 @@ import { useImageProxy } from "../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";
 import type { WatchlistFormData } from "./AddToWatchlist";
 
@@ -11,7 +11,7 @@ interface MainInfoProps {
 }
 
 const MainInfo = ({ anime }: MainInfoProps) => {
-  const { auth } = usePage().props;
+  const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
   const { proxyImage } = useImageProxy();
   const coverImage = proxyImage(
@@ -119,11 +119,13 @@ const MainInfo = ({ anime }: MainInfoProps) => {
 
   const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("a");
+    router.post(routes["watchlist.store"], watchlistFormData);
   };
 
   const handleWatchlistFormChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const field = e.currentTarget.id;
     const rawValue = e.currentTarget.value;
@@ -223,17 +225,19 @@ const MainInfo = ({ anime }: MainInfoProps) => {
           </div>
 
           {/* ACTIONS */}
-          <AddToWatchlist
-            anime={anime}
-            watchlistFormData={watchlistFormData}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            onSubmitWatchlist={onSubmitWatchlist}
-            handleWatchlistFormChange={handleWatchlistFormChange}
-            scoreSelectItem={scoreSelectItem}
-            statusSelectItem={statusSelectItem}
-            incrementProgress={incrementProgress}
-          />
+          {auth.user && (
+            <AddToWatchlist
+              anime={anime}
+              watchlistFormData={watchlistFormData}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              onSubmitWatchlist={onSubmitWatchlist}
+              handleWatchlistFormChange={handleWatchlistFormChange}
+              scoreSelectItem={scoreSelectItem}
+              statusSelectItem={statusSelectItem}
+              incrementProgress={incrementProgress}
+            />
+          )}
 
           {/* SYNOPSIS */}
           <section>

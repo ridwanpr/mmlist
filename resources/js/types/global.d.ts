@@ -10,6 +10,7 @@ declare module "@inertiajs/core" {
         "login": string;
         "dashboard.index": string;
         "user.dash.index": string;
+        "watchlist.store": string;
       };
       currentRoute: string | null;
       auth: {

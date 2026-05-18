@@ -8,6 +8,7 @@ class WatchlistController extends Controller
 {
     public function store(StoreWatchlistRequest $request): void
     {
-        dd($request->all());
+        $validated = $request->validated();
+        dd($validated);
     }
 }

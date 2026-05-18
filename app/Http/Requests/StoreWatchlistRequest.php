@@ -28,8 +28,8 @@ class StoreWatchlistRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id' => ['required, exists:animes,id'],
-            'user_id' => ['required'],
+            'animeId' => ['required', 'exists:animes,mal_id'],
+            'userId' => ['required'],
             'status' => ['required', Rule::in(['planned', 'watching', 'on_hold', 'completed', 'dropped'])],
             'progress' => ['nullable', 'numeric'],
             'score' => ['nullable', 'numeric', 'min:1', 'max:10'],
