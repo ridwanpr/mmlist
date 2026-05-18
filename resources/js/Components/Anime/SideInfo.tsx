@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { LuInfo, LuUsers } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
 
 interface SideInfoProps {
   triggers: App.DTOs.TriggerData[];

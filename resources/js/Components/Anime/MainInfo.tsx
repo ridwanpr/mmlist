@@ -1,24 +1,12 @@
-import { LuBookmark, LuPlus, LuShare2 } from "react-icons/lu";
-
 import { useImageProxy } from "../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";
-import ModalDialog from "../UI/ModalDialog";
 import { usePage } from "@inertiajs/react";
-import { SelectOption } from "../UI/SelectOption";
+import { AddToWatchlist } from "./AddToWatchlist";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
-}
-
-export interface WatchlistFormData {
-  animeId: number | string;
-  userId: number | string;
-  status: string;
-  progress: number;
-  score: number;
-  note: string;
 }
 
 const MainInfo = ({ anime }: MainInfoProps) => {
@@ -118,7 +106,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
     console.log("a");
   };
 
-  const handleFormNumberChange = (
+  const handleWatchlistFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const field = e.currentTarget.id;
@@ -212,98 +200,16 @@ const MainInfo = ({ anime }: MainInfoProps) => {
           </div>
 
           {/* ACTIONS */}
-          <div className="mb-6 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="bg-primary text-surface flex w-full items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto"
-            >
-              <LuBookmark size={18} />
-              Add to Watchlist
-            </button>
-
-            <ModalDialog
-              title="Add to Watchlist"
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              onSubmit={onSubmitWatchlist}
-              footer={
-                <>
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    className="border-border hover:bg-surface-alt flex-1 rounded-lg border py-2.5 font-medium transition-colors hover:cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-primary text-surface hover:bg-primary-dark flex-1 rounded-lg py-2.5 font-medium transition-colors hover:cursor-pointer"
-                  >
-                    Submit
-                  </button>
-                </>
-              }
-            >
-              {/*Modal dialog children*/}
-              <div className="flex flex-col gap-4">
-                <SelectOption
-                  id="status"
-                  name="status"
-                  label="Status"
-                  items={statusSelectItem}
-                  onChange={handleFormNumberChange}
-                />
-                {/*Progress*/}
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="progress" className="text-sm">
-                    Episode progress
-                  </label>
-                  <div className="relative flex items-center gap-1">
-                    <input
-                      type="number"
-                      name="progress"
-                      id="progress"
-                      min={0}
-                      value={watchlistFormData.progress}
-                      onChange={(e) => handleFormNumberChange(e)}
-                      className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
-                    />
-                    <div className="absolute right-4 flex items-center gap-1 md:right-10">
-                      {anime.episodes && <p>/ {anime.episodes} eps</p>}
-                      <button className="border-border rounded-full border p-2">
-                        <LuPlus />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {/*Score*/}
-                <div className="flex flex-col gap-1">
-                  <SelectOption
-                    id="score"
-                    name="score"
-                    label="Score"
-                    items={scoreSelectItem}
-                    onChange={handleFormNumberChange}
-                  />
-                </div>
-                {/*Note*/}
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="score" className="text-sm">
-                    Note
-                  </label>
-                  <textarea
-                    rows={3}
-                    className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
-                  ></textarea>
-                </div>
-              </div>
-            </ModalDialog>
-
-            <button className="text-primary border-primary-soft hover:bg-surface-alt flex w-full items-center justify-center gap-1.5 rounded-lg border-2 px-4 py-2 text-sm font-semibold transition active:scale-95 sm:w-auto">
-              <LuShare2 size={18} />
-              Share
-            </button>
-          </div>
+          <AddToWatchlist
+            anime={anime}
+            watchlistFormData={watchlistFormData}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            onSubmitWatchlist={onSubmitWatchlist}
+            handleWatchlistFormChange={handleWatchlistFormChange}
+            scoreSelectItem={scoreSelectItem}
+            statusSelectItem={statusSelectItem}
+          />
 
           {/* SYNOPSIS */}
           <section>
