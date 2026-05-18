@@ -10,8 +10,10 @@ export interface WatchlistFormData {
   userId: number | string;
   status: string;
   progress: number | "";
-  score: number;
+  score: number | "";
   note: string;
+  started_at: string;
+  completed_at: string;
 }
 
 type SelectItem = {
@@ -124,6 +126,35 @@ export const AddToWatchlist = ({
               items={scoreSelectItem}
               onChange={handleWatchlistFormChange}
             />
+          </div>
+          {/* Dates (Started & Completed) */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="started_at" className="text-sm">
+                Start Date
+              </label>
+              <input
+                type="date"
+                name="started_at"
+                id="started_at"
+                value={watchlistFormData.started_at}
+                onChange={handleWatchlistFormChange}
+                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="completed_at" className="text-sm">
+                Finish Date
+              </label>
+              <input
+                type="date"
+                name="completed_at"
+                id="completed_at"
+                value={watchlistFormData.completed_at}
+                onChange={handleWatchlistFormChange}
+                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+              />
+            </div>
           </div>
           {/*Note*/}
           <div className="flex flex-col gap-1">

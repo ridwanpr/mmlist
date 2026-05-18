@@ -199,4 +199,15 @@ class Anime extends Model
     {
         return $this->hasMany(AnimeTrigger::class);
     }
+
+    /**
+     * @return BelongsToMany<User, $this, Watchlist>
+     */
+    public function watchlists(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'watchlists', 'anime_id', 'user_id')
+            ->using(Watchlist::class)
+            ->withPivotValue(['status', 'progress', 'score', 'note'])
+            ->withTimestamps();
+    }
 }

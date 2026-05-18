@@ -97,12 +97,12 @@ const MainInfo = ({ anime }: MainInfoProps) => {
       userId: auth.user?.id || "",
       status: "planned",
       progress: "",
-      score: 1,
+      score: "",
       note: "",
+      started_at: "",
+      completed_at: "",
     },
   );
-
-  console.log(watchlistFormData);
 
   const incrementProgress = (e: React.MouseEvent<HTMLButtonElement>) => {
     setWatchlistFormData((prev: WatchlistFormData) => {
@@ -119,7 +119,12 @@ const MainInfo = ({ anime }: MainInfoProps) => {
 
   const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.post(routes["watchlist.store"], watchlistFormData);
+    router.post(routes["watchlist.store"], watchlistFormData, {
+      preserveScroll: true,
+      onSuccess: () => {
+        setIsOpen(false);
+      },
+    });
   };
 
   const handleWatchlistFormChange = (

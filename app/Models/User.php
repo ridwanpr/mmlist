@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
@@ -72,6 +73,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
             ->using(UserRole::class)
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Anime, $this, Watchlist>
+     */
+    public function watchlists(): BelongsToMany
+    {
+        return $this->belongsToMany(Anime::class, 'watchlists', 'user_id', 'anime_id')
+            ->using(Watchlist::class)
+            ->withPivotValue(['status', 'progress', 'score', 'note'])
             ->withTimestamps();
     }
 }

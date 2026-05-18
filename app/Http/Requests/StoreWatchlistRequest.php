@@ -33,7 +33,9 @@ class StoreWatchlistRequest extends FormRequest
             'status' => ['required', Rule::in(['planned', 'watching', 'on_hold', 'completed', 'dropped'])],
             'progress' => ['nullable', 'numeric'],
             'score' => ['nullable', 'numeric', 'min:1', 'max:10'],
-            'note' => ['nullable', 'string']
+            'note' => ['nullable', 'string'],
+            'started_at' => ['nullable'],
+            'updated_at' => ['nullable']
         ];
     }
 }
