@@ -21,23 +21,23 @@ class ExtractAiredData implements ShouldQueue
         Anime::whereNotNull('aired')->lazyById(200)->each(function (Anime $anime) {
             $aired = $anime->aired;
 
-            if (!$aired) {
+            if (! $aired) {
                 return;
             }
 
-            $from = !empty($aired['from']) ? Carbon::parse($aired['from']) : null;
-            $to   = !empty($aired['to'])   ? Carbon::parse($aired['to'])   : null;
+            $from = ! empty($aired['from']) ? Carbon::parse($aired['from']) : null;
+            $to = ! empty($aired['to']) ? Carbon::parse($aired['to']) : null;
 
             $updateData = [
-                'from'           => $from,
-                'to'             => $to,
+                'from' => $from,
+                'to' => $to,
                 'from_to_string' => $aired['string'] ?? null,
             ];
 
             if ($from) {
-                $updateData['season']  = $this->deriveSeason($from);
-                $updateData['year']    = $from->year;
-                $updateData['airing']  = $this->deriveAiring($anime->status, $from, $to);
+                $updateData['season'] = $this->deriveSeason($from);
+                $updateData['year'] = $from->year;
+                $updateData['airing'] = $this->deriveAiring($anime->status, $from, $to);
             }
 
             $anime->update($updateData);
@@ -47,10 +47,10 @@ class ExtractAiredData implements ShouldQueue
     private function deriveSeason(Carbon $from): string
     {
         return match (true) {
-            $from->month <= 3  => 'winter',
-            $from->month <= 6  => 'spring',
-            $from->month <= 9  => 'summer',
-            default            => 'fall',
+            $from->month <= 3 => 'winter',
+            $from->month <= 6 => 'spring',
+            $from->month <= 9 => 'summer',
+            default => 'fall',
         };
     }
 
@@ -61,6 +61,7 @@ class ExtractAiredData implements ShouldQueue
         }
 
         $now = Carbon::now();
+
         return $from->isPast() && ($to === null || $to->isFuture());
     }
 }

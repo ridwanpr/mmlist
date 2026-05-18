@@ -15,7 +15,6 @@ Schedule::job(new FetchAiringAnime)->twiceDaily(1, 13);
 
 Schedule::job(new GenerateGeminiAdvisory)->everyMinute();
 
-
 Artisan::command('extract:fromto', function () {
     $this->info('Dispatching extraction job to the queue...');
 

@@ -15,8 +15,7 @@ class VoteController extends Controller
     public function __construct(
         private VoteService $voteService,
         private AnimeService $animeService
-    ) {
-    }
+    ) {}
 
     public function voteAnimeTrigger(
         VoteAnimeTriggerRequest $request,

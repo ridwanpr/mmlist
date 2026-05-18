@@ -16,16 +16,15 @@ class WatchlistController extends Controller
 
     public function store(StoreWatchlistRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        $watchlistData = WatchlistData::fromRequest($validated);
+        $watchlistData = WatchlistData::fromRequest($request);
         $this->watchlistService->storeUserWatchlist($watchlistData);
 
         Inertia::flash('success', 'Added to watchlist');
+
         return back();
     }
 
-    public function destroy(int $wachlistId)
+    public function destroy(int $wachlistId): RedirectResponse
     {
         $this->watchlistService->deleteWatchlist($wachlistId);
 

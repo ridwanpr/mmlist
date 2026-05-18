@@ -9,8 +9,8 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class GenreData
 {
     public function __construct(
-        public int    $id,
-        public int    $mal_id,
+        public int $id,
+        public int $mal_id,
         public string $type,
         public string $name,
         public string $url

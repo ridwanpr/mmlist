@@ -8,15 +8,14 @@ use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\MasterTrigger;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 
 use function Illuminate\Support\now;
 
 class AnimeService
 {
     /**
-     * @param array<string,mixed> $filter
-     * @param array<string,string> $sort
+     * @param  array<string,mixed>  $filter
+     * @param  array<string,string>  $sort
      */
     public function fetchAnimes(
         array $filter,
@@ -33,64 +32,64 @@ class AnimeService
             $q->where(function ($subQuery) use ($rawTerm, $booleanTerm) {
                 if ($booleanTerm !== null) {
                     $subQuery->whereRaw(
-                        "MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE)",
+                        'MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE)',
                         [$booleanTerm]
                     );
                 } else {
-                    $subQuery->where('title', 'like', '%' . $rawTerm . '%')
-                        ->orWhere('title_english', 'like', '%' . $rawTerm . '%')
-                        ->orWhere('title_japanese', 'like', '%' . $rawTerm . '%');
+                    $subQuery->where('title', 'like', '%'.$rawTerm.'%')
+                        ->orWhere('title_english', 'like', '%'.$rawTerm.'%')
+                        ->orWhere('title_japanese', 'like', '%'.$rawTerm.'%');
                 }
 
                 $subQuery->orWhereJsonContains('title_synonyms', $rawTerm)
-                    ->orWhere('title_synonyms', 'like', '%' . $rawTerm . '%');
+                    ->orWhere('title_synonyms', 'like', '%'.$rawTerm.'%');
             });
 
             if ($booleanTerm !== null) {
                 $q->select('*')
                     ->selectRaw(
-                        "MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE) AS relevance",
+                        'MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE) AS relevance',
                         [$booleanTerm]
                     )
                     ->orderByDesc('relevance');
             }
         });
 
-        $query->when(array_key_exists('airing', $filter) && !is_null($filter['airing']), function ($q) use ($filter) {
+        $query->when(array_key_exists('airing', $filter) && ! is_null($filter['airing']), function ($q) use ($filter) {
             $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now()->year);
         });
 
-        $query->when(array_key_exists('upcoming', $filter) && !is_null($filter['upcoming']), function ($q) {
+        $query->when(array_key_exists('upcoming', $filter) && ! is_null($filter['upcoming']), function ($q) {
             $q->where('animes.year', '>', now()->year);
         });
 
-        $query->when(!empty($filter['genres']), function ($q) use ($filter) {
+        $query->when(! empty($filter['genres']), function ($q) use ($filter) {
             $q->whereHas('genres', function ($q) use ($filter) {
                 $q->whereIn('genres.id', (array) $filter['genres']);
             });
         });
 
-        $query->when(!empty($filter['themes']), function ($q) use ($filter) {
+        $query->when(! empty($filter['themes']), function ($q) use ($filter) {
             $q->whereHas('themes', function ($q) use ($filter) {
                 $q->whereIn('themes.id', (array) $filter['themes']);
             });
         });
 
-        $query->when(!empty($filter['years']), function ($q) use ($filter) {
+        $query->when(! empty($filter['years']), function ($q) use ($filter) {
             $q->whereIn('animes.year', (array) $filter['years']);
         });
 
-        $query->when(!empty($filter['seasons']), function ($q) use ($filter) {
+        $query->when(! empty($filter['seasons']), function ($q) use ($filter) {
             $q->whereIn('animes.season', (array) $filter['seasons']);
         });
 
-        $query->when(!empty($filter['types']), function ($q) use ($filter) {
+        $query->when(! empty($filter['types']), function ($q) use ($filter) {
             $q->whereIn('animes.type', (array) $filter['types']);
         });
 
-        $query->when(!empty($sort['sort']), function ($q) use ($sort) {
+        $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-            $q->orderBy('animes.' . $sort['sort'], $direction);
+            $q->orderBy('animes.'.$sort['sort'], $direction);
         }, function ($q) {
             $q->orderByRaw("animes.type = 'TV' DESC")
                 ->orderBy('animes.year', 'desc')
@@ -103,7 +102,7 @@ class AnimeService
             ->onEachSide(1)
             ->withQueryString();
 
-        $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
+        $transformed = $paginator->through(fn (Anime $item): AnimeData => AnimeData::fromModel($item));
 
         return PaginatedAnimeData::fromPaginator($transformed);
     }
@@ -122,7 +121,7 @@ class AnimeService
             ->limit($limit)
             ->get();
 
-        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        return $animeFromDb->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**
@@ -142,7 +141,7 @@ class AnimeService
             ->limit($limit)
             ->get();
 
-        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        return $animeFromDb->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     public function getAnimeInfo(string $slug): Anime
@@ -166,7 +165,7 @@ class AnimeService
         ])
             ->orderBy('importance', 'desc')->get();
 
-        return $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+        return $triggersFromDb->map(fn (MasterTrigger $trigger) => TriggerData::fromModel($trigger));
     }
 
     /**
@@ -192,13 +191,13 @@ class AnimeService
         $stopwords = ['a', 'an', 'and', 'as', 'at', 'for', 'in', 'is', 'it', 'of', 'on', 'or', 'the', 'to', 'with'];
 
         $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
-            return !in_array($token, $stopwords, true);
+            return ! in_array($token, $stopwords, true);
         }));
 
         if ($tokens === []) {
             return null;
         }
 
-        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
+        return implode(' ', array_map(static fn ($token) => '+'.$token.'*', $tokens));
     }
 }

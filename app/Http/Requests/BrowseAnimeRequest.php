@@ -25,17 +25,17 @@ class BrowseAnimeRequest extends FormRequest
     public function rules(MasterService $masterService): array
     {
         return [
-            'airing'  => ['nullable', Rule::in(['true', 'false'])],
-            'upcoming'  => ['nullable', Rule::in(['true', 'false'])],
-            'sort'    => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
-            'order'   => ['nullable', Rule::in(['asc', 'desc'])],
-            'query'   => ['nullable', 'string', 'max:100'],
-            'genres'  => ['nullable'],
-            'themes'  => ['nullable'],
+            'airing' => ['nullable', Rule::in(['true', 'false'])],
+            'upcoming' => ['nullable', Rule::in(['true', 'false'])],
+            'sort' => ['nullable', Rule::in(['score', 'title', 'year', 'episodes'])],
+            'order' => ['nullable', Rule::in(['asc', 'desc'])],
+            'query' => ['nullable', 'string', 'max:100'],
+            'genres' => ['nullable'],
+            'themes' => ['nullable'],
             'seasons' => ['nullable', 'exists:animes,season'],
-            'types'   => ['nullable', 'exists:animes,type'],
-            'years'   => ['nullable', 'exists:animes,year'],
-            'rating'  => ['nullable', 'exists:animes,rating'],
+            'types' => ['nullable', 'exists:animes,type'],
+            'years' => ['nullable', 'exists:animes,year'],
+            'rating' => ['nullable', 'exists:animes,rating'],
         ];
     }
 }

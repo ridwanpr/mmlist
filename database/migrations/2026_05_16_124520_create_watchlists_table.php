@@ -20,7 +20,7 @@ return new class extends Migration
                 'watching',
                 'completed',
                 'on_hold',
-                'dropped'
+                'dropped',
             ])->default('planned');
             $table->unsignedInteger('progress')->default(0);
             $table->unsignedTinyInteger('score')->nullable();

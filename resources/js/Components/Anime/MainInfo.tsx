@@ -94,8 +94,6 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
     };
   });
 
-  console.log(userWatchlist);
-
   const [watchlistFormData, setWatchlistFormData] = useState<WatchlistFormData>(
     {
       animeId: anime.mal_id,
@@ -171,6 +169,10 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
     }));
   };
 
+  const removeAnimeFromWatchlist = (watchlistId: number) => {
+    console.log(watchlistId);
+  };
+
   return (
     <div className="min-w-0 lg:col-span-3">
       {/* MOBILE COVER */}
@@ -239,7 +241,12 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
             <>
               {userWatchlist !== null ? (
                 <div>
-                  <button className="border-primary border text-primary mb-6 w-full md:w-fit flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto">
+                  <button
+                    onClick={() =>
+                      removeAnimeFromWatchlist(userWatchlist.anime_id)
+                    }
+                    className="border-primary text-primary mb-6 flex w-full items-center justify-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto md:w-fit"
+                  >
                     <LuBookmarkX size={18} />
                     Remove from Watchlist
                   </button>

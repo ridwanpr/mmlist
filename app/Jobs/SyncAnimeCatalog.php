@@ -36,7 +36,7 @@ class SyncAnimeCatalog implements ShouldQueue
 
             Log::info("Finished syncing the entire anime catalog on page {$this->page}!");
         } catch (Exception $e) {
-            Log::error("Failed to sync catalog on page {$this->page}: " . $e->getMessage());
+            Log::error("Failed to sync catalog on page {$this->page}: ".$e->getMessage());
             throw $e;
         }
     }

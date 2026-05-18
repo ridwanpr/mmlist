@@ -21,17 +21,17 @@ class MasterService
             return Genre::whereNotIn('name', ['Hentai', 'Erotica'])
                 ->orderBy('name', 'asc')
                 ->get()
-                ->map(fn(Genre $item) => [
-                    'id'     => $item->id,
+                ->map(fn (Genre $item) => [
+                    'id' => $item->id,
                     'mal_id' => $item->mal_id,
-                    'type'   => $item->type,
-                    'name'   => $item->name,
-                    'url'    => $item->url,
+                    'type' => $item->type,
+                    'name' => $item->name,
+                    'url' => $item->url,
                 ])
                 ->all();
         });
 
-        return collect($raw)->map(fn(array $data) => GenreData::fromArray($data));
+        return collect($raw)->map(fn (array $data) => GenreData::fromArray($data));
     }
 
     /**
@@ -42,17 +42,17 @@ class MasterService
         $raw = Cache::remember('themes', now()->addDays(30), function () {
             return Theme::orderBy('name', 'asc')
                 ->get()
-                ->map(fn(Theme $item) => [
-                    'id'     => $item->id,
+                ->map(fn (Theme $item) => [
+                    'id' => $item->id,
                     'mal_id' => $item->mal_id,
-                    'type'   => $item->type,
-                    'name'   => $item->name,
-                    'url'    => $item->url,
+                    'type' => $item->type,
+                    'name' => $item->name,
+                    'url' => $item->url,
                 ])
                 ->all();
         });
 
-        return collect($raw)->map(fn(array $data) => ThemeData::fromArray($data));
+        return collect($raw)->map(fn (array $data) => ThemeData::fromArray($data));
     }
 
     /**

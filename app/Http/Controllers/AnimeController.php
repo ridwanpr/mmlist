@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\AnimeService;
-use App\Services\GeminiService;
 use App\Services\VoteService;
 use App\Services\WatchlistService;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +32,7 @@ class AnimeController extends Controller
             'anime' => $anime,
             'triggers' => $triggers,
             'userTriggerVote' => $userTriggerVote ?? null,
-            'userWatchlist' => $watchlist ?? null
+            'userWatchlist' => $watchlist ?? null,
         ]);
     }
 }

@@ -17,6 +17,7 @@ class StoreWatchlistRequest extends FormRequest
         if (Auth::user()) {
             return true;
         }
+
         return false;
     }
 
@@ -35,7 +36,7 @@ class StoreWatchlistRequest extends FormRequest
             'score' => ['nullable', 'numeric', 'min:1', 'max:10'],
             'note' => ['nullable', 'string'],
             'started_at' => ['nullable'],
-            'updated_at' => ['nullable']
+            'updated_at' => ['nullable'],
         ];
     }
 }

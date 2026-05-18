@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Watchlist;
 use App\DTOs\WatchlistData;
 use App\Models\Anime;
+use App\Models\Watchlist;
 
 class WatchlistService
 {
@@ -25,11 +25,17 @@ class WatchlistService
         );
     }
 
-    public function findUserWatchlist(int $userId, int $animeId)
+    public function findUserWatchlist(int $userId, int $animeId): ?WatchlistData
     {
-        return Watchlist::where('user_id', $userId)
+        $data = Watchlist::where('user_id', $userId)
             ->where('anime_id', $animeId)
             ->first();
+
+        if (! $data) {
+            return null;
+        }
+
+        return WatchlistData::fromModel($data);
     }
 
     public function deleteWatchlist(int $watchlistId): void

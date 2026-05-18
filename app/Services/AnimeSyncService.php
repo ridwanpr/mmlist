@@ -29,7 +29,7 @@ class AnimeSyncService
     {
         $response = Http::withQueryParameters([
             'page' => $page,
-        ])->get(config('app.jikan_url') . '/seasons/now');
+        ])->get(config('app.jikan_url').'/seasons/now');
 
         if ($response->failed()) {
             Log::warning("Jikan API failed for syncing airing anime page {$page}. Status: {$response->status()}");
@@ -40,10 +40,10 @@ class AnimeSyncService
         $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
         $syncedMalIds = [];
 
-        if (!empty($animeDataDtos)) {
+        if (! empty($animeDataDtos)) {
             $syncedMalIds = collect($animeDataDtos)->pluck('mal_id')->all();
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
-            $masterService = new MasterService();
+            $masterService = new MasterService;
             $masterService->clearCache();
         }
 
@@ -58,7 +58,7 @@ class AnimeSyncService
         Log::info('sync anime');
         $response = Http::timeout(15)->withQueryParameters([
             'page' => $page,
-        ])->get(config('app.jikan_url') . '/top/anime');
+        ])->get(config('app.jikan_url').'/top/anime');
 
         if ($response->failed()) {
             Log::warning("Jikan API failed for syncing catalog page {$page}. Status: {$response->status()}");
@@ -68,18 +68,18 @@ class AnimeSyncService
         $apiPayload = $response->json();
         $animeDataDtos = $this->mapApiPayloadToAnimeData($apiPayload);
 
-        if (!empty($animeDataDtos)) {
+        if (! empty($animeDataDtos)) {
             $this->bulkInsertAnimeWithMetaData($animeDataDtos, false);
         }
 
-        $masterService = new MasterService();
+        $masterService = new MasterService;
         $masterService->clearCache();
 
         return $apiPayload['pagination']['has_next_page'] ?? false;
     }
 
     /**
-     * @param array<int, int> $activeMalIds
+     * @param  array<int, int>  $activeMalIds
      */
     public function cleanupStaleAiringAnime(array $activeMalIds): void
     {
@@ -93,7 +93,7 @@ class AnimeSyncService
     }
 
     /**
-     * @param array<int, AnimeData> $animeApiData
+     * @param  array<int, AnimeData>  $animeApiData
      */
     private function bulkInsertAnimeWithMetaData(
         array $animeApiData,
@@ -164,7 +164,7 @@ class AnimeSyncService
     }
 
     /**
-     * @param array<int, AnimeData> $animeApiData
+     * @param  array<int, AnimeData>  $animeApiData
      * @return array{animeRecords: array<int, array<string, mixed>>, animeMalIds: array<int, int>}
      */
     private function buildAnimeRecords(array $animeApiData): array
@@ -212,25 +212,25 @@ class AnimeSyncService
     }
 
     /**
-     * @param array<string, mixed> $apiPayload
+     * @param  array<string, mixed>  $apiPayload
      * @return array<int, AnimeData>
      */
     private function mapApiPayloadToAnimeData(array $apiPayload): array
     {
-        if (!isset($apiPayload['data']) || !is_array($apiPayload['data'])) {
+        if (! isset($apiPayload['data']) || ! is_array($apiPayload['data'])) {
             return [];
         }
 
         return collect($apiPayload['data'])
             ->unique('mal_id')
-            ->map(fn(array $item) => AnimeData::fromArray($item))
+            ->map(fn (array $item) => AnimeData::fromArray($item))
             ->values()
             ->all();
     }
 
     /**
-     * @param array<int, AnimeData> $animeApiData
-     * @param Collection<int, Anime> $insertedAnimeRecords
+     * @param  array<int, AnimeData>  $animeApiData
+     * @param  Collection<int, Anime>  $insertedAnimeRecords
      */
     private function processAndInsertAnimeMetadata(
         array $animeApiData,
@@ -274,12 +274,12 @@ class AnimeSyncService
         $pivotTableDatas = [];
 
         foreach ($insertedAnimeRecords as $dbAnimeRecord) {
-            if (!isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
+            if (! isset($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id])) {
                 continue;
             }
 
             foreach ($malAnimeIdWithPivotData[$dbAnimeRecord->mal_id] as $malId) {
-                if (!isset($relatedIdsLookup[$malId])) {
+                if (! isset($relatedIdsLookup[$malId])) {
                     continue;
                 }
 
@@ -292,7 +292,7 @@ class AnimeSyncService
             }
         }
 
-        if (!empty($pivotTableDatas)) {
+        if (! empty($pivotTableDatas)) {
             $pivotModel::insertOrIgnore($pivotTableDatas);
         }
     }

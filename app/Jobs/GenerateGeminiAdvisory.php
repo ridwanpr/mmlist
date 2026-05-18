@@ -20,7 +20,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
      */
     public function handle(GeminiService $geminiService): void
     {
-        $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
+        $cacheKey = 'gemini_daily_requests_'.date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
 
         // 1. Calculate how many requests we are still allowed to make today
@@ -55,9 +55,9 @@ class GenerateGeminiAdvisory implements ShouldQueue
             try {
                 $advisory = $geminiService->generateAnimeAdvisory($anime->title, $anime->rating);
 
-                if ($advisory != "Insufficient data to provide a reliable advisory.") {
+                if ($advisory != 'Insufficient data to provide a reliable advisory.') {
                     $anime->update([
-                        'ai_advisory' => $advisory
+                        'ai_advisory' => $advisory,
                     ]);
                 }
 
@@ -65,9 +65,9 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
                 sleep(4);
             } catch (\Exception $e) {
-                Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: " . $e->getMessage());
+                Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: ".$e->getMessage());
                 $anime->update([
-                    'ai_advisory' => 'AI Advisory not yet generated'
+                    'ai_advisory' => 'AI Advisory not yet generated',
                 ]);
             }
         }

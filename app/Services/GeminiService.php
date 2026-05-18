@@ -2,19 +2,23 @@
 
 namespace App\Services;
 
+use Exception;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Client\ConnectionException;
 
 class GeminiService
 {
-    private string $apiKey;
+    private string|bool $apiKey;
+
     private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/';
+
     private string $systemInstruction;
 
     public function __construct()
     {
-        $this->apiKey = env('GEMINI_API_KEY');
+        $this->apiKey = config('gemini_api_key');
 
         $this->systemInstruction = <<<'PROMPT'
         You are an anime expert media analyst specializing in content advisories.
@@ -46,7 +50,7 @@ class GeminiService
 
     public function generateAnimeAdvisory(string $title, ?string $rating = null): string
     {
-        $ratingContext = $rating ? " Official Age Rating: {$rating}." : "";
+        $ratingContext = $rating ? " Official Age Rating: {$rating}." : '';
         $prompt = "Provide the content advisory for anime: {$title}.{$ratingContext}";
         $response = null;
 
@@ -61,45 +65,49 @@ class GeminiService
             return $this->extractText($response->json());
         }
 
-        if (!$response || $response->status() === 429 || $response->serverError()) {
+        if (! $response || $response->status() === 429 || $response->serverError()) {
             $status = $response ? $response->status() : 'Timeout';
             Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Falling back to Gemma 4 31B.");
 
             try {
-                //Gemma 4 31B (Fallback)
+                // Gemma 4 31B (Fallback)
                 $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60);
 
                 if ($fallbackResponse->successful()) {
                     return $this->extractText($fallbackResponse->json());
                 }
 
-                Log::error("Gemma fallback failed for {$title}: " . $fallbackResponse->body());
+                Log::error("Gemma fallback failed for {$title}: ".$fallbackResponse->body());
             } catch (ConnectionException $e) {
                 Log::error("Gemma fallback also timed out for {$title}.");
             }
         } else {
-            Log::error("Gemini API failed for {$title}: " . $response->body());
+            Log::error("Gemini API failed for {$title}: ".$response->body());
         }
 
-        throw new \Exception("Failed to generate advisory after fallback.");
+        throw new Exception('Failed to generate advisory after fallback.');
     }
 
-    private function callApi(string $model, string $prompt, int $timeout = 30)
+    private function callApi(string $model, string $prompt, int $timeout = 30): Response
     {
+        if (! $this->apiKey) {
+            throw new Exception('GEMINI API KEY NOT SET');
+        }
+
         $url = "{$this->baseUrl}{$model}:generateContent?key={$this->apiKey}";
 
         $generationConfig = ['temperature' => 1.0];
 
-        if (!str_starts_with($model, 'gemma-')) {
+        if (! str_starts_with($model, 'gemma-')) {
             $generationConfig['thinkingConfig'] = ['thinkingLevel' => 'minimal'];
         }
 
         $payload = [
             'systemInstruction' => [
-                'parts' => [['text' => $this->systemInstruction]]
+                'parts' => [['text' => $this->systemInstruction]],
             ],
             'contents' => [
-                ['role' => 'user', 'parts' => [['text' => $prompt]]]
+                ['role' => 'user', 'parts' => [['text' => $prompt]]],
             ],
             'generationConfig' => $generationConfig,
         ];
@@ -107,6 +115,9 @@ class GeminiService
         return Http::timeout($timeout)->post($url, $payload);
     }
 
+    /**
+     * @param  array<int|string, mixed>  $json
+     */
     private function extractText(array $json): string
     {
         $parts = $json['candidates'][0]['content']['parts'] ?? [];

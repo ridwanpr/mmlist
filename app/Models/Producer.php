@@ -16,9 +16,10 @@ use Illuminate\Support\Carbon;
  * @property string $url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\AnimeProducer|null $pivot
- * @property-read Collection<int, \App\Models\Anime> $animes
+ * @property-read AnimeProducer|null $pivot
+ * @property-read Collection<int, Anime> $animes
  * @property-read int|null $animes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer query()
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Producer whereUrl($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['mal_id', 'type', 'name', 'url'])]

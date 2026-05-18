@@ -28,6 +28,6 @@ class VoteService
             ->where('anime_id', $animeId)
             ->get();
 
-        return $data->map(fn($item) => AnimeTriggerData::fromModel($item));
+        return $data->map(fn ($item) => AnimeTriggerData::fromModel($item));
     }
 }
