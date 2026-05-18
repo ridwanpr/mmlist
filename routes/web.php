@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ManageAnimeController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
@@ -27,9 +28,13 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-});
+Route::prefix('admin')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+        Route::get('anime', [ManageAnimeController::class, 'index'])->name('manage-anime.index');
+    });
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');

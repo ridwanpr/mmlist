@@ -16,7 +16,7 @@ import {
 import SidebarLink from "./SidebarLink";
 
 interface AdminSidebarProps {
-  isOpen: boolean
+  isOpen: boolean;
 }
 
 const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
@@ -37,17 +37,14 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
 
       <nav className="flex flex-col">
         {/* Main */}
-        <SidebarLink
-          href={routes["dashboard.index"]}
-          routeName="dashboard.index"
-        >
+        <SidebarLink href="/admin/dashboard" routeName="dashboard.index">
           <LuHouse size={18} /> Overview
         </SidebarLink>
 
         {/* Content */}
         <p className="my-2 px-3 text-sm">Content</p>
 
-        <SidebarLink href="#" routeName="anime.index">
+        <SidebarLink href="/admin/anime" routeName="anime.index">
           <LuFolder size={18} /> Anime
         </SidebarLink>
 

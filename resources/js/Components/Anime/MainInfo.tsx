@@ -177,7 +177,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
       });
     }
   };
-
+  
   return (
     <div className="min-w-0 lg:col-span-3">
       {/* MOBILE COVER */}
