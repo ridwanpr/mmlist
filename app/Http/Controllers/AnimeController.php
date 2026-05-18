@@ -14,7 +14,8 @@ class AnimeController extends Controller
     public function __construct(
         private AnimeService $animeService,
         private VoteService $voteService
-    ) {}
+    ) {
+    }
 
     public function show(string $slug): Response
     {

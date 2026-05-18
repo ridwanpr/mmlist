@@ -24,7 +24,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $dailyRequests = Cache::get($cacheKey, 0);
 
         // 1. Calculate how many requests we are still allowed to make today
-        $remainingQuota = 1500 - $dailyRequests;
+        $remainingQuota = 5 - $dailyRequests;
 
         if ($remainingQuota <= 0) {
             return;
@@ -53,7 +53,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
         foreach ($animes as $anime) {
             try {
-                $advisory = $geminiService->generateAnimeAdvisory($anime->title);
+                $advisory = $geminiService->generateAnimeAdvisory($anime->title, $anime->rating);
 
                 $anime->update([
                     'ai_advisory' => $advisory
@@ -61,7 +61,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
                 $processedCount++;
 
-                sleep(5);
+                sleep(4);
             } catch (\Exception $e) {
                 Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: " . $e->getMessage());
                 $anime->update([

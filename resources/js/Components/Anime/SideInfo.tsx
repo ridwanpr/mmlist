@@ -61,10 +61,10 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
           <h3 className="text-text flex items-center gap-2 font-bold">
             Content Advisory
           </h3>
-          <span className="bg-primary text-surface flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[10px] font-bold tracking-wider uppercase">
+          {/*<span className="bg-primary text-surface flex shrink-0 items-center gap-1 rounded px-2 py-1 text-[10px] font-bold tracking-wider uppercase">
             <LuInfo size={12} />
             AI Powered
-          </span>
+          </span>*/}
         </div>
         <p className="text-text/90 text-sm leading-relaxed text-pretty">
           {anime.ai_advisory || "Not yet available"}
@@ -143,8 +143,8 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
         </div>
         <h3 className="text-text mb-1 font-bold">Message Us</h3>
         <p className="text-text-muted mb-4 text-xs leading-relaxed">
-          Did we miss something? Your message or suggestion help us improve
-          mamorulist.
+          Spot a mistake or missing info? Let us know! Your feedback helps us
+          make Mamorulist even better.
         </p>
         <button className="bg-primary focus:ring-primary text-surface w-full rounded-md py-2 text-sm font-semibold transition-opacity hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:outline-none">
           Leave a Message
