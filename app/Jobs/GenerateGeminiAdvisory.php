@@ -24,7 +24,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $dailyRequests = Cache::get($cacheKey, 0);
 
         // 1. Calculate how many requests we are still allowed to make today
-        $remainingQuota = 5 - $dailyRequests;
+        $remainingQuota = 480 - $dailyRequests;
 
         if ($remainingQuota <= 0) {
             return;
