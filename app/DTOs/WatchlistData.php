@@ -1,6 +1,10 @@
 <?php
+
 namespace App\DTOs;
 
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+
+#[TypeScript]
 readonly class WatchlistData
 {
     public function __construct(

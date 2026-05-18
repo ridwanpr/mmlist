@@ -24,4 +24,16 @@ class WatchlistService
             ]
         );
     }
+
+    public function findUserWatchlist(int $userId, int $animeId)
+    {
+        return Watchlist::where('user_id', $userId)
+            ->where('anime_id', $animeId)
+            ->first();
+    }
+
+    public function deleteWatchlist(int $watchlistId): void
+    {
+        Watchlist::where('id', $watchlistId)->delete();
+    }
 }

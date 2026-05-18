@@ -1,4 +1,4 @@
-import '@inertiajs/core'
+import "@inertiajs/core";
 
 declare module "@inertiajs/core" {
   export interface InertiaConfig {
@@ -7,7 +7,7 @@ declare module "@inertiajs/core" {
         "home.index": string;
         "browse.index": string;
         "auth.register": string;
-        "login": string;
+        login: string;
         "dashboard.index": string;
         "user.dash.index": string;
         "watchlist.store": string;

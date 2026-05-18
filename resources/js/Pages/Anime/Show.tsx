@@ -10,9 +10,15 @@ interface ShowAnimeProps {
   anime: App.DTOs.AnimeData;
   triggers: App.DTOs.TriggerData[];
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
+  userWatchlist: App.DTOs.WatchlistData | null;
 }
 
-const ShowAnime = ({ anime, triggers, userTriggerVote }: ShowAnimeProps) => {
+const ShowAnime = ({
+  anime,
+  triggers,
+  userTriggerVote,
+  userWatchlist,
+}: ShowAnimeProps) => {
   return (
     <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
       {/* Breadcrumb */}
@@ -21,7 +27,7 @@ const ShowAnime = ({ anime, triggers, userTriggerVote }: ShowAnimeProps) => {
       {/* Anime Information */}
       <div className="grid gap-6 lg:grid-cols-4">
         {/* Left Main Info */}
-        <MainInfo anime={anime && anime} />
+        <MainInfo anime={anime && anime} userWatchlist={userWatchlist} />
 
         {/* Right Info */}
         <SideInfo triggers={triggers} anime={anime} />

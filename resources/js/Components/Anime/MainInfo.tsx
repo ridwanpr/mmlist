@@ -5,14 +5,17 @@ import React, { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";
 import type { WatchlistFormData } from "./AddToWatchlist";
+import { LuBookmarkX } from "react-icons/lu";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
+  userWatchlist: App.DTOs.WatchlistData | null;
 }
 
-const MainInfo = ({ anime }: MainInfoProps) => {
+const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
+
   const { proxyImage } = useImageProxy();
   const coverImage = proxyImage(
     anime.images?.webp?.image_url || anime.images?.jpg?.image_url,
@@ -90,6 +93,8 @@ const MainInfo = ({ anime }: MainInfoProps) => {
       label: `(${score}) ${labels[score]}`,
     };
   });
+
+  console.log(userWatchlist);
 
   const [watchlistFormData, setWatchlistFormData] = useState<WatchlistFormData>(
     {
@@ -231,17 +236,28 @@ const MainInfo = ({ anime }: MainInfoProps) => {
 
           {/* ACTIONS */}
           {auth.user && (
-            <AddToWatchlist
-              anime={anime}
-              watchlistFormData={watchlistFormData}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              onSubmitWatchlist={onSubmitWatchlist}
-              handleWatchlistFormChange={handleWatchlistFormChange}
-              scoreSelectItem={scoreSelectItem}
-              statusSelectItem={statusSelectItem}
-              incrementProgress={incrementProgress}
-            />
+            <>
+              {userWatchlist !== null ? (
+                <div>
+                  <button className="border-primary border text-primary mb-6 w-full md:w-fit flex items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 sm:w-auto">
+                    <LuBookmarkX size={18} />
+                    Remove from Watchlist
+                  </button>
+                </div>
+              ) : (
+                <AddToWatchlist
+                  anime={anime}
+                  watchlistFormData={watchlistFormData}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  onSubmitWatchlist={onSubmitWatchlist}
+                  handleWatchlistFormChange={handleWatchlistFormChange}
+                  scoreSelectItem={scoreSelectItem}
+                  statusSelectItem={statusSelectItem}
+                  incrementProgress={incrementProgress}
+                />
+              )}
+            </>
           )}
 
           {/* SYNOPSIS */}

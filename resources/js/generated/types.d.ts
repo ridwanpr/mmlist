@@ -135,6 +135,18 @@ declare namespace App {
       readonly createdAt: string | null;
       readonly roleId: string;
     };
+    export type WatchlistData = {
+      readonly anime_id: number;
+      readonly user_id: number;
+      readonly status: string;
+      readonly progress: number;
+      readonly score: number | null;
+      readonly note: string | null;
+      readonly started_at: string | null;
+      readonly completed_at: string | null;
+      readonly created_at: string | null;
+      readonly updated_at: string | null;
+    };
   }
 }
 declare namespace Illuminate {

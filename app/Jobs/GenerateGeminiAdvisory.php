@@ -55,9 +55,11 @@ class GenerateGeminiAdvisory implements ShouldQueue
             try {
                 $advisory = $geminiService->generateAnimeAdvisory($anime->title, $anime->rating);
 
-                $anime->update([
-                    'ai_advisory' => $advisory
-                ]);
+                if ($advisory != "Insufficient data to provide a reliable advisory.") {
+                    $anime->update([
+                        'ai_advisory' => $advisory
+                    ]);
+                }
 
                 $processedCount++;
 

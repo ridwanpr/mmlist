@@ -44,8 +44,7 @@ class HandleInertiaRequests extends Middleware
                 'auth.register' => route('auth.register'),
                 'login' => route('login'),
                 'user.dash.index' => route('user.dash.index'),
-                'watchlist.store' => route('watchlist.store')
-                // 'posts.show' => fn($id) => route('posts.show', $id),
+                'watchlist.store' => route('watchlist.store'),
             ],
             'currentRoute' => optional($request->route())->getName(),
             'auth' => [

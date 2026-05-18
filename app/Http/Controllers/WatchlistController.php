@@ -24,4 +24,11 @@ class WatchlistController extends Controller
         Inertia::flash('success', 'Added to watchlist');
         return back();
     }
+
+    public function destroy(int $wachlistId)
+    {
+        $this->watchlistService->deleteWatchlist($wachlistId);
+
+        return back();
+    }
 }

@@ -40,4 +40,5 @@ Route::middleware('auth')->group(function () {
         ->name('vote.anime.trigger');
 
     Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store');
+    Route::delete('watchlist/{watchlistId}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
 });
