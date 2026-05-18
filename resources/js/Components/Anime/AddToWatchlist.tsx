@@ -28,6 +28,7 @@ type AddToWatchlistProps = {
   ) => void;
   scoreSelectItem: SelectItem[];
   statusSelectItem: SelectItem[];
+  incrementProgress: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const AddToWatchlist = ({
@@ -39,6 +40,7 @@ export const AddToWatchlist = ({
   handleWatchlistFormChange,
   scoreSelectItem,
   statusSelectItem,
+  incrementProgress,
 }: AddToWatchlistProps) => {
   return (
     <div className="mb-6 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
@@ -99,7 +101,11 @@ export const AddToWatchlist = ({
               />
               <div className="absolute right-4 flex items-center gap-1 md:right-10">
                 {anime.episodes && <p>/ {anime.episodes} eps</p>}
-                <button className="border-border rounded-full border p-2">
+                <button
+                  type="button"
+                  className="border-border rounded-full border p-2 hover:cursor-pointer"
+                  onClick={(e) => incrementProgress(e)}
+                >
                   <LuPlus />
                 </button>
               </div>

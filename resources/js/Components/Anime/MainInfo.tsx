@@ -104,6 +104,19 @@ const MainInfo = ({ anime }: MainInfoProps) => {
 
   console.log(watchlistFormData);
 
+  const incrementProgress = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setWatchlistFormData((prev: WatchlistFormData) => {
+      const current = prev.progress === "" ? 0 : Number(prev.progress);
+      const next = current + 1;
+
+      return {
+        ...prev,
+        progress:
+          anime.episodes != null ? Math.min(next, anime.episodes) : next,
+      };
+    });
+  };
+
   const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("a");
@@ -219,6 +232,7 @@ const MainInfo = ({ anime }: MainInfoProps) => {
             handleWatchlistFormChange={handleWatchlistFormChange}
             scoreSelectItem={scoreSelectItem}
             statusSelectItem={statusSelectItem}
+            incrementProgress={incrementProgress}
           />
 
           {/* SYNOPSIS */}
