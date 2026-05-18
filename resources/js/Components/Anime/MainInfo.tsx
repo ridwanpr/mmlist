@@ -4,6 +4,7 @@ import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";
 import { usePage } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";
+import type { WatchlistFormData } from "./AddToWatchlist";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
@@ -90,14 +91,16 @@ const MainInfo = ({ anime }: MainInfoProps) => {
     };
   });
 
-  const [watchlistFormData, setWatchlistFormData] = useState({
-    animeId: anime.mal_id,
-    userId: auth.user?.id || "",
-    status: "planned",
-    progress: 0,
-    score: 1,
-    note: "",
-  });
+  const [watchlistFormData, setWatchlistFormData] = useState<WatchlistFormData>(
+    {
+      animeId: anime.mal_id,
+      userId: auth.user?.id || "",
+      status: "planned",
+      progress: "",
+      score: 1,
+      note: "",
+    },
+  );
 
   console.log(watchlistFormData);
 
@@ -113,21 +116,28 @@ const MainInfo = ({ anime }: MainInfoProps) => {
     const rawValue = e.currentTarget.value;
 
     if (field === "progress" || field === "score") {
-      if (rawValue === "") return;
-      let numValue = Number(e.currentTarget.value);
-      if (isNaN(numValue)) return;
-      if (anime.episodes != null) {
-        if (numValue > anime.episodes) {
-          numValue = anime.episodes;
-        }
-
-        setWatchlistFormData((prev) => ({
+      if (rawValue === "") {
+        setWatchlistFormData((prev: WatchlistFormData) => ({
           ...prev,
-          [field]: numValue,
+          [field]: "",
         }));
-
         return;
       }
+
+      let numValue = Number(rawValue);
+
+      if (isNaN(numValue)) return;
+
+      if (anime.episodes != null && numValue > anime.episodes) {
+        numValue = anime.episodes;
+      }
+
+      setWatchlistFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+      }));
+
+      return;
     }
 
     setWatchlistFormData((prev) => ({

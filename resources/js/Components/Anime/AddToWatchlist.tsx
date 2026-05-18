@@ -7,7 +7,7 @@ export interface WatchlistFormData {
   animeId: number | string;
   userId: number | string;
   status: string;
-  progress: number;
+  progress: number | "";
   score: number;
   note: string;
 }
