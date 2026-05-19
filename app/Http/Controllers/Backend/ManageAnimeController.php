@@ -3,13 +3,27 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Services\AnimeService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ManageAnimeController extends Controller
 {
-    public function index()
+    public function __construct(private AnimeService $animeService) {}
+
+    public function index(): Response
     {
-        return Inertia::render("Backend/Anime/Index");
+        $filter = [];
+        $sort = [];
+        $animes = $this->animeService->fetchAnimes(
+            filter: $filter,
+            sort: $sort,
+            paginateLimit: 15
+        );
+
+        return Inertia::render("Backend/Anime/Index", [
+            'animes' => $animes
+        ]);
     }
 }
