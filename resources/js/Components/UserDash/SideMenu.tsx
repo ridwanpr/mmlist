@@ -2,7 +2,7 @@ import {
   LuBookmark,
   LuCheck,
   LuCog,
-  LuHouse,
+  LuLayoutDashboard,
   LuLogOut,
   LuMessageCircle,
 } from "react-icons/lu";
@@ -23,8 +23,8 @@ const SideMenu = () => {
 
       <SidebarLink href="/dash" routeName="user.dash.index">
         <span className="flex items-center gap-3">
-          <LuHouse size={18} />
-          <span>Dashboard</span>
+          <LuLayoutDashboard size={18} />
+          <span>Overview</span>
         </span>
       </SidebarLink>
 

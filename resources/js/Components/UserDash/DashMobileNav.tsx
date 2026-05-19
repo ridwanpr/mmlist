@@ -13,9 +13,6 @@ const DashMobileNav = () => {
       {/* Profile header */}
       <div className="px-4 pt-5 pb-4">
         <div className="mb-4 flex items-center gap-3">
-          <div className="bg-primary-soft flex h-12 w-12 shrink-0 items-center justify-center rounded-full">
-            <span className="text-primary-dark text-sm font-semibold">YK</span>
-          </div>
           <div>
             <p className="text-text text-base leading-tight font-semibold">
               Yuki K.
@@ -50,7 +47,7 @@ const DashMobileNav = () => {
       {/* Scrollable tab strip */}
       <div className="border-border flex overflow-x-auto border-t [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Link
-          href="#"
+          href="/dash"
           className="border-primary text-primary-dark flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-3 text-xs font-medium"
         >
           <LuLayoutDashboard size={14} strokeWidth={2.5} />
@@ -58,7 +55,7 @@ const DashMobileNav = () => {
         </Link>
 
         <Link
-          href="#"
+          href="/watchlist"
           className="text-text-muted hover:text-text flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
         >
           <LuBookmark size={14} strokeWidth={2} />
