@@ -19,21 +19,17 @@ const BackLayout = ({ children }: BackLayoutProps) => {
     return true;
   });
 
-  const { flash } = usePage();
+  const { flash } = usePage().props as any;
 
   useEffect(() => {
-    if (flash.success) toast.success(flash.success);
-    if (flash.error) toast.error(flash.error);
-    if (flash.warning) toast.warning(flash.warning);
-    if (flash.info) toast.info(flash.info);
+    if (flash?.success) toast.success(flash.success);
+    if (flash?.error) toast.error(flash.error);
+    if (flash?.warning) toast.warning(flash.warning);
+    if (flash?.info) toast.info(flash.info);
   }, [flash]);
 
   const toggleSidebar = () => {
-    if (isSidebarOpen) {
-      setIsSidebarOpen(false);
-    } else {
-      setIsSidebarOpen(true);
-    }
+    setIsSidebarOpen((prev) => !prev);
   };
 
   const closeSidebar = () => {
@@ -41,24 +37,33 @@ const BackLayout = ({ children }: BackLayoutProps) => {
   };
 
   return (
-    <div className="relative flex min-h-screen">
+    <div className="relative flex h-screen overflow-hidden">
       <Toaster position="top-right" richColors closeButton />
-      {/* Mobile sidebar backdrop */}
+
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={closeSidebar}
         />
       )}
 
-      {/* Sidebar */}
       <AdminSidebar isOpen={isSidebarOpen} />
-      {/* Content */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="bg-surface border-border flex items-center justify-between border-b p-4">
-          <div className="hover:cursor-pointer" onClick={toggleSidebar}>
+
+      <div
+        className={`flex min-w-0 flex-1 flex-col transition-[padding] duration-300 ${
+          isSidebarOpen ? "lg:pl-67.5" : "lg:pl-0"
+        }`}
+      >
+        <header className="bg-surface border-border flex shrink-0 items-center justify-between border-b p-4">
+          <button
+            type="button"
+            className="hover:cursor-pointer"
+            onClick={toggleSidebar}
+            aria-label="Toggle sidebar"
+          >
             <LuMenu size={24} />
-          </div>
+          </button>
+
           <div className="flex items-center gap-2">
             <Popover className="relative">
               <PopoverButton className="px-2 font-medium outline-none hover:cursor-pointer">
@@ -66,22 +71,24 @@ const BackLayout = ({ children }: BackLayoutProps) => {
               </PopoverButton>
               <PopoverPanel
                 anchor="bottom start"
-                className="bg-background border-border flex flex-col rounded-lg border p-2 opacity-100 shadow hover:cursor-pointer"
+                className="bg-background border-border flex flex-col rounded-lg border p-2 shadow"
               >
                 <Link
                   href="/logout"
                   method="post"
                   as="button"
-                  className="text-sm font-semibold text-red-500 hover:cursor-pointer"
+                  className="text-sm font-semibold text-red-500"
                 >
                   Logout
                 </Link>
               </PopoverPanel>
             </Popover>
+
             <ThemeToggle />
           </div>
-        </div>
-        <main className="flex-1 p-4">{children}</main>
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-4">{children}</main>
       </div>
     </div>
   );
