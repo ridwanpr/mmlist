@@ -8,7 +8,7 @@ import { index as dashIndex } from "../../actions/App/Http/Controllers/UserDashb
 import { index as adminDashIndex } from "../../actions/App/Http/Controllers/Backend/DashboardController";
 
 const DesktopNav = () => {
-  const { routes, auth } = usePage().props;
+  const { auth } = usePage().props;
   const { component } = usePage();
 
   const isHomeActive = component === "Home/Index";

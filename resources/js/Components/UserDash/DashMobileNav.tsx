@@ -1,13 +1,16 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
   LuBookmark,
-  LuCog,
   LuLayoutDashboard,
   LuMessageCircle,
   LuThumbsUp,
 } from "react-icons/lu";
+import { index as userDashIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
+import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
 
 const DashMobileNav = () => {
+  const { url } = usePage();
+
   return (
     <div className="bg-surface border-border border-b md:hidden">
       {/* Profile header */}
@@ -33,7 +36,7 @@ const DashMobileNav = () => {
             <p className="text-primary-dark text-base leading-none font-bold">
               34
             </p>
-            <p className="text-text-muted mt-1 text-[10px]">Reviews</p>
+            <p className="text-text-muted mt-1 text-[10px]">Comments</p>
           </div>
           <div className="flex-1 py-2.5 text-center">
             <p className="text-primary-dark text-base leading-none font-bold">
@@ -47,16 +50,16 @@ const DashMobileNav = () => {
       {/* Scrollable tab strip */}
       <div className="border-border flex overflow-x-auto border-t [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Link
-          href="/dash"
-          className="border-primary text-primary-dark flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-3 text-xs font-medium"
+          href={userDashIndex.url()}
+          className={`${url.startsWith(userDashIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium`}
         >
           <LuLayoutDashboard size={14} strokeWidth={2.5} />
           Overview
         </Link>
 
         <Link
-          href="/watchlist"
-          className="text-text-muted hover:text-text flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
+          href={watchlistIndex.url()}
+          className={`${url.startsWith(watchlistIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
           <LuBookmark size={14} strokeWidth={2} />
           Watchlist
@@ -64,15 +67,7 @@ const DashMobileNav = () => {
 
         <Link
           href="#"
-          className="text-text-muted hover:text-text flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
-        >
-          <LuMessageCircle size={14} strokeWidth={2} />
-          Comments
-        </Link>
-
-        <Link
-          href="#"
-          className="text-text-muted hover:text-text flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
+          className="text-text-muted flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
         >
           <LuThumbsUp size={14} strokeWidth={2} />
           Votes
@@ -80,10 +75,10 @@ const DashMobileNav = () => {
 
         <Link
           href="#"
-          className="text-text-muted hover:text-text flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
+          className="text-text-muted flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
         >
-          <LuCog size={14} strokeWidth={2} />
-          Settings
+          <LuMessageCircle size={14} strokeWidth={2} />
+          Comments
         </Link>
       </div>
     </div>
