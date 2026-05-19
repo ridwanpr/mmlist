@@ -29,29 +29,25 @@ class AnimeService
             $rawTerm = trim($filter['query']);
             $booleanTerm = $this->buildBooleanSearch($rawTerm);
 
-            $q->where(function ($subQuery) use ($rawTerm, $booleanTerm) {
-                if ($booleanTerm !== null) {
-                    $subQuery->whereRaw(
-                        'MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE)',
-                        [$booleanTerm]
-                    );
-                } else {
-                    $subQuery->where('title', 'like', '%'.$rawTerm.'%')
-                        ->orWhere('title_english', 'like', '%'.$rawTerm.'%')
-                        ->orWhere('title_japanese', 'like', '%'.$rawTerm.'%');
-                }
-
-                $subQuery->orWhereJsonContains('title_synonyms', $rawTerm)
-                    ->orWhere('title_synonyms', 'like', '%'.$rawTerm.'%');
-            });
-
             if ($booleanTerm !== null) {
-                $q->select('*')
+                $q->whereRaw(
+                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
+                    [$booleanTerm]
+                );
+
+                $q->select('animes.*')
                     ->selectRaw(
-                        'MATCH(title, title_english, title_japanese) AGAINST (? IN BOOLEAN MODE) AS relevance',
+                        'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE) AS relevance',
                         [$booleanTerm]
                     )
                     ->orderByDesc('relevance');
+            } else {
+                $q->where(function ($subQuery) use ($rawTerm) {
+                    $subQuery->where('title', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('title_english', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('title_japanese', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                });
             }
         });
 
@@ -89,7 +85,7 @@ class AnimeService
 
         $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-            $q->orderBy('animes.'.$sort['sort'], $direction);
+            $q->orderBy('animes.' . $sort['sort'], $direction);
         }, function ($q) {
             $q->orderByRaw("animes.type = 'TV' DESC")
                 ->orderBy('animes.year', 'desc')
@@ -102,7 +98,7 @@ class AnimeService
             ->onEachSide(1)
             ->withQueryString();
 
-        $transformed = $paginator->through(fn (Anime $item): AnimeData => AnimeData::fromModel($item));
+        $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
 
         return PaginatedAnimeData::fromPaginator($transformed);
     }
@@ -121,7 +117,7 @@ class AnimeService
             ->limit($limit)
             ->get();
 
-        return $animeFromDb->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
+        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     /**
@@ -141,7 +137,7 @@ class AnimeService
             ->limit($limit)
             ->get();
 
-        return $animeFromDb->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
+        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     public function getAnimeInfo(string $slug): Anime
@@ -165,7 +161,7 @@ class AnimeService
         ])
             ->orderBy('importance', 'desc')->get();
 
-        return $triggersFromDb->map(fn (MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+        return $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
     }
 
     /**
@@ -198,6 +194,6 @@ class AnimeService
             return null;
         }
 
-        return implode(' ', array_map(static fn ($token) => '+'.$token.'*', $tokens));
+        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
     }
 }

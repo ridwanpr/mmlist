@@ -146,6 +146,17 @@ class Anime extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        static::saving(function (Anime $anime) {
+            if (is_array($anime->title_synonyms)) {
+                $anime->title_synonyms_text = implode(' ', $anime->title_synonyms);
+            } else {
+                $anime->title_synonyms_text = null;
+            }
+        });
+    }
+
     /**
      * @return BelongsToMany<Demographic, $this, AnimeDemographic>
      */
