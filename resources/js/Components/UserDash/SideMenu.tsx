@@ -33,7 +33,7 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="watchlist.index">
+      <SidebarLink href="/watchlist" routeName="watchlist.index">
         <span className="flex items-center gap-3">
           <LuBookmark size={18} />
           <span>Watchlist</span>

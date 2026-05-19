@@ -7,6 +7,7 @@ use App\Http\Requests\StoreWatchlistRequest;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WatchlistController extends Controller
 {
@@ -29,5 +30,10 @@ class WatchlistController extends Controller
         $this->watchlistService->deleteWatchlist($wachlistId);
 
         return back();
+    }
+
+    public function index(): Response
+    {
+        return Inertia::render('Watchlist/Index');
     }
 }
