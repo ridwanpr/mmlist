@@ -1,5 +1,4 @@
 import type React from "react";
-
 import BackLayout from "../../../Layouts/BackLayout";
 import {
   useReactTable,
@@ -7,7 +6,8 @@ import {
   type ColumnDef,
   flexRender,
 } from "@tanstack/react-table";
-import { router } from "@inertiajs/react";
+import { router, Link } from "@inertiajs/react";
+import { LuPencil, LuTrash } from "react-icons/lu";
 
 type ManageAnimeProps = {
   animes: App.DTOs.PaginatedAnimeData;
@@ -19,6 +19,24 @@ const columns: ColumnDef<App.DTOs.AnimeData>[] = [
   { accessorKey: "source", header: "Source" },
   { accessorKey: "year", header: "Year" },
   { accessorKey: "season", header: "Season" },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const anime = row.original;
+
+      return (
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/anime"
+            className="bg-primary hover:bg-primary rounded px-3 py-1.5 text-sm text-surface transition-colors"
+          >
+            <LuPencil />
+          </Link>
+        </div>
+      );
+    },
+  },
 ];
 
 const ManageAnime = ({ animes }: ManageAnimeProps) => {
