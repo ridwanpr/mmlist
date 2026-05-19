@@ -1,5 +1,8 @@
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { FiSearch } from "react-icons/fi";
+import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
+import type React from "react";
+import { useState } from "react";
 
 const trending = [
   "Frieren",
@@ -37,6 +40,19 @@ const covers = [
 ];
 
 const Hero = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.get(
+      browseIndex.url({
+        query: {
+          query: searchQuery,
+        },
+      }),
+    );
+  };
+
   return (
     <section className="border-border bg-surface overflow-hidden border-b">
       <div className="mx-auto max-w-7xl px-4">
@@ -53,19 +69,21 @@ const Hero = () => {
               watching.
             </p>
 
-            <form className="mt-5 max-w-xl">
+            <form onSubmit={(e) => handleSearch(e)} className="mt-5 max-w-xl">
               <div className="bg-surface ring-border focus-within:ring-primary/30 relative overflow-hidden rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.06)] ring-1 transition focus-within:ring-2">
                 <FiSearch className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-[#72776d]" />
 
                 <input
                   type="text"
-                  placeholder="Search anime..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search anime title..."
                   className="text-text h-12 w-full bg-transparent pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
                 />
 
                 <button
                   type="submit"
-                  className="bg-primary text-surface hover:bg-primary-dark absolute top-1.5 right-1.5 h-9 rounded-lg px-4 text-sm font-semibold transition"
+                  className="bg-primary text-surface hover:bg-primary-dark absolute top-1.5 right-1.5 h-9 rounded-lg px-4 text-sm font-semibold transition hover:cursor-pointer"
                 >
                   Search
                 </button>

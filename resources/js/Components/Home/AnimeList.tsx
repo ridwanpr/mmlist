@@ -1,4 +1,5 @@
 import { LuFlame, LuRadio } from "react-icons/lu";
+import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
 
 import AnimeCard from "../UI/AnimeCard";
 import SectionHeader from "./SectionHeader";
@@ -12,7 +13,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
   return (
     <div className="mx-auto max-w-7xl p-4 lg:py-8">
       <SectionHeader
-        href="/browse?airing=true"
+        href={browseIndex.url({ query: { airing: "true" } })}
         title="Now Airing"
         icon={<LuRadio size="32px" className="text-primary" />}
       />
@@ -27,7 +28,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       </section>
 
       <SectionHeader
-        href="/browse?sort=score&order=desc"
+        href={browseIndex.url({ query: { sort: "score", order: "desc" } })}
         title="Top Anime"
         icon={<LuFlame size="32px" className="text-primary" />}
       />
