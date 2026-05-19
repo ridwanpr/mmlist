@@ -1,5 +1,11 @@
 import { Link, usePage } from "@inertiajs/react";
 import ThemeToggle from "./ThemeToggle";
+import { index as homeIndex } from "../../actions/App/Http/Controllers/HomeController";
+import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
+import { login } from "../../actions/App/Http/Controllers/AuthController";
+import { register } from "../../actions/App/Http/Controllers/AuthController";
+import { index as dashIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
+import { index as adminDashIndex } from "../../actions/App/Http/Controllers/Backend/DashboardController";
 
 const DesktopNav = () => {
   const { routes, auth } = usePage().props;
@@ -13,7 +19,7 @@ const DesktopNav = () => {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link
-          href={routes["home.index"]}
+          href={homeIndex.url()}
           className="text-primary font-serif text-2xl font-bold tracking-wider transition-opacity hover:opacity-90"
         >
           Mamorulist
@@ -24,7 +30,7 @@ const DesktopNav = () => {
           <ul className="flex h-full items-center gap-8">
             <li className="relative flex h-full items-center">
               <Link
-                href={routes["home.index"]}
+                href={homeIndex.url()}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isHomeActive
                     ? "text-accent-gold"
@@ -39,7 +45,7 @@ const DesktopNav = () => {
             </li>
             <li className="relative flex h-full items-center">
               <Link
-                href={routes["browse.index"]}
+                href={browseIndex.url()}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isBrowseActive
                     ? "text-accent-gold"
@@ -61,13 +67,13 @@ const DesktopNav = () => {
             {!auth.user ? (
               <>
                 <Link
-                  href={routes["login"]}
+                  href={login.url()}
                   className="text-text-muted hover:text-text text-sm font-medium transition-colors duration-200"
                 >
                   Login
                 </Link>
                 <Link
-                  href={routes["auth.register"]}
+                  href={register.url()}
                   className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
                 >
                   Register
@@ -77,8 +83,8 @@ const DesktopNav = () => {
               <Link
                 href={
                   auth.user.role_id === "user"
-                    ? routes["user.dash.index"]
-                    : routes["dashboard.index"]
+                    ? dashIndex.url()
+                    : adminDashIndex.url()
                 }
                 className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
               >
