@@ -42,4 +42,12 @@ class WatchlistService
     {
         Watchlist::where('id', $watchlistId)->delete();
     }
+
+    public function getUserWatchlist(int $paginateLimit = 10, int $userId)
+    {
+        $data = Watchlist::where('user_id', $userId)
+            ->paginate($paginateLimit);
+
+        // $watchlistDto = $data->
+    }
 }

@@ -6,7 +6,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-readonly class PaginatedAnimeData
+readonly class PaginatedData
 {
     /**
      * @param  array<int, AnimeData>  $data

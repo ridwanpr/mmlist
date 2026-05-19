@@ -64,7 +64,7 @@ declare namespace App {
       readonly username: string;
       readonly password: string;
     };
-    export type PaginatedAnimeData = {
+    export type PaginatedData = {
       readonly data: App.DTOs.AnimeData[];
       readonly current_page: number;
       readonly last_page: number;

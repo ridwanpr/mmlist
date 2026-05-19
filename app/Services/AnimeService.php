@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AnimeData;
-use App\DTOs\PaginatedAnimeData;
+use App\DTOs\PaginatedData;
 use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\MasterTrigger;
@@ -21,8 +21,8 @@ class AnimeService
         array $filter,
         array $sort,
         int $paginateLimit = 15
-    ): PaginatedAnimeData {
-        $query = Anime::with(['genres', 'animeTriggers.triggerContent'])
+    ): PaginatedData {
+        $query = Anime::query()
             ->where('animes.rating', '!=', 'Rx - Hentai');
 
         $query->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
@@ -35,7 +35,7 @@ class AnimeService
                     [$booleanTerm]
                 );
 
-                $q->select('animes.*')
+                $q->select('animes.id')
                     ->selectRaw(
                         'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE) AS relevance',
                         [$booleanTerm]
@@ -50,6 +50,11 @@ class AnimeService
                 });
             }
         });
+
+        // Force the base query to only select IDs if the search didn't already
+        if (empty($filter['query']) || $this->buildBooleanSearch(trim($filter['query'])) === null) {
+            $query->select('animes.id');
+        }
 
         $query->when(array_key_exists('airing', $filter) && ! is_null($filter['airing']), function ($q) use ($filter) {
             $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now()->year);
@@ -98,9 +103,24 @@ class AnimeService
             ->onEachSide(1)
             ->withQueryString();
 
+        // Deferred Join: Hydrate the heavy models only for the current page
+        if ($paginator->isNotEmpty()) {
+            $ids = $paginator->pluck('id')->toArray();
+
+            // Fetch the full data and eager load relationships for these 24 IDs
+            $models = Anime::with(['genres', 'animeTriggers.triggerContent'])
+                ->whereIn('id', $ids)
+                ->get()
+                ->keyBy('id'); // Index by ID for easy lookup
+
+            // Replace the bare IDs in the paginator with the fully loaded models, preserving the sorted order
+            $sortedModels = collect($ids)->map(fn($id) => $models[$id]);
+            $paginator->setCollection($sortedModels);
+        }
+
         $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
 
-        return PaginatedAnimeData::fromPaginator($transformed);
+        return PaginatedData::fromPaginator($transformed);
     }
 
     /**
@@ -108,16 +128,25 @@ class AnimeService
      */
     public function fetchTopAnime(int $limit = 8): array
     {
-        $animeFromDb = Anime::with(['genres', 'animeTriggers.triggerContent'])
+        $topIds = Anime::query()
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderByRaw("animes.type = 'TV' DESC")
             ->orderBy('animes.score', 'desc')
             ->orderBy('animes.year', 'desc')
             ->orderBy('animes.airing', 'desc')
             ->limit($limit)
-            ->get();
+            ->pluck('id');
 
-        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        if ($topIds->isEmpty()) {
+            return [];
+        }
+
+        $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
+            ->whereIn('id', $topIds)
+            ->get()
+            ->keyBy('id');
+
+        return $topIds->map(fn($id) => AnimeData::fromModel($animes[$id]))->values()->all();
     }
 
     /**
@@ -125,9 +154,9 @@ class AnimeService
      */
     public function getNowAiringFromDatabase(int $limit = 12): array
     {
-        $animeFromDb = Anime::with(['genres', 'animeTriggers.triggerContent'])
+        $airingIds = Anime::query()
             ->where('airing', true)
-            ->where('year', now('Y'))
+            ->where('year', now()->year)
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderByRaw("animes.type = 'TV' DESC")
             ->orderBy('animes.year', 'desc')
@@ -135,9 +164,18 @@ class AnimeService
             ->orderBy('animes.score', 'desc')
             ->orderBy('score', 'desc')
             ->limit($limit)
-            ->get();
+            ->pluck('id');
 
-        return $animeFromDb->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        if ($airingIds->isEmpty()) {
+            return [];
+        }
+
+        $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
+            ->whereIn('id', $airingIds)
+            ->get()
+            ->keyBy('id');
+
+        return $animes->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     public function getAnimeInfo(string $slug): Anime

@@ -196,7 +196,7 @@ const SearchSection = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             className="border-border focus:ring-primary/50 w-full rounded-lg border-2 p-3 focus:ring-2 focus:outline-none"
-            placeholder="Search anime..."
+            placeholder="Search anime title..."
           />
           <button
             onClick={() => setShowFilters(!showFilters)}
