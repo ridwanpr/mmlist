@@ -13,11 +13,6 @@ const SideMenu = () => {
   return (
     <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex">
       <div className="mb-5 flex items-center gap-4">
-        <img
-          src="https://placehold.co/400x400"
-          alt=""
-          className="h-14 w-14 shrink-0 rounded-full object-cover"
-        />
         <div className="min-w-0">
           <p className="text-text truncate text-sm font-medium">
             Lorem ipsum dolor sit amet.
@@ -26,7 +21,7 @@ const SideMenu = () => {
         </div>
       </div>
 
-      <SidebarLink href="#" routeName="user.dash.index">
+      <SidebarLink href="/dash" routeName="user.dash.index">
         <span className="flex items-center gap-3">
           <LuHouse size={18} />
           <span>Dashboard</span>
@@ -40,21 +35,21 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="watchlist.index">
+      <SidebarLink href="#" routeName="#">
         <span className="flex items-center gap-3">
           <LuMessageCircle size={18} />
           <span>Comments</span>
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="watchlist.index">
+      <SidebarLink href="#" routeName="#">
         <span className="flex items-center gap-3">
           <LuCheck size={18} />
           <span>My Votes</span>
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="watchlist.index">
+      <SidebarLink href="#" routeName="#">
         <span className="flex items-center gap-3">
           <LuCog size={18} />
           <span>Settings</span>
@@ -80,7 +75,7 @@ const SideMenu = () => {
       </div>
 
       <div className="mt-5">
-        <SidebarLink href="/logout" method="post" routeName="watchlist.index">
+        <SidebarLink href="/logout" method="post" routeName="auth.logout">
           <span className="flex items-center gap-3">
             <LuLogOut size={18} />
             <span>Logout</span>

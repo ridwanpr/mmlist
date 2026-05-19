@@ -1,10 +1,11 @@
+import DashContainer from "../../Components/UserDash/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 const Watchlist = () => {
   return (
-    <div>
+    <DashContainer>
       <h1>Watchlist</h1>
-    </div>
+    </DashContainer>
   );
 };
 
