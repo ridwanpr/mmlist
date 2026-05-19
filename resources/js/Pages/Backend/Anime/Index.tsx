@@ -7,6 +7,7 @@ import {
   type ColumnDef,
   flexRender,
 } from "@tanstack/react-table";
+import { router } from "@inertiajs/react";
 
 type ManageAnimeProps = {
   animes: App.DTOs.PaginatedAnimeData;
@@ -30,6 +31,12 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
     rowCount: animes.total,
   });
 
+  const handlePagination = (url: string | null) => {
+    if (!url) return;
+
+    router.get(url, {}, { preserveState: true });
+  };
+
   return (
     <div>
       <div className="mb-4">
@@ -37,7 +44,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
       </div>
       <div className="bg-surface w-full overflow-hidden rounded-lg">
         <table className="w-full border-collapse">
-          <thead className="bg-surface">
+          <thead className="bg-surface-alt">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -51,7 +58,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
               </tr>
             ))}
           </thead>
-          <tbody className="bg-surface-alt">
+          <tbody className="bg-surface">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -66,6 +73,22 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
             ))}
           </tbody>
         </table>
+
+        <div className="mt-4 flex justify-end gap-2 px-4 pb-4">
+          {animes.links.map((link, idx) => (
+            <button
+              key={idx}
+              disabled={!link.url}
+              onClick={() => handlePagination(link.url)}
+              className={`rounded border px-3 py-1.5 text-sm transition-colors hover:cursor-pointer ${
+                link.active
+                  ? "border-border bg-surface-alt text-text"
+                  : "bg-surface hover:bg-surface-alt border-border text-text"
+              } ${!link.url ? "cursor-not-allowed opacity-40" : ""}`}
+              dangerouslySetInnerHTML={{ __html: link.label }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
