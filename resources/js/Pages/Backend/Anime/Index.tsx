@@ -162,7 +162,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
                 key={idx}
                 disabled={!link.url}
                 onClick={() => handlePagination(link.url)}
-                className={`min-w-[2rem] rounded-md border px-2.5 py-1 text-xs font-medium transition-colors hover:cursor-pointer ${
+                className={`min-w-8 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors hover:cursor-pointer ${
                   link.active
                     ? "border-primary bg-primary text-surface"
                     : "border-border bg-surface text-text-muted hover:bg-surface-alt hover:text-text"
