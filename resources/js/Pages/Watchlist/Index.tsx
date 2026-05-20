@@ -1,8 +1,11 @@
 import type React from "react";
 import DashContainer from "../../Components/UserDash/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
+import { useState } from "react";
 
 const Watchlist = () => {
+  const [activeTab, setActiveTab] = useState("watching");
+
   return (
     <DashContainer>
       <div className="mb-6">
@@ -15,32 +18,62 @@ const Watchlist = () => {
         id="watchlist-tab"
         className="border-border flex gap-4 border-b pb-2"
       >
-        <div className="border-primary -mb-2 flex items-center gap-1 border-b px-4 pb-2.5">
-          <p className="text-text text-sm leading-relaxed tracking-wide">
+        <div
+          id="watching"
+          onClick={() => setActiveTab("watching")}
+          className={`${activeTab === "watching" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
+        >
+          <p
+            className={`${activeTab === "watching" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          >
             Watching
           </p>
           <span className="text-text-muted text-xs">8</span>
         </div>
-        <div className="-mb-2 flex items-center gap-1 px-4 pb-2.5">
-          <p className="text-text-muted text-sm leading-relaxed tracking-wide">
+        <div
+          id="completed"
+          onClick={() => setActiveTab("completed")}
+          className={`${activeTab === "completed" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
+        >
+          <p
+            className={`${activeTab === "completed" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          >
             Completed
           </p>
           <span className="text-text-muted text-xs">124</span>
         </div>
-        <div className="-mb-2 flex items-center gap-1 px-4 pb-2.5">
-          <p className="text-text-muted text-sm leading-relaxed tracking-wide">
+        <div
+          id="planned"
+          onClick={() => setActiveTab("planned")}
+          className={`${activeTab === "planned" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
+        >
+          <p
+            className={`${activeTab === "planned" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          >
             Plan to Watch
           </p>
           <span className="text-text-muted text-xs">7</span>
         </div>
-        <div className="-mb-2 flex items-center gap-1 px-4 pb-2.5">
-          <p className="text-text-muted text-sm leading-relaxed tracking-wide">
+        <div
+          id="on_hold"
+          onClick={() => setActiveTab("on_hold")}
+          className={`${activeTab === "on_hold" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
+        >
+          <p
+            className={`${activeTab === "on_hold" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          >
             On Hold
           </p>
           <span className="text-text-muted text-xs">2</span>
         </div>
-        <div className="-mb-2 flex items-center gap-1 px-4 pb-2.5">
-          <p className="text-text-muted text-sm leading-relaxed tracking-wide">
+        <div
+          id="dropped"
+          onClick={() => setActiveTab("dropped")}
+          className={`${activeTab === "dropped" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
+        >
+          <p
+            className={`${activeTab === "dropped" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          >
             Dropped
           </p>
           <span className="text-text-muted text-xs">4</span>
