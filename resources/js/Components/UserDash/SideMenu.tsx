@@ -1,3 +1,4 @@
+import { usePage } from "@inertiajs/react";
 import {
   LuBookmark,
   LuCheck,
@@ -10,14 +11,18 @@ import {
 import SidebarLink from "../UI/SidebarLink";
 
 const SideMenu = () => {
+  const { auth } = usePage().props;
+
+  const votesCount = auth?.user?.votes_count ?? 0;
+  const userName = auth?.user?.name || "Guest User";
+  const joinedAt = auth?.user?.joined_at || "Recent";
+
   return (
     <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex">
       <div className="mb-5 flex items-center gap-4">
         <div className="min-w-0">
-          <p className="text-text truncate text-sm font-medium">
-            Lorem ipsum dolor sit amet.
-          </p>
-          <p className="text-text-muted text-xs">Joined 7 May 2026</p>
+          <p className="text-text truncate font-medium">{userName}</p>
+          <p className="text-text-muted text-xs">Joined {joinedAt}</p>
         </div>
       </div>
 
@@ -65,7 +70,7 @@ const SideMenu = () => {
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div>
             <p className="text-text-muted text-xs">Votes Submitted</p>
-            <p className="text-text text-lg font-semibold">127</p>
+            <p className="text-text text-lg font-semibold">{votesCount}</p>
           </div>
           <div>
             <p className="text-text-muted text-xs">Reviews Written</p>

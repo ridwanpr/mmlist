@@ -19,6 +19,8 @@ declare module "@inertiajs/core" {
           name: string;
           username: string;
           role_id: string;
+          votes_count: number;
+          joined_at: string;
         } | null;
       };
     };

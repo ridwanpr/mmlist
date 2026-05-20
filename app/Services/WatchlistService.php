@@ -87,4 +87,9 @@ class WatchlistService
             'dropped' => $counts['dropped'] ?? 0,
         ];
     }
+
+    public function getTotalVoteCount(int $userId): int
+    {
+        return Watchlist::where('user_id', $userId)->count();
+    }
 }
