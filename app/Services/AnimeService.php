@@ -88,6 +88,10 @@ class AnimeService
             $q->whereIn('animes.type', (array) $filter['types']);
         });
 
+        $query->when(! empty($filter['rating']), function ($q) use ($filter) {
+            $q->whereIn('animes.rating', (array) $filter['rating']);
+        });
+
         $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
             $q->orderBy('animes.' . $sort['sort'], $direction);
@@ -223,10 +227,47 @@ class AnimeService
 
         $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
         $stopwords = [
-            'a', 'an', 'as', 'at', 'in', 'is', 'it', 'of', 'on', 'or', 'to', 
-            'am', 'be', 'by', 'do', 'he', 'if', 'me', 'my', 'no', 'so', 'up', 'us', 'we', 'i',
-            'and', 'the', 'for', 'with', 'about', 'are', 'from', 'how', 'that', 
-            'this', 'was', 'what', 'when', 'where', 'who', 'will'
+            'a',
+            'an',
+            'as',
+            'at',
+            'in',
+            'is',
+            'it',
+            'of',
+            'on',
+            'or',
+            'to',
+            'am',
+            'be',
+            'by',
+            'do',
+            'he',
+            'if',
+            'me',
+            'my',
+            'no',
+            'so',
+            'up',
+            'us',
+            'we',
+            'i',
+            'and',
+            'the',
+            'for',
+            'with',
+            'about',
+            'are',
+            'from',
+            'how',
+            'that',
+            'this',
+            'was',
+            'what',
+            'when',
+            'where',
+            'who',
+            'will'
         ];
 
         $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
