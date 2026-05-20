@@ -143,7 +143,8 @@ const Hero = () => {
                   src={cover.image}
                   alt={cover.title}
                   className="aspect-2/3 w-full object-cover"
-                  loading="lazy"
+                  fetchPriority="high"
+                  loading="eager"
                 />
               </div>
             ))}
