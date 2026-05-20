@@ -7,6 +7,7 @@ use App\Http\Requests\StoreWatchlistRequest;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,22 +34,29 @@ class WatchlistController extends Controller
         return back();
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $user = Auth::user();
         if (! $user) {
             abort(401);
         }
 
+        $status = $request->query('status', 'watching');
+
         $watchlists = $this->watchlistService->getUserWatchlist(
             paginateLimit: 12,
-            userId: $user->id
+            userId: $user->id,
+            status: $status
         );
+
+        $tabCounts = $this->watchlistService->getTabCounts($user->id);
 
         return Inertia::render(
             'Watchlist/Index',
             [
-                "watchlists" => $watchlists
+                "watchlists" => $watchlists,
+                "status" => $status,
+                "tabCounts" => $tabCounts
             ]
         );
     }

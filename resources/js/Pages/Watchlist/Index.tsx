@@ -1,17 +1,36 @@
 import type React from "react";
+import { router } from "@inertiajs/react";
 import DashContainer from "../../Components/UserDash/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
-import { useState } from "react";
 import WatchlistTab from "../../Components/Watchlist/WatchlistTab";
 import { useImageProxy } from "../../utils/image-proxy";
+import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
+  status: string;
+  tabCounts: {
+    watching: number;
+    completed: number;
+    planned: number;
+    on_hold: number;
+    dropped: number;
+  };
 };
 
-const Watchlist = ({ watchlists }: WatchlistPropsType) => {
+const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   const { proxyImage } = useImageProxy();
-  const [activeTab, setActiveTab] = useState("watching");
+  const activeTab = status || "watching";
+
+  const handleChangeTab = (tab: string) => {
+    router.get(
+      watchlistIndex.url({
+        query: {
+          status: tab,
+        },
+      }),
+    );
+  };
 
   return (
     <DashContainer>
@@ -20,12 +39,24 @@ const Watchlist = ({ watchlists }: WatchlistPropsType) => {
           <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
             Watchlist
           </h1>
-          <p className="text-text-muted text-sm">27 titles</p>
+          {/* Use the total from all tabs combined for the overall count if desired */}
+          <p className="text-text-muted text-sm">
+            {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
+          </p>
         </div>
 
-        <WatchlistTab activeTab={activeTab} setActiveTab={setActiveTab} />
+        <WatchlistTab
+          activeTab={activeTab}
+          handleChangeTab={handleChangeTab}
+          tabCounts={tabCounts}
+        />
+
         <div className="mt-4">
-          <p className="text-text-muted mb-4 text-xs">4 Titles</p>
+          {/* Display the count of titles matching the active tab */}
+          <p className="text-text-muted mb-4 text-xs">
+            {watchlists?.total} Titles
+          </p>
+
           {/*Anime List*/}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {watchlists?.data.map((watchlist) => (
@@ -55,7 +86,9 @@ const Watchlist = ({ watchlists }: WatchlistPropsType) => {
                     <div className="flex items-center gap-2 text-xs">
                       <span className="text-text-muted">
                         Ep{" "}
-                        <strong className="text-text font-semibold">14</strong>
+                        <strong className="text-text font-semibold">
+                          {watchlist.progress}
+                        </strong>
                         {watchlist.episodes && ` / ${watchlist.episodes}`}
                       </span>
                       <button className="text-primary hover:text-primary-dark font-medium transition-colors">

@@ -1,12 +1,20 @@
-import type { SetStateAction } from "react";
-import type React from "react";
-
 type WatchlistTabProps = {
   activeTab: string;
-  setActiveTab: React.Dispatch<SetStateAction<string>>;
+  handleChangeTab: (tab: string) => void;
+  tabCounts: {
+    watching: number;
+    completed: number;
+    planned: number;
+    on_hold: number;
+    dropped: number;
+  };
 };
 
-const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
+const WatchlistTab = ({
+  activeTab,
+  handleChangeTab,
+  tabCounts,
+}: WatchlistTabProps) => {
   return (
     <div
       id="watchlist-tab"
@@ -14,7 +22,7 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
     >
       <div
         id="watching"
-        onClick={() => setActiveTab("watching")}
+        onClick={() => handleChangeTab("watching")}
         className={`${activeTab === "watching" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
       >
         <p
@@ -22,11 +30,12 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
         >
           Watching
         </p>
-        <span className="text-text-muted text-xs">8</span>
+        <span className="text-text-muted text-xs">{tabCounts.watching}</span>
       </div>
+
       <div
         id="completed"
-        onClick={() => setActiveTab("completed")}
+        onClick={() => handleChangeTab("completed")}
         className={`${activeTab === "completed" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
       >
         <p
@@ -34,11 +43,12 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
         >
           Completed
         </p>
-        <span className="text-text-muted text-xs">124</span>
+        <span className="text-text-muted text-xs">{tabCounts.completed}</span>
       </div>
+
       <div
         id="planned"
-        onClick={() => setActiveTab("planned")}
+        onClick={() => handleChangeTab("planned")}
         className={`${activeTab === "planned" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
       >
         <p
@@ -46,11 +56,12 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
         >
           Plan to Watch
         </p>
-        <span className="text-text-muted text-xs">7</span>
+        <span className="text-text-muted text-xs">{tabCounts.planned}</span>
       </div>
+
       <div
         id="on_hold"
-        onClick={() => setActiveTab("on_hold")}
+        onClick={() => handleChangeTab("on_hold")}
         className={`${activeTab === "on_hold" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
       >
         <p
@@ -58,11 +69,12 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
         >
           On Hold
         </p>
-        <span className="text-text-muted text-xs">2</span>
+        <span className="text-text-muted text-xs">{tabCounts.on_hold}</span>
       </div>
+
       <div
         id="dropped"
-        onClick={() => setActiveTab("dropped")}
+        onClick={() => handleChangeTab("dropped")}
         className={`${activeTab === "dropped" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-4 pb-2.5 hover:cursor-pointer`}
       >
         <p
@@ -70,7 +82,7 @@ const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
         >
           Dropped
         </p>
-        <span className="text-text-muted text-xs">4</span>
+        <span className="text-text-muted text-xs">{tabCounts.dropped}</span>
       </div>
     </div>
   );

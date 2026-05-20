@@ -8,6 +8,7 @@ use App\DTOs\WatchlistData;
 use App\Models\Anime;
 use App\Models\Watchlist;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class WatchlistService
 {
@@ -46,9 +47,9 @@ class WatchlistService
         Watchlist::where('id', $watchlistId)->delete();
     }
 
-    public function getUserWatchlist(int $paginateLimit, int $userId): PaginatedWatchlistData
+    public function getUserWatchlist(int $paginateLimit, int $userId, ?string $status = null): PaginatedWatchlistData
     {
-        $paginator = Watchlist::where('user_id', $userId)
+        $query = Watchlist::where('user_id', $userId)
             ->join('animes', 'animes.id', 'watchlists.anime_id')
             ->select(
                 'watchlists.*',
@@ -57,13 +58,35 @@ class WatchlistService
                 'animes.episodes',
                 'animes.images',
                 'animes.year'
-            )
-            ->paginate($paginateLimit);
+            );
+
+        if ($status) {
+            $query->where('watchlists.status', $status);
+        }
+
+        $paginator = $query->paginate($paginateLimit);
 
         // Use through() to map internal items without losing pagination metadata
         $paginator->through(fn($item) => WatchlistData::fromModel($item));
 
         // Wrap the transformed paginator inside your DTO
         return PaginatedWatchlistData::fromPaginator($paginator);
+    }
+
+    public function getTabCounts(int $userId): array
+    {
+        $counts = Watchlist::where('user_id', $userId)
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
+        return [
+            'watching' => $counts['watching'] ?? 0,
+            'completed' => $counts['completed'] ?? 0,
+            'planned' => $counts['planned'] ?? 0,
+            'on_hold' => $counts['on_hold'] ?? 0,
+            'dropped' => $counts['dropped'] ?? 0,
+        ];
     }
 }
