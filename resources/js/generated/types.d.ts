@@ -64,8 +64,22 @@ declare namespace App {
       readonly username: string;
       readonly password: string;
     };
-    export type PaginatedData = {
+    export type PaginatedAnimeData = {
       readonly data: App.DTOs.AnimeData[];
+      readonly current_page: number;
+      readonly last_page: number;
+      readonly per_page: number;
+      readonly total: number;
+      readonly next_page_url: string | null;
+      readonly prev_page_url: string | null;
+      readonly links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+      }[];
+    };
+    export type PaginatedWatchlistData = {
+      readonly data: App.DTOs.WatchlistData[];
       readonly current_page: number;
       readonly last_page: number;
       readonly per_page: number;
@@ -147,6 +161,11 @@ declare namespace App {
       readonly completed_at: string | null;
       readonly created_at: string | null;
       readonly updated_at: string | null;
+      readonly title: string | null;
+      readonly year: string | null;
+      readonly type: string | null;
+      readonly episodes: string | null;
+      readonly images: Record<string, any>;
     };
   }
 }

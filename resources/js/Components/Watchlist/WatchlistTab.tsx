@@ -8,7 +8,10 @@ type WatchlistTabProps = {
 
 const WatchlistTab = ({ activeTab, setActiveTab }: WatchlistTabProps) => {
   return (
-    <div id="watchlist-tab" className="border-border flex gap-4 border-b pb-2">
+    <div
+      id="watchlist-tab"
+      className="border-border flex gap-4 overflow-x-scroll border-b pb-2 lg:overflow-hidden"
+    >
       <div
         id="watching"
         onClick={() => setActiveTab("watching")}

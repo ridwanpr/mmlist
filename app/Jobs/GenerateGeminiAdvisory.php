@@ -55,7 +55,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
             try {
                 $advisory = $geminiService->generateAnimeAdvisory($anime->title, $anime->rating);
 
-                if ($advisory != 'Insufficient data to provide a reliable advisory.') {
+                if ($advisory != 'Not yet available.') {
                     $anime->update([
                         'ai_advisory' => $advisory,
                     ]);
@@ -67,7 +67,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
             } catch (\Exception $e) {
                 Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: ".$e->getMessage());
                 $anime->update([
-                    'ai_advisory' => 'AI Advisory not yet generated',
+                    'ai_advisory' => 'Not yet available.',
                 ]);
             }
         }

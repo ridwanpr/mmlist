@@ -1,6 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import { LuBookmark, LuCog, LuHouse, LuSearch, LuUser } from "react-icons/lu";
 import type { IconType } from "react-icons";
+import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
 
 interface NavItemProps {
   href: string;
@@ -73,7 +74,7 @@ const MobileNav = () => {
             label="Browse"
           />
           <NavItem
-            href="#"
+            href={watchlistIndex.url()}
             active={component === "Watchlist/Index"}
             icon={LuBookmark}
             label="Watchlist"

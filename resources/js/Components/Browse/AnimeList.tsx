@@ -2,7 +2,7 @@ import AnimeCard from "../UI/AnimeCard";
 import Pagination from "../UI/Pagination";
 
 interface AnimeListProps {
-  animes: App.DTOs.PaginatedData;
+  animes: App.DTOs.PaginatedAnimeData;
 }
 
 const AnimeList = ({ animes }: AnimeListProps) => {

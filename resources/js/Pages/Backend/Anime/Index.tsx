@@ -10,7 +10,7 @@ import { router, Link } from "@inertiajs/react";
 import { LuPencil } from "react-icons/lu";
 
 type ManageAnimeProps = {
-  animes: App.DTOs.PaginatedData;
+  animes: App.DTOs.PaginatedAnimeData;
 };
 
 const columns: ColumnDef<App.DTOs.AnimeData>[] = [

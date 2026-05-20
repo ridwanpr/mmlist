@@ -5,12 +5,13 @@ namespace App\Jobs;
 use App\Services\AnimeSyncService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
 class FetchAiringAnime implements ShouldQueue
 {
-    use Queueable;
+    use Dispatchable, Queueable;
 
     public int $timeout = 1200;
 

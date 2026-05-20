@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Services\AnimeService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,8 +21,8 @@ class ManageAnimeController extends Controller
             paginateLimit: 15
         );
 
-        return Inertia::render("Backend/Anime/Index", [
-            'animes' => $animes
+        return Inertia::render('Backend/Anime/Index', [
+            'animes' => $animes,
         ]);
     }
 }

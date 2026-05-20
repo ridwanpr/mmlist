@@ -10,6 +10,7 @@ return [
 
     'allowed_hosts' => [
         'myanimelist.net',
+        'cdn.myanimelist.net',
         'mamorulist.test',
     ],
 

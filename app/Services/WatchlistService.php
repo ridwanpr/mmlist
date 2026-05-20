@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\DTOs\PaginatedAnimeData;
+use App\DTOs\PaginatedWatchlistData;
 use App\DTOs\WatchlistData;
 use App\Models\Anime;
 use App\Models\Watchlist;
+use Illuminate\Support\Collection;
 
 class WatchlistService
 {
@@ -43,11 +46,24 @@ class WatchlistService
         Watchlist::where('id', $watchlistId)->delete();
     }
 
-    public function getUserWatchlist(int $paginateLimit = 10, int $userId)
+    public function getUserWatchlist(int $paginateLimit, int $userId): PaginatedWatchlistData
     {
-        $data = Watchlist::where('user_id', $userId)
+        $paginator = Watchlist::where('user_id', $userId)
+            ->join('animes', 'animes.id', 'watchlists.anime_id')
+            ->select(
+                'watchlists.*',
+                'animes.title',
+                'animes.type',
+                'animes.episodes',
+                'animes.images',
+                'animes.year'
+            )
             ->paginate($paginateLimit);
 
-        // $watchlistDto = $data->
+        // Use through() to map internal items without losing pagination metadata
+        $paginator->through(fn($item) => WatchlistData::fromModel($item));
+
+        // Wrap the transformed paginator inside your DTO
+        return PaginatedWatchlistData::fromPaginator($paginator);
     }
 }

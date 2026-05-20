@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,7 +17,7 @@ return new class extends Migration
             foreach ($animes as $anime) {
                 $synonyms = json_decode($anime->title_synonyms, true);
 
-                if (is_array($synonyms) && !empty($synonyms)) {
+                if (is_array($synonyms) && ! empty($synonyms)) {
                     DB::table('animes')
                         ->where('id', $anime->id)
                         ->update(['title_synonyms_text' => implode(' ', $synonyms)]);

@@ -6,6 +6,7 @@ use App\DTOs\WatchlistData;
 use App\Http\Requests\StoreWatchlistRequest;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,6 +35,21 @@ class WatchlistController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('Watchlist/Index');
+        $user = Auth::user();
+        if (! $user) {
+            abort(401);
+        }
+
+        $watchlists = $this->watchlistService->getUserWatchlist(
+            paginateLimit: 12,
+            userId: $user->id
+        );
+
+        return Inertia::render(
+            'Watchlist/Index',
+            [
+                "watchlists" => $watchlists
+            ]
+        );
     }
 }
