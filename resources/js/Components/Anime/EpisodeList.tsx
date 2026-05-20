@@ -10,37 +10,82 @@ const EpisodeList = () => {
         </span>
       </div>
 
-      <div className="border-border overflow-hidden rounded-lg border">
-        {[
-          { num: "EP 01", title: "To You, in 2000 Years", count: 14 },
-          { num: "EP 02", title: "That Day", count: 8 },
-          { num: "EP 03", title: "A Dim Light Amid Despair", count: 22 },
-          {
-            num: "EP 04",
-            title: "Night of the Disbanding Ceremony",
-            count: 31,
-          },
-          { num: "EP 05", title: "First Battle", count: 19 },
-        ].map((ep) => (
-          <Link
-            key={ep.num}
-            href="#"
-            className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
-          >
-            <span className="text-text-muted w-10 shrink-0 text-[11px] font-semibold tabular-nums">
-              {ep.num}
-            </span>
-            <span className="text-text flex-1 text-sm font-semibold">
-              {ep.title}
-            </span>
-            <span className="text-text-muted shrink-0 text-xs">
-              {ep.count} comments
-            </span>
-            <span className="text-primary translate-x-0 text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
-              →
-            </span>
-          </Link>
-        ))}
+      <div className="border-border border-y">
+        <Link
+          href="#"
+          className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
+        >
+          <span className="text-text-muted w-9 shrink-0 text-[11px] font-semibold tabular-nums">
+            EP 01
+          </span>
+          <span className="text-text flex-1 text-sm font-semibold">
+            Shingeki no Kyojin Episode 1 Discussion
+          </span>
+          <span className="text-text-muted shrink-0 text-xs">14 comments</span>
+          <span className="text-primary text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
+            →
+          </span>
+        </Link>
+        <Link
+          href="#"
+          className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
+        >
+          <span className="text-text-muted w-9 shrink-0 text-[11px] font-semibold tabular-nums">
+            EP 02
+          </span>
+          <span className="text-text flex-1 text-sm font-semibold">
+            Shingeki no Kyojin Episode 2 Discussion
+          </span>
+          <span className="text-text-muted shrink-0 text-xs">8 comments</span>
+          <span className="text-primary text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
+            →
+          </span>
+        </Link>
+        <Link
+          href="#"
+          className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
+        >
+          <span className="text-text-muted w-9 shrink-0 text-[11px] font-semibold tabular-nums">
+            EP 03
+          </span>
+          <span className="text-text flex-1 text-sm font-semibold">
+            Shingeki no Kyojin Episode 3 Discussion
+          </span>
+          <span className="text-text-muted shrink-0 text-xs">22 comments</span>
+          <span className="text-primary text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
+            →
+          </span>
+        </Link>
+        <Link
+          href="#"
+          className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
+        >
+          <span className="text-text-muted w-9 shrink-0 text-[11px] font-semibold tabular-nums">
+            EP 04
+          </span>
+          <span className="text-text flex-1 text-sm font-semibold">
+            Shingeki no Kyojin Episode 4 Discussion
+          </span>
+          <span className="text-text-muted shrink-0 text-xs">31 comments</span>
+          <span className="text-primary text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
+            →
+          </span>
+        </Link>
+        <Link
+          href="#"
+          className="border-border/60 hover:bg-surface-alt group flex items-center gap-4 border-b px-4 py-3 transition-colors last:border-b-0"
+        >
+          <span className="text-text-muted w-9 shrink-0 text-[11px] font-semibold tabular-nums">
+            EP 05
+          </span>
+          <span className="text-text flex-1 text-sm font-semibold">
+            Shingeki no Kyojin Episode 5 Discussion
+          </span>
+          <span className="text-text-muted shrink-0 text-xs">19 comments</span>
+          <span className="text-primary text-sm font-bold opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100">
+            →
+          </span>
+        </Link>
       </div>
 
       <a
