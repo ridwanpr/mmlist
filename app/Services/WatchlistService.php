@@ -64,12 +64,10 @@ class WatchlistService
             $query->where('watchlists.status', $status);
         }
 
-        $paginator = $query->paginate($paginateLimit);
+        $paginator = $query->paginate($paginateLimit)->withQueryString();
 
-        // Use through() to map internal items without losing pagination metadata
         $paginator->through(fn($item) => WatchlistData::fromModel($item));
 
-        // Wrap the transformed paginator inside your DTO
         return PaginatedWatchlistData::fromPaginator($paginator);
     }
 

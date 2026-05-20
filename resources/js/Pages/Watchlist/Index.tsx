@@ -1,5 +1,5 @@
 import type React from "react";
-import { router } from "@inertiajs/react";
+import { router, Link } from "@inertiajs/react";
 import DashContainer from "../../Components/UserDash/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
 import WatchlistTab from "../../Components/Watchlist/WatchlistTab";
@@ -39,7 +39,6 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
           <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
             Watchlist
           </h1>
-          {/* Use the total from all tabs combined for the overall count if desired */}
           <p className="text-text-muted text-sm">
             {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
           </p>
@@ -52,7 +51,6 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
         />
 
         <div className="mt-4">
-          {/* Display the count of titles matching the active tab */}
           <p className="text-text-muted mb-4 text-xs">
             {watchlists?.total} Titles
           </p>
@@ -109,6 +107,38 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
               </div>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          {watchlists?.links && watchlists.links.length > 3 && (
+            <div className="mt-8 flex justify-center gap-1">
+              {watchlists.links.map((link, index) => {
+                // If there is no URL (e.g. disabled prev/next buttons), render a span
+                if (!link.url) {
+                  return (
+                    <span
+                      key={index}
+                      className="border-border text-text-muted/50 cursor-not-allowed rounded-lg border px-3 py-1.5 text-xs opacity-50"
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                  );
+                }
+
+                return (
+                  <Link
+                    key={index}
+                    href={link.url}
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      link.active
+                        ? "bg-primary border-primary text-white"
+                        : "border-border bg-surface text-text hover:bg-muted"
+                    }`}
+                    // Laravel's paginator defaults use HTML elements like &laquo; and &raquo; for arrows
+                    dangerouslySetInnerHTML={{ __html: link.label }}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </DashContainer>
