@@ -24,17 +24,17 @@ const warnings = [
 const covers = [
   {
     title: "Tensei Shitara Slime Datta Ken 4th Season",
-    image: "/assets/img/hero-1.jpg",
+    image: "/assets/img/hero-1.webp",
     className: "left-0 top-14 z-10 w-[165px] -rotate-[9deg] opacity-80",
   },
   {
     title: "Sousou no Frieren 2nd Season",
-    image: "/assets/img/hero-2.jpg",
+    image: "/assets/img/hero-2.webp",
     className: "left-[115px] top-0 z-30 w-[220px] rotate-[2deg]",
   },
   {
     title: "Witch Hat Atelier",
-    image: "/assets/img/hero-3.jpg",
+    image: "/assets/img/hero-3.webp",
     className: "right-0 top-18 z-20 w-[160px] rotate-[10deg] opacity-90",
   },
 ];
