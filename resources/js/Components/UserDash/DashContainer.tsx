@@ -12,7 +12,7 @@ const DashContainer = ({ children }: DashContainer) => {
       <SideMenu />
       <div className="flex min-w-0 flex-1 flex-col">
         <DashMobileNav />
-        <div className="border-border p-4">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

@@ -222,7 +222,12 @@ class AnimeService
         }
 
         $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-        $stopwords = ['a', 'an', 'and', 'as', 'at', 'for', 'in', 'is', 'it', 'of', 'on', 'or', 'the', 'to', 'with'];
+        $stopwords = [
+            'a', 'an', 'as', 'at', 'in', 'is', 'it', 'of', 'on', 'or', 'to', 
+            'am', 'be', 'by', 'do', 'he', 'if', 'me', 'my', 'no', 'so', 'up', 'us', 'we', 'i',
+            'and', 'the', 'for', 'with', 'about', 'are', 'from', 'how', 'that', 
+            'this', 'was', 'what', 'when', 'where', 'who', 'will'
+        ];
 
         $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
             return ! in_array($token, $stopwords, true);
