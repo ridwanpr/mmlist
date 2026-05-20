@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { LuUsers } from "react-icons/lu";
 
 interface SideInfoProps {
@@ -7,6 +7,8 @@ interface SideInfoProps {
 }
 
 export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
+  const [isRevealed, setIsRevealed] = useState(false);
+
   const triggerContents = useMemo(
     () => triggers.flatMap((trigger) => trigger.triggerContents ?? []),
     [triggers],
@@ -71,6 +73,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
         </p>
       </div>
 
+      {/*Trigger Profile*/}
       <div className="border-border bg-surface rounded-lg border p-5 shadow-sm">
         <div className="mb-4">
           <h3 className="text-text flex items-center gap-2 font-bold">
@@ -124,14 +127,27 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
             <div className="text-text-muted text-[11px] font-semibold tracking-wider uppercase">
               Most reported trigger
             </div>
-            <div className="text-text text-sm font-bold">
-              {stats.mostUsedTrigger?.name ?? "None"}
-            </div>
-            <div className="text-text-muted text-xs">
-              {stats.mostUsedTrigger?.animeTriggers?.filter(
-                (item) => item.is_appear,
-              ).length ?? 0}{" "}
-              reported entries
+            <div className="relative mt-1 overflow-hidden">
+              {/* Overlay Layer */}
+              {!isRevealed && (
+                <button
+                  onClick={() => setIsRevealed(true)}
+                  className="bg-background/90 text-text hover:bg-background/95 absolute inset-0 z-10 flex cursor-pointer items-center justify-center text-xs font-medium transition-colors"
+                >
+                  Click to reveal
+                </button>
+              )}
+              <div className={!isRevealed ? "blur-sm select-none" : ""}>
+                <div className="text-text text-sm font-bold">
+                  {stats.mostUsedTrigger?.name ?? "None"}
+                </div>
+                <div className="text-text-muted text-xs">
+                  {stats.mostUsedTrigger?.animeTriggers?.filter(
+                    (item) => item.is_appear,
+                  ).length ?? 0}{" "}
+                  reported entries
+                </div>
+              </div>
             </div>
           </div>
         )}
