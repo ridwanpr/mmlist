@@ -69,13 +69,15 @@ const MobileNav = () => {
           />
           <NavItem
             href={routes["browse.index"]}
-            active={component.startsWith("Browse/")}
+            active={
+              component.startsWith("Browse/") || component.startsWith("Anime/")
+            }
             icon={LuSearch}
             label="Browse"
           />
           <NavItem
             href={watchlistIndex.url()}
-            active={component === "Watchlist/Index"}
+            active={component.startsWith("Watchlist/")}
             icon={LuBookmark}
             label="Watchlist"
           />
