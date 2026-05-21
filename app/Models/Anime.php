@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $title_english
  * @property string|null $title_japanese
  * @property array<array-key, mixed>|null $title_synonyms
+ * @property string|null $title_synonyms_text
  * @property string|null $type
  * @property string|null $source
  * @property int|null $episodes
@@ -42,22 +43,23 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $to
  * @property string|null $from_to_string
  * @property string|null $ai_advisory
- * @property-read Collection<int, AnimeTrigger> $animeTriggers
+ * @property-read Collection<int, \App\Models\AnimeTrigger> $animeTriggers
  * @property-read int|null $anime_triggers_count
- * @property-read Watchlist|AnimeTheme|AnimeStudio|AnimeProducer|AnimeGenre|AnimeDemographic|null $pivot
- * @property-read Collection<int, Demographic> $demographics
+ * @property-read \App\Models\Watchlist|\App\Models\AnimeTheme|\App\Models\AnimeStudio|\App\Models\AnimeProducer|\App\Models\AnimeGenre|\App\Models\AnimeDemographic|null $pivot
+ * @property-read Collection<int, \App\Models\Demographic> $demographics
  * @property-read int|null $demographics_count
- * @property-read Collection<int, Genre> $genres
+ * @property-read Collection<int, \App\Models\Genre> $genres
  * @property-read int|null $genres_count
- * @property-read Collection<int, Producer> $producers
+ * @property-read Collection<int, \App\Models\Producer> $producers
  * @property-read int|null $producers_count
- * @property-read Collection<int, Studio> $studios
+ * @property-read Collection<int, \App\Models\Studio> $studios
  * @property-read int|null $studios_count
- * @property-read Collection<int, Theme> $themes
+ * @property-read Collection<int, \App\Models\Theme> $themes
  * @property-read int|null $themes_count
- * @property-read Collection<int, User> $watchlists
+ * @property-read Collection<int, \App\Models\AnimeTriggerContext> $triggerContexts
+ * @property-read int|null $trigger_contexts_count
+ * @property-read Collection<int, \App\Models\User> $watchlists
  * @property-read int|null $watchlists_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime query()
@@ -86,6 +88,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleEnglish($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleJapanese($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleSynonyms($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitleSynonymsText($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitles($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTo($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTrailer($value)
@@ -93,7 +96,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereYear($value)
- *
  * @mixin \Eloquent
  */
 #[Fillable([

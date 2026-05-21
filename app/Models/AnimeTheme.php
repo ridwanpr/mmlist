@@ -12,7 +12,6 @@ use Illuminate\Support\Carbon;
  * @property int $theme_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme query()
@@ -21,7 +20,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereThemeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTheme whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 #[Fillable(['anime_id', 'theme_id'])]

@@ -18,7 +18,7 @@ class GeminiService
 
     public function __construct()
     {
-        $this->apiKey = config('gemini_api_key');
+        $this->apiKey = config('app.gemini_api_key');
 
         $this->systemInstruction = <<<'PROMPT'
         You are an anime expert media analyst specializing in content advisories.
@@ -85,12 +85,12 @@ class GeminiService
                     return $this->extractText($fallbackResponse->json());
                 }
 
-                Log::error("Gemma fallback failed for {$title}: ".$fallbackResponse->body());
+                Log::error("Gemma fallback failed for {$title}: " . $fallbackResponse->body());
             } catch (ConnectionException $e) {
                 Log::error("Gemma fallback also timed out for {$title}.");
             }
         } else {
-            Log::error("Gemini API failed for {$title}: ".$response->body());
+            Log::error("Gemini API failed for {$title}: " . $response->body());
         }
 
         throw new Exception('Failed to generate advisory after fallback.');
