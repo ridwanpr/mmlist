@@ -1,10 +1,10 @@
 import React from "react";
 
-import AnimeList from "../../Components/Home/AnimeList";
-import CTA from "../../Components/Home/CTA";
-import Features from "../../Components/Home/Features";
-import Hero from "../../Components/Home/Hero";
-import HowItWork from "../../Components/Home/HowItWork";
+import AnimeList from "./Partials/AnimeList";
+import CTA from "./Partials/CTA";
+import Features from "./Partials/Features";
+import Hero from "./Partials/Hero";
+import HowItWork from "./Partials/HowItWork";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface HomeProps {

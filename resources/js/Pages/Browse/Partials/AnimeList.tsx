@@ -1,5 +1,5 @@
-import AnimeCard from "../UI/AnimeCard";
-import Pagination from "../UI/Pagination";
+import AnimeCard from "../../../Components/AnimeCard";
+import Pagination from "../../../Components/UI/Pagination";
 
 interface AnimeListProps {
   animes: App.DTOs.PaginatedAnimeData;

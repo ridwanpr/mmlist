@@ -1,6 +1,6 @@
 import type React from "react";
 import FrontLayout from "../../Layouts/FrontLayout";
-import DashContainer from "../../Components/UserDash/DashContainer";
+import DashContainer from "./Partials/DashContainer";
 
 const UserDash = () => {
   return (

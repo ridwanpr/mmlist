@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import { useImageProxy } from "../../utils/image-proxy";
+import { useImageProxy } from "../utils/image-proxy";
 
 interface AnimeCardProps {
   animeData: App.DTOs.AnimeData;

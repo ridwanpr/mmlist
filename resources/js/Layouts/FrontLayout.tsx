@@ -2,9 +2,9 @@ import { usePage } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import { toast, Toaster } from "sonner";
 
-import DekstopNav from "../Components/UI/DekstopNav";
-import Footer from "../Components/UI/Footer";
-import MobileNav from "../Components/UI/MobileNav";
+import DekstopNav from "../Components/DekstopNav";
+import Footer from "../Components/Footer";
+import MobileNav from "../Components/MobileNav";
 
 interface FrontLayoutProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ const FrontLayout = ({ children }: FrontLayoutProps) => {
 
   return (
     <>
-      <div className="relative flex min-h-screen flex-col bg-background">
+      <div className="bg-background relative flex min-h-screen flex-col">
         <Toaster position="top-right" richColors closeButton />
         <div>
           <DekstopNav />

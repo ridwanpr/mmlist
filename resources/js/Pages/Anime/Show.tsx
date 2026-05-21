@@ -1,9 +1,9 @@
 import type React from "react";
 
-import Breadcrumb from "../../Components/Anime/Breadcrumb";
-import MainInfo from "../../Components/Anime/MainInfo";
-import { SideInfo } from "../../Components/Anime/SideInfo";
-import TriggerWarning from "../../Components/Anime/TriggerWarning";
+import Breadcrumb from "./Partials/Breadcrumb";
+import MainInfo from "./Partials/MainInfo";
+import { SideInfo } from "./Partials/SideInfo";
+import TriggerWarning from "./Partials/TriggerWarning";
 import FrontLayout from "../../Layouts/FrontLayout";
 
 interface ShowAnimeProps {

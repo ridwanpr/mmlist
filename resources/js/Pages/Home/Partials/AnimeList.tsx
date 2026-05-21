@@ -1,7 +1,7 @@
 import { LuFlame, LuRadio } from "react-icons/lu";
-import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
+import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
 
-import AnimeCard from "../UI/AnimeCard";
+import AnimeCard from "../../../Components/AnimeCard";
 import SectionHeader from "./SectionHeader";
 
 interface AnimeListProps {

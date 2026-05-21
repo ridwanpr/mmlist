@@ -1,8 +1,8 @@
 import type React from "react";
 
-import AnimeList from "../../Components/Browse/AnimeList";
-import SearchSection from "../../Components/Browse/SearchSection";
 import FrontLayout from "../../Layouts/FrontLayout";
+import SearchSection from "./Partials/SearchSection";
+import AnimeList from "./Partials/AnimeList";
 
 interface BrowseProps {
   animes: App.DTOs.PaginatedAnimeData;

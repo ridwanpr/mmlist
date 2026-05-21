@@ -13,7 +13,7 @@ import {
   LuVote,
 } from "react-icons/lu";
 
-import SidebarLink from "./SidebarLink";
+import SidebarLink from "./UI/SidebarLink";
 
 interface AdminSidebarProps {
   isOpen: boolean;

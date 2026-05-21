@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { LuMenu } from "react-icons/lu";
 import { toast, Toaster } from "sonner";
 
-import AdminSidebar from "../Components/UI/AdminSidebar";
+import AdminSidebar from "../Components/AdminSidebar";
 import ThemeToggle from "../Components/UI/ThemeToggle";
 
 interface BackLayoutProps {
@@ -19,6 +19,7 @@ const BackLayout = ({ children }: BackLayoutProps) => {
     return true;
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { flash } = usePage().props as any;
 
   useEffect(() => {

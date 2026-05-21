@@ -7,8 +7,7 @@ import {
   LuLogOut,
   LuMessageCircle,
 } from "react-icons/lu";
-
-import SidebarLink from "../UI/SidebarLink";
+import SidebarLink from "../../../Components/UI/SidebarLink";
 
 const SideMenu = () => {
   const { auth } = usePage().props;

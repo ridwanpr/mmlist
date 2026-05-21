@@ -1,6 +1,6 @@
 import { Link, router } from "@inertiajs/react";
 import { FiSearch } from "react-icons/fi";
-import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
+import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
 import type React from "react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { useImageProxy } from "../../utils/image-proxy";
+import { useImageProxy } from "../../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";

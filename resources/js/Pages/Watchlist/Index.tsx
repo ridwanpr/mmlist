@@ -1,12 +1,12 @@
 import type React from "react";
 import { router, Link } from "@inertiajs/react";
-import DashContainer from "../../Components/UserDash/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
-import WatchlistTab from "../../Components/Watchlist/WatchlistTab";
+import WatchlistTab from "./Partials/WatchlistTab";
 import { useImageProxy } from "../../utils/image-proxy";
 import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
 import { useState } from "react";
-import DetailModal from "../../Components/Watchlist/DetailModal";
+import DetailModal from "./Partials/DetailModal";
+import DashContainer from "../UserDash/Partials/DashContainer";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import DropdownMenu from "../UI/DropdownMenu";
-import { LuFlame, LuTv, LuCalendar, LuShuffle, LuFilter } from "react-icons/lu";
+import { LuFlame, LuTv, LuCalendar, LuFilter } from "react-icons/lu";
 import { router } from "@inertiajs/react";
+import DropdownMenu from "../../../Components/UI/DropdownMenu";
 
 interface SearchSectionProps {
   genres: { id: number; name: string }[];

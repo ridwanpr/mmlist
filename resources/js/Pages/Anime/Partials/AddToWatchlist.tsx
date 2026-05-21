@@ -1,8 +1,8 @@
-import { LuBookmark, LuPlus, LuShare2 } from "react-icons/lu";
-import ModalDialog from "../UI/ModalDialog";
-import { SelectOption } from "../UI/SelectOption";
+import { LuBookmark, LuPlus } from "react-icons/lu";
 import type { SetStateAction } from "react";
 import type { FormDataConvertible } from "@inertiajs/core";
+import ModalDialog from "../../../Components/UI/ModalDialog";
+import { SelectOption } from "../../../Components/UI/SelectOption";
 
 export interface WatchlistFormData {
   [key: string]: FormDataConvertible;

@@ -1,11 +1,11 @@
 import { Link, usePage } from "@inertiajs/react";
-import ThemeToggle from "./ThemeToggle";
-import { index as homeIndex } from "../../actions/App/Http/Controllers/HomeController";
-import { index as browseIndex } from "../../actions/App/Http/Controllers/BrowseController";
-import { login } from "../../actions/App/Http/Controllers/AuthController";
-import { register } from "../../actions/App/Http/Controllers/AuthController";
-import { index as dashIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
-import { index as adminDashIndex } from "../../actions/App/Http/Controllers/Backend/DashboardController";
+import ThemeToggle from "./UI/ThemeToggle";
+import { index as homeIndex } from "../actions/App/Http/Controllers/HomeController";
+import { index as browseIndex } from "../actions/App/Http/Controllers/BrowseController";
+import { login } from "../actions/App/Http/Controllers/AuthController";
+import { register } from "../actions/App/Http/Controllers/AuthController";
+import { index as dashIndex } from "../actions/App/Http/Controllers/UserDashboardController";
+import { index as adminDashIndex } from "../actions/App/Http/Controllers/Backend/DashboardController";
 
 const DesktopNav = () => {
   const { auth } = usePage().props;

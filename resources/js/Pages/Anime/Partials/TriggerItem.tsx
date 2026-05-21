@@ -7,9 +7,8 @@ import {
   LuThumbsDown,
   LuThumbsUp,
 } from "react-icons/lu";
-
-import AuthGate from "./AuthGate";
 import VoteGroup from "./VoteGroup";
+import AuthGate from "./AuthGate";
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;

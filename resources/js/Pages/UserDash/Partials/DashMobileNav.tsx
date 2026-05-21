@@ -5,8 +5,8 @@ import {
   LuMessageCircle,
   LuThumbsUp,
 } from "react-icons/lu";
-import { index as userDashIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
-import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
+import { index as userDashIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
+import { index as watchlistIndex } from "../../../actions/App/Http/Controllers/WatchlistController";
 
 const DashMobileNav = () => {
   const { url } = usePage();
