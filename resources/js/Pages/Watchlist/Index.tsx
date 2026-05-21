@@ -88,7 +88,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   return (
     <DashContainer>
       <div className="p-4 lg:p-0">
-        <div className="mb-6">
+        <div className="mb-4">
           <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
             Watchlist
           </h1>

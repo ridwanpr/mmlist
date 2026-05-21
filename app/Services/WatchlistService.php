@@ -6,7 +6,6 @@ use App\DTOs\PaginatedWatchlistData;
 use App\DTOs\WatchlistData;
 use App\Models\Anime;
 use App\Models\Watchlist;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class WatchlistService
