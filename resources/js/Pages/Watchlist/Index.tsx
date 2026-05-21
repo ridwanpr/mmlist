@@ -64,6 +64,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   });
 
   const handleEditWatchlist = (watchlist: App.DTOs.WatchlistData | null) => {
+    console.log(watchlist);
     setEditWatchlist(watchlist);
     if (watchlist) {
       setData({

@@ -46,6 +46,27 @@ const EditModal = ({
     },
   ];
 
+  const labels: Record<string, string> = {
+    10: "Masterpiece",
+    9: "Great",
+    8: "Very Good",
+    7: "Good",
+    6: "Fine",
+    5: "Average",
+    4: "Bad",
+    3: "Very Bad",
+    2: "Horrible",
+    1: "Appalling",
+  };
+
+  const scoreSelectItem = Array.from({ length: 10 }, (_, i) => {
+    const score = String(10 - i);
+    return {
+      value: score,
+      label: `(${score}) ${labels[score]}`,
+    };
+  });
+
   return (
     <Dialog
       open={editWatchlist !== null}
@@ -118,6 +139,63 @@ const EditModal = ({
                     <LuPlus />
                   </button>
                 </div>
+              </div>
+            </div>
+            {/* Score */}
+            <div>
+              <label htmlFor="score" className="mb-1 block text-sm font-medium">
+                Score
+              </label>
+              <select
+                value={data.score?.toString() ?? ""}
+                onChange={(e) => setData("score", Number(e.target.value))}
+                name="score"
+                id="score"
+                className="border-border bg-surface text-text hover:bg-surface-alt w-full rounded-lg border px-3 py-2.5 outline-none hover:cursor-pointer"
+              >
+                <option value="">Select</option>
+                {scoreSelectItem.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Start and Finish Date */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="started_at" className="text-sm">
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  name="started_at"
+                  id="started_at"
+                  value={
+                    data?.started_at
+                      ? new Date(data.started_at).toISOString().slice(0, 10)
+                      : ""
+                  }
+                  onChange={(e) => setData("started_at", e.target.value)}
+                  className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="completed_at" className="text-sm">
+                  Finish Date
+                </label>
+                <input
+                  type="date"
+                  name="completed_at"
+                  id="completed_at"
+                  value={
+                    data?.completed_at
+                      ? new Date(data.completed_at).toISOString().slice(0, 10)
+                      : ""
+                  }
+                  onChange={(e) => setData("completed_at", e.target.value)}
+                  className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+                />
               </div>
             </div>
 
