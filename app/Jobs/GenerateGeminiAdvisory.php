@@ -26,7 +26,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $dailyRequests = Cache::get($cacheKey, 0);
 
         // 1. Calculate how many requests we are still allowed to make today
-        $remainingQuota = 480 - $dailyRequests;
+        $remainingQuota = 800 - $dailyRequests;
 
         if ($remainingQuota <= 0) {
             return;
@@ -62,12 +62,15 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 // Returns clean structured data array separating general overview and specific triggers
                 $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
 
-                if ($result['ai_advisory'] !== 'Not yet available.') {
-                    $anime->update([
-                        'ai_advisory' => $result['ai_advisory'],
-                    ]);
+                // Save advisory regardless — if AI returned the fallback string, we still persist it
+                // so whereNull() skips this anime on future runs and we don't waste tokens retrying it
+                $anime->update([
+                    'ai_advisory' => $result['ai_advisory'],
+                ]);
 
-                    // Process structural itemized trigger contexts saved inside the JSON payload
+                // Only process trigger contexts when the advisory is a real generated result,
+                // not the fallback placeholder meaning the anime was unrecognized
+                if ($result['ai_advisory'] !== GeminiService::FALLBACK_ADVISORY) {
                     foreach ($result['matched_triggers'] as $matched) {
                         $name = $matched['trigger_name'] ?? '';
                         $summary = $matched['ai_summary'] ?? '';
@@ -88,16 +91,17 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 }
 
                 $processedCount++;
-                sleep(4);
+                sleep(2);
             } catch (\Exception $e) {
+                // API completely failed after all fallbacks — stamp the placeholder so this anime
                 Log::error("Gemini Advisory Processing Failed for Anime ID {$anime->id}: " . $e->getMessage());
                 $anime->update([
-                    'ai_advisory' => 'Not yet available.',
+                    'ai_advisory' => GeminiService::FALLBACK_ADVISORY,
                 ]);
             }
         }
 
-        // 5. Bulk update the daily cache tracker threshold count once
+        // 4. Bulk update the daily cache tracker threshold count once
         Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
     }
 }

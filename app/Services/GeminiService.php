@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Cache;
 use Exception;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
@@ -10,7 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class GeminiService
 {
+    public const FALLBACK_ADVISORY = 'Insufficient data to provide a reliable advisory.';
+
     private string $apiKey;
+
+    private string $apiKey2;
 
     private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
@@ -19,6 +24,7 @@ class GeminiService
     public function __construct()
     {
         $this->apiKey = config('app.gemini_api_key');
+        $this->apiKey2 = config('app.gemini_api_key_2');
 
         // Aligned to column 0 to prevent PHP indentation compiler errors
         $this->systemInstruction = <<<'PROMPT'
@@ -26,8 +32,9 @@ class GeminiService
 
         <knowledge_rules>
         1. Base your advisory and trigger summaries on specific, reliable information available in this lineage order: exact installment, source material, then continuity lineage.
-        2. Fallback Clause: If data is missing or incomplete, set the "ai_advisory" field value to exactly: "Insufficient data to provide a reliable advisory." and return an empty array for "matched_triggers".
-        3. Rating Calibration: Calibrate description descriptions safely matching the official age ratings provided (G/PG vs Teen vs Mature). Do not soft-pedal severe themes on R-ratings.
+        2. Fallback Clause: Only set "ai_advisory" to exactly "Insufficient data to provide a reliable advisory." and return an empty array for "matched_triggers" if you cannot identify the anime at all. Partial knowledge is acceptable — write what you can confidently state about the anime's thematic content. Do not refuse or fall back simply because you are uncertain about specific minor details.
+        3. Consistency Rule: If you have enough knowledge to populate any matched_triggers, you have enough knowledge to write an ai_advisory. Never produce matched_triggers with an empty or fallback ai_advisory.
+        4. Rating Calibration: Accurately match the tone of your descriptions to the official age rating. For G/PG and Teen ratings, use measured, proportionate language — do not use alarmist or severe framing for content that is mild or age-appropriate by rating. For Mature/R ratings, do not soft-pedal or downplay severe themes. If the rating is unknown, calibrate based on the anime's known content and target demographic.
         </knowledge_rules>
 
         <output_constraints>
@@ -59,7 +66,9 @@ class GeminiService
      */
     public function generateAnimeAdvisory(string $title, array $availableTriggers, ?string $rating = null): array
     {
-        $ratingContext = $rating ? " Official Age Rating: {$rating}." : '';
+        $ratingContext = $rating
+            ? " Official Age Rating: {$rating}."
+            : " Official Age Rating: Unknown — calibrate tone based on the anime's known content and target demographic.";
 
         // Pass the array of allowed triggers into the user prompt
         $triggerListStr = implode(", ", array_map(fn($t) => "'{$t}'", $availableTriggers));
@@ -69,25 +78,55 @@ class GeminiService
             "Allowed Trigger Names: [{$triggerListStr}]";
 
         $response = null;
+        $key1CircuitOpen = Cache::get('gemini_key1_circuit_open', false);
 
-        try {
-            // Primary model call
-            $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25);
-        } catch (ConnectionException $e) {
-            Log::warning("Gemini main call timed out for {$title}.");
+        if ($key1CircuitOpen) {
+            Log::info("Gemini key 1 circuit open — skipping directly to secondary key for {$title}.");
+        } else {
+            try {
+                // Primary model call with key 1
+                $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25);
+            } catch (ConnectionException $e) {
+                // Connection timeout is likely transient, short cooldown is enough
+                Log::warning("Gemini main call timed out for {$title}. Opening key 1 circuit for 60 seconds.");
+                Cache::put('gemini_key1_circuit_open', true, now()->addSeconds(60));
+            }
+
+            if ($response && $response->successful()) {
+                return $this->parseJsonOutput($this->extractText($response->json()));
+            }
+
+            // Trip the circuit breaker on rate-limit or server error so subsequent
+            // anime in this batch stop hitting key 1 altogether for a while
+            if ($response && ($response->status() === 429 || $response->serverError())) {
+                // 429 = daily quota exhausted (RPD), lock key 1 out until midnight when quota resets.
+                // Server errors get a short cooldown since they are likely transient.
+                $until = $response->status() === 429 ? now()->endOfDay() : now()->addSeconds(60);
+                Log::warning("Gemini key 1 failed (Status: {$response->status()}) for {$title}. Opening circuit until {$until}.");
+                Cache::put('gemini_key1_circuit_open', true, $until);
+            }
         }
 
-        if ($response && $response->successful()) {
-            return $this->parseJsonOutput($this->extractText($response->json()));
-        }
-
-        // Fallback procedure if primary model fails or gets rate-limited
-        if (! $response || $response->status() === 429 || $response->serverError()) {
-            $status = $response ? $response->status() : 'Timeout';
-            Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Falling back to Gemma 4 31B.");
+        // Key-2 retry: attempt same model with the secondary API key
+        if ($key1CircuitOpen || ! $response || $response->status() === 429 || $response->serverError()) {
+            $status = $response ? $response->status() : ($key1CircuitOpen ? 'Circuit Open' : 'Timeout');
+            Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Retrying with secondary API key.");
 
             try {
-                $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60);
+                $key2Response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25, apiKey: $this->apiKey2);
+
+                if ($key2Response->successful()) {
+                    return $this->parseJsonOutput($this->extractText($key2Response->json()));
+                }
+
+                Log::warning("Gemini secondary key also failed (Status: {$key2Response->status()}) for {$title}. Falling back to Gemma 4 31B.");
+            } catch (ConnectionException $e) {
+                Log::warning("Gemini secondary key timed out for {$title}. Falling back to Gemma 4 31B.");
+            }
+
+            // Final fallback: Gemma model with secondary key
+            try {
+                $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60, apiKey: $this->apiKey2);
 
                 if ($fallbackResponse->successful()) {
                     return $this->parseJsonOutput($this->extractText($fallbackResponse->json()));
@@ -106,9 +145,10 @@ class GeminiService
     /**
      * Make HTTP request to the API gateway.
      */
-    private function callApi(string $model, string $prompt, int $timeout = 30): Response
+    private function callApi(string $model, string $prompt, int $timeout = 30, ?string $apiKey = null): Response
     {
-        $url = "{$this->baseUrl}{$model}:generateContent?key={$this->apiKey}";
+        $key = $apiKey ?? $this->apiKey;
+        $url = "{$this->baseUrl}{$model}:generateContent?key={$key}";
 
         $generationConfig = [
             'temperature' => 0.2,
@@ -190,7 +230,7 @@ class GeminiService
     private function parseJsonOutput(string $rawText): array
     {
         if (empty($rawText)) {
-            return ['ai_advisory' => 'Insufficient data to provide a reliable advisory.', 'matched_triggers' => []];
+            return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
 
         // Clean out any accidental markdown wrapper artifacts if they leak from fallback models
@@ -199,7 +239,7 @@ class GeminiService
 
         if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
             Log::error("Failed to decode valid JSON content structural layout. Raw Output: " . $rawText);
-            return ['ai_advisory' => 'Insufficient data to provide a reliable advisory.', 'matched_triggers' => []];
+            return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
 
         return [
