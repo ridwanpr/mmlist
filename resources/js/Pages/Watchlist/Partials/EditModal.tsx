@@ -7,6 +7,7 @@ import {
 import { LuPlus, LuX } from "react-icons/lu";
 import type { EditWatchlistForm } from "../Index";
 import type { InertiaFormProps } from "@inertiajs/react";
+import type React from "react";
 
 type EditModalProps = {
   data: EditWatchlistForm;
@@ -14,6 +15,10 @@ type EditModalProps = {
   editWatchlist: App.DTOs.WatchlistData | null;
   handleEditWatchlist: (watchlist: App.DTOs.WatchlistData | null) => void;
   incrementProgress: () => void;
+  handleSubmitEditWatchlist: (
+    e: React.SubmitEvent<HTMLFormElement>,
+    watchlistId: number,
+  ) => void;
 };
 
 const EditModal = ({
@@ -22,6 +27,7 @@ const EditModal = ({
   editWatchlist,
   handleEditWatchlist,
   incrementProgress,
+  handleSubmitEditWatchlist,
 }: EditModalProps) => {
   const statusSelectItem = [
     {
@@ -89,7 +95,13 @@ const EditModal = ({
             </button>
           </div>
 
-          <form className="mt-4 flex flex-col gap-4">
+          <form
+            onSubmit={(e) =>
+              editWatchlist?.id &&
+              handleSubmitEditWatchlist(e, editWatchlist.id)
+            }
+            className="mt-4 flex flex-col gap-4"
+          >
             {/* Status */}
             <div>
               <label

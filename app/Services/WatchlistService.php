@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DTOs\PaginatedAnimeData;
 use App\DTOs\PaginatedWatchlistData;
 use App\DTOs\WatchlistData;
 use App\Models\Anime;
@@ -91,5 +90,22 @@ class WatchlistService
     public function getTotalVoteCount(int $userId): int
     {
         return Watchlist::where('user_id', $userId)->count();
+    }
+
+    public function updateWatchlist(int $userId, int $watchlistId, array $data): void
+    {
+        $watchlist = Watchlist::query()
+            ->where('id', $watchlistId)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        $watchlist->update([
+            'status' => $data['status'],
+            'progress' => $data['progress'] ?? $watchlist->progress,
+            'score' => array_key_exists('score', $data) ? $data['score'] : $watchlist->score,
+            'note' => $data['note'] ?? $watchlist->note,
+            'started_at' => $data['started_at'] ?? $watchlist->started_at,
+            'completed_at' => $data['completed_at'] ?? $watchlist->completed_at,
+        ]);
     }
 }

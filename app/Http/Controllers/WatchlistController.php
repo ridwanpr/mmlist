@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\WatchlistData;
 use App\Http\Requests\StoreWatchlistRequest;
+use App\Http\Requests\UpdateWatchlistRequest;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -59,5 +60,17 @@ class WatchlistController extends Controller
                 "tabCounts" => $tabCounts
             ]
         );
+    }
+
+    public function update(UpdateWatchlistRequest $request, int $watchlistId): RedirectResponse
+    {
+        $this->watchlistService->updateWatchlist(
+            userId: $request->user()->id,
+            watchlistId: $watchlistId,
+            data: $request->validated(),
+        );
+
+        Inertia::flash('success', 'Update data success');
+        return back();
     }
 }

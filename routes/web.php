@@ -47,4 +47,5 @@ Route::middleware('auth')->group(function () {
     Route::get('watchlist', [WatchlistController::class, 'index'])->name('watchlist.index');
     Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store');
     Route::delete('watchlist/{watchlistId}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
+    Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
 });

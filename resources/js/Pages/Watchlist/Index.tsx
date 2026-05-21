@@ -9,6 +9,7 @@ import DashContainer from "../UserDash/Partials/DashContainer";
 import EditModal from "./Partials/EditModal";
 import AnimeList from "./Partials/AnimeList";
 import Pagination from "../../Components/UI/Pagination";
+import { update as watchlistUpdate } from "../../actions/App/Http/Controllers/WatchlistController";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -23,8 +24,6 @@ type WatchlistPropsType = {
 };
 
 export type EditWatchlistForm = {
-  animeId: string;
-  userId: string;
   status: string;
   progress: number;
   score: number | null;
@@ -52,9 +51,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
     );
   };
 
-  const { data, setData } = useForm<EditWatchlistForm>({
-    animeId: "",
-    userId: "",
+  const { data, setData, put } = useForm<EditWatchlistForm>({
     status: "",
     progress: 0,
     score: null,
@@ -64,7 +61,6 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   });
 
   const handleEditWatchlist = (watchlist: App.DTOs.WatchlistData | null) => {
-    console.log(watchlist);
     setEditWatchlist(watchlist);
     if (watchlist) {
       setData({
@@ -78,6 +74,15 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
       ...prev,
       progress: prev.progress + 1,
     }));
+  };
+
+  const handleSubmitEditWatchlist = (
+    e: React.SubmitEvent<HTMLFormElement>,
+    watchlistId: number,
+  ) => {
+    e.preventDefault();
+    put(watchlistUpdate.url(watchlistId));
+    setEditWatchlist(null);
   };
 
   return (
@@ -127,6 +132,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
         data={data}
         setData={setData}
         incrementProgress={incrementProgress}
+        handleSubmitEditWatchlist={handleSubmitEditWatchlist}
       />
     </DashContainer>
   );
