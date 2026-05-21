@@ -72,6 +72,13 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
     }
   };
 
+  const incrementProgress = () => {
+    setData((prev) => ({
+      ...prev,
+      progress: prev.progress + 1,
+    }));
+  };
+
   return (
     <DashContainer>
       <div className="p-4 lg:p-0">
@@ -118,6 +125,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
         handleEditWatchlist={handleEditWatchlist}
         data={data}
         setData={setData}
+        incrementProgress={incrementProgress}
       />
     </DashContainer>
   );

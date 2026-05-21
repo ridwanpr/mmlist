@@ -4,7 +4,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { LuX } from "react-icons/lu";
+import { LuPlus, LuX } from "react-icons/lu";
 import type { EditWatchlistForm } from "../Index";
 import type { InertiaFormProps } from "@inertiajs/react";
 
@@ -13,6 +13,7 @@ type EditModalProps = {
   setData: InertiaFormProps<EditWatchlistForm>["setData"];
   editWatchlist: App.DTOs.WatchlistData | null;
   handleEditWatchlist: (watchlist: App.DTOs.WatchlistData | null) => void;
+  incrementProgress: () => void;
 };
 
 const EditModal = ({
@@ -20,6 +21,7 @@ const EditModal = ({
   setData,
   editWatchlist,
   handleEditWatchlist,
+  incrementProgress,
 }: EditModalProps) => {
   const statusSelectItem = [
     {
@@ -67,6 +69,7 @@ const EditModal = ({
           </div>
 
           <form className="mt-4 flex flex-col gap-4">
+            {/* Status */}
             <div>
               <label
                 htmlFor="status"
@@ -87,6 +90,35 @@ const EditModal = ({
                   </option>
                 ))}
               </select>
+            </div>
+            {/*Progress*/}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="progress" className="text-sm">
+                Episode progress
+              </label>
+              <div className="relative flex items-center gap-1">
+                <input
+                  type="number"
+                  name="progress"
+                  id="progress"
+                  min={0}
+                  value={data.progress}
+                  onChange={(e) => setData("progress", Number(e.target.value))}
+                  className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
+                />
+                <div className="absolute right-4 flex items-center gap-1 md:right-10">
+                  {editWatchlist?.episodes && (
+                    <p>/ {editWatchlist.episodes} eps</p>
+                  )}
+                  <button
+                    type="button"
+                    className="border-border rounded-full border p-2 hover:cursor-pointer"
+                    onClick={() => incrementProgress()}
+                  >
+                    <LuPlus />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Action Buttons Footer */}
