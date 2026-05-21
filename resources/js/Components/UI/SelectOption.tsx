@@ -22,7 +22,7 @@ export const SelectOption = ({
 }: SelectOptionProps) => {
   return (
     <div>
-      <label htmlFor="status" className="mb-1 block text-sm font-medium">
+      <label htmlFor={id} className="mb-1 block text-sm font-medium">
         {label}
       </label>
       <select

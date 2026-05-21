@@ -109,6 +109,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
   );
 
   const incrementProgress = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setWatchlistFormData((prev: WatchlistFormData) => {
       const current = prev.progress === "" ? 0 : Number(prev.progress);
       const next = current + 1;

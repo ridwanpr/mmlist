@@ -1,12 +1,14 @@
 import type React from "react";
-import { router, Link } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import FrontLayout from "../../Layouts/FrontLayout";
 import WatchlistTab from "./Partials/WatchlistTab";
-import { useImageProxy } from "../../utils/image-proxy";
 import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
 import { useState } from "react";
 import DetailModal from "./Partials/DetailModal";
 import DashContainer from "../UserDash/Partials/DashContainer";
+import EditModal from "./Partials/EditModal";
+import AnimeList from "./Partials/AnimeList";
+import Pagination from "../../Components/UI/Pagination";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -20,11 +22,24 @@ type WatchlistPropsType = {
   };
 };
 
+export type EditWatchlistForm = {
+  animeId: string;
+  userId: string;
+  status: string;
+  progress: number;
+  score: number | null;
+  note: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+};
+
 const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
-  const { proxyImage } = useImageProxy();
   const activeTab = status || "watching";
 
   const [selectedWatchlist, setSelectedWatchlist] =
+    useState<App.DTOs.WatchlistData | null>(null);
+
+  const [editWatchlist, setEditWatchlist] =
     useState<App.DTOs.WatchlistData | null>(null);
 
   const handleChangeTab = (tab: string) => {
@@ -35,6 +50,26 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
         },
       }),
     );
+  };
+
+  const { data, setData } = useForm<EditWatchlistForm>({
+    animeId: "",
+    userId: "",
+    status: "",
+    progress: 0,
+    score: null,
+    note: "",
+    started_at: "",
+    completed_at: "",
+  });
+
+  const handleEditWatchlist = (watchlist: App.DTOs.WatchlistData | null) => {
+    setEditWatchlist(watchlist);
+    if (watchlist) {
+      setData({
+        ...watchlist,
+      });
+    }
   };
 
   return (
@@ -61,95 +96,14 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
           </p>
 
           {/*Anime List*/}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {watchlists?.data.map((watchlist) => (
-              <div
-                key={watchlist.id}
-                className="bg-surface border-border flex h-28 w-full overflow-hidden rounded-xl border transition-shadow hover:shadow-sm"
-              >
-                <img
-                  src={proxyImage(watchlist.images?.jpg.image_url)}
-                  alt={`${watchlist.title} cover`}
-                  className="xs:w-24 w-20 object-cover"
-                />
-
-                <div className="flex flex-1 flex-col justify-between p-2.5">
-                  <div>
-                    <p className="text-text line-clamp-1 font-sans text-sm leading-tight font-semibold tracking-tight">
-                      {watchlist.title}
-                    </p>
-                    <div className="text-text-muted mt-1 flex items-center gap-2 text-xs">
-                      <span>{watchlist.year}</span>
-                      <span className="text-border text-[10px]">•</span>
-                      <span className="truncate">{watchlist.type}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-text-muted flex items-center gap-2 text-xs">
-                      Personal Score: {watchlist.score || "-"}
-                    </p>
-                  </div>
-
-                  <div className="border-border/60 flex items-center justify-between border-t pt-2">
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-text-muted">
-                        Ep{" "}
-                        <strong className="text-text font-semibold">
-                          {watchlist.progress}
-                        </strong>
-                        {watchlist.episodes && ` / ${watchlist.episodes}`}
-                      </span>
-                      <button className="text-primary hover:text-primary-dark font-medium transition-colors">
-                        +1 ep
-                      </button>
-                    </div>
-
-                    <div className="text-text-muted flex items-center gap-2.5 text-xs font-medium">
-                      <button
-                        onClick={() => setSelectedWatchlist(watchlist)}
-                        className="hover:text-text transition-colors hover:cursor-pointer"
-                      >
-                        View
-                      </button>
-                      <button className="hover:text-text transition-colors hover:cursor-pointer">
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <AnimeList
+            watchlists={watchlists}
+            setSelectedWatchlist={setSelectedWatchlist}
+            handleEditWatchlist={handleEditWatchlist}
+          />
 
           {/* Pagination */}
-          {watchlists?.links && watchlists.links.length > 3 && (
-            <div className="mt-8 flex justify-center gap-1">
-              {watchlists.links.map((link, index) => {
-                if (!link.url) {
-                  return (
-                    <span
-                      key={index}
-                      className="border-border text-text-muted/50 cursor-not-allowed rounded-lg border px-3 py-1.5 text-xs opacity-50"
-                      dangerouslySetInnerHTML={{ __html: link.label }}
-                    />
-                  );
-                }
-
-                return (
-                  <Link
-                    key={index}
-                    href={link.url}
-                    className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      link.active
-                        ? "bg-primary border-primary text-white"
-                        : "border-border bg-surface text-text hover:bg-muted"
-                    }`}
-                    dangerouslySetInnerHTML={{ __html: link.label }}
-                  />
-                );
-              })}
-            </div>
-          )}
+          <Pagination links={watchlists.links} />
         </div>
       </div>
 
@@ -157,6 +111,13 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
       <DetailModal
         selectedWatchlist={selectedWatchlist}
         setSelectedWatchlist={setSelectedWatchlist}
+      />
+
+      <EditModal
+        editWatchlist={editWatchlist}
+        handleEditWatchlist={handleEditWatchlist}
+        data={data}
+        setData={setData}
       />
     </DashContainer>
   );
