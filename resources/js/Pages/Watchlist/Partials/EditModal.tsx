@@ -210,6 +210,20 @@ const EditModal = ({
                 />
               </div>
             </div>
+            {/* Note */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="score" className="text-sm">
+                Note
+              </label>
+              <textarea
+                rows={3}
+                value={data.note ?? ""}
+                name="note"
+                id="note"
+                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
+                onChange={(e) => setData("note", e.target.value)}
+              ></textarea>
+            </div>
 
             {/* Action Buttons Footer */}
             <div className="border-border/60 mt-2 flex gap-3 border-t pt-4">

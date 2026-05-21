@@ -10,6 +10,7 @@ import EditModal from "./Partials/EditModal";
 import AnimeList from "./Partials/AnimeList";
 import Pagination from "../../Components/UI/Pagination";
 import { update as watchlistUpdate } from "../../actions/App/Http/Controllers/WatchlistController";
+import { destroy as watchlistDelete } from "../../actions/App/Http/Controllers/WatchlistController";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -85,6 +86,12 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
     setEditWatchlist(null);
   };
 
+  const handleDeleteWatchlist = (watchlistId: number) => {
+    if (confirm("Are you sure you want to remove this watchlist item?")) {
+      router.delete(watchlistDelete.url(watchlistId));
+    }
+  };
+
   return (
     <DashContainer>
       <div className="p-4 lg:p-0">
@@ -113,6 +120,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
             watchlists={watchlists}
             setSelectedWatchlist={setSelectedWatchlist}
             handleEditWatchlist={handleEditWatchlist}
+            handleDeleteWatchlist={handleDeleteWatchlist}
           />
 
           {/* Pagination */}

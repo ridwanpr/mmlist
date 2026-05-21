@@ -1,5 +1,6 @@
 import type { SetStateAction } from "react";
 import { useImageProxy } from "../../../utils/image-proxy";
+import { LuTrash2 } from "react-icons/lu";
 
 type AnimeListProps = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -7,12 +8,14 @@ type AnimeListProps = {
     SetStateAction<App.DTOs.WatchlistData | null>
   >;
   handleEditWatchlist: (watchlist: App.DTOs.WatchlistData | null) => void;
+  handleDeleteWatchlist: (watchlistId: number) => void;
 };
 
 const AnimeList = ({
   watchlists,
   setSelectedWatchlist,
   handleEditWatchlist,
+  handleDeleteWatchlist,
 }: AnimeListProps) => {
   const { proxyImage } = useImageProxy();
 
@@ -55,9 +58,6 @@ const AnimeList = ({
                   </strong>
                   {watchlist.episodes && ` / ${watchlist.episodes}`}
                 </span>
-                <button className="text-primary hover:text-primary-dark font-medium transition-colors">
-                  +1 ep
-                </button>
               </div>
 
               <div className="text-text-muted flex items-center gap-2.5 text-xs font-medium">
@@ -72,6 +72,15 @@ const AnimeList = ({
                   className="hover:text-text transition-colors hover:cursor-pointer"
                 >
                   Edit
+                </button>
+                <button
+                  onClick={() =>
+                    watchlist?.id && handleDeleteWatchlist(watchlist.id)
+                  }
+                  title="Delete"
+                  className="transition-colors hover:cursor-pointer hover:text-red-500"
+                >
+                  <LuTrash2 />
                 </button>
               </div>
             </div>
