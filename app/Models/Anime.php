@@ -225,4 +225,9 @@ class Anime extends Model
             ->withPivot('status', 'progress', 'score', 'note')
             ->withTimestamps();
     }
+
+    public function triggerContexts()
+    {
+        return $this->hasMany(AnimeTriggerContext::class);
+    }
 }
