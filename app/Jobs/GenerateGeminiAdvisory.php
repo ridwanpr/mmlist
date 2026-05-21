@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Anime;
+use App\Models\TriggerContent;
+use App\Models\AnimeTriggerContext;
 use App\Services\GeminiService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,7 +22,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
      */
     public function handle(GeminiService $geminiService): void
     {
-        $cacheKey = 'gemini_daily_requests_'.date('Y-m-d');
+        $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
 
         // 1. Calculate how many requests we are still allowed to make today
@@ -33,7 +35,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         // 2. Limit to either 15 (our max per minute) or the remaining daily quota
         $limit = min(15, $remainingQuota);
 
-        // 3. Fetch up to 15 anime instead of just ->first()
+        // 3. Fetch up to 15 anime missing an AI summary
         $animes = Anime::whereNull('ai_advisory')
             ->where('source', '!=', 'Original')
             ->where('rating', '!=', 'Rx - Hentai')
@@ -49,30 +51,53 @@ class GenerateGeminiAdvisory implements ShouldQueue
             return;
         }
 
+        // Fetch all possible trigger content values from the database to map back against names
+        $dbTriggerContents = TriggerContent::pluck('id', 'name')->toArray();
+        $availableTriggerNames = array_keys($dbTriggerContents);
+
         $processedCount = 0;
 
         foreach ($animes as $anime) {
             try {
-                $advisory = $geminiService->generateAnimeAdvisory($anime->title, $anime->rating);
+                // Returns clean structured data array separating general overview and specific triggers
+                $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
 
-                if ($advisory != 'Not yet available.') {
+                if ($result['ai_advisory'] !== 'Not yet available.') {
                     $anime->update([
-                        'ai_advisory' => $advisory,
+                        'ai_advisory' => $result['ai_advisory'],
                     ]);
+
+                    // Process structural itemized trigger contexts saved inside the JSON payload
+                    foreach ($result['matched_triggers'] as $matched) {
+                        $name = $matched['trigger_name'] ?? '';
+                        $summary = $matched['ai_summary'] ?? '';
+
+                        // Safeguard validation verifying the generated category matches an ID in your db
+                        if (array_key_exists($name, $dbTriggerContents) && ! empty($summary)) {
+                            AnimeTriggerContext::updateOrCreate(
+                                [
+                                    'anime_id' => $anime->id,
+                                    'trigger_content_id' => $dbTriggerContents[$name],
+                                ],
+                                [
+                                    'ai_summary' => $summary,
+                                ]
+                            );
+                        }
+                    }
                 }
 
                 $processedCount++;
-
                 sleep(4);
             } catch (\Exception $e) {
-                Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: ".$e->getMessage());
+                Log::error("Gemini Advisory Processing Failed for Anime ID {$anime->id}: " . $e->getMessage());
                 $anime->update([
                     'ai_advisory' => 'Not yet available.',
                 ]);
             }
         }
 
-        // 5. Bulk update the cache once at the end of the loop
+        // 5. Bulk update the daily cache tracker threshold count once
         Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
     }
 }

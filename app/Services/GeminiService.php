@@ -20,71 +20,78 @@ class GeminiService
     {
         $this->apiKey = config('app.gemini_api_key');
 
+        // Aligned to column 0 to prevent PHP indentation compiler errors
         $this->systemInstruction = <<<'PROMPT'
-        You are an anime expert media analyst specializing in content advisories.
+        You are an anime expert media analyst specializing in content advisories and content triggers. Your output must be a strict JSON object matching the requested schema.
 
         <knowledge_rules>
-        1. Base your advisory on the most specific reliable information available, in this order: the exact anime installment, then its direct source material, then broader franchise sources only if they belong to the same continuity and adaptation lineage. Do not infer content from genre or title alone.
-        2. Fallback Clause: If the anime does not exist or you still lack reliable content knowledge after checking the exact installment and any allowed franchise sources, output exactly: "Insufficient data to provide a reliable advisory." Nothing else.
-        3. Franchise Generalization: If a specific season or film is requested, use that installment's source material first. If specific information is unavailable, fall back only to broader franchise sources that clearly apply to the same continuity. Do not import themes, scenes, or content from unrelated arcs, spin-offs, alternate continuities, or different adaptations.
-        4. Rating Calibration: If an official age rating is provided, adjust your language as follows:
-           - G / PG / All Ages: use neutral, matter-of-fact language; avoid alarming descriptors.
-           - PG-13 / Teen: use clear but measured language; name mature themes directly without dramatizing them.
-           - R / Mature / 17+: use precise, frank language; do not soften or omit significant content warnings.
-           If no rating is provided, use objective, descriptive language only.
+        1. Base your advisory and trigger summaries on specific, reliable information available in this lineage order: exact installment, source material, then continuity lineage.
+        2. Fallback Clause: If data is missing or incomplete, set the "ai_advisory" field value to exactly: "Insufficient data to provide a reliable advisory." and return an empty array for "matched_triggers".
+        3. Rating Calibration: Calibrate description descriptions safely matching the official age ratings provided (G/PG vs Teen vs Mature). Do not soft-pedal severe themes on R-ratings.
         </knowledge_rules>
 
         <output_constraints>
-        1. Structure: Your entire response must be exactly one plain-text paragraph. Completely omit introductions, title headers, sign-offs, or conversational commentary.
-        2. Length Guidance: The paragraph must consist of exactly 3 to 4 sentences. Keep individual sentences short (aim for 12 to 15 words per sentence) to naturally keep the total output between 40 and 60 words.
-        3. Content Scope: Describe only themes, conflicts, and visual elements actually present in the anime. Do not speculate or generalize from genre conventions.
+        Your entire response MUST be an unformatted, valid JSON string matching this structural schema precisely:
+        {
+        "ai_advisory": "A 3-4 sentence plain text paragraph (40-60 words total) evaluating overall thematic elements. No markdown formatting, bolding, or bullets.",
+        "matched_triggers": [
+            {
+            "trigger_name": "The exact name string of the trigger as provided in the allowed list",
+            "ai_summary": "A brief, 1-2 sentence objective context summary explaining how, when, or to what extent this specific trigger shows up in this anime."
+            }
+        ]
+        }
         </output_constraints>
 
-        <examples>
-        Example 1:
-        Spy x Family is a wholesome action-comedy with a lighthearted tone. It features espionage, mild cartoon violence, and occasional gunfire, though the action sequences are highly stylized. The narrative focuses primarily on found family dynamics and humorous misunderstandings, making it highly accessible.
-
-        Example 2:
-        K-On! is a slice-of-life comedy focused on friendship and music. The story centers around high school club activities, daily teenage struggles, and personal growth. The narrative remains deeply positive, prioritizing comedic character interactions and musical performances over external conflict.
-        </examples>
-
         <critical_restrictions>
-        - Absolute Plain Text: Do not use markdown, bullet points, bolding, italics, or headers.
-        - No Ratings Mention: Do not mention, quote, or allude to any official age rating in your final paragraph.
-        - No Meta-Text: Do not explain your reasoning, show drafts, count words aloud, or include any text that is not the final advisory paragraph.
+        - You are strictly forbidden from including any markdown code block wrappers (do NOT wrap the output in triple backticks) or conversational commentary.
+        - The keys "ai_advisory" and "matched_triggers" must exist.
+        - "trigger_name" MUST perfectly match one of the string names provided in the user request. Do not invent your own category names.
         </critical_restrictions>
         PROMPT;
     }
 
-    public function generateAnimeAdvisory(string $title, ?string $rating = null): string
+    /**
+     * Generate content advisory and localized trigger contexts.
+     * 
+     * @param array<string> $availableTriggers
+     * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
+     */
+    public function generateAnimeAdvisory(string $title, array $availableTriggers, ?string $rating = null): array
     {
         $ratingContext = $rating ? " Official Age Rating: {$rating}." : '';
-        $prompt = "Provide the content advisory for anime: {$title}.{$ratingContext}";
+
+        // Pass the array of allowed triggers into the user prompt
+        $triggerListStr = implode(", ", array_map(fn($t) => "'{$t}'", $availableTriggers));
+
+        $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n" .
+            "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n" .
+            "Allowed Trigger Names: [{$triggerListStr}]";
+
         $response = null;
 
         try {
-            // Gemini 3.1 Flash Lite (Primary)
-            $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 20);
+            // Primary model call
+            $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25);
         } catch (ConnectionException $e) {
             Log::warning("Gemini main call timed out for {$title}.");
         }
 
         if ($response && $response->successful()) {
-            return $this->extractText($response->json());
+            return $this->parseJsonOutput($this->extractText($response->json()));
         }
 
+        // Fallback procedure if primary model fails or gets rate-limited
         if (! $response || $response->status() === 429 || $response->serverError()) {
             $status = $response ? $response->status() : 'Timeout';
             Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Falling back to Gemma 4 31B.");
 
             try {
-                // Gemma 4 31B (Fallback)
                 $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60);
 
                 if ($fallbackResponse->successful()) {
-                    return $this->extractText($fallbackResponse->json());
+                    return $this->parseJsonOutput($this->extractText($fallbackResponse->json()));
                 }
-
                 Log::error("Gemma fallback failed for {$title}: " . $fallbackResponse->body());
             } catch (ConnectionException $e) {
                 Log::error("Gemma fallback also timed out for {$title}.");
@@ -96,14 +103,49 @@ class GeminiService
         throw new Exception('Failed to generate advisory after fallback.');
     }
 
+    /**
+     * Make HTTP request to the API gateway.
+     */
     private function callApi(string $model, string $prompt, int $timeout = 30): Response
     {
         $url = "{$this->baseUrl}{$model}:generateContent?key={$this->apiKey}";
 
-        $generationConfig = ['temperature' => 1.0];
+        $generationConfig = [
+            'temperature' => 0.2,
+        ];
 
+        // Apply Structured Outputs JSON Schema only to native Gemini models
         if (! str_starts_with($model, 'gemma-')) {
+            $generationConfig['responseMimeType'] = 'application/json';
             $generationConfig['thinkingConfig'] = ['thinkingLevel' => 'minimal'];
+
+            $generationConfig['responseSchema'] = [
+                'type' => 'OBJECT',
+                'properties' => [
+                    'ai_advisory' => [
+                        'type' => 'STRING',
+                        'description' => 'A 3-4 sentence plain text paragraph evaluating overall thematic elements.'
+                    ],
+                    'matched_triggers' => [
+                        'type' => 'ARRAY',
+                        'items' => [
+                            'type' => 'OBJECT',
+                            'properties' => [
+                                'trigger_name' => [
+                                    'type' => 'STRING',
+                                    'description' => 'The exact name string of the trigger provided in the allowed list.'
+                                ],
+                                'ai_summary' => [
+                                    'type' => 'STRING',
+                                    'description' => 'A brief, 1-2 sentence objective context summary explaining how this trigger shows up.'
+                                ]
+                            ],
+                            'required' => ['trigger_name', 'ai_summary']
+                        ]
+                    ]
+                ],
+                'required' => ['ai_advisory', 'matched_triggers']
+            ];
         }
 
         $payload = [
@@ -120,26 +162,49 @@ class GeminiService
     }
 
     /**
-     * @param  array<int|string, mixed>  $json
+     * Extract raw text string from response payload blocks.
      */
     private function extractText(array $json): string
     {
         $parts = $json['candidates'][0]['content']['parts'] ?? [];
-
         if (empty($parts)) {
-            return 'Insufficient data to provide a reliable advisory.';
+            return '';
         }
 
         $finalAnswer = '';
-
         foreach ($parts as $part) {
             if (isset($part['thought']) && $part['thought'] === true) {
                 continue;
             }
-
             $finalAnswer .= $part['text'] ?? '';
         }
 
-        return trim($finalAnswer) ?: 'Insufficient data to provide a reliable advisory.';
+        return trim($finalAnswer);
+    }
+
+    /**
+     * Clean up and decode raw text block into an structured array representation.
+     * 
+     * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
+     */
+    private function parseJsonOutput(string $rawText): array
+    {
+        if (empty($rawText)) {
+            return ['ai_advisory' => 'Insufficient data to provide a reliable advisory.', 'matched_triggers' => []];
+        }
+
+        // Clean out any accidental markdown wrapper artifacts if they leak from fallback models
+        $cleaned = preg_replace('/^```json\s*|```$/m', '', $rawText);
+        $decoded = json_decode(trim($cleaned), true);
+
+        if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
+            Log::error("Failed to decode valid JSON content structural layout. Raw Output: " . $rawText);
+            return ['ai_advisory' => 'Insufficient data to provide a reliable advisory.', 'matched_triggers' => []];
+        }
+
+        return [
+            'ai_advisory' => $decoded['ai_advisory'],
+            'matched_triggers' => $decoded['matched_triggers'] ?? []
+        ];
     }
 }

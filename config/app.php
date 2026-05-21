@@ -126,4 +126,5 @@ return [
     'jikan_url' => env('JIKAN_BASE_URL', 'https://api.jikan.moe/v4'),
 
     'gemini_api_key' => env('GEMINI_API_KEY', ''),
+    'gemini_api_key_2' => env('GEMINI_API_KEY_2', ''),
 ];
