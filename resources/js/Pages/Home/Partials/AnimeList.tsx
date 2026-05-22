@@ -1,4 +1,4 @@
-import { LuFlame, LuRadio } from "react-icons/lu";
+import { LuAward, LuFilm } from "react-icons/lu";
 import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
 
 import AnimeCard from "../../../Components/AnimeCard";
@@ -15,7 +15,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       <SectionHeader
         href={browseIndex.url({ query: { airing: "true" } })}
         title="Now Airing"
-        icon={<LuRadio size="32px" className="text-primary" />}
+        icon={<LuFilm size="22px" />}
       />
 
       <section id="now-airing" className="mb-8">
@@ -30,7 +30,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       <SectionHeader
         href={browseIndex.url({ query: { sort: "score", order: "desc" } })}
         title="Top Anime"
-        icon={<LuFlame size="32px" className="text-primary" />}
+        icon={<LuAward size="22px" />}
       />
 
       <section id="top" className="mb-4">
