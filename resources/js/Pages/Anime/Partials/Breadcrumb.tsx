@@ -3,7 +3,7 @@ import { LuChevronRight } from "react-icons/lu";
 
 const Breadcrumb = ({ title }: { title: string }) => {
   return (
-    <div className="text-text-muted mb-4 flex items-center gap-2 text-sm font-semibold">
+    <div className="text-text-muted mb-4 hidden items-center gap-2 text-sm font-semibold md:flex">
       <Link
         href="/"
         className="hover:text-primary cursor-pointer text-xs transition-colors md:text-sm"
@@ -18,7 +18,7 @@ const Breadcrumb = ({ title }: { title: string }) => {
         Anime
       </Link>
       <LuChevronRight size={16} />
-      <span className="text-text text-xs md:text-sm">{title && title}</span>
+      <span className="text-text text-xs md:text-sm">{title}</span>
     </div>
   );
 };

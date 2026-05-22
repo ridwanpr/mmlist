@@ -6,7 +6,6 @@ import { router, usePage } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";
 import type { WatchlistFormData } from "./AddToWatchlist";
 import { LuBookmarkX } from "react-icons/lu";
-import EpisodeList from "./EpisodeList";
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
@@ -183,7 +182,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
   return (
     <div className="min-w-0 lg:col-span-3">
       {/* MOBILE COVER */}
-      <div className="mb-5 flex justify-center md:hidden">
+      <div className="mb-5 mt-3 flex justify-center md:hidden">
         <img
           src={coverImage}
           alt="cover anime image"
@@ -288,7 +287,6 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
 
           {/* COMMENTS */}
           <Comment />
-          <EpisodeList />
         </main>
       </div>
     </div>
