@@ -34,14 +34,10 @@ const comments = [
 const Comment = () => {
   return (
     <section className="border-border mt-6 border-t pt-5">
-      <div className="mb-4 flex items-baseline justify-between">
-        <h2 className="text-text text-base font-bold">Discussion</h2>
-        <a href="#" className="text-primary text-xs font-bold hover:underline">
-          View all 847 →
-        </a>
-      </div>
+      <h2 className="text-text mb-4 text-base font-bold">Discussion</h2>
 
-      <div>
+      {/* Comments Preview List */}
+      <div className="space-y-1">
         {comments.map((c, i) => (
           <div
             key={i}
@@ -59,7 +55,21 @@ const Comment = () => {
         ))}
       </div>
 
-      <div className="border-border border-t pt-2.5">
+      {/* Inline Input Box  */}
+      <div className="border-border bg-surface mt-6 rounded-lg border p-3 shadow-xs">
+        <textarea
+          placeholder="Share your thoughts..."
+          className="text-text placeholder:text-text/50 min-h-17.5 w-full resize-none bg-transparent text-sm outline-hidden"
+        />
+        <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
+          <button className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95">
+            Post Comment
+          </button>
+        </div>
+      </div>
+
+      {/* 3. View All Link */}
+      <div className="border-border mt-4 border-t pt-3">
         <a href="#" className="text-primary text-sm font-bold hover:underline">
           View all 847 comments →
         </a>
