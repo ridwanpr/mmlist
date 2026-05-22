@@ -12,7 +12,8 @@ const DesktopNav = () => {
   const { component } = usePage();
 
   const isHomeActive = component === "Home/Index";
-  const isBrowseActive = component.startsWith("Browse/");
+  const isBrowseActive =
+    component.startsWith("Browse/") || component.startsWith("Anime/");
 
   return (
     <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
