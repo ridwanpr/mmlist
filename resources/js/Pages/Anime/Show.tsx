@@ -5,6 +5,7 @@ import MainInfo from "./Partials/MainInfo";
 import { SideInfo } from "./Partials/SideInfo";
 import TriggerWarning from "./Partials/TriggerWarning";
 import FrontLayout from "../../Layouts/FrontLayout";
+import AppHead from "../../Components/AppHead";
 
 interface ShowAnimeProps {
   anime: App.DTOs.AnimeData;
@@ -21,26 +22,33 @@ const ShowAnime = ({
   userWatchlist,
   aiTriggerContext,
 }: ShowAnimeProps) => {
+  const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
+  const metaDescription = `Find ${animeTitle} trigger warnings and community safety flags on Mamorulist before you watch.`;
+
   return (
-    <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
-      {/* Breadcrumb */}
-      <Breadcrumb title={anime && anime.title} />
+    <>
+      <AppHead title={animeTitle} meta={metaDescription} />
+      <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
+        {/* Breadcrumb */}
+        <Breadcrumb title={animeTitle} />
 
-      {/* Anime Information */}
-      <div className="grid gap-6 lg:grid-cols-4">
-        {/* Left Main Info */}
-        <MainInfo anime={anime && anime} userWatchlist={userWatchlist} />
+        {/* Anime Information */}
+        <div className="grid gap-6 lg:grid-cols-4">
+          {/* Left Main Info */}
+          <MainInfo anime={anime} userWatchlist={userWatchlist} />
 
-        {/* Right Info */}
-        <SideInfo triggers={triggers} anime={anime} />
+          {/* Right Info */}
+          <SideInfo triggers={triggers} anime={anime} />
+        </div>
+
+        <TriggerWarning
+          triggers={triggers}
+          anime={anime}
+          userTriggerVote={userTriggerVote}
+          aiTriggerContext={aiTriggerContext}
+        />
       </div>
-      <TriggerWarning
-        triggers={triggers}
-        anime={anime}
-        userTriggerVote={userTriggerVote}
-        aiTriggerContext={aiTriggerContext}
-      />
-    </div>
+    </>
   );
 };
 

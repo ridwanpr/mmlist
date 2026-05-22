@@ -3,6 +3,7 @@ import type React from "react";
 import FrontLayout from "../../Layouts/FrontLayout";
 import SearchSection from "./Partials/SearchSection";
 import AnimeList from "./Partials/AnimeList";
+import AppHead from "../../Components/AppHead";
 
 interface BrowseProps {
   animes: App.DTOs.PaginatedAnimeData;
@@ -34,18 +35,24 @@ const Browse = ({
   filters,
 }: BrowseProps) => {
   return (
-    <div className="mb-8">
-      <SearchSection
-        genres={genres}
-        themes={themes}
-        year={year}
-        type={type}
-        season={season}
-        filters={filters}
-        rating={rating}
+    <>
+      <AppHead
+        title="Browse Anime"
+        meta="Browse our comprehensive anime database. Filter series by specific trigger warnings, search for content flags, and find safe shows to add to your list."
       />
-      <AnimeList animes={animes} />
-    </div>
+      <div className="mb-8">
+        <SearchSection
+          genres={genres}
+          themes={themes}
+          year={year}
+          type={type}
+          season={season}
+          filters={filters}
+          rating={rating}
+        />
+        <AnimeList animes={animes} />
+      </div>
+    </>
   );
 };
 

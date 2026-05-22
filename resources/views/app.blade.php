@@ -31,7 +31,11 @@
     </script>
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
-    <x-inertia::head />
+    <x-inertia::head>
+        <title>{{ config('app.name') }}</title>
+        <meta name="description"
+            content="Find anime trigger warnings and community-rated content flags on Mamorulist. Search your favorite series and safely manage your anime watchlist.">
+    </x-inertia::head>
 </head>
 
 <body>

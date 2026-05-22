@@ -6,6 +6,7 @@ import Features from "./Partials/Features";
 import Hero from "./Partials/Hero";
 import HowItWork from "./Partials/HowItWork";
 import FrontLayout from "../../Layouts/FrontLayout";
+import AppHead from "../../Components/AppHead";
 
 interface HomeProps {
   nowAiring: App.DTOs.AnimeData[];
@@ -16,6 +17,10 @@ interface HomeProps {
 const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
   return (
     <>
+      <AppHead
+        title="Track Anime Trigger Warnings & Watchlists"
+        meta="Welcome to Mamorulist, the community-driven anime trigger warning database. Search safety flags, check content warnings, and manage your watchlist."
+      />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <Features />
