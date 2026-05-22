@@ -53,6 +53,7 @@ declare namespace App {
       readonly updated_at: string | null;
     };
     export type AnimeTriggerData = {
+      readonly id: number | null;
       readonly trigger_content_id: number;
       readonly anime_id: number;
       readonly user_id: number;
@@ -60,6 +61,9 @@ declare namespace App {
       readonly severity: string | null;
       readonly framing: string | null;
       readonly triggerContent: App.DTOs.TriggerContentData | null;
+      readonly animeData: App.DTOs.AnimeData | null;
+      readonly created_at: string | null;
+      readonly updated_at: string | null;
     };
     export type GenreData = {
       readonly id: number;

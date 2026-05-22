@@ -10,6 +10,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class AnimeTriggerData
 {
     public function __construct(
+        public ?int $id,
         public int $trigger_content_id,
         public int $anime_id,
         public int $user_id,
@@ -18,6 +19,8 @@ readonly class AnimeTriggerData
         public ?string $framing,
         public ?TriggerContentData $triggerContent = null,
         public ?AnimeData $animeData = null,
+        public ?string $created_at = null,
+        public ?string $updated_at = null,
     ) {}
 
     public static function fromRequest(
@@ -29,6 +32,7 @@ readonly class AnimeTriggerData
         $validated = $request->validated();
 
         return new self(
+            id: null,
             trigger_content_id: $triggerContentId,
             anime_id: $animeId,
             user_id: $userId,
@@ -41,6 +45,7 @@ readonly class AnimeTriggerData
     public static function fromModel(AnimeTrigger $model): self
     {
         return new self(
+            id: $model->id,
             trigger_content_id: $model->trigger_content_id,
             anime_id: $model->anime_id,
             user_id: $model->user_id,
@@ -50,7 +55,9 @@ readonly class AnimeTriggerData
             triggerContent: $model->relationLoaded('triggerContent') ?
                 TriggerContentData::fromModel($model->triggerContent) : null,
             animeData: $model->relationLoaded('anime') ?
-                AnimeData::fromModel($model->anime) : null
+                AnimeData::fromModel($model->anime) : null,
+            created_at: $model->created_at ?? null,
+            updated_at: $model->updated_at ?? null,
         );
     }
 
@@ -58,6 +65,7 @@ readonly class AnimeTriggerData
     public function toArray(): array
     {
         return [
+            'id' => $this->id,
             'trigger_content_id' => $this->trigger_content_id,
             'anime_id' => $this->anime_id,
             'user_id' => $this->user_id,

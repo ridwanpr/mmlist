@@ -39,11 +39,10 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $animes = Anime::whereNull('ai_advisory')
             ->where('source', '!=', 'Original')
             ->where('rating', '!=', 'Rx - Hentai')
-            ->orderByRaw("type = 'TV' DESC")
-            ->orderBy('year', 'desc')
-            ->orderBy('airing', 'desc')
-            ->orderBy('score', 'desc')
-            ->orderBy('id')
+            ->orderByRaw("animes.type = 'TV' DESC")
+            ->orderBy('animes.year', 'desc')
+            ->orderBy('animes.airing', 'desc')
+            ->orderBy('animes.score', 'desc')
             ->limit($limit)
             ->get();
 

@@ -18,7 +18,7 @@ const SideMenu = () => {
   const joinedAt = auth?.user?.joined_at || "Recent";
 
   return (
-    <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex">
+    <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex self-start">
       <div className="mb-5 flex items-center gap-4">
         <div className="min-w-0">
           <p className="text-text truncate font-medium">{userName}</p>
