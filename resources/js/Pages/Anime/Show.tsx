@@ -13,6 +13,7 @@ interface ShowAnimeProps {
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
   userWatchlist: App.DTOs.WatchlistData | null;
   aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
+  topComments: App.DTOs.CommentData[] | null;
 }
 
 const ShowAnime = ({
@@ -21,6 +22,7 @@ const ShowAnime = ({
   userTriggerVote,
   userWatchlist,
   aiTriggerContext,
+  topComments,
 }: ShowAnimeProps) => {
   const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
   const metaDescription = `Find ${animeTitle} trigger warnings and community safety flags on Mamorulist before you watch.`;
@@ -35,7 +37,11 @@ const ShowAnime = ({
         {/* Anime Information */}
         <div className="grid gap-6 lg:grid-cols-4">
           {/* Left Main Info */}
-          <MainInfo anime={anime} userWatchlist={userWatchlist} />
+          <MainInfo
+            anime={anime}
+            userWatchlist={userWatchlist}
+            topComments={topComments}
+          />
 
           {/* Right Info */}
           <SideInfo triggers={triggers} anime={anime} />

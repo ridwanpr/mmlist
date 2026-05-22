@@ -2,44 +2,12 @@ import { useForm, usePage, Link } from "@inertiajs/react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
-const comments = [
-  {
-    user: "AnimeFanatic99",
-    time: "2 days ago",
-    up: 124,
-    text: "Absolutely phenomenal. The animation quality is top-tier and the story kept me on the edge of my seat.",
-  },
-  {
-    user: "SakuraDreamer",
-    time: "1 week ago",
-    up: 98,
-    text: "I went in with moderate expectations but this completely blew me away. The OST alone is worth the watch.",
-  },
-  {
-    user: "OtakuCritic",
-    time: "3 weeks ago",
-    up: 76,
-    text: "Solid entry for the season. The world-building is where this show truly shines — every detail feels intentional.",
-  },
-  {
-    user: "MangaFirst",
-    time: "1 month ago",
-    up: 54,
-    text: "Read the manga twice before watching. The adaptation stays faithful in all the right ways.",
-  },
-  {
-    user: "KiritoFan2009",
-    time: "1 month ago",
-    up: 41,
-    text: "Episode 5 had me in tears. Not what I expected from episode one at all — this show really creeps up on you.",
-  },
-];
-
 type CommentProps = {
   anime: App.DTOs.AnimeData;
+  topComments: App.DTOs.CommentData[] | null;
 };
 
-const Comment = ({ anime }: CommentProps) => {
+const Comment = ({ anime, topComments }: CommentProps) => {
   const { auth } = usePage().props;
   const { data, setData, post, errors, reset } = useForm({
     slug: anime.slug,
@@ -62,21 +30,29 @@ const Comment = ({ anime }: CommentProps) => {
 
       {/* Comments Preview List */}
       <div className="space-y-1">
-        {comments.map((c, i) => (
-          <div
-            key={i}
-            className={`py-2.5 ${i < comments.length - 1 ? "border-border/60 border-b" : ""}`}
-          >
-            <div className="mb-1 flex items-baseline gap-2">
-              <span className="text-text text-sm font-bold">{c.user}</span>
-              <span className="text-text-muted text-[11px]">{c.time}</span>
-              <span className="text-text-muted ml-auto text-[11px]">
-                ↑ {c.up}
-              </span>
-            </div>
-            <p className="text-text/85 text-sm leading-snug">{c.text}</p>
-          </div>
-        ))}
+        {topComments && topComments.length > 0
+          ? topComments.map((comment, i) => (
+              <div
+                key={comment.id}
+                className={`py-2.5 ${i < topComments.length - 1 ? "border-border/60 border-b" : ""}`}
+              >
+                <div className="mb-1 flex items-baseline gap-2">
+                  <span className="text-text text-sm font-bold">
+                    {comment.user?.name}
+                  </span>
+                  <span className="text-text-muted text-[11px]">
+                    {comment.createdAt.toString()}
+                  </span>
+                  <span className="text-text-muted ml-auto text-[11px]">
+                    ↑ {comment.upvotes}
+                  </span>
+                </div>
+                <p className="text-text/85 text-sm leading-snug">
+                  {comment.body}
+                </p>
+              </div>
+            ))
+          : ""}
       </div>
 
       {/* Conditional Interface Placement */}

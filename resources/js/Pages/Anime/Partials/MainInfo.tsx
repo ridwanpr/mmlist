@@ -10,9 +10,10 @@ import { LuBookmarkX } from "react-icons/lu";
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
   userWatchlist: App.DTOs.WatchlistData | null;
+  topComments: App.DTOs.CommentData[] | null;
 }
 
-const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
+const MainInfo = ({ anime, userWatchlist, topComments }: MainInfoProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -307,7 +308,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
           </div>
 
           {/* COMMENTS */}
-          <Comment anime={anime} />
+          <Comment anime={anime} topComments={topComments} />
         </main>
       </div>
     </div>
