@@ -86,6 +86,20 @@ declare namespace App {
         active: boolean;
       }[];
     };
+    export type PaginatedAnimeTriggerData = {
+      readonly data: App.DTOs.AnimeTriggerData[];
+      readonly current_page: number;
+      readonly last_page: number;
+      readonly per_page: number;
+      readonly total: number;
+      readonly next_page_url: string | null;
+      readonly prev_page_url: string | null;
+      readonly links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+      }[];
+    };
     export type PaginatedWatchlistData = {
       readonly data: App.DTOs.WatchlistData[];
       readonly current_page: number;

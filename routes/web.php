@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('vote-anime-trigger/{triggerContentId}/{animeSlug}', [VoteController::class, 'voteAnimeTrigger'])
         ->name('vote.anime.trigger');
+    Route::get('votes', [VoteController::class, 'index'])->name('votes.index');
 
     Route::get('watchlist', [WatchlistController::class, 'index'])->name('watchlist.index');
     Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store');

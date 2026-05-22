@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AnimeTriggerData;
+use App\DTOs\PaginatedAnimeTriggerData;
 use App\Models\AnimeTrigger;
 use Illuminate\Support\Collection;
 
@@ -28,6 +29,18 @@ class VoteService
             ->where('anime_id', $animeId)
             ->get();
 
-        return $data->map(fn ($item) => AnimeTriggerData::fromModel($item));
+        return $data->map(fn($item) => AnimeTriggerData::fromModel($item));
+    }
+
+    public function getUserVotes(int $userId)
+    {
+        $paginatedData = AnimeTrigger::where('user_id', $userId)
+            ->with(['anime', 'triggerContent'])
+            ->paginate(15)
+            ->onEachSide(1)
+            ->withQueryString();
+
+        $transformed = $paginatedData->through(fn(AnimeTrigger $item): AnimeTriggerData => AnimeTriggerData::fromModel($item));
+        return PaginatedAnimeTriggerData::fromPaginator($transformed);
     }
 }

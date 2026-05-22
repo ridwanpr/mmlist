@@ -8,6 +8,7 @@ import {
   LuMessageCircle,
 } from "react-icons/lu";
 import SidebarLink from "../../../Components/UI/SidebarLink";
+import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
 
 const SideMenu = () => {
   const { auth } = usePage().props;
@@ -46,7 +47,7 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="#">
+      <SidebarLink href={voteIndex.url()} routeName="#">
         <span className="flex items-center gap-3">
           <LuCheck size={18} />
           <span>My Votes</span>

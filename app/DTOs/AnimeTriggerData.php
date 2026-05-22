@@ -17,6 +17,7 @@ readonly class AnimeTriggerData
         public ?string $severity,
         public ?string $framing,
         public ?TriggerContentData $triggerContent = null,
+        public ?AnimeData $animeData = null,
     ) {}
 
     public static function fromRequest(
@@ -47,7 +48,9 @@ readonly class AnimeTriggerData
             severity: $model->severity,
             framing: $model->framing,
             triggerContent: $model->relationLoaded('triggerContent') ?
-                TriggerContentData::fromModel($model->triggerContent) : null
+                TriggerContentData::fromModel($model->triggerContent) : null,
+            animeData: $model->relationLoaded('anime') ?
+                AnimeData::fromModel($model->anime) : null
         );
     }
 
