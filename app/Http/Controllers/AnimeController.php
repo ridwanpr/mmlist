@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\AnimeTriggerContextData;
+use App\DTOs\CommentData;
+use App\Models\Comment;
 use App\Services\AnimeService;
+use App\Services\CommentService;
 use App\Services\VoteService;
 use App\Services\WatchlistService;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +18,8 @@ class AnimeController extends Controller
     public function __construct(
         private AnimeService $animeService,
         private VoteService $voteService,
-        private WatchlistService $watchlistService
+        private WatchlistService $watchlistService,
+        private CommentService $commentService,
     ) {}
 
     public function show(string $slug): Response
@@ -33,12 +37,16 @@ class AnimeController extends Controller
             fn($item) => AnimeTriggerContextData::fromModel($item)
         );
 
+        $topComments = $this->commentService->getTopAnimeComments($anime->id);
+        $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
+
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
             'userTriggerVote' => $userTriggerVote ?? null,
             'userWatchlist' => $watchlist ?? null,
-            'aiTriggerContext' => $aiTriggerContext ?? null
+            'aiTriggerContext' => $aiTriggerContext ?? null,
+            'topComments' => $topCommentsDto ?? null
         ]);
     }
 }

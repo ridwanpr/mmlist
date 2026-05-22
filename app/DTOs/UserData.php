@@ -2,6 +2,7 @@
 
 namespace App\DTOs;
 
+use App\Models\User;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -13,23 +14,18 @@ readonly class UserData
         public string $username,
         public ?string $email,
         public ?string $createdAt,
-        public string $roleId,
+        public ?string $updatedAt,
     ) {}
 
-    public static function fromDatabase(object $row): self
+    public static function fromModel(User $model): self
     {
-        /** @var array<string, mixed> $data */
-        $data = (array) $row;
-
         return new self(
-            id: (int) ($data['id']),
-            name: (string) ($data['name']),
-            username: (string) ($data['username']),
-            email: (string) ($data['email'] ?? null),
-            createdAt: isset($data['created_at']) && is_string($data['created_at'])
-                ? $data['created_at']
-                : null,
-            roleId: (string) ($data['role_id'])
+            id: $model->id,
+            name: $model->name,
+            username: $model->username,
+            email: $model->email ?? null,
+            createdAt: $model->created_at ?? null,
+            updatedAt: $model->updated_at ?? null,
         );
     }
 }

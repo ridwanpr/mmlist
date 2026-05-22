@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\CommentData;
 use App\Models\Comment;
 
 class CommentService
@@ -13,5 +14,16 @@ class CommentService
             'anime_id' => $animeId,
             'body' => $data['body']
         ]);
+    }
+
+    public function getTopAnimeComments(int $animeId)
+    {
+        $commentData = Comment::where('anime_id', $animeId)
+            ->with(['user'])
+            ->limit(5)
+            ->orderBy('upvotes', 'asc')
+            ->get();
+
+        return $commentData;
     }
 }

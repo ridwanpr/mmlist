@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\AnimeController::show
- * @see app/Http/Controllers/AnimeController.php:21
+ * @see app/Http/Controllers/AnimeController.php:25
  * @route '/anime/{slug}'
  */
 export const show = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\AnimeController::show
- * @see app/Http/Controllers/AnimeController.php:21
+ * @see app/Http/Controllers/AnimeController.php:25
  * @route '/anime/{slug}'
  */
 show.url = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -44,7 +44,7 @@ show.url = (args: { slug: string | number } | [slug: string | number ] | string 
 
 /**
 * @see \App\Http\Controllers\AnimeController::show
- * @see app/Http/Controllers/AnimeController.php:21
+ * @see app/Http/Controllers/AnimeController.php:25
  * @route '/anime/{slug}'
  */
 show.get = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ show.get = (args: { slug: string | number } | [slug: string | number ] | string 
 })
 /**
 * @see \App\Http\Controllers\AnimeController::show
- * @see app/Http/Controllers/AnimeController.php:21
+ * @see app/Http/Controllers/AnimeController.php:25
  * @route '/anime/{slug}'
  */
 show.head = (args: { slug: string | number } | [slug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({

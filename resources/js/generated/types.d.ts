@@ -65,6 +65,18 @@ declare namespace App {
       readonly created_at: string | null;
       readonly updated_at: string | null;
     };
+    export type CommentData = {
+      readonly id: number;
+      readonly animeId: number;
+      readonly userId: number;
+      readonly body: string;
+      readonly upvotes: number;
+      readonly downvotes: number;
+      readonly createdAt: string;
+      readonly updatedAt: string;
+      readonly user: App.DTOs.UserData | null;
+      readonly anime: App.DTOs.AnimeData | null;
+    };
     export type GenreData = {
       readonly id: number;
       readonly mal_id: number;
@@ -173,7 +185,7 @@ declare namespace App {
       readonly username: string;
       readonly email: string | null;
       readonly createdAt: string | null;
-      readonly roleId: string;
+      readonly updatedAt: string | null;
     };
     export type WatchlistData = {
       readonly id: number | null;
