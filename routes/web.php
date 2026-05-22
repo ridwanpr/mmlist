@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
 use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\UserDashboardController;
@@ -49,4 +50,6 @@ Route::middleware('auth')->group(function () {
     Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store');
     Route::delete('watchlist/{watchlistId}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
     Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
+
+    Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
 });

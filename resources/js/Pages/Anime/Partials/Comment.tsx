@@ -1,3 +1,7 @@
+import { useForm } from "@inertiajs/react";
+import type React from "react";
+import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
+
 const comments = [
   {
     user: "AnimeFanatic99",
@@ -31,7 +35,24 @@ const comments = [
   },
 ];
 
-const Comment = () => {
+type CommentProps = {
+  anime: App.DTOs.AnimeData;
+};
+
+const Comment = ({ anime }: CommentProps) => {
+  const { data, setData, post, errors, reset } = useForm({
+    slug: anime.slug,
+    body: "",
+  });
+
+  const handleCommentSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    post(storeComment.url(), {
+      preserveScroll: true,
+      onSuccess: () => reset("body"),
+    });
+  };
+
   return (
     <section className="border-border mt-6 border-t pt-5">
       <h2 className="text-text mb-4 text-base font-bold">Discussion</h2>
@@ -57,15 +78,30 @@ const Comment = () => {
 
       {/* Inline Input Box  */}
       <div className="border-border bg-surface mt-6 rounded-lg border p-3 shadow-xs">
-        <textarea
-          placeholder="Share your thoughts..."
-          className="text-text placeholder:text-text/50 min-h-17.5 w-full resize-none bg-transparent text-sm outline-hidden"
-        />
-        <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
-          <button className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95">
-            Post Comment
-          </button>
-        </div>
+        <form onSubmit={handleCommentSubmit}>
+          <textarea
+            value={data.body}
+            onChange={(e) => setData("body", e.target.value)}
+            placeholder="Share your thoughts..."
+            className="text-text placeholder:text-text/50 min-h-17.5 w-full resize-none bg-transparent text-sm outline-hidden"
+            required
+          />
+
+          {errors.body && (
+            <p className="mt-1 text-xs font-medium text-red-500">
+              {errors.body}
+            </p>
+          )}
+
+          <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
+            <button
+              type="submit"
+              className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95"
+            >
+              Post Comment
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* 3. View All Link */}

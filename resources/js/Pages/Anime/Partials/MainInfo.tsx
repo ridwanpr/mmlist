@@ -286,7 +286,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
           </div>
 
           {/* COMMENTS */}
-          <Comment />
+          <Comment anime={anime} />
         </main>
       </div>
     </div>
