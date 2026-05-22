@@ -2,7 +2,7 @@ import { useImageProxy } from "../../../utils/image-proxy";
 import Comment from "./Comment";
 import { MetaInfo } from "./MetaInfo";
 import React, { useState } from "react";
-import { router, usePage } from "@inertiajs/react";
+import { router, usePage, Link } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";
 import type { WatchlistFormData } from "./AddToWatchlist";
 import { LuBookmarkX } from "react-icons/lu";
@@ -182,7 +182,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
   return (
     <div className="min-w-0 lg:col-span-3">
       {/* MOBILE COVER */}
-      <div className="mb-5 mt-3 flex justify-center md:hidden">
+      <div className="mt-3 mb-5 flex justify-center md:hidden">
         <img
           src={coverImage}
           alt="cover anime image"
@@ -243,7 +243,7 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
           </div>
 
           {/* ACTIONS */}
-          {auth.user && (
+          {auth.user ? (
             <>
               {userWatchlist !== null ? (
                 <div>
@@ -269,6 +269,27 @@ const MainInfo = ({ anime, userWatchlist }: MainInfoProps) => {
                 />
               )}
             </>
+          ) : (
+            /* Call to Action Box for Guest Users to manage watchlist */
+            <div className="border-border bg-surface/40 mb-6 rounded-lg border border-dashed p-4 text-center sm:text-left md:w-fit">
+              <p className="text-text-muted text-sm">
+                Want to track this anime?{" "}
+                <Link
+                  href="/login"
+                  className="text-primary font-semibold hover:underline"
+                >
+                  Log in
+                </Link>{" "}
+                or{" "}
+                <Link
+                  href="/register"
+                  className="text-primary font-semibold hover:underline"
+                >
+                  Register
+                </Link>{" "}
+                to manage your watchlist.
+              </p>
+            </div>
           )}
 
           {/* SYNOPSIS */}
