@@ -14,7 +14,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
     body: "",
   });
 
-  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCommentSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     post(storeComment.url(), {
       preserveScroll: true,
@@ -44,7 +44,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
                     {comment.createdAt.toString()}
                   </span>
                   <span className="text-text-muted ml-auto text-[11px]">
-                    ↑ {comment.upvotes}
+                    ↑ {comment.upvotes - comment.downvotes}
                   </span>
                 </div>
                 <p className="text-text/85 text-sm leading-snug">

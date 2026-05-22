@@ -21,7 +21,7 @@ class CommentService
         $commentData = Comment::where('anime_id', $animeId)
             ->with(['user'])
             ->limit(5)
-            ->orderBy('upvotes', 'asc')
+            ->orderBy('upvotes', 'desc')
             ->get();
 
         return $commentData;
