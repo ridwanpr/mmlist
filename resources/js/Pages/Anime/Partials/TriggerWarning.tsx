@@ -7,12 +7,16 @@ const TriggerWarning = ({
   triggers,
   anime,
   userTriggerVote,
+  aiTriggerContext,
 }: {
   triggers: App.DTOs.TriggerData[];
   anime: App.DTOs.AnimeData;
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
+  aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
 }) => {
   const [filterTrigger, setFilterTrigger] = useState<string | number>("all");
+
+  console.log(aiTriggerContext);
 
   const handleFilterTrigger = (triggerId: string | number) => {
     setFilterTrigger(triggerId);
@@ -83,6 +87,7 @@ const TriggerWarning = ({
                     triggerContent={triggerContent}
                     animeSlug={anime.slug}
                     userTriggerVote={userTriggerVote}
+                    aiTriggerContext={aiTriggerContext}
                   />
                 ))}
               </div>

@@ -11,6 +11,7 @@ interface ShowAnimeProps {
   triggers: App.DTOs.TriggerData[];
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
   userWatchlist: App.DTOs.WatchlistData | null;
+  aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
 }
 
 const ShowAnime = ({
@@ -18,6 +19,7 @@ const ShowAnime = ({
   triggers,
   userTriggerVote,
   userWatchlist,
+  aiTriggerContext,
 }: ShowAnimeProps) => {
   return (
     <div className="mx-auto mb-8 max-w-7xl p-4 lg:pt-6 lg:pb-6">
@@ -36,6 +38,7 @@ const ShowAnime = ({
         triggers={triggers}
         anime={anime}
         userTriggerVote={userTriggerVote}
+        aiTriggerContext={aiTriggerContext}
       />
     </div>
   );

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\AnimeTriggerContextData;
 use App\Services\AnimeService;
 use App\Services\VoteService;
 use App\Services\WatchlistService;
@@ -28,11 +29,16 @@ class AnimeController extends Controller
             $watchlist = $this->watchlistService->findUserWatchlist($user->id, $anime->id);
         }
 
+        $aiTriggerContext = $anime->triggerContexts->map(
+            fn($item) => AnimeTriggerContextData::fromModel($item)
+        );
+
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
             'userTriggerVote' => $userTriggerVote ?? null,
             'userWatchlist' => $watchlist ?? null,
+            'aiTriggerContext' => $aiTriggerContext ?? null
         ]);
     }
 }

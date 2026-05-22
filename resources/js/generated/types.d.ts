@@ -44,6 +44,14 @@ declare namespace App {
       readonly type: string;
       readonly title: string;
     };
+    export type AnimeTriggerContextData = {
+      readonly id: number;
+      readonly anime_id: number;
+      readonly trigger_content_id: number;
+      readonly ai_summary: string | null;
+      readonly created_at: string | null;
+      readonly updated_at: string | null;
+    };
     export type AnimeTriggerData = {
       readonly trigger_content_id: number;
       readonly anime_id: number;

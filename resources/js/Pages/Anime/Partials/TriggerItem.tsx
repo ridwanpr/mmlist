@@ -14,6 +14,7 @@ interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
   animeSlug: string;
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
+  aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
 }
 
 export interface VoteProps {
@@ -26,6 +27,7 @@ const TriggerItem = ({
   triggerContent,
   animeSlug,
   userTriggerVote,
+  aiTriggerContext,
 }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +37,12 @@ const TriggerItem = ({
       userVote.user_id === auth.user?.id &&
       userVote.trigger_content_id === triggerContent.id
     ) {
+      return true;
+    }
+  });
+
+  const findAITriggerContext = aiTriggerContext?.find((triggerContext) => {
+    if (triggerContext.trigger_content_id === triggerContent.id) {
       return true;
     }
   });
@@ -200,9 +208,8 @@ const TriggerItem = ({
               AI Context
             </p>
             <p className="text-text-muted text-xs leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
-              natus, saepe in earum fugit odit dolores esse voluptatem possimus
-              corporis dicta, harum delectus.
+              {findAITriggerContext?.ai_summary ||
+                "No AI summary available. This content may be pending evaluation, or the AI found no matching triggers."}
             </p>
           </div>
 
