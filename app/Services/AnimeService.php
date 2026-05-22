@@ -217,6 +217,11 @@ class AnimeService
             ->pluck('year');
     }
 
+    public function getStaffPickAnime(): Collection
+    {
+        return Anime::where('staff_pick', true)->get();
+    }
+
     private function buildBooleanSearch(string $input): ?string
     {
         $input = trim(mb_strtolower($input));

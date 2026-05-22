@@ -16,8 +16,6 @@ const TriggerWarning = ({
 }) => {
   const [filterTrigger, setFilterTrigger] = useState<string | number>("all");
 
-  console.log(aiTriggerContext);
-
   const handleFilterTrigger = (triggerId: string | number) => {
     setFilterTrigger(triggerId);
   };

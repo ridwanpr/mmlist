@@ -14,10 +14,12 @@ class HomeController extends Controller
     {
         $nowAiring = $this->animeService->getNowAiringFromDatabase();
         $topAnime = $this->animeService->fetchTopAnime();
+        $staffPick = $this->animeService->getStaffPickAnime();
 
         return Inertia::render('Home/Index', [
             'nowAiring' => $nowAiring,
             'topAnime' => $topAnime,
+            'staffPick' => $staffPick
         ]);
     }
 }

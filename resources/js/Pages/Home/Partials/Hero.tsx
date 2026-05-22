@@ -1,25 +1,9 @@
 import { Link, router } from "@inertiajs/react";
 import { FiSearch } from "react-icons/fi";
 import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
+import { show as showAnime } from "../../../actions/App/Http/Controllers/AnimeController";
 import type React from "react";
 import { useState } from "react";
-
-const trending = [
-  "Frieren",
-  "Dungeon Meshi",
-  "Perfect Blue",
-  "Mob Psycho 100",
-  "Serial Experiments Lain",
-];
-
-const warnings = [
-  "Gore",
-  "Abuse",
-  "Suicide",
-  "Flashing",
-  "Insects",
-  "Cannibalism",
-];
 
 const covers = [
   {
@@ -39,7 +23,11 @@ const covers = [
   },
 ];
 
-const Hero = () => {
+type HeroProps = {
+  staffPick: App.DTOs.AnimeData[];
+};
+
+const Hero = ({ staffPick }: HeroProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -93,35 +81,17 @@ const Hero = () => {
             <div className="mt-6 space-y-5">
               <div>
                 <div className="text-text-muted mb-2 text-[11px] font-bold tracking-[0.18em] uppercase">
-                  Trending
+                  Staff Pick
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {trending.map((item) => (
+                  {staffPick?.map((item) => (
                     <Link
-                      key={item}
-                      href="/"
+                      key={item.slug}
+                      href={showAnime.url(item.slug)}
                       className="border-border bg-surface text-text hover:border-primary/20 hover:bg-primary-soft/30 hover:text-primary-dark rounded-lg border px-2.5 py-1 text-sm font-medium transition"
                     >
-                      {item}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="text-text-muted mb-2 text-[11px] font-bold tracking-[0.18em] uppercase">
-                  Most reported
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {warnings.map((item) => (
-                    <Link
-                      key={item}
-                      href="/"
-                      className="bg-surface-alt hover:bg-primary-soft/40 hover:text-text-muted text-text rounded-lg px-2.5 py-1 text-sm transition"
-                    >
-                      {item}
+                      {item.title_english || item.title}
                     </Link>
                   ))}
                 </div>

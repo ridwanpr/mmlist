@@ -10,12 +10,13 @@ import FrontLayout from "../../Layouts/FrontLayout";
 interface HomeProps {
   nowAiring: App.DTOs.AnimeData[];
   topAnime: App.DTOs.AnimeData[];
+  staffPick: App.DTOs.AnimeData[];
 }
 
-const Home = ({ nowAiring, topAnime }: HomeProps) => {
+const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
   return (
     <>
-      <Hero />
+      <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <Features />
       <HowItWork />
