@@ -37,14 +37,14 @@ const Votes = ({ votes }: VotesProps) => {
 
         {/* Votes List Container */}
         <div className="border-border bg-surface overflow-hidden rounded-xl border">
-          {/* Table Header - Desktop Only */}
-          <div className="border-border bg-surface-alt text-text-muted hidden border-b px-6 py-2 text-xs font-semibold tracking-wider uppercase md:grid md:grid-cols-[2fr_1.5fr_0.8fr_1fr_1fr_1.2fr] md:gap-4">
+          {/* Table Header - Rebalanced Grid tracks & Right-aligned Date */}
+          <div className="border-border bg-surface-alt text-text-muted hidden border-b px-6 py-2 text-xs font-semibold tracking-wider uppercase md:grid md:grid-cols-[3fr_1.5fr_0.6fr_1fr_1fr_0.9fr] md:gap-4">
             <div>Anime</div>
             <div>Trigger Category</div>
             <div>Present?</div>
             <div>Severity</div>
             <div>Framing</div>
-            <div>Voted At</div>
+            <div className="md:text-right">Voted At</div>
           </div>
 
           {/* List Items */}
@@ -57,7 +57,7 @@ const Votes = ({ votes }: VotesProps) => {
               votes.data.map((vote) => (
                 <div
                   key={vote.id}
-                  className="hover:bg-surface-alt/10 relative flex flex-col gap-1 px-4 py-3.5 text-sm transition-colors md:grid md:grid-cols-[2fr_1.5fr_0.8fr_1fr_1fr_1.2fr] md:items-center md:gap-4 md:px-6 md:py-2.5"
+                  className="hover:bg-surface-alt/10 relative flex flex-col gap-1 px-4 py-3.5 text-sm transition-colors md:grid md:grid-cols-[3fr_1.5fr_0.6fr_1fr_1fr_0.9fr] md:items-center md:gap-4 md:px-6 md:py-2.5"
                 >
                   {/* Row 1 (Mobile): Anime Title (Left) & Absolute Positioned Date (Right) */}
                   <div className="min-w-0 pr-20 md:block md:truncate md:pr-0">
@@ -133,7 +133,8 @@ const Votes = ({ votes }: VotesProps) => {
                     )}
                   </div>
 
-                  <div className="text-text-muted md:text-text-muted absolute top-3.5 right-4 text-[11px] whitespace-nowrap md:static md:block md:text-xs">
+                  {/* Voted At Timestamp (Absolute on mobile, right-aligned grid text on desktop) */}
+                  <div className="text-text-muted absolute top-3.5 right-4 text-[11px] whitespace-nowrap md:static md:block md:text-right md:text-xs">
                     {formatDate(vote.created_at)}
                   </div>
                 </div>
