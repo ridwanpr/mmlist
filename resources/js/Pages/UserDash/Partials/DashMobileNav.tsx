@@ -7,9 +7,15 @@ import {
 } from "react-icons/lu";
 import { index as userDashIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
 import { index as watchlistIndex } from "../../../actions/App/Http/Controllers/WatchlistController";
+import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
 
 const DashMobileNav = () => {
   const { url } = usePage();
+  const { auth } = usePage().props;
+
+  const votesCount = auth?.user?.votes_count ?? 0;
+  const userName = auth?.user?.name || "Guest User";
+  const joinedAt = auth?.user?.joined_at || "Recent";
 
   return (
     <div className="bg-surface border-border border-b md:hidden">
@@ -18,9 +24,9 @@ const DashMobileNav = () => {
         <div className="mb-4 flex items-center gap-3">
           <div>
             <p className="text-text text-base leading-tight font-semibold">
-              Yuki K.
+              {userName}
             </p>
-            <p className="text-text-muted mt-0.5 text-xs">Joined May 2026</p>
+            <p className="text-text-muted mt-0.5 text-xs">Joined {joinedAt}</p>
           </div>
         </div>
 
@@ -28,7 +34,7 @@ const DashMobileNav = () => {
         <div className="divide-border bg-surface-alt flex divide-x overflow-hidden rounded-lg">
           <div className="flex-1 py-2.5 text-center">
             <p className="text-primary-dark text-base leading-none font-bold">
-              127
+              {votesCount}
             </p>
             <p className="text-text-muted mt-1 text-[10px]">Votes</p>
           </div>
@@ -66,8 +72,8 @@ const DashMobileNav = () => {
         </Link>
 
         <Link
-          href="#"
-          className="text-text-muted flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
+          href={voteIndex.url()}
+          className={`${url.startsWith(voteIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
           <LuThumbsUp size={14} strokeWidth={2} />
           Votes
