@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Form, Link, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
@@ -48,6 +49,21 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
 
+  // Local comment state, owns display order for this session
+  const [comments, setComments] = useState(paginatedComment.data);
+
+  // Tracks in-flight upvote requests to prevent useEffect from clobbering
+  // optimistic state when Inertia pushes new props mid-request
+  const isUpvoting = useRef(false);
+
+  // Sync from server props only when it's NOT an upvote response
+  // (e.g. sort changed, page changed, or initial load)
+  useEffect(() => {
+    if (!isUpvoting.current) {
+      setComments(paginatedComment.data);
+    }
+  }, [paginatedComment.data]);
+
   const handleFilter = (filter: string) => {
     router.get(
       getAnimeComment.url(anime.slug),
@@ -59,33 +75,52 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const handleUpvote = (commentId: number) => {
     if (isGuest) return;
 
-    router
-      .optimistic((props: DiscussionProps) => ({
-        paginatedComment: {
-          ...props.paginatedComment,
-          data: props.paginatedComment.data.map((comment) =>
-            comment.id === commentId
-              ? {
-                  ...comment,
-                  upvotes: comment.isUpvoted
-                    ? comment.upvotes - 1
-                    : comment.upvotes + 1,
-                  isUpvoted: !comment.isUpvoted,
-                }
-              : comment,
-          ),
+    // snapshot current state for rollback
+    const previousComments = comments;
+
+    // optimistic update, mutate count/flag, keep array order stable
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId
+          ? {
+              ...c,
+              upvotes: c.isUpvoted ? c.upvotes - 1 : c.upvotes + 1,
+              isUpvoted: !c.isUpvoted,
+            }
+          : c,
+      ),
+    );
+
+    isUpvoting.current = true;
+
+    router.put(
+      upvote.url({ commentId }),
+      {},
+      {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: (page) => {
+          const serverComments = (
+            page.props as unknown as {
+              paginatedComment: App.DTOs.PaginatedCommentData;
+            }
+          ).paginatedComment.data;
+
+          setComments((prev) =>
+            prev.map((local) => {
+              const fromServer = serverComments.find((s) => s.id === local.id);
+              return fromServer ?? local;
+            }),
+          );
         },
-      }))
-      .put(
-        upvote.url({
-          commentId,
-        }),
-        {},
-        {
-          preserveScroll: true,
-          preserveState: true,
+        onError: () => {
+          setComments(previousComments);
         },
-      );
+        onFinish: () => {
+          isUpvoting.current = false;
+        },
+      },
+    );
   };
 
   return (
@@ -120,7 +155,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         </button>
       </div>
 
-      {paginatedComment.data?.map((comment, index) => (
+      {comments?.map((comment, index) => (
         <div
           key={comment.id}
           className="border-border bg-surface mt-3 divide-y rounded border"
