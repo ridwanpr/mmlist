@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 class GeminiService
 {
     public const FALLBACK_ADVISORY = 'Insufficient data to provide a reliable advisory.';
+    public const FALLBACK_CONTEXT  = 'No significant content found for this trigger.';
 
     private string $apiKey;
 
@@ -60,8 +61,8 @@ class GeminiService
 
     /**
      * Generate content advisory and localized trigger contexts.
-     * 
-     * @param array<string> $availableTriggers
+     *
+     * @param  array<string>  $availableTriggers
      * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
      */
     public function generateAnimeAdvisory(string $title, array $availableTriggers, ?string $rating = null): array
@@ -70,8 +71,7 @@ class GeminiService
             ? " Official Age Rating: {$rating}."
             : " Official Age Rating: Unknown — calibrate tone based on the anime's known content and target demographic.";
 
-        // Pass the array of allowed triggers into the user prompt
-        $triggerListStr = implode(", ", array_map(fn($t) => "'{$t}'", $availableTriggers));
+        $triggerListStr = implode(', ', array_map(fn($t) => "'{$t}'", $availableTriggers));
 
         $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n" .
             "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n" .
@@ -84,10 +84,8 @@ class GeminiService
             Log::info("Gemini key 1 circuit open — skipping directly to secondary key for {$title}.");
         } else {
             try {
-                // Primary model call with key 1
                 $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25);
             } catch (ConnectionException $e) {
-                // Connection timeout is likely transient, short cooldown is enough
                 Log::warning("Gemini main call timed out for {$title}. Opening key 1 circuit for 60 seconds.");
                 Cache::put('gemini_key1_circuit_open', true, now()->addSeconds(60));
             }
@@ -96,18 +94,13 @@ class GeminiService
                 return $this->parseJsonOutput($this->extractText($response->json()));
             }
 
-            // Trip the circuit breaker on rate-limit or server error so subsequent
-            // anime in this batch stop hitting key 1 altogether for a while
             if ($response && ($response->status() === 429 || $response->serverError())) {
-                // 429 = daily quota exhausted (RPD), lock key 1 out until midnight when quota resets.
-                // Server errors get a short cooldown since they are likely transient.
                 $until = $response->status() === 429 ? now()->endOfDay() : now()->addSeconds(60);
                 Log::warning("Gemini key 1 failed (Status: {$response->status()}) for {$title}. Opening circuit until {$until}.");
                 Cache::put('gemini_key1_circuit_open', true, $until);
             }
         }
 
-        // Key-2 retry: attempt same model with the secondary API key
         if ($key1CircuitOpen || ! $response || $response->status() === 429 || $response->serverError()) {
             $status = $response ? $response->status() : ($key1CircuitOpen ? 'Circuit Open' : 'Timeout');
             Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Retrying with secondary API key.");
@@ -124,7 +117,6 @@ class GeminiService
                 Log::warning("Gemini secondary key timed out for {$title}. Falling back to Gemma 4 31B.");
             }
 
-            // Final fallback: Gemma model with secondary key
             try {
                 $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60, apiKey: $this->apiKey2);
 
@@ -154,7 +146,6 @@ class GeminiService
             'temperature' => 0.2,
         ];
 
-        // Apply Structured Outputs JSON Schema only to native Gemini models
         if (! str_starts_with($model, 'gemma-')) {
             $generationConfig['responseMimeType'] = 'application/json';
             $generationConfig['thinkingConfig'] = ['thinkingLevel' => 'minimal'];
@@ -164,7 +155,7 @@ class GeminiService
                 'properties' => [
                     'ai_advisory' => [
                         'type' => 'STRING',
-                        'description' => 'A 3-4 sentence plain text paragraph evaluating overall thematic elements.'
+                        'description' => 'A 3-4 sentence plain text paragraph evaluating overall thematic elements.',
                     ],
                     'matched_triggers' => [
                         'type' => 'ARRAY',
@@ -173,18 +164,18 @@ class GeminiService
                             'properties' => [
                                 'trigger_name' => [
                                     'type' => 'STRING',
-                                    'description' => 'The exact name string of the trigger provided in the allowed list.'
+                                    'description' => 'The exact name string of the trigger provided in the allowed list.',
                                 ],
                                 'ai_summary' => [
                                     'type' => 'STRING',
-                                    'description' => 'A brief, 1-2 sentence objective context summary explaining how this trigger shows up.'
-                                ]
+                                    'description' => 'A brief, 1-2 sentence objective context summary explaining how this trigger shows up.',
+                                ],
                             ],
-                            'required' => ['trigger_name', 'ai_summary']
-                        ]
-                    ]
+                            'required' => ['trigger_name', 'ai_summary'],
+                        ],
+                    ],
                 ],
-                'required' => ['ai_advisory', 'matched_triggers']
+                'required' => ['ai_advisory', 'matched_triggers'],
             ];
         }
 
@@ -223,8 +214,8 @@ class GeminiService
     }
 
     /**
-     * Clean up and decode raw text block into an structured array representation.
-     * 
+     * Clean up and decode raw text block into a structured array representation.
+     *
      * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
      */
     private function parseJsonOutput(string $rawText): array
@@ -233,18 +224,18 @@ class GeminiService
             return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
 
-        // Clean out any accidental markdown wrapper artifacts if they leak from fallback models
         $cleaned = preg_replace('/^```json\s*|```$/m', '', $rawText);
         $decoded = json_decode(trim($cleaned), true);
 
         if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
-            Log::error("Failed to decode valid JSON content structural layout. Raw Output: " . $rawText);
+            Log::error('Failed to decode valid JSON content structural layout. Raw Output: ' . $rawText);
+
             return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
 
         return [
-            'ai_advisory' => $decoded['ai_advisory'],
-            'matched_triggers' => $decoded['matched_triggers'] ?? []
+            'ai_advisory'     => $decoded['ai_advisory'],
+            'matched_triggers' => $decoded['matched_triggers'] ?? [],
         ];
     }
 }

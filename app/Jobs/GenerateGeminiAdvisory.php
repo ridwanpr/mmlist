@@ -17,26 +17,29 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
     public function __construct() {}
 
-    /**
-     * Execute the job.
-     */
     public function handle(GeminiService $geminiService): void
     {
         $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
-
-        // 1. Calculate how many requests we are still allowed to make today
         $remainingQuota = 800 - $dailyRequests;
 
         if ($remainingQuota <= 0) {
             return;
         }
 
-        // 2. Limit to either 15 (our max per minute) or the remaining daily quota
         $limit = min(15, $remainingQuota);
 
-        // 3. Fetch up to 15 anime missing an AI summary
-        $animes = Anime::whereNull('ai_advisory')
+        // name => id map, used in both phases
+        $dbTriggerContents = TriggerContent::pluck('id', 'name')->toArray();
+        $availableTriggerNames = array_keys($dbTriggerContents);
+        $totalTriggerCount = count($dbTriggerContents);
+
+        $processedCount = 0;
+
+        // -------------------------------------------------------------------------
+        // Phase 1: Fresh anime (no advisory yet)
+        // -------------------------------------------------------------------------
+        $newAnimes = Anime::whereNull('ai_advisory')
             ->where('source', '!=', 'Original')
             ->where('rating', '!=', 'Rx - Hentai')
             ->orderByRaw("animes.type = 'TV' DESC")
@@ -46,61 +49,122 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->limit($limit)
             ->get();
 
-        if ($animes->isEmpty()) {
-            return;
-        }
+        foreach ($newAnimes as $anime) {
+            if ($processedCount >= $limit) {
+                break;
+            }
 
-        // Fetch all possible trigger content values from the database to map back against names
-        $dbTriggerContents = TriggerContent::pluck('id', 'name')->toArray();
-        $availableTriggerNames = array_keys($dbTriggerContents);
-
-        $processedCount = 0;
-
-        foreach ($animes as $anime) {
             try {
-                // Returns clean structured data array separating general overview and specific triggers
                 $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
 
-                // Save advisory regardless — if AI returned the fallback string, we still persist it
-                // so whereNull() skips this anime on future runs and we don't waste tokens retrying it
-                $anime->update([
-                    'ai_advisory' => $result['ai_advisory'],
-                ]);
+                $anime->update(['ai_advisory' => $result['ai_advisory']]);
 
-                // Only process trigger contexts when the advisory is a real generated result,
-                // not the fallback placeholder meaning the anime was unrecognized
                 if ($result['ai_advisory'] !== GeminiService::FALLBACK_ADVISORY) {
-                    foreach ($result['matched_triggers'] as $matched) {
-                        $name = $matched['trigger_name'] ?? '';
-                        $summary = $matched['ai_summary'] ?? '';
-
-                        // Safeguard validation verifying the generated category matches an ID in your db
-                        if (array_key_exists($name, $dbTriggerContents) && ! empty($summary)) {
-                            AnimeTriggerContext::updateOrCreate(
-                                [
-                                    'anime_id' => $anime->id,
-                                    'trigger_content_id' => $dbTriggerContents[$name],
-                                ],
-                                [
-                                    'ai_summary' => $summary,
-                                ]
-                            );
-                        }
-                    }
+                    $this->syncTriggerContexts($anime->id, $result['matched_triggers'], $dbTriggerContents, $availableTriggerNames);
                 }
 
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                // API completely failed after all fallbacks — stamp the placeholder so this anime
-                Log::error("Gemini Advisory Processing Failed for Anime ID {$anime->id}: " . $e->getMessage());
-                $anime->update([
-                    'ai_advisory' => GeminiService::FALLBACK_ADVISORY,
-                ]);
+                Log::error("Gemini Advisory Failed for Anime ID {$anime->id}: " . $e->getMessage());
+                $anime->update(['ai_advisory' => GeminiService::FALLBACK_ADVISORY]);
             }
         }
 
-        // 4. Bulk update the daily cache tracker threshold count once
+        // -------------------------------------------------------------------------
+        // Phase 2: Gap-fill (anime already have an advisory but are missing rows)
+        // -------------------------------------------------------------------------
+        $remainingSlots = $limit - $processedCount;
+
+        if ($remainingSlots <= 0) {
+            Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
+            return;
+        }
+
+        $gapAnimes = Anime::whereNotNull('ai_advisory')
+            ->where('ai_advisory', '!=', GeminiService::FALLBACK_ADVISORY)
+            ->where('source', '!=', 'Original')
+            ->where('rating', '!=', 'Rx - Hentai')
+            ->whereRaw(
+                '(SELECT COUNT(*) FROM anime_trigger_contexts WHERE anime_trigger_contexts.anime_id = animes.id) < ?',
+                [$totalTriggerCount]
+            )
+            ->orderByRaw("animes.type = 'TV' DESC")
+            ->orderBy('animes.year', 'desc')
+            ->orderBy('animes.score', 'desc')
+            ->limit($remainingSlots)
+            ->get();
+
+        foreach ($gapAnimes as $anime) {
+            if ($processedCount >= $limit) {
+                break;
+            }
+
+            // Resolve exactly which trigger names are missing for this anime
+            $existingTriggerIds = AnimeTriggerContext::where('anime_id', $anime->id)
+                ->pluck('trigger_content_id')
+                ->flip() // flip to use as a set for O(1) lookup
+                ->all();
+
+            $missingTriggerNames = array_keys(
+                array_filter($dbTriggerContents, fn($id) => ! isset($existingTriggerIds[$id]))
+            );
+
+            if (empty($missingTriggerNames)) {
+                continue;
+            }
+
+            try {
+                // Pass ONLY the missing triggers to avoid re-evaluating ones already stored
+                $result = $geminiService->generateAnimeAdvisory($anime->title, $missingTriggerNames, $anime->rating);
+
+                if ($result['ai_advisory'] !== GeminiService::FALLBACK_ADVISORY) {
+                    $this->syncTriggerContexts($anime->id, $result['matched_triggers'], $dbTriggerContents, $missingTriggerNames);
+                }
+
+                $processedCount++;
+                sleep(2);
+            } catch (\Exception $e) {
+                Log::error("Gemini Gap-Fill Failed for Anime ID {$anime->id}: " . $e->getMessage());
+            }
+        }
+
         Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
+    }
+
+    /**
+     * Persist AnimeTriggerContext rows from a matched_triggers payload.
+     * Missing or unmatched targets will receive a fallback placeholder string.
+     *
+     * @param array<array{trigger_name: string, ai_summary: string}> $matchedTriggers
+     * @param array<string, int> $dbTriggerContents name => id
+     * @param array<string> $evaluatedTriggerNames List of triggers evaluated in this batch
+     */
+    private function syncTriggerContexts(int $animeId, array $matchedTriggers, array $dbTriggerContents, array $evaluatedTriggerNames): void
+    {
+        // Map out the positive matches returned by the AI for quick lookup
+        $matchedMap = [];
+        foreach ($matchedTriggers as $matched) {
+            $name = $matched['trigger_name'] ?? '';
+            $summary = $matched['ai_summary'] ?? '';
+            if (! empty($name) && ! empty($summary)) {
+                $matchedMap[$name] = $summary;
+            }
+        }
+
+        // Write a record for every trigger sent during this specific evaluation cycle
+        foreach ($evaluatedTriggerNames as $name) {
+            if (array_key_exists($name, $dbTriggerContents)) {
+                $summary = $matchedMap[$name] ?? GeminiService::FALLBACK_CONTEXT;
+
+                AnimeTriggerContext::updateOrCreate(
+                    [
+                        'anime_id'           => $animeId,
+                        'trigger_content_id' => $dbTriggerContents[$name],
+                    ],
+                    ['ai_summary' => $summary]
+                );
+            }
+        }
     }
 }

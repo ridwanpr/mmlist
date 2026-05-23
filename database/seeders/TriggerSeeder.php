@@ -59,8 +59,8 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Severe Bullying / Ijime',        'importance' => 90,  'description' => 'Intense, prolonged peer abuse, ostracization, or school bullying.'],
                     ['name' => 'Domestic Abuse & Manipulation',  'importance' => 85,  'description' => 'Household abuse, severe gaslighting, or obsessive stalking.'],
                     ['name' => 'Terminal Illness / Death',       'importance' => 70,  'description' => 'Slow, painful decline or tragic death from incurable disease.'],
-                    ['name' => 'Discrimination & Prejudice', 'importance' => 75, 'description' => 'Abuse, marginalization, or slurs based on race, origin, or fantasy species (e.g., demi-humans, mages).'],
-
+                    ['name' => 'Discrimination & Prejudice',     'importance' => 75,  'description' => 'Abuse, marginalization, or slurs based on race, origin, or fantasy species (e.g., demi-humans, mages).'],
+                    ['name' => 'Family Dysfunction / Broken Home', 'importance' => 70, 'description' => 'Severe parental abandonment, bitter divorce trauma, toxic sibling rivalries, or parental estrangement.'],
                 ],
             ],
             [
@@ -84,6 +84,36 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Dense / Oblivious MC',           'importance' => 80,  'description' => 'Protagonist is frustratingly blind to obvious romantic advances or plot points.'],
                     ['name' => 'Toxic / Yandere Love Interest',  'importance' => 75,  'description' => 'Main love interest is obsessively jealous, toxic, or violently possessive.'],
                     ['name' => 'Edgelord / Tryhard Dark MC',     'importance' => 60,  'description' => 'Protagonist is overly cynical, excessively cruel, or artificially dark.'],
+                ],
+            ],
+            [
+                'name' => 'Supernatural, Cults & Existential Dread',
+                'importance' => 82,
+                'description' => 'Themes involving psychological breakdown due to cosmic elements, cult control, or supernatural violations.',
+                'contents' => [
+                    ['name' => 'Cults & Religious Manipulation',      'importance' => 85, 'description' => 'Fictional or real-world religious groups exploiting, brainwashing, or sacrificing members.'],
+                    ['name' => 'Existential Dread & Reality Collapse', 'importance' => 80, 'description' => 'Characters discovering their reality is fake, cosmic horror elements, or impending universal erasure.'],
+                    ['name' => 'Demonic Possession & Host Takeover',  'importance' => 78, 'description' => 'Malicious spirits, entities, or demons taking over a host body against their will.'],
+                ],
+            ],
+            [
+                'name' => 'Substance Abuse & Addiction',
+                'importance' => 75,
+                'description' => 'Depictions of chemical dependency, alcoholism, and illicit drug use.',
+                'contents' => [
+                    ['name' => 'Severe Drug Abuse & Withdrawal', 'importance' => 85, 'description' => 'Graphic depictions of illicit substance use, chemical dependency, or overdose symptoms.'],
+                    ['name' => 'Alcoholism & Intoxication Gags', 'importance' => 65, 'description' => 'Characters struggling with chronic alcohol abuse or predatory framing during heavy intoxication.'],
+                ],
+            ],
+            [
+                'name' => 'Narrative & Ending Frustrations',
+                'importance' => 65,
+                'description' => 'Highly divisive plot devices, pacing problems, or controversial series conclusions.',
+                'contents' => [
+                    ['name' => 'Tragic / Depressing Ending',      'importance' => 80, 'description' => 'The story concludes with the primary cast dying, failing, or entering permanent misery.'],
+                    ['name' => 'Amnesia / Plot Progress Reset',   'importance' => 75, 'description' => 'Characters lose their memories, completely erasing established character growth or romantic progress.'],
+                    ['name' => 'Unresolved Cliffhanger / Axed',   'importance' => 70, 'description' => 'The anime ends abruptly without wrapping up major plot lines, offering zero narrative closure.'],
+                    ['name' => 'Bait-and-Switch Romance',         'importance' => 65, 'description' => 'The narrative builds up a specific romantic pairing over a long duration only to switch to another pairing unexpectedly.'],
                 ],
             ],
         ];
