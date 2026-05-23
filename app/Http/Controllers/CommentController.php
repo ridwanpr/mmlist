@@ -43,7 +43,8 @@ class CommentController extends Controller
 
         return Inertia::render('AnimeComment/Index', [
             'anime' => $anime,
-            'paginatedComment' => $paginatedComment
+            'paginatedComment' => $paginatedComment,
+            'sortBy' => $sortBy
         ]);
     }
 }

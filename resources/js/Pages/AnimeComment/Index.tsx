@@ -8,16 +8,25 @@ import Pagination from "../../Components/UI/Pagination";
 type AnimeCommentProps = {
   anime: App.DTOs.AnimeData;
   paginatedComment: App.DTOs.PaginatedCommentData;
+  sortBy: "latest" | "most_loved" | "oldest";
 };
 
-const AnimeComment = ({ anime, paginatedComment }: AnimeCommentProps) => {
+const AnimeComment = ({
+  anime,
+  paginatedComment,
+  sortBy,
+}: AnimeCommentProps) => {
   return (
     <div>
       <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
         <AnimeCommentBreadcrumb anime={anime} />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
           <AnimeInfo anime={anime} />
-          <Discussion anime={anime} paginatedComment={paginatedComment} />
+          <Discussion
+            anime={anime}
+            paginatedComment={paginatedComment}
+            sortBy={sortBy}
+          />
         </div>
         <Pagination links={paginatedComment.links} />
       </div>

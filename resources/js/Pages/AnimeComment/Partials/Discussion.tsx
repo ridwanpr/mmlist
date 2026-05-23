@@ -6,6 +6,7 @@ import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentCo
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
   paginatedComment: App.DTOs.PaginatedCommentData;
+  sortBy: "latest" | "most_loved" | "oldest";
 };
 
 const formatRelativeTime = (dateString: string): string => {
@@ -38,7 +39,7 @@ const formatRelativeTime = (dateString: string): string => {
   return "just now";
 };
 
-const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
+const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const handleFilter = (filter: string) => {
     router.get(getAnimeComment.url(anime.slug), {
       sort: filter,
@@ -85,7 +86,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
           onClick={() => {
             handleFilter("latest");
           }}
-          className="bg-primary-soft text-primary rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+          className={`${sortBy === "latest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Latest
         </button>
@@ -93,7 +94,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
           onClick={() => {
             handleFilter("most_loved");
           }}
-          className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+          className={`${sortBy === "most_loved" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Most Loved
         </button>
@@ -101,7 +102,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
           onClick={() => {
             handleFilter("oldest");
           }}
-          className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+          className={`${sortBy === "oldest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Oldest
         </button>

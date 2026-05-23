@@ -33,7 +33,7 @@ class CommentService
             ->when($sortBy === "latest", function ($q) {
                 return $q->latest();
             })->when($sortBy === "most_loved", function ($q) {
-                return $q->orderBy('upvotes', 'asc');
+                return $q->orderBy('upvotes', 'desc');
             })->when($sortBy === "oldest", function ($q) {
                 return $q->orderBy("created_at", 'asc');
             })
