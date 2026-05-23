@@ -172,7 +172,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
               <p className="text-text mt-1 text-xs leading-relaxed whitespace-pre-wrap md:text-sm">
                 {comment.body}
               </p>
-              <button className="text-text-muted mt-2 flex items-center gap-1 text-xs">
+              <button className="text-text-muted mt-2 flex items-center gap-1 text-xs hover:cursor-pointer hover:text-text">
                 <LuReply className="size-3" /> Reply
               </button>
             </div>
