@@ -1,4 +1,6 @@
+import { Form } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
+import { store } from "../../../actions/App/Http/Controllers/CommentController";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -42,11 +44,19 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
         {anime.title_english || anime.title} - Discussion
       </h1>
 
-      <div className="border-border border bg-surface my-3 rounded p-3 shadow-xs">
-        <form>
+      <div className="border-border bg-surface my-3 rounded border p-3 shadow-xs">
+        <Form
+          action={store.url()}
+          method="post"
+          disableWhileProcessing
+          resetOnSuccess
+        >
+          <input type="hidden" name="slug" value={anime.slug} />
           <textarea
+            name="body"
             placeholder="Share your thoughts..."
-            className="text-text placeholder:text-text/50 min-h-17.5 w-full resize-none bg-transparent text-sm outline-hidden"
+            className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
+            rows={4}
             required
           />
 
@@ -60,7 +70,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
               Post Comment
             </button>
           </div>
-        </form>
+        </Form>
       </div>
 
       <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
@@ -102,7 +112,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
                   {formatRelativeTime(comment.createdAt)}
                 </span>
               </div>
-              <p className="text-text mt-1 text-xs leading-relaxed md:text-sm">
+              <p className="text-text mt-1 text-xs leading-relaxed whitespace-pre-wrap md:text-sm">
                 {comment.body}
               </p>
               <button className="text-text-muted mt-2 flex items-center gap-1 text-xs">
