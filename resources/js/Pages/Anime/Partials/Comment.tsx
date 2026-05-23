@@ -7,9 +7,10 @@ import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentCo
 type CommentProps = {
   anime: App.DTOs.AnimeData;
   topComments: App.DTOs.CommentData[] | null;
+  countComments: number;
 };
 
-const Comment = ({ anime, topComments }: CommentProps) => {
+const Comment = ({ anime, topComments, countComments }: CommentProps) => {
   const { auth } = usePage().props;
   const { data, setData, post, errors, reset } = useForm({
     slug: anime.slug,
@@ -78,7 +79,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
           href={getAnimeComment.url(anime.slug)}
           className="text-primary text-sm font-bold hover:underline"
         >
-          View all 847 comments →
+          View all {countComments} comments
         </Link>
       </div>
 

@@ -11,9 +11,15 @@ interface MainInfoProps {
   anime: App.DTOs.AnimeData;
   userWatchlist: App.DTOs.WatchlistData | null;
   topComments: App.DTOs.CommentData[] | null;
+  countComments: number;
 }
 
-const MainInfo = ({ anime, userWatchlist, topComments }: MainInfoProps) => {
+const MainInfo = ({
+  anime,
+  userWatchlist,
+  topComments,
+  countComments,
+}: MainInfoProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -308,7 +314,11 @@ const MainInfo = ({ anime, userWatchlist, topComments }: MainInfoProps) => {
           </div>
 
           {/* COMMENTS */}
-          <Comment anime={anime} topComments={topComments} />
+          <Comment
+            countComments={countComments}
+            anime={anime}
+            topComments={topComments}
+          />
         </main>
       </div>
     </div>

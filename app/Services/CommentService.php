@@ -35,4 +35,9 @@ class CommentService
 
         return $commentData;
     }
+
+    public function getCommentCount(int $animeId)
+    {
+        return Comment::where('anime_id', $animeId)->count();
+    }
 }
