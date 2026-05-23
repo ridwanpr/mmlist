@@ -1,10 +1,10 @@
-import { Form, Link, router, usePage } from "@inertiajs/react";
+import { Form, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
-import { login } from "../../../actions/App/Http/Controllers/AuthController";
-import { register } from "../../../actions/App/Http/Controllers/AuthController";
+
 import QuoteBlock from "./QuoteBlock";
+import FormComment from "./FormComment";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -56,63 +56,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         {anime.title_english || anime.title} - Discussion
       </h1>
 
-      <div className="border-border bg-surface my-3 rounded border p-3 shadow-xs">
-        {isGuest ? (
-          <div className="relative">
-            <textarea
-              disabled
-              placeholder="Share your thoughts..."
-              className="text-text placeholder:text-text/30 min-h-17.5 w-full cursor-not-allowed bg-transparent text-sm outline-hidden"
-              rows={4}
-            />
-            <div className="bg-surface/80 absolute inset-0 flex flex-col items-center justify-center gap-2 rounded backdrop-blur-[2px]">
-              <p className="text-text-muted text-xs font-medium">
-                Join the discussion
-              </p>
-              <div className="flex items-center gap-2">
-                <Link
-                  href={register.url()}
-                  className="bg-primary text-primary-soft rounded px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95"
-                >
-                  Register
-                </Link>
-                <span className="text-text-muted text-xs">or</span>
-                <Link
-                  href={login.url()}
-                  className="border-border text-text-muted hover:bg-surface-alt hover:text-text rounded border px-4 py-1.5 text-xs font-semibold transition active:scale-95"
-                >
-                  Log in
-                </Link>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <Form
-            action={store.url()}
-            method="post"
-            disableWhileProcessing
-            resetOnSuccess
-          >
-            <input type="hidden" name="slug" value={anime.slug} />
-            <textarea
-              name="body"
-              placeholder="Share your thoughts..."
-              className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
-              rows={4}
-              required
-            />
-            <p className="mt-1 text-xs font-medium text-red-500"></p>
-            <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
-              <button
-                type="submit"
-                className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
-              >
-                Post Comment
-              </button>
-            </div>
-          </Form>
-        )}
-      </div>
+      <FormComment isGuest={isGuest} anime={anime} />
 
       <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
         <button
@@ -172,9 +116,35 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
               <p className="text-text mt-1 text-xs leading-relaxed whitespace-pre-wrap md:text-sm">
                 {comment.body}
               </p>
-              <button className="text-text-muted mt-2 flex items-center gap-1 text-xs hover:cursor-pointer hover:text-text">
+              <button className="text-text-muted hover:text-text mt-2 flex items-center gap-1 text-xs hover:cursor-pointer">
                 <LuReply className="size-3" /> Reply
               </button>
+              <div className="bg-surface-alt mt-2 hidden rounded p-3">
+                <Form
+                  action={store.url()}
+                  method="post"
+                  disableWhileProcessing
+                  resetOnSuccess
+                >
+                  <input type="hidden" name="slug" value={anime.slug} />
+                  <textarea
+                    name="body"
+                    placeholder="Write your reply here..."
+                    className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
+                    rows={4}
+                    required
+                  />
+                  <p className="mt-1 text-xs font-medium text-red-500"></p>
+                  <div className="border-border mt-2 flex justify-end border-t border-dashed pt-2">
+                    <button
+                      type="submit"
+                      className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
+                    >
+                      Post Comment
+                    </button>
+                  </div>
+                </Form>
+              </div>
             </div>
           </div>
         </div>

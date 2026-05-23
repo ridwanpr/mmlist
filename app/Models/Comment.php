@@ -36,6 +36,7 @@ class Comment extends Model
     protected $fillable = [
         'user_id',
         'anime_id',
+        'episode_number',
         'body',
         'upvotes',
         'downvotes',
