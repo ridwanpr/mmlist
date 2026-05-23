@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../
 import anime from './anime'
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:18
+ * @see app/Http/Controllers/CommentController.php:21
  * @route '/comment'
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -17,7 +17,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:18
+ * @see app/Http/Controllers/CommentController.php:21
  * @route '/comment'
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -26,7 +26,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:18
+ * @see app/Http/Controllers/CommentController.php:21
  * @route '/comment'
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({

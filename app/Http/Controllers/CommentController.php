@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\CommentData;
+use App\DTOs\PaginatedCommentData;
 use App\Http\Requests\StoreCommentRequest;
+use App\Models\Comment;
 use App\Services\AnimeService;
 use App\Services\CommentService;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +31,15 @@ class CommentController extends Controller
 
     public function getAnimeComment(string $animeSlug)
     {
-        return Inertia::render('AnimeComment/Index');
+        $anime = $this->animeService->getAnimeInfo($animeSlug);
+        $animeComments = $this->commentService->getAnimeComments($anime->id);
+
+        $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
+        $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);
+
+        return Inertia::render('AnimeComment/Index', [
+            'anime' => $anime,
+            'paginatedComment' => $paginatedComment
+        ]);
     }
 }

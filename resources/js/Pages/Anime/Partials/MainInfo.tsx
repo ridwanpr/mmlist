@@ -1,6 +1,6 @@
 import { useImageProxy } from "../../../utils/image-proxy";
 import Comment from "./Comment";
-import { MetaInfo } from "./MetaInfo";
+import { MetaInfo } from "../../../Components/MetaInfo";
 import React, { useState } from "react";
 import { router, usePage, Link } from "@inertiajs/react";
 import { AddToWatchlist } from "./AddToWatchlist";

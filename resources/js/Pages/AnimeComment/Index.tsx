@@ -1,13 +1,25 @@
 import type React from "react";
 import FrontLayout from "../../Layouts/FrontLayout";
+import Discussion from "./Partials/Discussion";
+import AnimeInfo from "./Partials/AnimeInfo";
+import AnimeCommentBreadcrumb from "./Partials/AnimeCommentBreadcrumb";
 
-const AnimeComment = () => {
+type AnimeCommentProps = {
+  anime: App.DTOs.AnimeData;
+  paginatedComment: App.DTOs.PaginatedCommentData;
+};
+
+const AnimeComment = ({ anime, paginatedComment }: AnimeCommentProps) => {
   return (
-    <>
-      <div>
-        <h1>Anime Comment</h1>
+    <div>
+      <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
+        <AnimeCommentBreadcrumb anime={anime} />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
+          <AnimeInfo anime={anime} />
+          <Discussion anime={anime} paginatedComment={paginatedComment} />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

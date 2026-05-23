@@ -26,4 +26,14 @@ class CommentService
 
         return $commentData;
     }
+
+    public function getAnimeComments(int $animeId, int $paginateLimit = 15)
+    {
+        $commentData = Comment::where('anime_id', $animeId)
+            ->with(['user'])
+            ->latest()
+            ->paginate($paginateLimit);
+
+        return $commentData;
+    }
 }

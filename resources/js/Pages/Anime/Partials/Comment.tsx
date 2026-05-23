@@ -1,7 +1,7 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
-import { LuReply } from "react-icons/lu";
+import { LuHeart, LuReply } from "react-icons/lu";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 type CommentProps = {
@@ -28,7 +28,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
 
   return (
     <section className="border-border mt-6 border-t pt-5">
-      <h2 className="text-text mb-2 text-base font-bold">Comments</h2>
+      <h2 className="text-text mb-2 text-base font-bold">Discussion</h2>
 
       {/* Comments Preview List */}
       <div className="space-y-1">
@@ -45,8 +45,9 @@ const Comment = ({ anime, topComments }: CommentProps) => {
                   <span className="text-text-muted text-[11px]">
                     {comment.createdAt.toString()}
                   </span>
-                  <span className="text-text-muted ml-auto text-[11px]">
-                    ↑ {comment.upvotes - comment.downvotes}
+                  <span className="text-text-muted ml-auto flex items-center gap-1 text-[11px]">
+                    <LuHeart className="size-4" />
+                    {comment.upvotes - comment.downvotes}
                   </span>
                 </div>
 
