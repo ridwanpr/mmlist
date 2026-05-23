@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:34
  * @route '/comment/{animeSlug}'
  */
 export const getAnimeComment = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ getAnimeComment.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:34
  * @route '/comment/{animeSlug}'
  */
 getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -44,7 +44,7 @@ getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string
 
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:34
  * @route '/comment/{animeSlug}'
  */
 getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string
 })
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:34
  * @route '/comment/{animeSlug}'
  */
 getAnimeComment.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -63,7 +63,7 @@ getAnimeComment.head = (args: { animeSlug: string | number } | [animeSlug: strin
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:22
+ * @see app/Http/Controllers/CommentController.php:23
  * @route '/comment'
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -78,7 +78,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:22
+ * @see app/Http/Controllers/CommentController.php:23
  * @route '/comment'
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -87,7 +87,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:22
+ * @see app/Http/Controllers/CommentController.php:23
  * @route '/comment'
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({

@@ -32,7 +32,7 @@ class CommentService
             ->with(['user'])
             ->when($sortBy === "latest", function ($q) {
                 return $q->latest();
-            })->when($sortBy === "most_loved", function ($q) {
+            })->when($sortBy === "most-loved", function ($q) {
                 return $q->orderBy('upvotes', 'desc');
             })->when($sortBy === "oldest", function ($q) {
                 return $q->orderBy("created_at", 'asc');

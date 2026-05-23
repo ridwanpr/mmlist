@@ -24,7 +24,7 @@ class DiscussionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sort' => [Rule::in(['latest', 'most_loved', 'oldest'])],
+            'sort' => [Rule::in(['latest', 'most-loved', 'oldest'])],
         ];
     }
 }

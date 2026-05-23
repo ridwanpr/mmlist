@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\CommentData;
 use App\DTOs\PaginatedCommentData;
 use App\Http\Requests\DiscussionRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use App\Services\AnimeService;
@@ -30,11 +31,12 @@ class CommentController extends Controller
         return back();
     }
 
-    public function getAnimeComment(DiscussionRequest $request, string $animeSlug)
+    public function getAnimeComment(Request $request, string $animeSlug)
     {
-        $validated = $request->validated();
-        $sortBy = $validated["sort"] ?? "latest";
-
+        $sortInput = $request->query('sort');
+        $allowedSorts = ['latest', 'most-loved', 'oldest'];
+        $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'most-loved';
+        
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
 

@@ -8,7 +8,7 @@ import { register } from "../../../actions/App/Http/Controllers/AuthController";
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
   paginatedComment: App.DTOs.PaginatedCommentData;
-  sortBy: "latest" | "most_loved" | "oldest";
+  sortBy: "latest" | "most-loved" | "oldest";
 };
 
 const formatRelativeTime = (dateString: string): string => {
@@ -115,16 +115,16 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
       <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
         <button
+          onClick={() => handleFilter("most-loved")}
+          className={`${sortBy === "most-loved" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
+        >
+          Most Loved
+        </button>
+        <button
           onClick={() => handleFilter("latest")}
           className={`${sortBy === "latest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Latest
-        </button>
-        <button
-          onClick={() => handleFilter("most_loved")}
-          className={`${sortBy === "most_loved" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
-        >
-          Most Loved
         </button>
         <button
           onClick={() => handleFilter("oldest")}
@@ -140,13 +140,12 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
           className="border-border bg-surface mt-3 divide-y rounded border"
         >
           <div className="flex gap-4 px-4 py-3">
-            <div className="flex shrink-0 flex-col items-center gap-0.5 pt-0.5">
-              <button className="text-text-muted hover:text-text flex items-center text-xs">
-                <LuHeart className="size-3.5" />
+            {/* Upvote Column */}
+            <div className="flex shrink-0 flex-col items-center pt-0.5">
+              <button className="text-text-muted hover:text-accent-red -m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer">
+                <LuHeart className="size-4" />
+                <span className="text-xs leading-none">{comment.upvotes}</span>
               </button>
-              <span className="text-text-muted mt-1 text-xs leading-none">
-                {comment.upvotes}
-              </span>
             </div>
 
             <div className="min-w-0 flex-1">

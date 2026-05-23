@@ -8,7 +8,7 @@ import Pagination from "../../Components/UI/Pagination";
 type AnimeCommentProps = {
   anime: App.DTOs.AnimeData;
   paginatedComment: App.DTOs.PaginatedCommentData;
-  sortBy: "latest" | "most_loved" | "oldest";
+  sortBy: "latest" | "most-loved" | "oldest";
 };
 
 const AnimeComment = ({
