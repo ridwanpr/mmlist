@@ -12,6 +12,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new FetchAiringAnime)->twiceDaily(1, 13);
+Schedule::job(new ExtractAiredData)->twiceDaily(2, 14);
 
 Schedule::job(new GenerateGeminiAdvisory)->everyMinute();
 

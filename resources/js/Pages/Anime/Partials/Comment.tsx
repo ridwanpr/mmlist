@@ -1,6 +1,7 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
+import { LuReply } from "react-icons/lu";
 
 type CommentProps = {
   anime: App.DTOs.AnimeData;
@@ -47,9 +48,23 @@ const Comment = ({ anime, topComments }: CommentProps) => {
                     ↑ {comment.upvotes - comment.downvotes}
                   </span>
                 </div>
+
+                {/* Comment Body */}
                 <p className="text-text/85 text-sm leading-snug">
                   {comment.body}
                 </p>
+
+                {/* Comment Actions Row */}
+                {auth.user && (
+                  <div className="mt-1.5 flex items-center gap-3">
+                    <button
+                      type="button"
+                      className="text-primary/80 flex items-center gap-1 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95"
+                    >
+                      <LuReply /> Reply
+                    </button>
+                  </div>
+                )}
               </div>
             ))
           : ""}
