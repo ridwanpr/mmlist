@@ -94,6 +94,59 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-const CommentController = { getAnimeComment, store }
+
+/**
+* @see \App\Http\Controllers\CommentController::upvote
+ * @see app/Http/Controllers/CommentController.php:53
+ * @route '/comment/upvote/{commentId}'
+ */
+export const upvote = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: upvote.url(args, options),
+    method: 'put',
+})
+
+upvote.definition = {
+    methods: ["put"],
+    url: '/comment/upvote/{commentId}',
+} satisfies RouteDefinition<["put"]>
+
+/**
+* @see \App\Http\Controllers\CommentController::upvote
+ * @see app/Http/Controllers/CommentController.php:53
+ * @route '/comment/upvote/{commentId}'
+ */
+upvote.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { commentId: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    commentId: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        commentId: args.commentId,
+                }
+
+    return upvote.definition.url
+            .replace('{commentId}', parsedArgs.commentId.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CommentController::upvote
+ * @see app/Http/Controllers/CommentController.php:53
+ * @route '/comment/upvote/{commentId}'
+ */
+upvote.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: upvote.url(args, options),
+    method: 'put',
+})
+const CommentController = { getAnimeComment, store, upvote }
 
 export default CommentController

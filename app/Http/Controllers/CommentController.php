@@ -36,7 +36,7 @@ class CommentController extends Controller
         $sortInput = $request->query('sort');
         $allowedSorts = ['latest', 'most-loved', 'oldest'];
         $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'most-loved';
-        
+
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
 
@@ -48,5 +48,13 @@ class CommentController extends Controller
             'paginatedComment' => $paginatedComment,
             'sortBy' => $sortBy
         ]);
+    }
+
+    public function upvote(Request $request, int $commentId)
+    {
+        $user = Auth::user();
+        $this->commentService->toggleCommentUpvote($commentId, $user->id);
+
+        return back();
     }
 }

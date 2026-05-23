@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Models\Comment;
+use App\Models\CommentVote;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CommentService
 {
@@ -47,5 +51,39 @@ class CommentService
     public function getCommentCount(int $animeId)
     {
         return Comment::where('anime_id', $animeId)->count();
+    }
+
+    public function findCommentFirst(int $commentId)
+    {
+        return Comment::where('id', $commentId)->firstOrFail();
+    }
+
+    public function toggleCommentUpvote(int $commentId, int $userId)
+    {
+
+        try {
+            DB::beginTransaction();
+            $comment = $this->findCommentFirst($commentId);
+            $existingVote = CommentVote::where('comment_id', $comment->id)
+                ->where('user_id', $userId)->first();
+
+            if ($existingVote) {
+                $existingVote->delete();
+                $comment->decrement('upvotes');
+            } else {
+                CommentVote::create([
+                    'user_id' => $userId,
+                    'comment_id' => $commentId,
+                    'type' => 'upvote'
+                ]);
+                $comment->increment('upvotes');
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            dd($e);
+            Log::error($e);
+            throw $e;
+        }
     }
 }

@@ -1,10 +1,12 @@
-import { Form, router, usePage } from "@inertiajs/react";
+import { Form, Link, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 import QuoteBlock from "./QuoteBlock";
 import FormComment from "./FormComment";
+import { show } from "../../../actions/App/Http/Controllers/AnimeController";
+import { upvote } from "../../../actions/App/Http/Controllers/CommentController";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -50,11 +52,36 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     router.get(getAnimeComment.url(anime.slug), { sort: filter });
   };
 
+  const handleUpvote = (commentId: number) => {
+    router
+      .optimistic((props: DiscussionProps) => ({
+        paginatedComment: {
+          ...props.paginatedComment,
+          data: props.paginatedComment.data.map((comment) =>
+            comment.id === commentId
+              ? { ...comment, upvotes: comment.upvotes + 1 }
+              : comment,
+          ),
+        },
+      }))
+      .put(
+        upvote.url({
+          commentId: commentId,
+        }),
+        {
+          preserveScroll: true,
+        },
+      );
+  };
+
   return (
     <section id="discussion">
-      <h1 className="text-text text-base font-semibold">
+      <Link
+        href={show.url(anime.slug)}
+        className="text-primary text-lg font-semibold"
+      >
         {anime.title_english || anime.title} - Discussion
-      </h1>
+      </Link>
 
       <FormComment isGuest={isGuest} anime={anime} />
 
@@ -86,7 +113,10 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         >
           <div className="flex gap-4 px-4 py-3">
             {/* Upvote Column */}
-            <div className="flex shrink-0 flex-col items-center pt-0.5">
+            <div
+              onClick={() => handleUpvote(comment.id)}
+              className="flex shrink-0 flex-col items-center pt-0.5"
+            >
               <button className="text-text-muted hover:text-accent-red -m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer">
                 <LuHeart className="size-4" />
                 <span className="text-xs leading-none">{comment.upvotes}</span>
@@ -119,6 +149,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
               <button className="text-text-muted hover:text-text mt-2 flex items-center gap-1 text-xs hover:cursor-pointer">
                 <LuReply className="size-3" /> Reply
               </button>
+              {/* Reply comment form */}
               <div className="bg-surface-alt mt-2 hidden rounded p-3">
                 <Form
                   action={store.url()}

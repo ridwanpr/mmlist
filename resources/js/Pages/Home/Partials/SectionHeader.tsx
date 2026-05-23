@@ -22,6 +22,7 @@ const SectionHeader = ({ title, icon, href }: SectionHeaderProps) => {
 
       <Link
         href={href}
+        prefetch
         className="group text-text-muted hover:text-primary flex items-center gap-0.5 font-sans text-xs font-bold tracking-wider uppercase transition-colors"
       >
         View All

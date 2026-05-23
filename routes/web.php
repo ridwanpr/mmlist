@@ -12,6 +12,7 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Middleware\EncryptHistory;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
@@ -31,14 +32,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::prefix('admin')
-    ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'role:admin', EncryptHistory::class])
     ->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-
         Route::get('anime', [ManageAnimeController::class, 'index'])->name('manage-anime.index');
     });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('dash', [UserDashboardController::class, 'index'])->name('user.dash.index');
@@ -53,4 +53,5 @@ Route::middleware('auth')->group(function () {
     Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::put('comment/upvote/{commentId}', [CommentController::class, 'upvote'])->name('comment.upvote');
 });

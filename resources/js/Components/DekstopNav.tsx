@@ -32,6 +32,7 @@ const DesktopNav = () => {
             <li className="relative flex h-full items-center">
               <Link
                 href={homeIndex.url()}
+                prefetch
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isHomeActive
                     ? "text-primary"
@@ -47,6 +48,7 @@ const DesktopNav = () => {
             <li className="relative flex h-full items-center">
               <Link
                 href={browseIndex.url()}
+                prefetch
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isBrowseActive
                     ? "text-primary"
@@ -87,6 +89,7 @@ const DesktopNav = () => {
                     ? dashIndex.url()
                     : adminDashIndex.url()
                 }
+                prefetch
                 className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
               >
                 My Account
