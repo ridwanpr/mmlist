@@ -49,7 +49,11 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const isGuest = !auth.user;
 
   const handleFilter = (filter: string) => {
-    router.get(getAnimeComment.url(anime.slug), { sort: filter });
+    router.get(
+      getAnimeComment.url(anime.slug),
+      { sort: filter },
+      { preserveScroll: true },
+    );
   };
 
   const handleUpvote = (commentId: number) => {
