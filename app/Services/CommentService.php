@@ -37,7 +37,9 @@ class CommentService
             })->when($sortBy === "oldest", function ($q) {
                 return $q->orderBy("created_at", 'asc');
             })
-            ->paginate($paginateLimit);
+            ->paginate($paginateLimit)
+            ->onEachSide(1)
+            ->withQueryString();
 
         return $commentData;
     }
