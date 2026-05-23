@@ -36,7 +36,7 @@ class CommentController extends Controller
         $sortBy = $validated["sort"] ?? "latest";
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
-        $animeComments = $this->commentService->getAnimeComments($anime->id, 10, $sortBy);
+        $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
 
         $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
         $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);
