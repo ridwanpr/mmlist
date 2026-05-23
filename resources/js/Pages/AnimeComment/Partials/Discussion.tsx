@@ -1,7 +1,9 @@
-import { Form, router } from "@inertiajs/react";
+import { Form, Link, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
+import { login } from "../../../actions/App/Http/Controllers/AuthController";
+import { register } from "../../../actions/App/Http/Controllers/AuthController";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -40,10 +42,11 @@ const formatRelativeTime = (dateString: string): string => {
 };
 
 const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
+  const { auth } = usePage().props;
+  const isGuest = !auth.user;
+
   const handleFilter = (filter: string) => {
-    router.get(getAnimeComment.url(anime.slug), {
-      sort: filter,
-    });
+    router.get(getAnimeComment.url(anime.slug), { sort: filter });
   };
 
   return (
@@ -53,55 +56,78 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       </h1>
 
       <div className="border-border bg-surface my-3 rounded border p-3 shadow-xs">
-        <Form
-          action={store.url()}
-          method="post"
-          disableWhileProcessing
-          resetOnSuccess
-        >
-          <input type="hidden" name="slug" value={anime.slug} />
-          <textarea
-            name="body"
-            placeholder="Share your thoughts..."
-            className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
-            rows={4}
-            required
-          />
-
-          <p className="mt-1 text-xs font-medium text-red-500"></p>
-
-          <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
-            <button
-              type="submit"
-              className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
-            >
-              Post Comment
-            </button>
+        {isGuest ? (
+          <div className="relative">
+            <textarea
+              disabled
+              placeholder="Share your thoughts..."
+              className="text-text placeholder:text-text/30 min-h-17.5 w-full cursor-not-allowed bg-transparent text-sm outline-hidden"
+              rows={4}
+            />
+            <div className="bg-surface/80 absolute inset-0 flex flex-col items-center justify-center gap-2 rounded backdrop-blur-[2px]">
+              <p className="text-text-muted text-xs font-medium">
+                Join the discussion
+              </p>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={register.url()}
+                  className="bg-primary text-primary-soft rounded px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95"
+                >
+                  Register
+                </Link>
+                <span className="text-text-muted text-xs">or</span>
+                <Link
+                  href={login.url()}
+                  className="border-border text-text-muted hover:bg-surface-alt hover:text-text rounded border px-4 py-1.5 text-xs font-semibold transition active:scale-95"
+                >
+                  Log in
+                </Link>
+              </div>
+            </div>
           </div>
-        </Form>
+        ) : (
+          <Form
+            action={store.url()}
+            method="post"
+            disableWhileProcessing
+            resetOnSuccess
+          >
+            <input type="hidden" name="slug" value={anime.slug} />
+            <textarea
+              name="body"
+              placeholder="Share your thoughts..."
+              className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
+              rows={4}
+              required
+            />
+            <p className="mt-1 text-xs font-medium text-red-500"></p>
+            <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
+              <button
+                type="submit"
+                className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
+              >
+                Post Comment
+              </button>
+            </div>
+          </Form>
+        )}
       </div>
 
       <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
         <button
-          onClick={() => {
-            handleFilter("latest");
-          }}
+          onClick={() => handleFilter("latest")}
           className={`${sortBy === "latest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Latest
         </button>
         <button
-          onClick={() => {
-            handleFilter("most_loved");
-          }}
+          onClick={() => handleFilter("most_loved")}
           className={`${sortBy === "most_loved" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Most Loved
         </button>
         <button
-          onClick={() => {
-            handleFilter("oldest");
-          }}
+          onClick={() => handleFilter("oldest")}
           className={`${sortBy === "oldest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
         >
           Oldest
