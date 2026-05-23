@@ -1,7 +1,7 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
-import { LuHeart, LuReply } from "react-icons/lu";
+import { LuHeart, LuReply, LuMessageSquarePlus } from "react-icons/lu";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 type CommentProps = {
@@ -33,44 +33,58 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
 
       {/* Comments Preview List */}
       <div className="space-y-1">
-        {topComments && topComments.length > 0
-          ? topComments.map((comment, i) => (
-              <div
-                key={comment.id}
-                className={`py-2.5 ${i < topComments.length - 1 ? "border-border/60 border-b" : ""}`}
-              >
-                <div className="mb-1 flex items-baseline gap-2">
-                  <span className="text-text text-sm font-bold">
-                    {comment.user?.name}
-                  </span>
-                  <span className="text-text-muted text-[11px]">
-                    {comment.createdAt.toString()}
-                  </span>
-                  <span className="text-text-muted ml-auto flex items-center gap-1 text-[11px]">
-                    <LuHeart className="size-4" />
-                    {comment.upvotes - comment.downvotes}
-                  </span>
-                </div>
-
-                {/* Comment Body */}
-                <p className="text-text/85 text-sm leading-snug">
-                  {comment.body}
-                </p>
-
-                {/* Comment Actions Row */}
-                {auth.user && (
-                  <div className="mt-1.5 flex items-center gap-3">
-                    <button
-                      type="button"
-                      className="text-primary/80 flex items-center gap-1 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95"
-                    >
-                      <LuReply /> Reply
-                    </button>
-                  </div>
-                )}
+        {topComments && topComments.length > 0 ? (
+          topComments.map((comment, i) => (
+            <div
+              key={comment.id}
+              className={`py-2.5 ${i < topComments.length - 1 ? "border-border/60 border-b" : ""}`}
+            >
+              <div className="mb-1 flex items-baseline gap-2">
+                <span className="text-text text-sm font-bold">
+                  {comment.user?.name}
+                </span>
+                <span className="text-text-muted text-[11px]">
+                  {comment.createdAt.toString()}
+                </span>
+                <span className="text-text-muted ml-auto flex items-center gap-1 text-[11px]">
+                  <LuHeart className="size-4" />
+                  {comment.upvotes - comment.downvotes}
+                </span>
               </div>
-            ))
-          : ""}
+
+              {/* Comment Body */}
+              <p className="text-text/85 text-sm leading-snug">
+                {comment.body}
+              </p>
+
+              {/* Comment Actions Row */}
+              {auth.user && (
+                <div className="mt-1.5 flex items-center gap-3">
+                  <button
+                    type="button"
+                    className="text-primary/80 flex items-center gap-1 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95"
+                  >
+                    <LuReply /> Reply
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        ) : (
+          <div className="border-border bg-surface/30 flex flex-col items-center justify-center rounded-lg border border-dashed px-4 py-8 text-center">
+            <LuMessageSquarePlus className="text-text-muted/60 mb-2 size-6" />
+            <p className="text-text-muted text-sm">
+              No comments yet.{" "}
+              {auth.user ? (
+                <span className="text-primary font-medium">
+                  Be the first to share your thoughts below!
+                </span>
+              ) : (
+                <span>Log in or register below to start the conversation!</span>
+              )}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* View All Link */}

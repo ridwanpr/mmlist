@@ -42,6 +42,39 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
         {anime.title_english || anime.title} - Discussion
       </h1>
 
+      <div className="border-border border bg-surface my-3 rounded p-3 shadow-xs">
+        <form>
+          <textarea
+            placeholder="Share your thoughts..."
+            className="text-text placeholder:text-text/50 min-h-17.5 w-full resize-none bg-transparent text-sm outline-hidden"
+            required
+          />
+
+          <p className="mt-1 text-xs font-medium text-red-500"></p>
+
+          <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
+            <button
+              type="submit"
+              className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
+            >
+              Post Comment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
+        <button className="bg-primary-soft text-primary rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+          Latest
+        </button>
+        <button className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+          Most Loved
+        </button>
+        <button className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+          Oldest
+        </button>
+      </div>
+
       {paginatedComment.data?.map((comment) => (
         <div
           key={comment.id}
@@ -52,7 +85,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
               <button className="text-text-muted hover:text-text flex items-center text-xs">
                 <LuHeart className="size-3.5" />
               </button>
-              <span className="text-text-muted text-xs leading-none mt-1">
+              <span className="text-text-muted mt-1 text-xs leading-none">
                 {comment.upvotes}
               </span>
             </div>
@@ -69,7 +102,7 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
                   {formatRelativeTime(comment.createdAt)}
                 </span>
               </div>
-              <p className="text-text mt-1 text-xs md:text-sm leading-relaxed">
+              <p className="text-text mt-1 text-xs leading-relaxed md:text-sm">
                 {comment.body}
               </p>
               <button className="text-text-muted mt-2 flex items-center gap-1 text-xs">
