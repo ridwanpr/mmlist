@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DTOs\CommentData;
 use App\Models\Comment;
 
 class CommentService
@@ -27,7 +26,7 @@ class CommentService
         return $commentData;
     }
 
-    public function getAnimeComments(int $animeId, int $paginateLimit = 15)
+    public function getAnimeComments(int $animeId, int $paginateLimit = 25)
     {
         $commentData = Comment::where('anime_id', $animeId)
             ->with(['user'])

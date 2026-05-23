@@ -3,6 +3,7 @@ import FrontLayout from "../../Layouts/FrontLayout";
 import Discussion from "./Partials/Discussion";
 import AnimeInfo from "./Partials/AnimeInfo";
 import AnimeCommentBreadcrumb from "./Partials/AnimeCommentBreadcrumb";
+import Pagination from "../../Components/UI/Pagination";
 
 type AnimeCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -18,6 +19,7 @@ const AnimeComment = ({ anime, paginatedComment }: AnimeCommentProps) => {
           <AnimeInfo anime={anime} />
           <Discussion anime={anime} paginatedComment={paginatedComment} />
         </div>
+        <Pagination links={paginatedComment.links} />
       </div>
     </div>
   );
