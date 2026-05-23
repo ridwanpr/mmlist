@@ -73,7 +73,7 @@ const SideMenu = () => {
             <p className="text-text text-lg font-semibold">{votesCount}</p>
           </div>
           <div>
-            <p className="text-text-muted text-xs">Reviews Written</p>
+            <p className="text-text-muted text-xs">Comment Written</p>
             <p className="text-text text-lg font-semibold">127</p>
           </div>
         </div>

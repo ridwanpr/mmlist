@@ -34,14 +34,14 @@ const DesktopNav = () => {
                 href={homeIndex.url()}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isHomeActive
-                    ? "text-accent-gold"
+                    ? "text-primary"
                     : "text-text-muted hover:text-text"
                 }`}
               >
                 Home
               </Link>
               {isHomeActive && (
-                <span className="bg-accent-gold absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
+                <span className="bg-primary absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
               )}
             </li>
             <li className="relative flex h-full items-center">
@@ -49,14 +49,14 @@ const DesktopNav = () => {
                 href={browseIndex.url()}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isBrowseActive
-                    ? "text-accent-gold"
+                    ? "text-primary"
                     : "text-text-muted hover:text-text"
                 }`}
               >
                 Browse Anime
               </Link>
               {isBrowseActive && (
-                <span className="bg-accent-gold absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
+                <span className="bg-primary absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
               )}
             </li>
           </ul>
