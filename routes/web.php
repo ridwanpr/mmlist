@@ -52,4 +52,5 @@ Route::middleware('auth')->group(function () {
     Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::get('comment/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
 });

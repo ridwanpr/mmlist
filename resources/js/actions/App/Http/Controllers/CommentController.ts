@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CommentController::store
  * @see app/Http/Controllers/CommentController.php:18
@@ -32,6 +32,68 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-const CommentController = { store }
+
+/**
+* @see \App\Http\Controllers\CommentController::getAnimeComment
+ * @see app/Http/Controllers/CommentController.php:29
+ * @route '/comment/{animeSlug}'
+ */
+export const getAnimeComment = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: getAnimeComment.url(args, options),
+    method: 'get',
+})
+
+getAnimeComment.definition = {
+    methods: ["get","head"],
+    url: '/comment/{animeSlug}',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\CommentController::getAnimeComment
+ * @see app/Http/Controllers/CommentController.php:29
+ * @route '/comment/{animeSlug}'
+ */
+getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { animeSlug: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    animeSlug: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        animeSlug: args.animeSlug,
+                }
+
+    return getAnimeComment.definition.url
+            .replace('{animeSlug}', parsedArgs.animeSlug.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CommentController::getAnimeComment
+ * @see app/Http/Controllers/CommentController.php:29
+ * @route '/comment/{animeSlug}'
+ */
+getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: getAnimeComment.url(args, options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\CommentController::getAnimeComment
+ * @see app/Http/Controllers/CommentController.php:29
+ * @route '/comment/{animeSlug}'
+ */
+getAnimeComment.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: getAnimeComment.url(args, options),
+    method: 'head',
+})
+const CommentController = { store, getAnimeComment }
 
 export default CommentController

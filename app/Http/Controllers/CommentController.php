@@ -25,4 +25,9 @@ class CommentController extends Controller
         Inertia::flash('success', 'Comment submitted');
         return back();
     }
+
+    public function getAnimeComment(string $animeSlug)
+    {
+        return Inertia::render('AnimeComment/Index');
+    }
 }

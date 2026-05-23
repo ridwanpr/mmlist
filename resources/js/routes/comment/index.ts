@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
+import anime from './anime'
 /**
 * @see \App\Http\Controllers\CommentController::store
  * @see app/Http/Controllers/CommentController.php:18
@@ -34,6 +35,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 const comment = {
     store: Object.assign(store, store),
+anime: Object.assign(anime, anime),
 }
 
 export default comment

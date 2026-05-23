@@ -2,6 +2,7 @@ import { useForm, usePage, Link } from "@inertiajs/react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
 import { LuReply } from "react-icons/lu";
+import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 type CommentProps = {
   anime: App.DTOs.AnimeData;
@@ -27,7 +28,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
 
   return (
     <section className="border-border mt-6 border-t pt-5">
-      <h2 className="text-text mb-4 text-base font-bold">Discussion</h2>
+      <h2 className="text-text mb-2 text-base font-bold">Comments</h2>
 
       {/* Comments Preview List */}
       <div className="space-y-1">
@@ -70,9 +71,19 @@ const Comment = ({ anime, topComments }: CommentProps) => {
           : ""}
       </div>
 
+      {/* View All Link */}
+      <div className="border-border mt-4 border-t pt-3">
+        <Link
+          href={getAnimeComment.url(anime.slug)}
+          className="text-primary text-sm font-bold hover:underline"
+        >
+          View all 847 comments →
+        </Link>
+      </div>
+
       {/* Conditional Interface Placement */}
       {auth.user ? (
-        <div className="border-border bg-surface mt-6 rounded-lg border p-3 shadow-xs">
+        <div className="border-border bg-surface mt-4 rounded-lg border p-3 shadow-xs">
           <form onSubmit={handleCommentSubmit}>
             <textarea
               value={data.body}
@@ -101,7 +112,7 @@ const Comment = ({ anime, topComments }: CommentProps) => {
         </div>
       ) : (
         /* Call to Action Box for Guest Users */
-        <div className="border-border bg-surface/40 mt-6 rounded-lg border border-dashed p-6 text-center">
+        <div className="border-border bg-surface/40 mt-4 rounded-lg border border-dashed p-6 text-center">
           <p className="text-text-muted text-sm">
             Want to join the discussion?{" "}
             <Link
@@ -121,13 +132,6 @@ const Comment = ({ anime, topComments }: CommentProps) => {
           </p>
         </div>
       )}
-
-      {/* View All Link */}
-      <div className="border-border mt-4 border-t pt-3">
-        <a href="#" className="text-primary text-sm font-bold hover:underline">
-          View all 847 comments →
-        </a>
-      </div>
     </section>
   );
 };
