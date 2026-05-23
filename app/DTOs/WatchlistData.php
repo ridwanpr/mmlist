@@ -26,7 +26,8 @@ readonly class WatchlistData
         public ?string $year = null,
         public ?string $type = null,
         public ?string $episodes = null,
-        public ?array $images = null
+        public ?array $images = null,
+        public ?string $slug = null
     ) {}
 
     public static function fromRequest(StoreWatchlistRequest $request): self
@@ -65,6 +66,7 @@ readonly class WatchlistData
             year: $model->year,
             episodes: $model->episodes,
             images: json_decode($model->images, true),
+            slug: $model->slug,
         );
     }
 }

@@ -48,14 +48,15 @@ class WatchlistService
     public function getUserWatchlist(int $paginateLimit, int $userId, ?string $status = null): PaginatedWatchlistData
     {
         $query = Watchlist::where('user_id', $userId)
-            ->join('animes', 'animes.id', 'watchlists.anime_id')
+            ->join('animes', 'animes.id', 'watchlists.anime_id', 'animes.slug')
             ->select(
                 'watchlists.*',
                 'animes.title',
                 'animes.type',
                 'animes.episodes',
                 'animes.images',
-                'animes.year'
+                'animes.year',
+                'animes.slug'
             );
 
         if ($status) {

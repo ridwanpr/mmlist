@@ -219,6 +219,7 @@ declare namespace App {
       readonly type: string | null;
       readonly episodes: string | null;
       readonly images: Record<string, any>;
+      readonly slug: string | null;
     };
   }
 }

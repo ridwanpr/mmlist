@@ -1,6 +1,8 @@
 import type { SetStateAction } from "react";
 import { useImageProxy } from "../../../utils/image-proxy";
 import { LuTrash2 } from "react-icons/lu";
+import { Link } from "@inertiajs/react";
+import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
 type AnimeListProps = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -34,9 +36,12 @@ const AnimeList = ({
 
           <div className="flex flex-1 flex-col justify-between p-2.5">
             <div>
-              <p className="text-text line-clamp-1 font-sans text-sm leading-tight font-semibold tracking-tight">
+              <Link
+                href={show.url({ slug: watchlist.slug! })}
+                className="text-primary line-clamp-1 font-sans text-sm leading-tight font-semibold tracking-tight"
+              >
                 {watchlist.title}
-              </p>
+              </Link>
               <div className="text-text-muted mt-1 flex items-center gap-2 text-xs">
                 <span>{watchlist.year}</span>
                 <span className="text-border text-[10px]">•</span>
