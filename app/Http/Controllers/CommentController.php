@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\CommentData;
 use App\DTOs\PaginatedCommentData;
+use App\Http\Requests\DiscussionRequest;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use App\Services\AnimeService;
@@ -29,10 +30,11 @@ class CommentController extends Controller
         return back();
     }
 
-    public function getAnimeComment(string $animeSlug)
+    public function getAnimeComment(DiscussionRequest $request, string $animeSlug)
     {
+        $validated = $request->validated();
         $anime = $this->animeService->getAnimeInfo($animeSlug);
-        $animeComments = $this->commentService->getAnimeComments($anime->id);
+        $animeComments = $this->commentService->getAnimeComments($anime->id, 10, $validated['sort']);
 
         $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
         $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);

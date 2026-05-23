@@ -18,6 +18,7 @@ Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
 
 Route::get('anime/{slug}', [AnimeController::class, 'show'])->name('anime.show');
 Route::get('/asset/image/{hash}', [ImageProxyController::class, 'show'])->name('proxy.image');
+Route::get('comment/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
@@ -52,5 +53,4 @@ Route::middleware('auth')->group(function () {
     Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
-    Route::get('comment/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
 });

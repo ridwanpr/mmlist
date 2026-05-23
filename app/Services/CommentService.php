@@ -26,11 +26,17 @@ class CommentService
         return $commentData;
     }
 
-    public function getAnimeComments(int $animeId, int $paginateLimit = 25)
+    public function getAnimeComments(int $animeId, int $paginateLimit = 25, string $sortBy = "latest")
     {
         $commentData = Comment::where('anime_id', $animeId)
             ->with(['user'])
-            ->latest()
+            ->when($sortBy === "latest", function ($q) {
+                return $q->latest();
+            })->when($sortBy === "most_loved", function ($q) {
+                return $q->orderBy('upvotes', 'asc');
+            })->when($sortBy === "oldest", function ($q) {
+                return $q->orderBy("created_at", 'asc');
+            })
             ->paginate($paginateLimit);
 
         return $commentData;

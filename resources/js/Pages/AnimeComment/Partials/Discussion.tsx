@@ -1,6 +1,7 @@
-import { Form } from "@inertiajs/react";
+import { Form, router } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
+import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -38,6 +39,12 @@ const formatRelativeTime = (dateString: string): string => {
 };
 
 const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
+  const handleFilter = (filter: string) => {
+    router.get(getAnimeComment.url(anime.slug), {
+      sort: filter,
+    });
+  };
+
   return (
     <section id="discussion">
       <h1 className="text-text text-base font-semibold">
@@ -74,13 +81,28 @@ const Discussion = ({ anime, paginatedComment }: DiscussionProps) => {
       </div>
 
       <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
-        <button className="bg-primary-soft text-primary rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+        <button
+          onClick={() => {
+            handleFilter("latest");
+          }}
+          className="bg-primary-soft text-primary rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+        >
           Latest
         </button>
-        <button className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+        <button
+          onClick={() => {
+            handleFilter("most_loved");
+          }}
+          className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+        >
           Most Loved
         </button>
-        <button className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95">
+        <button
+          onClick={() => {
+            handleFilter("oldest");
+          }}
+          className="text-text-muted hover:bg-surface-alt hover:text-text rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95"
+        >
           Oldest
         </button>
       </div>
