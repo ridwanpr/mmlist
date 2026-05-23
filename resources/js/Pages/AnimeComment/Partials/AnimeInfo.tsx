@@ -14,16 +14,23 @@ const AnimeInfo = ({ anime }: AnimeInfoProps) => {
 
   return (
     <section id="anime-detail" className="flex flex-col">
-      <div className="mt-2 mb-5 flex justify-center">
+      <div className="mt-2 mb-1 flex justify-center">
         <img
           src={coverImage}
           alt="cover anime image"
           className="bg-surface aspect-3/4 w-full max-w-60 rounded-xl object-cover shadow-sm"
         />
       </div>
-      <MetaInfo label="Rating" value={anime.rating} />
-      <MetaInfo label="Themes" items={anime.themes} />
-      <MetaInfo label="Demographics" items={anime.demographics} />
+      <div className="hidden md:block">
+        <MetaInfo label="Status" value={anime.status} />
+        <MetaInfo label="Source" value={anime.source} />
+        <MetaInfo label="Rating" value={anime.rating} />
+        <MetaInfo label="Duration" value={anime.duration} />
+        <MetaInfo label="Studio" items={anime.studios} />
+        <MetaInfo label="Producers" items={anime.producers} />
+        <MetaInfo label="Themes" items={anime.themes} />
+        <MetaInfo label="Demographics" items={anime.demographics} />
+      </div>
     </section>
   );
 };
