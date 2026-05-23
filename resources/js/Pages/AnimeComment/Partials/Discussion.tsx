@@ -4,6 +4,7 @@ import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 import { login } from "../../../actions/App/Http/Controllers/AuthController";
 import { register } from "../../../actions/App/Http/Controllers/AuthController";
+import QuoteBlock from "./QuoteBlock";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -134,7 +135,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         </button>
       </div>
 
-      {paginatedComment.data?.map((comment) => (
+      {paginatedComment.data?.map((comment, index) => (
         <div
           key={comment.id}
           className="border-border bg-surface mt-3 divide-y rounded border"
@@ -160,6 +161,14 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   {formatRelativeTime(comment.createdAt)}
                 </span>
               </div>
+
+              {index === 1 && (
+                <QuoteBlock
+                  authorName="John Doe"
+                  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
+                />
+              )}
+
               <p className="text-text mt-1 text-xs leading-relaxed whitespace-pre-wrap md:text-sm">
                 {comment.body}
               </p>
