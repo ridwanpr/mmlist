@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefa
 import anime from './anime'
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:23
+ * @see app/Http/Controllers/CommentController.php:22
  * @route '/comment'
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -17,7 +17,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:23
+ * @see app/Http/Controllers/CommentController.php:22
  * @route '/comment'
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -26,7 +26,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CommentController::store
- * @see app/Http/Controllers/CommentController.php:23
+ * @see app/Http/Controllers/CommentController.php:22
  * @route '/comment'
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -36,7 +36,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:53
+ * @see app/Http/Controllers/CommentController.php:52
  * @route '/comment/upvote/{commentId}'
  */
 export const upvote = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -51,7 +51,7 @@ upvote.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:53
+ * @see app/Http/Controllers/CommentController.php:52
  * @route '/comment/upvote/{commentId}'
  */
 upvote.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -79,7 +79,7 @@ upvote.url = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:53
+ * @see app/Http/Controllers/CommentController.php:52
  * @route '/comment/upvote/{commentId}'
  */
 upvote.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({

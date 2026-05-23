@@ -53,23 +53,33 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   };
 
   const handleUpvote = (commentId: number) => {
+    if (isGuest) return;
+
     router
       .optimistic((props: DiscussionProps) => ({
         paginatedComment: {
           ...props.paginatedComment,
           data: props.paginatedComment.data.map((comment) =>
             comment.id === commentId
-              ? { ...comment, upvotes: comment.upvotes + 1 }
+              ? {
+                  ...comment,
+                  upvotes: comment.isUpvoted
+                    ? comment.upvotes - 1
+                    : comment.upvotes + 1,
+                  isUpvoted: !comment.isUpvoted,
+                }
               : comment,
           ),
         },
       }))
       .put(
         upvote.url({
-          commentId: commentId,
+          commentId,
         }),
+        {},
         {
           preserveScroll: true,
+          preserveState: true,
         },
       );
   };
@@ -117,8 +127,16 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
               onClick={() => handleUpvote(comment.id)}
               className="flex shrink-0 flex-col items-center pt-0.5"
             >
-              <button className="text-text-muted hover:text-accent-red -m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer">
-                <LuHeart className="size-4" />
+              <button
+                className={`-m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer ${
+                  comment.isUpvoted
+                    ? "text-accent-red hover:text-accent-red/80"
+                    : "text-text-muted hover:text-accent-red"
+                }`}
+              >
+                <LuHeart
+                  className={`size-4 ${comment.isUpvoted ? "fill-current" : ""}`}
+                />
                 <span className="text-xs leading-none">{comment.upvotes}</span>
               </button>
             </div>

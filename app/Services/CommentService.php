@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\CommentVote;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -34,6 +35,9 @@ class CommentService
     {
         $commentData = Comment::where('anime_id', $animeId)
             ->with(['user'])
+            ->withExists(['votes' => function ($q) {
+                $q->where('user_id', Auth::id());
+            }])
             ->when($sortBy === "latest", function ($q) {
                 return $q->latest();
             })->when($sortBy === "most-loved", function ($q) {

@@ -74,6 +74,7 @@ declare namespace App {
       readonly downvotes: number;
       readonly createdAt: string;
       readonly updatedAt: string;
+      readonly isUpvoted: boolean;
       readonly user: App.DTOs.UserData | null;
       readonly anime: App.DTOs.AnimeData | null;
     };

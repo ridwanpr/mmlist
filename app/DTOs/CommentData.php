@@ -17,6 +17,7 @@ readonly class CommentData
         public int $downvotes,
         public string $createdAt,
         public string $updatedAt,
+        public bool $isUpvoted,
         public ?UserData $user = null,
         public ?AnimeData $anime = null,
     ) {}
@@ -32,6 +33,7 @@ readonly class CommentData
             downvotes: $model->downvotes,
             createdAt: $model->created_at,
             updatedAt: $model->updated_at,
+            isUpvoted: (bool) ($model->votes_exists ?? false),
             user: $model->relationLoaded('user') ? UserData::fromModel($model->user) : null,
             anime: $model->relationLoaded('anime') ? AnimeData::fromModel($model->anime) : null,
         );

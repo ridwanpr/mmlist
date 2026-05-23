@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\DTOs\CommentData;
 use App\DTOs\PaginatedCommentData;
-use App\Http\Requests\DiscussionRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
@@ -39,7 +38,7 @@ class CommentController extends Controller
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
-
+        
         $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
         $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);
 
