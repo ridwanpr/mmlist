@@ -3,124 +3,120 @@
 /*
  * Graphite & Crimson - Soft Balanced Palette
  * Designed for an anime trigger-warning, discussion, and watchlist site.
- *
- * This version uses a softened light mode to prevent glare fatigue,
- * paired with a pure neutral dark mode to avoid looking like standard anime databases.
  */
 
 @theme {
-  /* ── Backgrounds (Soft Neutral Light Mode - No Pure White Glare) ── */
+  /* ── Backgrounds (Soft Neutral Light Mode) ── */
   --color-background: #f2f2f2;
-  /* soft grey base reduces total screen brightness */
   --color-surface: #fafafa;
-  /* off-white card faces to eliminate harsh glare */
   --color-surface-alt: #eaeaea;
-  /* balanced grey for inputs and secondary areas */
   --color-border: #dbdbdb;
-  /* clean, neutral divider lines */
 
-  /* ── Typography (Softened Dark Grey) ─────────────────── */
+  /* ── Dedicated Spoiler Color (Light Mode) ── */
+  --color-spoiler-bg: #d6cbd0;
+  /* A distinct, muted crimson-graphite tint that stands out on off-white surfaces */
+
+  /* ── Typography ─────────────────────────────────────── */
   --color-text: #222222;
-  /* reduced from stark black to prevent text vibration */
   --color-text-muted: #666666;
-  /* clear mid-grey for metadata and timestamps */
 
-  /* ── Primary - Crimson & Rose (Your Brand Identity) ──── */
+  /* ── Primary - Crimson & Rose ───────────────────────── */
   --color-primary: #b34d56;
-  /* muted crimson [~4.9:1 contrast on soft white] */
   --color-primary-dark: #9c494f;
-  /* deep rose for hover states */
   --color-primary-soft: #fde8e9;
-  /* delicate pink tint for selections and highlights */
 
-  /* ── Accents ─────────────────────────────────────────── */
+  /* ── Accents ────────────────────────────────────────── */
   --color-accent-gold: #946300;
-  /* accessible amber for generic warnings */
   --color-accent-orange: #b84a00;
-  /* clear orange accent */
   --color-accent-red: #c24646;
-  /* prominent crimson red */
   --color-accent-rose: #b8516d;
-  /* rich terracotta rose */
   --color-success: #247a44;
-  /* forest green for approved/safe tags */
 
   /* ── Severity Scale ──────────────────────────────────── */
   --color-severity-mild: #737373;
-  /* neutral medium grey */
   --color-severity-moderate: #946300;
-  /* amber warning */
   --color-severity-high: #c24646;
-  /* high warning red */
   --color-severity-severe: #82131d;
-  /* deep crimson for intense triggers */
   --color-severity-unverified: #525252;
-  /* dark neutral grey */
 
   /* ── Typography ─────────────────────────────────────── */
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-serif:
+    "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 @layer base {
 
-  /* ── Dark Mode (Pure Charcoal & Onyx - Zero Blue Undertones) ── */
+  /* ── Dark Mode ── */
   .dark {
-    /* Backgrounds */
     --color-background: #121212;
-    /* deep onyx foundation */
     --color-surface: #1e1e1e;
-    /* solid charcoal card containers */
     --color-surface-alt: #2a2a2a;
-    /* lighter dark grey for fields and comments */
     --color-border: #333333;
-    /* sharp, dark neutral border lines */
 
-    /* Typography */
+    /* ── Dedicated Spoiler Color (Dark Mode) ── */
+    --color-spoiler-bg: #403234;
+    /* A visible, deep dark-rose ember block that contrasts perfectly with charcoal surfaces */
+
     --color-text: #f5f5f5;
-    /* soft white to ensure comfortable night reading */
     --color-text-muted: #a3a3a3;
-    /* legible muted grey for secondary details */
 
-    /* Primary */
     --color-primary: #e8a0a6;
-    /* soft rose [~8.0:1 contrast on charcoal surface] */
     --color-primary-dark: #d98b92;
-    /* medium rose for active/hover states */
     --color-primary-soft: #3d2426;
-    /* deep crimson container background */
 
-    /* Accents */
     --color-accent-gold: #f59e0b;
-    /* bright amber */
     --color-accent-orange: #f97316;
-    /* vibrant orange */
     --color-accent-red: #ef4444;
-    /* vibrant red */
     --color-accent-rose: #f43f5e;
-    /* vibrant pinkish rose */
     --color-success: #34d399;
-    /* bright green */
 
-    /* Severity Scale */
     --color-severity-mild: #a3a3a3;
-    /* balanced light grey */
     --color-severity-moderate: #f59e0b;
-    /* amber */
     --color-severity-high: #ef4444;
-    /* red */
     --color-severity-severe: #ff6b6b;
-    /* intense light red */
     --color-severity-unverified: #737373;
   }
 
-  html {
-    background: var(--color-background);
-    color: var(--color-text);
-  }
-
+  html,
   body {
     background: var(--color-background);
     color: var(--color-text);
+  }
+}
+
+/* ── Custom Markdown & Spoiler Layer ───────────────────── */
+@layer utilities {
+
+  /* Restores bold formatting for ** text */
+  .prose strong,
+  .prose b {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Restores italic formatting for * text */
+  .prose em,
+  .prose i {
+    font-style: italic;
+  }
+
+  /* Your existing spoiler system */
+  .prose .spoiler {
+    background-color: var(--color-spoiler-bg);
+    color: transparent;
+    border-radius: 0.25rem;
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .prose .spoiler.revealed {
+    background-color: transparent;
+    color: var(--color-text);
+    user-select: text;
+    cursor: text;
   }
 }

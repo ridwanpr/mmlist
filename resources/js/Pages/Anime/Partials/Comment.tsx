@@ -32,7 +32,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
       <h2 className="text-text mb-2 text-base font-bold">Comments</h2>
 
       {/* Comments Preview List */}
-      <div className="space-y-1 bg-surface px-4 rounded-lg">
+      <div className="bg-surface space-y-1 rounded-lg px-4">
         {topComments && topComments.length > 0 ? (
           topComments.map((comment, i) => (
             <div
@@ -53,9 +53,18 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
               </div>
 
               {/* Comment Body */}
-              <p className="text-text/85 text-sm leading-snug whitespace-pre-wrap line-clamp-10">
-                {comment.body}
-              </p>
+              <div
+                className="prose prose-sm text-text/85 mt-1 max-w-none md:text-sm"
+                onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.classList.contains("spoiler")) {
+                    target.classList.add("revealed");
+                  }
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: comment.bodyHtml,
+                }}
+              />
             </div>
           ))
         ) : (

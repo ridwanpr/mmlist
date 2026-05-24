@@ -13,6 +13,7 @@ readonly class CommentData
         public int $animeId,
         public int $userId,
         public string $body,
+        public string $bodyHtml,
         public int $upvotes,
         public int $downvotes,
         public string $createdAt,
@@ -29,13 +30,18 @@ readonly class CommentData
             animeId: $model->anime_id,
             userId: $model->user_id,
             body: $model->body,
+            bodyHtml: $model->body_html,
             upvotes: $model->upvotes,
             downvotes: $model->downvotes,
-            createdAt: $model->created_at,
-            updatedAt: $model->updated_at,
+            createdAt: $model->created_at->toDateTimeString(),
+            updatedAt: $model->updated_at->toDateTimeString(),
             isUpvoted: (bool) ($model->votes_exists ?? false),
-            user: $model->relationLoaded('user') ? UserData::fromModel($model->user) : null,
-            anime: $model->relationLoaded('anime') ? AnimeData::fromModel($model->anime) : null,
+            user: $model->relationLoaded('user')
+                ? UserData::fromModel($model->user)
+                : null,
+            anime: $model->relationLoaded('anime')
+                ? AnimeData::fromModel($model->anime)
+                : null,
         );
     }
 }

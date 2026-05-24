@@ -199,10 +199,18 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
                 />
               )}
-
-              <p className="text-text mt-1 text-xs leading-relaxed whitespace-pre-wrap md:text-sm">
-                {comment.body}
-              </p>
+              <div
+                className="prose prose-sm text-text mt-1 max-w-none md:text-sm"
+                onClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.classList.contains("spoiler")) {
+                    target.classList.add("revealed");
+                  }
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: comment.bodyHtml,
+                }}
+              />
               <button className="text-text-muted hover:text-text mt-2 flex items-center gap-1 text-xs hover:cursor-pointer">
                 <LuReply className="size-3" /> Reply
               </button>

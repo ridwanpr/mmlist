@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -42,6 +43,36 @@ class Comment extends Model
         'upvotes',
         'downvotes',
     ];
+
+    public function getBodyHtmlAttribute(): string
+    {
+        $body = $this->body;
+
+        // Shift trapped trailing spaces inside formatting tags to the outside
+        $body = preg_replace('/_*\s*([^*]+?)\s+(\*\*)(\s?)/', '**$1** ', $body);
+        $body = preg_replace('/(?<!\*)\*([^*]+?)\s+\*(?!\*)(\s?)/', '*$1* ', $body);
+        $body = preg_replace('/\|\|([^|]+?)\s+\|\|(\s?)/', '||$1|| ', $body);
+
+        // Shift trapped leading spaces inside formatting tags to the outside
+        $body = preg_replace('/(\s?)\*\*\s+([^*]+?)\*\*/', ' **$2**', $body);
+        $body = preg_replace('/(\s?)(?<!\*)\*\s+([^*]+?)\*(?!\*)/', ' *$2*', $body);
+        $body = preg_replace('/(\s?)\|\|\s+([^|]+?)\|\|/', ' ||$2||', $body);
+
+        // Run the cleaned markdown text through the secure compiler
+        $html = Str::markdown(
+            $body,
+            [
+                'html_input' => 'strip',
+                'allow_unsafe_links' => false,
+            ]
+        );
+
+        return preg_replace(
+            '/\|\|(.*?)\|\|/',
+            '<span class="spoiler">$1</span>',
+            $html
+        );
+    }
 
     public function user(): BelongsTo
     {

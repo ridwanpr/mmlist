@@ -70,6 +70,7 @@ declare namespace App {
       readonly animeId: number;
       readonly userId: number;
       readonly body: string;
+      readonly bodyHtml: string;
       readonly upvotes: number;
       readonly downvotes: number;
       readonly createdAt: string;
