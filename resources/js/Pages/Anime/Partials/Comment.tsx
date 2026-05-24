@@ -59,7 +59,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
             </div>
           ))
         ) : (
-          <div className="border-border bg-surface/30 flex flex-col items-center justify-center rounded-lg border border-dashed px-4 py-8 text-center">
+          <div className="border-border bg-surface/30 flex flex-col items-center justify-center rounded-lg px-4 py-8 text-center">
             <LuMessageSquarePlus className="text-text-muted/60 mb-2 size-6" />
             <p className="text-text-muted text-sm">
               No comments yet.{" "}

@@ -36,7 +36,7 @@ const TriggerWarning = ({
 
       <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
         {/* Trigger Category Filter (Unified with RefineResults style) */}
-        <section className="bg-surface border-border w-full self-start rounded-lg border p-5 lg:flex lg:w-72 lg:flex-col lg:gap-6">
+        <section className="bg-surface border-border w-full self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col lg:gap-6">
           {" "}
           <div className="border-border flex w-full items-center justify-between border-b pb-4">
             <h2 className="text-text font-bold">Filter Triggers</h2>

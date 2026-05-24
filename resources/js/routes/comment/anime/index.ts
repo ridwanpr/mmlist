@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefa
 /**
 * @see \App\Http\Controllers\CommentController::index
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/discussion/{animeSlug}'
+ * @route '/anime/discussion/{animeSlug}'
  */
 export const index = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -11,13 +11,13 @@ export const index = (args: { animeSlug: string | number } | [animeSlug: string 
 
 index.definition = {
     methods: ["get","head"],
-    url: '/discussion/{animeSlug}',
+    url: '/anime/discussion/{animeSlug}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\CommentController::index
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/discussion/{animeSlug}'
+ * @route '/anime/discussion/{animeSlug}'
  */
 index.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -45,7 +45,7 @@ index.url = (args: { animeSlug: string | number } | [animeSlug: string | number 
 /**
 * @see \App\Http\Controllers\CommentController::index
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/discussion/{animeSlug}'
+ * @route '/anime/discussion/{animeSlug}'
  */
 index.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(args, options),
@@ -54,7 +54,7 @@ index.get = (args: { animeSlug: string | number } | [animeSlug: string | number 
 /**
 * @see \App\Http\Controllers\CommentController::index
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/discussion/{animeSlug}'
+ * @route '/anime/discussion/{animeSlug}'
  */
 index.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(args, options),
