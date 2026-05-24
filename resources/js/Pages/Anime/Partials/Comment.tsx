@@ -29,10 +29,10 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
 
   return (
     <section className="border-border mt-6 border-t pt-5">
-      <h2 className="text-text mb-2 text-base font-bold">Discussion</h2>
+      <h2 className="text-text mb-2 text-base font-bold">Comments</h2>
 
       {/* Comments Preview List */}
-      <div className="space-y-1">
+      <div className="space-y-1 bg-surface px-4 rounded-lg">
         {topComments && topComments.length > 0 ? (
           topComments.map((comment, i) => (
             <div

@@ -89,7 +89,7 @@ const Hero = ({ staffPick }: HeroProps) => {
                     <Link
                       key={item.slug}
                       href={showAnime.url(item.slug)}
-                      prefetch
+                      prefetch={["click", "hover"]}
                       className="border-border bg-surface text-text hover:border-primary/20 hover:bg-primary-soft/30 hover:text-primary-dark rounded-lg border px-2.5 py-1 text-sm font-medium transition"
                     >
                       {item.title_english || item.title}

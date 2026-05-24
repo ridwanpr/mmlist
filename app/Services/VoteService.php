@@ -37,7 +37,7 @@ class VoteService
         $paginatedData = AnimeTrigger::where('user_id', $userId)
             ->with(['anime', 'triggerContent'])
             ->orderBy('created_at', 'desc')
-            ->paginate(15)
+            ->paginate(20)
             ->onEachSide(1)
             ->withQueryString();
 

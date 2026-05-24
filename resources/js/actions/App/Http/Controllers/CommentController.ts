@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefa
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/comment/{animeSlug}'
+ * @route '/discussion/{animeSlug}'
  */
 export const getAnimeComment = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnimeComment.url(args, options),
@@ -11,13 +11,13 @@ export const getAnimeComment = (args: { animeSlug: string | number } | [animeSlu
 
 getAnimeComment.definition = {
     methods: ["get","head"],
-    url: '/comment/{animeSlug}',
+    url: '/discussion/{animeSlug}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/comment/{animeSlug}'
+ * @route '/discussion/{animeSlug}'
  */
 getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -45,7 +45,7 @@ getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/comment/{animeSlug}'
+ * @route '/discussion/{animeSlug}'
  */
 getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: getAnimeComment.url(args, options),
@@ -54,7 +54,7 @@ getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
  * @see app/Http/Controllers/CommentController.php:33
- * @route '/comment/{animeSlug}'
+ * @route '/discussion/{animeSlug}'
  */
 getAnimeComment.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: getAnimeComment.url(args, options),

@@ -22,7 +22,7 @@ const DesktopNav = () => {
         <Link
           href={homeIndex.url()}
           prefetch
-          className="text-primary font-serif text-2xl font-bold tracking-wider transition-opacity hover:opacity-90"
+          className="text-primary font-serif text-2xl font-bold transition-opacity hover:opacity-90"
         >
           Mamorulist
         </Link>
