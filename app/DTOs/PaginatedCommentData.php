@@ -2,7 +2,6 @@
 
 namespace App\DTOs;
 
-use App\DTOs\CommentData;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -25,7 +24,7 @@ readonly class PaginatedCommentData
     ) {}
 
     /**
-     * @param  LengthAwarePaginator<int, AnimeData>  $paginator
+     * @param  LengthAwarePaginator<int, CommentData>  $paginator
      */
     public static function fromPaginator(LengthAwarePaginator $paginator): self
     {

@@ -35,7 +35,7 @@ class CommentService
     public function getAnimeComments(int $animeId, int $paginateLimit = 25, string $sortBy = "latest")
     {
         $commentData = Comment::where('anime_id', $animeId)
-            ->with(['user'])
+            ->with(['user', 'parent'])
             ->withExists(['votes' => function ($q) {
                 $q->where('user_id', Auth::id());
             }])

@@ -19,8 +19,10 @@ readonly class CommentData
         public string $createdAt,
         public string $updatedAt,
         public bool $isUpvoted,
+        public ?int $parentCommentId = null,
         public ?UserData $user = null,
         public ?AnimeData $anime = null,
+        public ?CommentData $parent = null,
     ) {}
 
     public static function fromModel(Comment $model): self
@@ -33,14 +35,18 @@ readonly class CommentData
             bodyHtml: $model->body_html,
             upvotes: $model->upvotes,
             downvotes: $model->downvotes,
-            createdAt: $model->created_at->toDateTimeString(),
-            updatedAt: $model->updated_at->toDateTimeString(),
+            createdAt: $model->created_at?->toDateTimeString() ?? '',
+            updatedAt: $model->updated_at?->toDateTimeString() ?? '',
             isUpvoted: (bool) ($model->votes_exists ?? false),
-            user: $model->relationLoaded('user')
+            parentCommentId: $model->parent_comment_id,
+            user: $model->relationLoaded('user') && $model->user
                 ? UserData::fromModel($model->user)
                 : null,
-            anime: $model->relationLoaded('anime')
+            anime: $model->relationLoaded('anime') && $model->anime
                 ? AnimeData::fromModel($model->anime)
+                : null,
+            parent: $model->relationLoaded('parent') && $model->parent
+                ? CommentData::fromModel($model->parent)
                 : null,
         );
     }

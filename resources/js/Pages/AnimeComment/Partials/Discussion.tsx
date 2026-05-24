@@ -216,10 +216,10 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   </span>
                 </div>
 
-                {index === 1 && (
+                {comment.parent && (
                   <QuoteBlock
                     authorName="John Doe"
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
+                    body={comment.parent.body}
                   />
                 )}
 

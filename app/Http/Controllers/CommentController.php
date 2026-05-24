@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\DTOs\CommentData;
 use App\DTOs\PaginatedCommentData;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use App\Services\AnimeService;
 use App\Services\CommentService;
@@ -48,10 +47,17 @@ class CommentController extends Controller
         $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'most-loved';
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
+
+        // 1. Fetch raw paginated models from service
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
 
-        $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
-        $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);
+        // 2. Transform the collection items inside the paginator into CommentData DTOs
+        $transformedPaginator = $animeComments->through(
+            fn(Comment $item): CommentData => CommentData::fromModel($item)
+        );
+
+        // 3. Build the final paginated response structure
+        $paginatedComment = PaginatedCommentData::fromPaginator($transformedPaginator);
 
         return Inertia::render('AnimeComment/Index', [
             'anime' => $anime,
