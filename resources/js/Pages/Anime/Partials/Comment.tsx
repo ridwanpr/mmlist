@@ -1,7 +1,14 @@
 import { useForm, usePage, Link } from "@inertiajs/react";
+import { useRef, useEffect } from "react";
 import type React from "react";
 import { store as storeComment } from "../../../actions/App/Http/Controllers/CommentController";
-import { LuHeart, LuMessageSquarePlus } from "react-icons/lu";
+import {
+  LuHeart,
+  LuMessageSquarePlus,
+  LuBold,
+  LuItalic,
+  LuEyeOff,
+} from "react-icons/lu";
 import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
 
 type CommentProps = {
@@ -12,12 +19,51 @@ type CommentProps = {
 
 const Comment = ({ anime, topComments, countComments }: CommentProps) => {
   const { auth } = usePage().props;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const cursorSelectionRef = useRef<{ start: number; end: number } | null>(
+    null,
+  );
+
   const { data, setData, post, errors, reset } = useForm({
     slug: anime.slug,
     body: "",
   });
 
-  const handleCommentSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  // Track selection coordinates safely across re-renders
+  useEffect(() => {
+    if (cursorSelectionRef.current && textareaRef.current) {
+      const { start, end } = cursorSelectionRef.current;
+      textareaRef.current.focus();
+      textareaRef.current.setSelectionRange(start, end);
+      cursorSelectionRef.current = null;
+    }
+  }, [data.body]);
+
+  const insertMarkdown = (before: string, after = "") => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = data.body.slice(start, end);
+
+    const next =
+      data.body.slice(0, start) +
+      before +
+      selected +
+      after +
+      data.body.slice(end);
+
+    const cursorPos =
+      selected.length > 0
+        ? end + before.length + after.length
+        : start + before.length;
+
+    cursorSelectionRef.current = { start: cursorPos, end: cursorPos };
+    setData("body", next);
+  };
+
+  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     post(storeComment.url(), {
       preserveScroll: true,
@@ -100,6 +146,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
         <div className="border-border bg-surface mt-4 rounded-lg border p-3 shadow-xs">
           <form onSubmit={handleCommentSubmit}>
             <textarea
+              ref={textareaRef}
               value={data.body}
               onChange={(e) => setData("body", e.target.value)}
               placeholder="Share your thoughts..."
@@ -113,7 +160,33 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
               </p>
             )}
 
-            <div className="border-border/60 mt-2 flex justify-end border-t border-dashed pt-2">
+            <div className="border-border/60 mt-2 flex items-center justify-between border-t border-dashed pt-2">
+              <div className="flex flex-wrap gap-1">
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown("**", "**")}
+                  className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs font-semibold transition"
+                >
+                  <LuBold />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown("*", "*")}
+                  className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs italic transition"
+                >
+                  <LuItalic />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => insertMarkdown("||", "||")}
+                  className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs transition"
+                >
+                  <LuEyeOff />
+                </button>
+              </div>
+
               <button
                 type="submit"
                 disabled={isButtonDisabled}
