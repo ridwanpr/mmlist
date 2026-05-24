@@ -4,10 +4,17 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { LuX, LuCornerUpLeft } from "react-icons/lu";
+import {
+  LuX,
+  LuCornerUpLeft,
+  LuBold,
+  LuItalic,
+  LuEyeOff,
+} from "react-icons/lu";
 import type { RepliedComment } from "./Discussion";
 import { Form } from "@inertiajs/react";
 import { store } from "../../../actions/App/Http/Controllers/CommentController";
+import { useRef } from "react";
 
 type ReplyFormModalProps = {
   replyModal: boolean;
@@ -22,6 +29,37 @@ const ReplyFormModal = ({
   repliedComment,
   slug,
 }: ReplyFormModalProps) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const insertMarkdown = (before: string, after = "") => {
+    const textarea = textareaRef.current;
+
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentVal = textarea.value;
+
+    const selected = currentVal.slice(start, end);
+
+    const next =
+      currentVal.slice(0, start) +
+      before +
+      selected +
+      after +
+      currentVal.slice(end);
+
+    textarea.value = next;
+
+    const cursorPos =
+      selected.length > 0
+        ? end + before.length + after.length
+        : start + before.length;
+
+    textarea.focus();
+    textarea.setSelectionRange(cursorPos, cursorPos);
+  };
+
   return (
     <Dialog
       open={replyModal}
@@ -33,7 +71,6 @@ const ReplyFormModal = ({
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 data-closed:opacity-0"
       />
 
-      {/* Mobile: bottom sheet — Desktop: centered modal */}
       <div className="fixed inset-0 flex items-end justify-center sm:items-center sm:p-4">
         <DialogPanel
           transition
@@ -88,6 +125,7 @@ const ReplyFormModal = ({
               />
               <input type="hidden" name="slug" value={slug} />
               <textarea
+                ref={textareaRef}
                 name="body"
                 placeholder="Write your reply..."
                 rows={4}
@@ -95,20 +133,48 @@ const ReplyFormModal = ({
                 className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
               />
 
-              <div className="mt-3 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={closeReplyModal}
-                  className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
-                >
-                  Post reply
-                </button>
+              <div className="border-border/60 mt-3 flex items-center justify-between border-t border-dashed pt-2">
+                <div className="flex flex-wrap gap-1">
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown("**", "**")}
+                    className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs font-semibold transition"
+                  >
+                    <LuBold />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown("*", "*")}
+                    className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs italic transition"
+                  >
+                    <LuItalic />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown("||", "||")}
+                    className="border-border bg-background hover:bg-muted text-text rounded-md border px-2 py-1 text-xs transition"
+                  >
+                    <LuEyeOff />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={closeReplyModal}
+                    className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
+                  >
+                    Post reply
+                  </button>
+                </div>
               </div>
             </Form>
           </div>
