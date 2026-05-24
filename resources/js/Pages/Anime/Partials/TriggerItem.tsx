@@ -209,7 +209,7 @@ const TriggerItem = ({
             </p>
             <p className="text-text-muted text-xs leading-relaxed">
               {findAITriggerContext?.ai_summary ||
-                "No AI summary is available. This content is pending evaluation."}
+                "No AI summary is currently available. This content is awaiting evaluation."}
             </p>
           </div>
 
