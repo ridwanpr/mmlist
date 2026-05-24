@@ -218,7 +218,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
                 {comment.parent && (
                   <QuoteBlock
-                    authorName="John Doe"
+                    authorName={comment.parent.user?.name!}
                     body={comment.parent.body}
                   />
                 )}
