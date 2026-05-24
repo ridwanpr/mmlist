@@ -9,6 +9,7 @@ import FormComment from "./FormComment";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 import { upvote } from "../../../actions/App/Http/Controllers/CommentController";
 import Sorting from "./Sorting";
+import ReplyFormModal from "./ReplyFormModal";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -49,6 +50,8 @@ const formatRelativeTime = (dateString: string): string => {
 const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
+
+  const [replyModal, setReplyModal] = useState(false);
 
   // Local comment state, owns display order for this session
   const [comments, setComments] = useState(paginatedComment.data);
@@ -124,110 +127,96 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     );
   };
 
+  const handleReplyModal = () => {
+    setReplyModal((prev) => !prev);
+  };
+
   return (
-    <section id="discussion">
-      <Link
-        href={show.url(anime.slug)}
-        className="text-primary text-lg font-semibold"
-      >
-        {anime.title_english || anime.title} - Discussion
-      </Link>
-
-      <FormComment isGuest={isGuest} anime={anime} />
-
-      <Sorting sortBy={sortBy} handleFilter={handleFilter} />
-
-      {comments?.map((comment, index) => (
-        <div
-          key={comment.id}
-          className="border-border bg-surface mt-3 divide-y rounded border"
+    <>
+      <section id="discussion">
+        <Link
+          href={show.url(anime.slug)}
+          className="text-primary text-lg font-semibold"
         >
-          <div className="flex gap-4 px-4 py-3">
-            {/* Upvote Column */}
-            <div
-              onClick={() => handleUpvote(comment.id)}
-              className="flex shrink-0 flex-col items-center pt-0.5"
-            >
-              <button
-                className={`-m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer ${
-                  comment.isUpvoted
-                    ? "text-accent-red hover:text-accent-red/80"
-                    : "text-text-muted hover:text-accent-red"
-                }`}
-              >
-                <LuHeart
-                  className={`size-4 ${comment.isUpvoted ? "fill-current" : ""}`}
-                />
-                <span className="text-xs leading-none">{comment.upvotes}</span>
-              </button>
-            </div>
+          {anime.title_english || anime.title} - Discussion
+        </Link>
 
-            <div className="min-w-0 flex-1">
-              <div className="flex items-baseline gap-2">
-                <span className="text-primary text-sm font-semibold">
-                  {comment.user?.name}
-                </span>
-                <span
-                  className="text-text-muted text-xs"
-                  suppressHydrationWarning
+        <FormComment isGuest={isGuest} anime={anime} />
+
+        <Sorting sortBy={sortBy} handleFilter={handleFilter} />
+
+        {comments?.map((comment, index) => (
+          <div
+            key={comment.id}
+            className="border-border bg-surface mt-3 divide-y rounded border"
+          >
+            <div className="flex gap-4 px-4 py-3">
+              {/* Upvote Column */}
+              <div className="flex shrink-0 flex-col items-center pt-0.5">
+                <button
+                  onClick={() => handleUpvote(comment.id)}
+                  className={`-m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer ${
+                    comment.isUpvoted
+                      ? "text-accent-red hover:text-accent-red/80"
+                      : "text-text-muted hover:text-accent-red"
+                  }`}
                 >
-                  {formatRelativeTime(comment.createdAt)}
-                </span>
+                  <LuHeart
+                    className={`size-4 ${comment.isUpvoted ? "fill-current" : ""}`}
+                  />
+                  <span className="text-xs leading-none">
+                    {comment.upvotes}
+                  </span>
+                </button>
               </div>
 
-              {index === 1 && (
-                <QuoteBlock
-                  authorName="John Doe"
-                  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
-                />
-              )}
-              <div
-                className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  if (target.classList.contains("spoiler")) {
-                    target.classList.add("revealed");
-                  }
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: comment.bodyHtml,
-                }}
-              />
-              <button className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer">
-                <LuReply className="size-3" /> Reply
-              </button>
-              {/* Reply comment form */}
-              <div className="bg-surface-alt mt-2 hidden rounded p-3">
-                <Form
-                  action={store.url()}
-                  method="post"
-                  disableWhileProcessing
-                  resetOnSuccess
-                >
-                  <input type="hidden" name="slug" value={anime.slug} />
-                  <textarea
-                    name="body"
-                    placeholder="Write your reply here..."
-                    className="text-text placeholder:text-text/50 min-h-17.5 w-full bg-transparent text-sm outline-hidden"
-                    rows={4}
-                    required
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-primary text-sm font-semibold">
+                    {comment.user?.name}
+                  </span>
+                  <span
+                    className="text-text-muted text-xs"
+                    suppressHydrationWarning
+                  >
+                    {formatRelativeTime(comment.createdAt)}
+                  </span>
+                </div>
+
+                {index === 1 && (
+                  <QuoteBlock
+                    authorName="John Doe"
+                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
                   />
-                  <p className="mt-1 text-xs font-medium text-red-500"></p>
-                  <div className="border-border mt-2 flex justify-end border-t border-dashed pt-2">
-                    <button
-                      type="submit"
-                      className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:cursor-pointer hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
-                    >
-                      Post Comment
-                    </button>
-                  </div>
-                </Form>
+                )}
+                <div
+                  className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement;
+                    if (target.classList.contains("spoiler")) {
+                      target.classList.add("revealed");
+                    }
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: comment.bodyHtml,
+                  }}
+                />
+                <button
+                  onClick={handleReplyModal}
+                  className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                >
+                  <LuReply className="size-3" /> Reply
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-    </section>
+        ))}
+      </section>
+      <ReplyFormModal
+        replyModal={replyModal}
+        handleReplyModal={handleReplyModal}
+      />
+    </>
   );
 };
 
