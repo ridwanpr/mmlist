@@ -17,7 +17,7 @@ type DiscussionProps = {
   sortBy: "latest" | "most-loved" | "oldest";
 };
 
-type RepliedComment = {
+export type RepliedComment = {
   parent_comment_id: number | null;
   parent_comment_body: string;
 };
@@ -230,7 +230,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 />
 
                 <button
-                  onClick={() => openReplyModal(comment.id, comment.bodyHtml)}
+                  onClick={() => openReplyModal(comment.id, comment.body)}
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                 >
                   <LuReply className="size-3" />
@@ -245,7 +245,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       <ReplyFormModal
         replyModal={replyModal}
         closeReplyModal={closeReplyModal}
-        anime={anime}
+        repliedComment={repliedComment}
       />
     </>
   );

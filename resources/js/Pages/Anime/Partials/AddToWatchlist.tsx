@@ -1,7 +1,12 @@
-import { LuBookmark, LuPlus } from "react-icons/lu";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { LuBookmark, LuPlus, LuX } from "react-icons/lu";
 import type { SetStateAction } from "react";
 import type { FormDataConvertible } from "@inertiajs/core";
-import ModalDialog from "../../../Components/UI/ModalDialog";
 import { SelectOption } from "../../../Components/UI/SelectOption";
 
 export interface WatchlistFormData {
@@ -58,119 +63,162 @@ export const AddToWatchlist = ({
         Add to Watchlist
       </button>
 
-      <ModalDialog
-        title="Add to Watchlist"
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        onSubmit={onSubmitWatchlist}
-        footer={
-          <>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="border-border hover:bg-surface-alt flex-1 rounded-lg border py-2.5 font-medium transition-colors hover:cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-primary text-surface hover:bg-primary-dark flex-1 rounded-lg py-2.5 font-medium transition-colors hover:cursor-pointer"
-            >
-              Submit
-            </button>
-          </>
-        }
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50"
       >
-        {/*Modal dialog children*/}
-        <div className="flex flex-col gap-4">
-          <SelectOption
-            id="status"
-            name="status"
-            label="Status"
-            items={statusSelectItem}
-            onChange={handleWatchlistFormChange}
-          />
-          {/*Progress*/}
-          <div className="flex flex-col gap-1">
-            <label htmlFor="progress" className="text-sm">
-              Episode progress
-            </label>
-            <div className="relative flex items-center gap-1">
-              <input
-                type="number"
-                name="progress"
-                id="progress"
-                min={0}
-                value={watchlistFormData.progress}
-                onChange={(e) => handleWatchlistFormChange(e)}
-                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5"
-              />
-              <div className="absolute right-4 flex items-center gap-1 md:right-10">
-                {anime.episodes && <p>/ {anime.episodes} eps</p>}
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 data-closed:opacity-0"
+        />
+
+        <div className="fixed inset-0 flex items-end justify-center sm:items-center sm:p-4">
+          <DialogPanel
+            transition
+            className="bg-surface border-border flex max-h-[85dvh] w-full flex-col rounded-t-2xl border border-b-0 shadow-2xl transition duration-200 data-closed:translate-y-4 data-closed:opacity-0 sm:max-w-md sm:rounded-2xl sm:border-b"
+          >
+            {/* Header */}
+            <div className="border-border/60 flex items-center justify-between border-b px-5 py-4">
+              <DialogTitle className="text-text text-lg font-semibold">
+                Add to Watchlist
+              </DialogTitle>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg p-1.5 transition-colors"
+              >
+                <LuX className="size-4" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={onSubmitWatchlist}
+              className="flex min-h-0 flex-1 flex-col"
+            >
+              {/* Scrollable body */}
+              <div className="flex-1 overflow-y-auto p-5">
+                <div className="flex flex-col gap-4">
+                  <SelectOption
+                    id="status"
+                    name="status"
+                    label="Status"
+                    items={statusSelectItem}
+                    onChange={handleWatchlistFormChange}
+                  />
+
+                  {/* Progress */}
+                  <div className="flex flex-col gap-1">
+                    <label htmlFor="progress" className="text-sm font-medium">
+                      Episode progress
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="number"
+                        name="progress"
+                        id="progress"
+                        min={0}
+                        value={watchlistFormData.progress}
+                        onChange={handleWatchlistFormChange}
+                        className="border-border outline-primary w-full rounded-xl border px-3 py-2.5 pr-28"
+                      />
+                      <div className="absolute right-3 flex items-center gap-2">
+                        {anime.episodes && (
+                          <p className="text-text-muted text-sm">
+                            / {anime.episodes}
+                          </p>
+                        )}
+                        <button
+                          type="button"
+                          onClick={incrementProgress}
+                          className="border-border hover:bg-surface-alt cursor-pointer rounded-full border p-1.5 transition-colors"
+                        >
+                          <LuPlus className="size-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <SelectOption
+                    id="score"
+                    name="score"
+                    label="Score"
+                    items={scoreSelectItem}
+                    onChange={handleWatchlistFormChange}
+                  />
+
+                  {/* Dates */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="started_at"
+                        className="text-sm font-medium"
+                      >
+                        Start date
+                      </label>
+                      <input
+                        type="date"
+                        name="started_at"
+                        id="started_at"
+                        value={watchlistFormData.started_at}
+                        onChange={handleWatchlistFormChange}
+                        className="border-border outline-primary w-full rounded-xl border px-3 py-2.5 text-sm"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="completed_at"
+                        className="text-sm font-medium"
+                      >
+                        Finish date
+                      </label>
+                      <input
+                        type="date"
+                        name="completed_at"
+                        id="completed_at"
+                        value={watchlistFormData.completed_at}
+                        onChange={handleWatchlistFormChange}
+                        className="border-border outline-primary w-full rounded-xl border px-3 py-2.5 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Note */}
+                  <div className="flex flex-col gap-1">
+                    <label htmlFor="note" className="text-sm font-medium">
+                      Note
+                    </label>
+                    <textarea
+                      rows={3}
+                      name="note"
+                      id="note"
+                      onChange={handleWatchlistFormChange}
+                      className="border-border outline-primary w-full resize-none rounded-xl border px-3 py-2.5 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="border-border/60 flex gap-3 border-t p-5">
                 <button
                   type="button"
-                  className="border-border rounded-full border p-2 hover:cursor-pointer"
-                  onClick={(e) => incrementProgress(e)}
+                  onClick={() => setIsOpen(false)}
+                  className="border-border text-text hover:bg-surface-alt flex-1 cursor-pointer rounded-xl border py-2.5 text-sm font-medium transition-colors"
                 >
-                  <LuPlus />
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-surface flex-1 cursor-pointer rounded-xl py-2.5 text-sm font-medium transition hover:opacity-90"
+                >
+                  Submit
                 </button>
               </div>
-            </div>
-          </div>
-          {/*Score*/}
-          <div className="flex flex-col gap-1">
-            <SelectOption
-              id="score"
-              name="score"
-              label="Score"
-              items={scoreSelectItem}
-              onChange={handleWatchlistFormChange}
-            />
-          </div>
-          {/* Dates (Started & Completed) */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="started_at" className="text-sm">
-                Start Date
-              </label>
-              <input
-                type="date"
-                name="started_at"
-                id="started_at"
-                value={watchlistFormData.started_at}
-                onChange={handleWatchlistFormChange}
-                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="completed_at" className="text-sm">
-                Finish Date
-              </label>
-              <input
-                type="date"
-                name="completed_at"
-                id="completed_at"
-                value={watchlistFormData.completed_at}
-                onChange={handleWatchlistFormChange}
-                className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
-              />
-            </div>
-          </div>
-          {/*Note*/}
-          <div className="flex flex-col gap-1">
-            <label htmlFor="score" className="text-sm">
-              Note
-            </label>
-            <textarea
-              rows={3}
-              name="note"
-              id="note"
-              className="border-border outline-primary w-full rounded-lg border px-3 py-2.5 text-sm"
-              onChange={handleWatchlistFormChange}
-            ></textarea>
-          </div>
+            </form>
+          </DialogPanel>
         </div>
-      </ModalDialog>
+      </Dialog>
     </div>
   );
 };

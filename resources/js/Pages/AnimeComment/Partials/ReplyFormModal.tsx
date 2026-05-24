@@ -4,72 +4,91 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { LuX } from "react-icons/lu";
+import { LuX, LuCornerUpLeft } from "react-icons/lu";
+import type { RepliedComment } from "./Discussion";
 
 type ReplyFormModalProps = {
   replyModal: boolean;
   closeReplyModal: () => void;
-  anime: App.DTOs.AnimeData;
+  repliedComment: RepliedComment;
 };
 
 const ReplyFormModal = ({
   replyModal,
   closeReplyModal,
-  anime,
+  repliedComment,
 }: ReplyFormModalProps) => {
   return (
     <Dialog
       open={replyModal}
-      onClose={() => closeReplyModal()}
+      onClose={closeReplyModal}
       className="relative z-50"
     >
-      <DialogBackdrop className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 data-closed:opacity-0"
+      />
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="bg-surface border-border w-full max-w-lg overflow-hidden rounded-lg border shadow-2xl">
+      {/* Mobile: bottom sheet — Desktop: centered modal */}
+      <div className="fixed inset-0 flex items-end justify-center sm:items-center sm:p-4">
+        <DialogPanel
+          transition
+          className="bg-surface border-border flex w-full flex-col rounded-t-2xl border border-b-0 shadow-2xl transition duration-200 data-closed:translate-y-4 data-closed:opacity-0 sm:max-w-lg sm:rounded-2xl sm:border-b"
+        >
           {/* Header */}
-          <div className="border-border/60 flex items-center justify-between border-b px-5 py-4">
-            <DialogTitle className="text-text text-lg font-semibold">
-              Write your reply
-            </DialogTitle>
-
+          <div className="flex items-center justify-between px-5 py-4">
+            <div className="flex items-center gap-2">
+              <LuCornerUpLeft className="text-primary size-4" />
+              <DialogTitle className="text-text text-base font-semibold">
+                Reply
+              </DialogTitle>
+            </div>
             <button
               type="button"
-              onClick={() => closeReplyModal()}
-              className="text-text-muted hover:text-text cursor-pointer rounded-lg p-1 transition-colors hover:bg-white/5 active:scale-95"
+              onClick={closeReplyModal}
+              className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg p-1.5 transition-colors active:scale-95"
             >
-              <LuX className="size-5" />
+              <LuX className="size-4" />
             </button>
           </div>
 
+          {/* Quoted comment */}
+          <div className="border-border/50 bg-surface-alt/60 mx-5 mb-1 flex gap-3 rounded-xl border px-4 py-3">
+            <div className="bg-primary/70 mt-0.5 w-0.5 shrink-0 rounded-full" />
+            <p className="text-text-muted line-clamp-3 text-sm leading-relaxed">
+              {repliedComment.parent_comment_body}
+            </p>
+          </div>
+
           {/* Body */}
-          <div className="p-5">
-            <form className="space-y-4">
-              <textarea
-                name="body"
-                placeholder="Share your thoughts..."
-                rows={5}
-                required
-                className="border-border bg-surface-alt text-text placeholder:text-text/45 focus:border-primary focus:ring-primary/40 min-h-32 w-full resize-none rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
-              />
+          <div className="p-5 pt-3">
+            <input
+              type="hidden"
+              value={repliedComment.parent_comment_id ?? ""}
+            />
+            <textarea
+              name="body"
+              placeholder="Write your reply..."
+              rows={4}
+              autoFocus
+              className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
+            />
 
-              <div className="border-border/60 flex justify-end gap-2 border-t pt-4">
-                <button
-                  type="button"
-                  onClick={() => closeReplyModal()}
-                  className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="bg-primary text-primary-soft cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition hover:opacity-90 active:scale-95"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
+            <div className="mt-3 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={closeReplyModal}
+                className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
+              >
+                Post reply
+              </button>
+            </div>
           </div>
         </DialogPanel>
       </div>

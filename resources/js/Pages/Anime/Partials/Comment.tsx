@@ -54,7 +54,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
 
               {/* Comment Body */}
               <div
-                className="prose prose-sm text-text/85 mt-1 max-w-none md:text-sm"
+                className="prose prose-sm text-text/85 mt-1 max-w-none text-xs md:text-sm"
                 onClick={(e) => {
                   const target = e.target as HTMLElement;
                   if (target.classList.contains("spoiler")) {

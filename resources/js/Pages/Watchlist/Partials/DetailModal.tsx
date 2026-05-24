@@ -25,27 +25,34 @@ const DetailModal = ({
       onClose={() => setSelectedWatchlist(null)}
       className="relative z-50"
     >
-      <DialogBackdrop className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="bg-surface border-border flex w-full max-w-md flex-col overflow-hidden rounded-xl border p-5 shadow-lg">
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 data-closed:opacity-0"
+      />
+
+      <div className="fixed inset-0 flex items-end justify-center sm:items-center sm:p-4">
+        <DialogPanel
+          transition
+          className="bg-surface border-border flex max-h-[85dvh] w-full flex-col rounded-t-2xl border border-b-0 shadow-2xl transition duration-200 data-closed:translate-y-4 data-closed:opacity-0 sm:max-w-md sm:rounded-2xl sm:border-b"
+        >
           {/* Header */}
-          <div className="border-border/60 flex items-center justify-between border-b pb-3">
+          <div className="border-border/60 flex items-center justify-between border-b px-5 py-4">
             <DialogTitle className="text-text font-serif text-lg font-semibold">
               Watchlist Info
             </DialogTitle>
             <button
               onClick={() => setSelectedWatchlist(null)}
-              className="text-text-muted hover:text-text transition-colors hover:cursor-pointer"
+              className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg p-1.5 transition-colors"
             >
-              <LuX className="size-5" />
+              <LuX className="size-4" />
             </button>
           </div>
 
-          {/* Body Content */}
+          {/* Body */}
           {selectedWatchlist && (
-            <div className="mt-4 space-y-5">
+            <div className="flex-1 space-y-5 overflow-y-auto p-5">
               <div>
-                <h3 className="text-text font-sans text-xl leading-tight font-bold tracking-tight">
+                <h3 className="text-text text-xl leading-tight font-bold tracking-tight">
                   {selectedWatchlist.title || "Untitled"}
                 </h3>
                 <div className="text-text-muted mt-1.5 flex items-center gap-2 text-xs font-medium">
@@ -55,7 +62,7 @@ const DetailModal = ({
                 </div>
               </div>
 
-              <div className="border-border/60 bg-muted/10 grid grid-cols-2 gap-4 rounded-xl border p-4 text-sm">
+              <div className="border-border/60 bg-surface-alt grid grid-cols-2 gap-4 rounded-xl border p-4 text-sm">
                 <div>
                   <span className="text-text-muted mb-0.5 block text-xs font-medium">
                     Status
@@ -75,7 +82,7 @@ const DetailModal = ({
                   </span>
                 </div>
                 {selectedWatchlist.score !== null && (
-                  <div className="border-border/40 col-span-2 mt-0.5 border-t pt-2.5">
+                  <div className="border-border/40 col-span-2 border-t pt-3">
                     <span className="text-text-muted mb-0.5 block text-xs font-medium">
                       Rating Score
                     </span>
@@ -95,7 +102,7 @@ const DetailModal = ({
                   {selectedWatchlist.started_at && (
                     <div>
                       <span className="text-text-muted mb-0.5 block font-medium">
-                        Started Tracking
+                        Started
                       </span>
                       <span className="text-text font-medium">
                         {new Date(selectedWatchlist.started_at).toDateString()}
@@ -105,7 +112,7 @@ const DetailModal = ({
                   {selectedWatchlist.completed_at && (
                     <div>
                       <span className="text-text-muted mb-0.5 block font-medium">
-                        Finished Tracking
+                        Finished
                       </span>
                       <span className="text-text font-medium">
                         {new Date(
@@ -117,13 +124,12 @@ const DetailModal = ({
                 </div>
               )}
 
-              {/* Notes Section */}
               {selectedWatchlist.note && (
                 <div className="border-border/60 border-t pt-4">
                   <span className="text-text-muted mb-1.5 block text-xs font-medium">
-                    Personal Notes
+                    Personal notes
                   </span>
-                  <div className="bg-muted/20 border-border/40 text-text rounded-xl border p-3.5 font-sans text-sm leading-relaxed whitespace-pre-wrap italic">
+                  <div className="bg-surface-alt border-border/40 text-text rounded-xl border p-3.5 text-sm leading-relaxed whitespace-pre-wrap italic">
                     &quot;{selectedWatchlist.note}&quot;
                   </div>
                 </div>
