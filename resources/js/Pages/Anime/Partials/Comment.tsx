@@ -53,7 +53,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
               </div>
 
               {/* Comment Body */}
-              <p className="text-text/85 text-sm leading-snug whitespace-pre-wrap">
+              <p className="text-text/85 text-sm leading-snug whitespace-pre-wrap line-clamp-10">
                 {comment.body}
               </p>
             </div>
