@@ -8,6 +8,7 @@ import QuoteBlock from "./QuoteBlock";
 import FormComment from "./FormComment";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 import { upvote } from "../../../actions/App/Http/Controllers/CommentController";
+import Sorting from "./Sorting";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -134,26 +135,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
       <FormComment isGuest={isGuest} anime={anime} />
 
-      <div className="mt-4 mb-4 flex items-center gap-1 text-xs font-semibold">
-        <button
-          onClick={() => handleFilter("most-loved")}
-          className={`${sortBy === "most-loved" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
-        >
-          Most Loved
-        </button>
-        <button
-          onClick={() => handleFilter("latest")}
-          className={`${sortBy === "latest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
-        >
-          Latest
-        </button>
-        <button
-          onClick={() => handleFilter("oldest")}
-          className={`${sortBy === "oldest" ? "bg-primary-soft text-primary" : "text-text-muted hover:bg-surface-alt hover:text-text"} rounded-md px-3 py-1.5 transition hover:cursor-pointer active:scale-95`}
-        >
-          Oldest
-        </button>
-      </div>
+      <Sorting sortBy={sortBy} handleFilter={handleFilter} />
 
       {comments?.map((comment, index) => (
         <div
