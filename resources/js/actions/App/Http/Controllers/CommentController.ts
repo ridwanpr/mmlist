@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:44
  * @route '/anime/discussion/{animeSlug}'
  */
 export const getAnimeComment = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ getAnimeComment.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:44
  * @route '/anime/discussion/{animeSlug}'
  */
 getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -44,7 +44,7 @@ getAnimeComment.url = (args: { animeSlug: string | number } | [animeSlug: string
 
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:44
  * @route '/anime/discussion/{animeSlug}'
  */
 getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ getAnimeComment.get = (args: { animeSlug: string | number } | [animeSlug: string
 })
 /**
 * @see \App\Http\Controllers\CommentController::getAnimeComment
- * @see app/Http/Controllers/CommentController.php:33
+ * @see app/Http/Controllers/CommentController.php:44
  * @route '/anime/discussion/{animeSlug}'
  */
 getAnimeComment.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -97,7 +97,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 export const upvote = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -112,7 +112,7 @@ upvote.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 upvote.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -140,7 +140,7 @@ upvote.url = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 upvote.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({

@@ -43,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $to
  * @property string|null $from_to_string
  * @property string|null $ai_advisory
+ * @property int $staff_pick
  * @property-read Collection<int, \App\Models\AnimeTrigger> $animeTriggers
  * @property-read int|null $anime_triggers_count
  * @property-read \App\Models\Watchlist|\App\Models\AnimeTheme|\App\Models\AnimeStudio|\App\Models\AnimeProducer|\App\Models\AnimeGenre|\App\Models\AnimeDemographic|null $pivot
@@ -82,6 +83,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSeason($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereStaffPick($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereSynopsis($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Anime whereTitle($value)

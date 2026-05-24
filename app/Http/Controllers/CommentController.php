@@ -19,12 +19,23 @@ class CommentController extends Controller
         private AnimeService $animeService
     ) {}
 
-    public function store(StoreCommentRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'body' => 'required',
+            'slug' => 'required',
+            'parent_comment_id' => 'nullable|exists:comments,id'
+        ]);
+
         $user = Auth::user();
         $anime = $this->animeService->getAnimeInfo($validated['slug']);
-        $this->commentService->storeComment($user->id, $anime->id, $validated);
+
+        if ($request->parent_comment_id) {
+            $parent = $this->commentService->findCommentFirst($request->parent_comment_id);
+            $this->commentService->storeComment($user->id, $anime->id, $validated, $parent->id);
+        } else {
+            $this->commentService->storeComment($user->id, $anime->id, $validated);
+        }
 
         Inertia::flash('success', 'Comment submitted');
         return back();
@@ -38,7 +49,7 @@ class CommentController extends Controller
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
-        
+
         $commentDto = $animeComments->through(fn(Comment $item): CommentData => CommentData::fromModel($item));
         $paginatedComment = PaginatedCommentData::fromPaginator($commentDto);
 

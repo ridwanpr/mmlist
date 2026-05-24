@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Log;
 
 class CommentService
 {
-    public function storeComment(int $userId, int $animeId, array $data): Comment
+    public function storeComment(int $userId, int $animeId, array $data, int|null $parent_comment_id = null): Comment
     {
         return Comment::create([
             'user_id' => $userId,
             'anime_id' => $animeId,
-            'body' => $data['body']
+            'body' => $data['body'],
+            'parent_comment_id' => $parent_comment_id ?? null
         ]);
     }
 

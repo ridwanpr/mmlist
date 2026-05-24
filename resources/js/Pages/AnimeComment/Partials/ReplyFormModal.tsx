@@ -6,17 +6,21 @@ import {
 } from "@headlessui/react";
 import { LuX, LuCornerUpLeft } from "react-icons/lu";
 import type { RepliedComment } from "./Discussion";
+import { Form } from "@inertiajs/react";
+import { store } from "../../../actions/App/Http/Controllers/CommentController";
 
 type ReplyFormModalProps = {
   replyModal: boolean;
   closeReplyModal: () => void;
   repliedComment: RepliedComment;
+  slug: string;
 };
 
 const ReplyFormModal = ({
   replyModal,
   closeReplyModal,
   repliedComment,
+  slug,
 }: ReplyFormModalProps) => {
   return (
     <Dialog
@@ -67,33 +71,42 @@ const ReplyFormModal = ({
 
           {/* Body */}
           <div className="p-5 pt-3">
-            <input
-              type="hidden"
-              value={repliedComment.parent_comment_id ?? ""}
-            />
-            <textarea
-              name="body"
-              placeholder="Write your reply..."
-              rows={4}
-              autoFocus
-              className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
-            />
+            <Form
+              action={store.url()}
+              method="post"
+              disableWhileProcessing
+              resetOnSuccess
+            >
+              <input
+                type="hidden"
+                name="parent_comment_id"
+                value={repliedComment.parent_comment_id ?? ""}
+              />
+              <input type="hidden" name="slug" value={slug} />
+              <textarea
+                name="body"
+                placeholder="Write your reply..."
+                rows={4}
+                autoFocus
+                className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
+              />
 
-            <div className="mt-3 flex items-center justify-end gap-2">
-              <button
-                type="button"
-                onClick={closeReplyModal}
-                className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
-              >
-                Post reply
-              </button>
-            </div>
+              <div className="mt-3 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={closeReplyModal}
+                  className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
+                >
+                  Post reply
+                </button>
+              </div>
+            </Form>
           </div>
         </DialogPanel>
       </div>

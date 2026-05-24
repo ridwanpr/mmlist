@@ -17,8 +17,12 @@ use Illuminate\Support\Str;
  * @property int $downvotes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $parent_comment_id
  * @property-read \App\Models\Anime $anime
+ * @property-read string $body_html
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CommentVote> $votes
+ * @property-read int|null $votes_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
@@ -28,6 +32,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereDownvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereEpisodeNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereParentCommentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUserId($value)
@@ -42,6 +47,7 @@ class Comment extends Model
         'body',
         'upvotes',
         'downvotes',
+        'parent_comment_id'
     ];
 
     public function getBodyHtmlAttribute(): string

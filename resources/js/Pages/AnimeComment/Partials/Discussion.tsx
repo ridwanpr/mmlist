@@ -239,7 +239,11 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
                 <button
                   onClick={() =>
-                    openReplyModal(comment.id, comment.body, comment.user?.name!)
+                    openReplyModal(
+                      comment.id,
+                      comment.body,
+                      comment.user?.name!,
+                    )
                   }
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                 >
@@ -256,6 +260,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         replyModal={replyModal}
         closeReplyModal={closeReplyModal}
         repliedComment={repliedComment}
+        slug={anime.slug}
       />
     </>
   );

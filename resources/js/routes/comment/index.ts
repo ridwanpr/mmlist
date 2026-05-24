@@ -36,7 +36,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 export const upvote = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -51,7 +51,7 @@ upvote.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 upvote.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -79,7 +79,7 @@ upvote.url = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:52
+ * @see app/Http/Controllers/CommentController.php:63
  * @route '/comment/upvote/{commentId}'
  */
 upvote.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
