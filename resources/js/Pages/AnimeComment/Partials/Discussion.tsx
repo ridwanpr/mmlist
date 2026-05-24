@@ -20,6 +20,7 @@ type DiscussionProps = {
 export type RepliedComment = {
   parent_comment_id: number | null;
   parent_comment_body: string;
+  parent_comment_user: string;
 };
 
 const formatRelativeTime = (dateString: string): string => {
@@ -62,6 +63,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
     parent_comment_body: "",
+    parent_comment_user: "",
   });
 
   const [comments, setComments] = useState(paginatedComment.data);
@@ -135,10 +137,15 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     );
   };
 
-  const openReplyModal = (commentId: number, commentBody: string) => {
+  const openReplyModal = (
+    commentId: number,
+    commentBody: string,
+    user: string,
+  ) => {
     setRepliedComment({
       parent_comment_id: commentId,
       parent_comment_body: commentBody,
+      parent_comment_user: user,
     });
 
     setReplyModal(true);
@@ -150,6 +157,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     setRepliedComment({
       parent_comment_id: null,
       parent_comment_body: "",
+      parent_comment_user: "",
     });
   };
 
@@ -230,7 +238,9 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 />
 
                 <button
-                  onClick={() => openReplyModal(comment.id, comment.body)}
+                  onClick={() =>
+                    openReplyModal(comment.id, comment.body, comment.user?.name!)
+                  }
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                 >
                   <LuReply className="size-3" />

@@ -55,9 +55,14 @@ const ReplyFormModal = ({
           {/* Quoted comment */}
           <div className="border-border/50 bg-surface-alt/60 mx-5 mb-1 flex gap-3 rounded-xl border px-4 py-3">
             <div className="bg-primary/70 mt-0.5 w-0.5 shrink-0 rounded-full" />
-            <p className="text-text-muted line-clamp-3 text-sm leading-relaxed">
-              {repliedComment.parent_comment_body}
-            </p>
+            <div className="min-w-0">
+              <p className="text-primary mb-1 text-xs font-semibold">
+                {repliedComment.parent_comment_user}
+              </p>
+              <p className="text-text-muted line-clamp-3 text-sm leading-relaxed">
+                {repliedComment.parent_comment_body}
+              </p>
+            </div>
           </div>
 
           {/* Body */}
