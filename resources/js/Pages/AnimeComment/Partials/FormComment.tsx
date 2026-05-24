@@ -17,7 +17,7 @@ const FormComment = ({ isGuest, anime }: FormCommentProps) => {
     null,
   );
 
-  const { data, setData, post } = useForm({
+  const { data, setData, post, reset } = useForm({
     slug: anime.slug,
     body: "",
   });
@@ -61,6 +61,7 @@ const FormComment = ({ isGuest, anime }: FormCommentProps) => {
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     post(store.url());
+    reset();
   };
 
   return (
@@ -136,7 +137,7 @@ const FormComment = ({ isGuest, anime }: FormCommentProps) => {
 
             <button
               type="submit"
-              className="bg-primary text-primary-soft rounded-lg px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
+              className="bg-primary text-primary-soft rounded-lg hover:cursor-pointer px-4 py-1.5 text-xs font-semibold transition hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-80"
             >
               Post Comment
             </button>

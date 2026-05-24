@@ -200,7 +200,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 />
               )}
               <div
-                className="prose prose-sm text-text mt-1 max-w-none md:text-sm"
+                className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
                 onClick={(e) => {
                   const target = e.target as HTMLElement;
                   if (target.classList.contains("spoiler")) {
@@ -211,7 +211,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   __html: comment.bodyHtml,
                 }}
               />
-              <button className="text-text-muted hover:text-text mt-2 flex items-center gap-1 text-xs hover:cursor-pointer">
+              <button className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer">
                 <LuReply className="size-3" /> Reply
               </button>
               {/* Reply comment form */}
