@@ -37,7 +37,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
           topComments.map((comment, i) => (
             <div
               key={comment.id}
-              className={`py-2.5 ${i < topComments.length - 1 ? "border-border/60 border-b" : ""}`}
+              className={`py-2.5 ${i < topComments.length - 1 ? "border-border border-b" : ""}`}
             >
               <div className="mb-1 flex items-baseline gap-2">
                 <span className="text-text text-sm font-bold">
