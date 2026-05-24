@@ -5,35 +5,13 @@ namespace App\Services;
 use App\Utils\ImageProxy;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ImageProxyService
 {
     public function stream(string $hash): StreamedResponse
     {
-        $disk = Storage::disk('local');
-        $cachePath = "image_proxy/{$hash}.bin";
-        $metaPath = "image_proxy/{$hash}.meta";
-
-        // 1. Serve from local cache if it exists
-        if ($disk->exists($cachePath) && $disk->exists($metaPath)) {
-            $contentType = $disk->get($metaPath);
-
-            return response()->stream(
-                function () use ($disk, $cachePath) {
-                    $stream = $disk->readStream($cachePath);
-                    if ($stream) {
-                        fpassthru($stream);
-                        fclose($stream);
-                    }
-                },
-                200,
-                $this->getHeaders($contentType)
-            );
-        }
-
-        // 2. Cache Miss: Decode and validate the URL
+        // 1. Decode and validate the incoming hash URL
         $url = ImageProxy::decode($hash);
 
         if (! $url) {
@@ -45,13 +23,14 @@ class ImageProxyService
 
         $this->assertAllowedUrl($url, $hash);
 
-        // 3. Fetch the remote image
+        // 2. Fetch the remote image with a browser-spoofing User-Agent
         $response = Http::withHeaders([
             'Accept' => 'image/*',
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Mamorulist/1.0 (ImageProxy)',
         ])
             ->timeout(config('image-proxy.timeout'))
             ->withOptions([
-                'stream' => true,
+                'stream' => true, // Keeps memory low by streaming the connection source
             ])
             ->get($url);
 
@@ -92,30 +71,18 @@ class ImageProxyService
             abort(413);
         }
 
-        // 4. Save stream directly to local disk chunk-by-chunk
-        $disk->makeDirectory('image_proxy');
-        $absoluteCachePath = $disk->path($cachePath);
-
-        $remoteBody = $response->toPsrResponse()->getBody();
-        $localFile = fopen($absoluteCachePath, 'wb');
-
-        if ($localFile) {
-            while (! $remoteBody->eof()) {
-                fwrite($localFile, $remoteBody->read(8192));
-            }
-            fclose($localFile);
-
-            // Save content type metadata alongside the binary file
-            $disk->put($metaPath, $contentType);
-        }
-
-        // 5. Stream the freshly cached file to the user
+        // 3. Stream the remote binary data straight to the user chunk-by-chunk
         return response()->stream(
-            function () use ($disk, $cachePath) {
-                $stream = $disk->readStream($cachePath);
-                if ($stream) {
-                    fpassthru($stream);
-                    fclose($stream);
+            function () use ($response) {
+                $remoteBody = $response->toPsrResponse()->getBody();
+
+                while (! $remoteBody->eof()) {
+                    echo $remoteBody->read(8192); // Read and output in 8KB chunks
+
+                    // Terminate if client closes connection early
+                    if (connection_aborted()) {
+                        break;
+                    }
                 }
             },
             200,
