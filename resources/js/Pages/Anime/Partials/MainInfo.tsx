@@ -211,7 +211,7 @@ const MainInfo = ({
 
         {/* RIGHT CONTENT */}
         <main className="flex min-w-0 flex-1 flex-col">
-          <h1 className="text-text text-2xl leading-tight font-bold lg:text-4xl">
+          <h1 className="text-text/90 text-2xl leading-tight font-bold lg:text-4xl">
             {displayTitle}
           </h1>
 
