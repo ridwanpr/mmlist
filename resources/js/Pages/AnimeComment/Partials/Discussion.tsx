@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { Form, Link, router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply } from "react-icons/lu";
-import { store } from "../../../actions/App/Http/Controllers/CommentController";
-import { getAnimeComment } from "../../../actions/App/Http/Controllers/CommentController";
+import {
+  getAnimeComment,
+  store,
+  upvote,
+} from "../../../actions/App/Http/Controllers/CommentController";
+import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
 import QuoteBlock from "./QuoteBlock";
 import FormComment from "./FormComment";
-import { show } from "../../../actions/App/Http/Controllers/AnimeController";
-import { upvote } from "../../../actions/App/Http/Controllers/CommentController";
 import Sorting from "./Sorting";
 import ReplyFormModal from "./ReplyFormModal";
+import TimeAgo from "../../../Components/TimeAgo";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -23,43 +26,11 @@ export type RepliedComment = {
   parent_comment_user: string;
 };
 
-const formatRelativeTime = (dateString: string): string => {
-  if (!dateString) return "";
-
-  const date = new Date(dateString.replace(" ", "T"));
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-  if (Number.isNaN(diffInSeconds) || diffInSeconds < 0) {
-    return "just now";
-  }
-
-  const intervals = [
-    { label: "year", seconds: 31536000 },
-    { label: "month", seconds: 2592000 },
-    { label: "week", seconds: 604800 },
-    { label: "day", seconds: 86400 },
-    { label: "hour", seconds: 3600 },
-    { label: "minute", seconds: 60 },
-  ];
-
-  for (const interval of intervals) {
-    const count = Math.floor(diffInSeconds / interval.seconds);
-
-    if (count >= 1) {
-      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
-    }
-  }
-
-  return "just now";
-};
-
 const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
 
   const [replyModal, setReplyModal] = useState(false);
-
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
     parent_comment_body: "",
@@ -67,7 +38,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   });
 
   const [comments, setComments] = useState(paginatedComment.data);
-
   const isUpvoting = useRef(false);
 
   useEffect(() => {
@@ -109,7 +79,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       {
         preserveScroll: true,
         preserveState: true,
-
         onSuccess: (page) => {
           const serverComments = (
             page.props as unknown as {
@@ -120,16 +89,13 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
           setComments((prev) =>
             prev.map((local) => {
               const fromServer = serverComments.find((s) => s.id === local.id);
-
               return fromServer ?? local;
             }),
           );
         },
-
         onError: () => {
           setComments(previousComments);
         },
-
         onFinish: () => {
           isUpvoting.current = false;
         },
@@ -147,13 +113,11 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       parent_comment_body: commentBody,
       parent_comment_user: user,
     });
-
     setReplyModal(true);
   };
 
   const closeReplyModal = () => {
     setReplyModal(false);
-
     setRepliedComment({
       parent_comment_id: null,
       parent_comment_body: "",
@@ -172,10 +136,9 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         </Link>
 
         <FormComment isGuest={isGuest} anime={anime} />
-
         <Sorting sortBy={sortBy} handleFilter={handleFilter} />
 
-        {comments?.map((comment, index) => (
+        {comments?.map((comment) => (
           <div
             key={comment.id}
             className="border-border bg-surface mt-3 divide-y rounded border"
@@ -195,7 +158,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                       comment.isUpvoted ? "fill-current" : ""
                     }`}
                   />
-
                   <span className="text-xs leading-none">
                     {comment.upvotes}
                   </span>
@@ -208,11 +170,8 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                     {comment.user?.name}
                   </span>
 
-                  <span
-                    className="text-text-muted text-xs"
-                    suppressHydrationWarning
-                  >
-                    {formatRelativeTime(comment.createdAt)}
+                  <span className="text-text-muted text-xs">
+                    <TimeAgo dateString={comment.createdAt} />
                   </span>
                 </div>
 
@@ -227,7 +186,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
-
                     if (target.classList.contains("spoiler")) {
                       target.classList.add("revealed");
                     }
