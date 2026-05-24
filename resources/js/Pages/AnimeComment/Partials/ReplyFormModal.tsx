@@ -8,17 +8,19 @@ import { LuX } from "react-icons/lu";
 
 type ReplyFormModalProps = {
   replyModal: boolean;
-  handleReplyModal: () => void;
+  closeReplyModal: () => void;
+  anime: App.DTOs.AnimeData;
 };
 
 const ReplyFormModal = ({
   replyModal,
-  handleReplyModal,
+  closeReplyModal,
+  anime,
 }: ReplyFormModalProps) => {
   return (
     <Dialog
       open={replyModal}
-      onClose={() => handleReplyModal()}
+      onClose={() => closeReplyModal()}
       className="relative z-50"
     >
       <DialogBackdrop className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
@@ -33,7 +35,7 @@ const ReplyFormModal = ({
 
             <button
               type="button"
-              onClick={() => handleReplyModal()}
+              onClick={() => closeReplyModal()}
               className="text-text-muted hover:text-text cursor-pointer rounded-lg p-1 transition-colors hover:bg-white/5 active:scale-95"
             >
               <LuX className="size-5" />
@@ -54,7 +56,7 @@ const ReplyFormModal = ({
               <div className="border-border/60 flex justify-end gap-2 border-t pt-4">
                 <button
                   type="button"
-                  onClick={() => handleReplyModal()}
+                  onClick={() => closeReplyModal()}
                   className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
                 >
                   Cancel

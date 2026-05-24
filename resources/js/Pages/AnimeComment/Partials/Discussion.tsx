@@ -17,6 +17,11 @@ type DiscussionProps = {
   sortBy: "latest" | "most-loved" | "oldest";
 };
 
+type RepliedComment = {
+  parent_comment_id: number | null;
+  parent_comment_body: string;
+};
+
 const formatRelativeTime = (dateString: string): string => {
   if (!dateString) return "";
 
@@ -39,6 +44,7 @@ const formatRelativeTime = (dateString: string): string => {
 
   for (const interval of intervals) {
     const count = Math.floor(diffInSeconds / interval.seconds);
+
     if (count >= 1) {
       return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
     }
@@ -53,15 +59,15 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
   const [replyModal, setReplyModal] = useState(false);
 
-  // Local comment state, owns display order for this session
+  const [repliedComment, setRepliedComment] = useState<RepliedComment>({
+    parent_comment_id: null,
+    parent_comment_body: "",
+  });
+
   const [comments, setComments] = useState(paginatedComment.data);
 
-  // Tracks in-flight upvote requests to prevent useEffect from clobbering
-  // optimistic state when Inertia pushes new props mid-request
   const isUpvoting = useRef(false);
 
-  // Sync from server props only when it's NOT an upvote response
-  // (e.g. sort changed, page changed, or initial load)
   useEffect(() => {
     if (!isUpvoting.current) {
       setComments(paginatedComment.data);
@@ -79,10 +85,8 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const handleUpvote = (commentId: number) => {
     if (isGuest) return;
 
-    // snapshot current state for rollback
     const previousComments = comments;
 
-    // optimistic update, mutate count/flag, keep array order stable
     setComments((prev) =>
       prev.map((c) =>
         c.id === commentId
@@ -103,6 +107,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       {
         preserveScroll: true,
         preserveState: true,
+
         onSuccess: (page) => {
           const serverComments = (
             page.props as unknown as {
@@ -113,13 +118,16 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
           setComments((prev) =>
             prev.map((local) => {
               const fromServer = serverComments.find((s) => s.id === local.id);
+
               return fromServer ?? local;
             }),
           );
         },
+
         onError: () => {
           setComments(previousComments);
         },
+
         onFinish: () => {
           isUpvoting.current = false;
         },
@@ -127,8 +135,22 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     );
   };
 
-  const handleReplyModal = () => {
-    setReplyModal((prev) => !prev);
+  const openReplyModal = (commentId: number, commentBody: string) => {
+    setRepliedComment({
+      parent_comment_id: commentId,
+      parent_comment_body: commentBody,
+    });
+
+    setReplyModal(true);
+  };
+
+  const closeReplyModal = () => {
+    setReplyModal(false);
+
+    setRepliedComment({
+      parent_comment_id: null,
+      parent_comment_body: "",
+    });
   };
 
   return (
@@ -151,7 +173,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
             className="border-border bg-surface mt-3 divide-y rounded border"
           >
             <div className="flex gap-4 px-4 py-3">
-              {/* Upvote Column */}
               <div className="flex shrink-0 flex-col items-center pt-0.5">
                 <button
                   onClick={() => handleUpvote(comment.id)}
@@ -162,8 +183,11 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   }`}
                 >
                   <LuHeart
-                    className={`size-4 ${comment.isUpvoted ? "fill-current" : ""}`}
+                    className={`size-4 ${
+                      comment.isUpvoted ? "fill-current" : ""
+                    }`}
                   />
+
                   <span className="text-xs leading-none">
                     {comment.upvotes}
                   </span>
@@ -175,6 +199,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   <span className="text-primary text-sm font-semibold">
                     {comment.user?.name}
                   </span>
+
                   <span
                     className="text-text-muted text-xs"
                     suppressHydrationWarning
@@ -189,10 +214,12 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                     body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. The animation in episode 3 was genuinely peak."
                   />
                 )}
+
                 <div
                   className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
+
                     if (target.classList.contains("spoiler")) {
                       target.classList.add("revealed");
                     }
@@ -201,20 +228,24 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                     __html: comment.bodyHtml,
                   }}
                 />
+
                 <button
-                  onClick={handleReplyModal}
+                  onClick={() => openReplyModal(comment.id, comment.bodyHtml)}
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                 >
-                  <LuReply className="size-3" /> Reply
+                  <LuReply className="size-3" />
+                  Reply
                 </button>
               </div>
             </div>
           </div>
         ))}
       </section>
+
       <ReplyFormModal
         replyModal={replyModal}
-        handleReplyModal={handleReplyModal}
+        closeReplyModal={closeReplyModal}
+        anime={anime}
       />
     </>
   );
