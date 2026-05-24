@@ -1,4 +1,4 @@
-import { useForm, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
 import {
@@ -95,6 +95,13 @@ const TriggerItem = ({
           <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
             {triggerContent?.description}
           </p>
+          <Link
+            href="#"
+            prefetch
+            className="text-primary text-xs font-medium hover:underline"
+          >
+            Discussion (32)
+          </Link>
         </div>
 
         {/* Middle - Severity & Framing */}
@@ -273,36 +280,38 @@ const TriggerItem = ({
                       (data.appears === "Yes" &&
                         data.severity &&
                         data.framing)) && (
-                      <div className="flex justify-end">
-                        <button
-                          type="submit"
-                          disabled={processing}
-                          className="bg-primary disabled:bg-primary/60 text-surface flex items-center gap-1.5 rounded px-3 py-1.5 text-sm transition-opacity disabled:cursor-not-allowed"
-                        >
-                          {processing && (
-                            <svg
-                              className="h-3.5 w-3.5 animate-spin"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              />
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v8H4z"
-                              />
-                            </svg>
-                          )}
-                          {processing ? "Submitting..." : "Submit Vote"}
-                        </button>
-                      </div>
+                      <>
+                        <div className="flex justify-end">
+                          <button
+                            type="submit"
+                            disabled={processing}
+                            className="bg-primary disabled:bg-primary/60 text-surface flex items-center gap-1.5 rounded px-3 py-1.5 text-sm transition-opacity disabled:cursor-not-allowed"
+                          >
+                            {processing && (
+                              <svg
+                                className="h-3.5 w-3.5 animate-spin"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                />
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8v8H4z"
+                                />
+                              </svg>
+                            )}
+                            {processing ? "Submitting..." : "Submit Vote"}
+                          </button>
+                        </div>
+                      </>
                     )}
                   </div>
                 </form>
