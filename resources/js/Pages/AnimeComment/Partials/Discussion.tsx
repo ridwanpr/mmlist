@@ -256,12 +256,14 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         ))}
       </section>
 
-      <ReplyFormModal
-        replyModal={replyModal}
-        closeReplyModal={closeReplyModal}
-        repliedComment={repliedComment}
-        slug={anime.slug}
-      />
+      {replyModal && (
+        <ReplyFormModal
+          replyModal={replyModal}
+          closeReplyModal={closeReplyModal}
+          repliedComment={repliedComment}
+          slug={anime.slug}
+        />
+      )}
     </>
   );
 };

@@ -76,6 +76,10 @@ const ReplyFormModal = ({
               method="post"
               disableWhileProcessing
               resetOnSuccess
+              onFinish={closeReplyModal}
+              options={{
+                preserveScroll: true,
+              }}
             >
               <input
                 type="hidden"
