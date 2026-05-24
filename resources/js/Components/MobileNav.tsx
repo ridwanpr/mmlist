@@ -20,6 +20,7 @@ const NavItem = ({ href, active, icon: Icon, label }: NavItemProps) => {
     <li className="flex-1">
       <Link
         href={href}
+        prefetch={"click"}
         className="group flex w-full flex-col items-center justify-center gap-1 py-2"
       >
         <div

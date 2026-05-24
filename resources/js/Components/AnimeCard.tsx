@@ -89,7 +89,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   return (
     <Link
       href={`/anime/${animeData.slug}`}
-      prefetch
+      prefetch={["click"]}
       className="group mb-4 block lg:mb-0"
     >
       <div className="border-border bg-surface group-hover:border-primary-soft relative flex h-48 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(179,77,86,0.18)]">

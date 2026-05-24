@@ -31,6 +31,7 @@ const Pagination = ({ links }: PaginationProps) => {
           <Link
             key={index}
             href={link.url}
+            prefetch={"click"}
             className={`rounded border px-4 py-2 text-sm font-medium transition-colors ${
               link.active
                 ? "border-primary bg-primary text-surface hover:bg-primary-dark shadow-sm"

@@ -57,6 +57,7 @@ const DashMobileNav = () => {
       <div className="border-border flex overflow-x-auto border-t [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <Link
           href={userDashIndex.url()}
+          prefetch={"click"}
           className={`${url.startsWith(userDashIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium`}
         >
           <LuLayoutDashboard size={14} strokeWidth={2.5} />
@@ -65,6 +66,7 @@ const DashMobileNav = () => {
 
         <Link
           href={watchlistIndex.url()}
+          prefetch={"click"}
           className={`${url.startsWith(watchlistIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
           <LuBookmark size={14} strokeWidth={2} />
@@ -73,6 +75,7 @@ const DashMobileNav = () => {
 
         <Link
           href={voteIndex.url()}
+          prefetch={"click"}
           className={`${url.startsWith(voteIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
           <LuThumbsUp size={14} strokeWidth={2} />

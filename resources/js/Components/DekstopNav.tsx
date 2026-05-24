@@ -21,6 +21,7 @@ const DesktopNav = () => {
         {/* Logo */}
         <Link
           href={homeIndex.url()}
+          prefetch
           className="text-primary font-serif text-2xl font-bold tracking-wider transition-opacity hover:opacity-90"
         >
           Mamorulist
@@ -71,12 +72,14 @@ const DesktopNav = () => {
               <>
                 <Link
                   href={login.url()}
+                  prefetch
                   className="text-text-muted hover:text-text text-sm font-medium transition-colors duration-200"
                 >
                   Login
                 </Link>
                 <Link
                   href={register.url()}
+                  prefetch
                   className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
                 >
                   Register

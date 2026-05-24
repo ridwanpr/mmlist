@@ -1,9 +1,10 @@
 import { Link } from "@inertiajs/react";
 import { LuShieldAlert } from "react-icons/lu";
+import { register } from "../../../actions/App/Http/Controllers/AuthController";
 
 const CTA = () => {
   return (
-    <div className="p-4 lg:py-8 mb-6">
+    <div className="mb-6 p-4 lg:py-8">
       <div className="bg-primary-soft border-surface-alt mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 rounded-lg border p-6 text-center md:flex-row md:p-8 md:text-left">
         <div className="shrink-0">
           <LuShieldAlert size={70} className="text-primary" />
@@ -14,13 +15,15 @@ const CTA = () => {
             You&apos;re not Alone.
           </h2>
           <p className="text-base opacity-80 md:text-lg">
-            Together, we&apos;re creating a safer space for anime fans everywhere.
+            Together, we&apos;re creating a safer space for anime fans
+            everywhere.
           </p>
         </div>
 
         <div className="flex shrink-0 flex-col items-center gap-3 md:items-end">
           <Link
-            href="#"
+            href={register.url()}
+            prefetch
             className="bg-primary text-surface inline-flex items-center justify-center rounded-lg px-8 py-3 font-semibold transition-opacity hover:opacity-90"
           >
             Join Mamorulist
