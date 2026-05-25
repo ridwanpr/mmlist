@@ -134,7 +134,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
       <div className="border-border mt-4 border-t pt-3">
         <Link
           href={getAnimeComment.url(anime.slug)}
-          prefetch
+          prefetch={"click"}
           className="text-primary text-sm font-bold hover:underline"
         >
           View all {countComments} comments

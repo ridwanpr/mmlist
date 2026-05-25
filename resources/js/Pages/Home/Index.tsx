@@ -2,11 +2,11 @@ import React from "react";
 
 import AnimeList from "./Partials/AnimeList";
 import CTA from "./Partials/CTA";
-import Features from "./Partials/Features";
 import Hero from "./Partials/Hero";
-import HowItWork from "./Partials/HowItWork";
 import FrontLayout from "../../Layouts/FrontLayout";
 import AppHead from "../../Components/AppHead";
+import RecentVotes from "./Partials/RecentVotes";
+import RecentComment from "./Partials/RecentComment";
 
 interface HomeProps {
   nowAiring: App.DTOs.AnimeData[];
@@ -23,8 +23,8 @@ const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
       />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
-      <Features />
-      <HowItWork />
+      <RecentComment />
+      <RecentVotes />
       <CTA />
     </>
   );

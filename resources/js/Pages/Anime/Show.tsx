@@ -27,7 +27,10 @@ const ShowAnime = ({
   countComments,
 }: ShowAnimeProps) => {
   const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
-  const metaDescription = `Find ${animeTitle} trigger warnings and community safety flags on Mamorulist before you watch.`;
+
+  const shortTitle =
+    animeTitle.length > 60 ? `${animeTitle.slice(0, 60)}...` : animeTitle;
+  const metaDescription = `View community-voted trigger warnings, severity ratings, and framing metrics for ${shortTitle} on Mamorulist.`;
 
   return (
     <>

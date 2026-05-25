@@ -25,7 +25,7 @@ const SectionHeader = ({ title, icon, href }: SectionHeaderProps) => {
         prefetch
         className="group text-text-muted hover:text-primary flex items-center gap-0.5 font-sans text-xs font-bold tracking-wider uppercase transition-colors"
       >
-        View All
+        View More
         <LuChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
       </Link>
     </div>
