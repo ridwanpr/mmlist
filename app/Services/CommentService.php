@@ -86,7 +86,6 @@ class CommentService
 
             DB::commit();
         } catch (Exception $e) {
-            dd($e);
             Log::error($e);
             throw $e;
         }
