@@ -30,14 +30,14 @@ class TriggerSeeder extends Seeder
             [
                 'name' => 'Taboos & Controversial Dynamics',
                 'importance' => 95,
-                'description' => 'Highly controversial relationship dynamics and anime tropes.',
+                'description' => 'Highly controversial relationship or behavioral dynamics.',
                 'contents' => [
                     ['name' => 'NTR (Netorare) / Infidelity',    'importance' => 100, 'description' => 'Severe romantic betrayal, cheating, or having a partner taken away.'],
                     ['name' => 'Incest / Pseudo-incest',         'importance' => 95,  'description' => 'Sexual or romantic tension between blood or step relatives.'],
                     ['name' => 'Mind Break',                     'importance' => 92,  'description' => 'A character\'s psyche, sanity, or personality is completely shattered through prolonged trauma or despair.'],
                     ['name' => 'Questionable Age Dynamics',      'importance' => 90,  'description' => 'Loli/Shota framing, or romance involving a severe age disparity.'],
                     ['name' => 'Mind Control & Autonomy Loss',   'importance' => 88,  'description' => 'Brainwashing, hypnosis, or forced physical conditions like forced pregnancy.'],
-                    ['name' => 'Non-Sexual Slavery / Slave-Owning MC', 'importance' => 85, 'description' => 'The protagonist buys, owns, or keeps slaves, a common trope in fantasy and isekai narratives.'],
+                    ['name' => 'Non-Sexual Slavery / Slave-Owning MC', 'importance' => 85, 'description' => 'The protagonist buys, owns, or keeps slaves.'],
                     ['name' => 'Power Imbalance Romance',        'importance' => 80,  'description' => 'Romance between unequal parties (teacher/student, master/servant).'],
                 ],
             ],
@@ -49,7 +49,7 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Graphic Mutilation & Torture',   'importance' => 100, 'description' => 'Dismemberment, eye trauma, heavy bloodshed, or prolonged torture.'],
                     ['name' => 'Pregnancy Loss / Infant Death',  'importance' => 95,  'description' => 'Depictions of miscarriages, stillbirths, or the tragic deaths of infants and newborns.'],
                     ['name' => 'Body Horror & Mutation',         'importance' => 90,  'description' => 'Disturbing physical mutations, flesh corruption, or forced transformations.'],
-                    ['name' => 'Vore / Eaten Alive',             'importance' => 88,  'description' => 'Characters being swallowed whole, chewed, or consumed alive by monsters, titans, or demons.'],
+                    ['name' => 'Eaten Alive',                    'importance' => 88,  'description' => 'Characters being swallowed whole, chewed, or consumed alive by monsters, titans, or demons.'],
                     ['name' => 'Cannibalism',                    'importance' => 85,  'description' => 'Depiction of characters consuming human or humanoid flesh.'],
                     ['name' => 'Graphic Vomiting',               'importance' => 80,  'description' => 'Detailed, onscreen vomiting.'],
                 ],
@@ -61,7 +61,7 @@ class TriggerSeeder extends Seeder
                 'contents' => [
                     ['name' => 'Suicide & Self-Harm',            'importance' => 100, 'description' => 'Suicide, suicide attempts, cutting, or explicit thoughts of self-harm.'],
                     ['name' => 'Child Abuse & Grooming',         'importance' => 95,  'description' => 'Physical abuse, severe neglect, or predatory grooming of minors.'],
-                    ['name' => 'Severe Bullying / Ijime',        'importance' => 90,  'description' => 'Intense, prolonged peer abuse, ostracization, or school bullying.'],
+                    ['name' => 'Severe Bullying',                'importance' => 90,  'description' => 'Intense, prolonged peer abuse, ostracization, or school bullying.'],
                     ['name' => 'Domestic Abuse & Manipulation',  'importance' => 85,  'description' => 'Household abuse, severe gaslighting, or obsessive stalking.'],
                     ['name' => 'Discrimination & Prejudice',     'importance' => 75,  'description' => 'Abuse, marginalization, or slurs based on race, origin, or fantasy species (e.g., demi-humans, mages).'],
                     ['name' => 'Terminal Illness / Death',       'importance' => 70,  'description' => 'Slow, painful decline or tragic death from incurable disease.'],
@@ -84,7 +84,7 @@ class TriggerSeeder extends Seeder
             [
                 'name' => 'Frustrating Lead Traits',
                 'importance' => 70,
-                'description' => 'Subjective but highly avoided character archetypes and writing tropes.',
+                'description' => 'Polarizing character archetypes and behavioral traits.',
                 'contents' => [
                     ['name' => 'Spineless / Doormat Lead',       'importance' => 90,  'description' => 'Protagonist is cowardly, lacks agency, or endlessly forgives abusers.'],
                     ['name' => 'Promiscuous / Unfaithful Lead',  'importance' => 85,  'description' => 'Main character or heroine casually sleeps around or acts unfaithfully.'],
@@ -115,15 +115,15 @@ class TriggerSeeder extends Seeder
             [
                 'name' => 'Narrative / Ending Frustrations',
                 'importance' => 65,
-                'description' => 'Highly divisive plot devices, pacing problems, or controversial series conclusions.',
+                'description' => 'Divisive plot developments or controversial series conclusions.',
                 'contents' => [
                     ['name' => 'Tragic / Depressing Ending',      'importance' => 80, 'description' => 'The story concludes with the primary cast dying, failing, or entering permanent misery.'],
                     ['name' => 'Amnesia / Plot Progress Reset',   'importance' => 75, 'description' => 'Characters lose their memories, completely erasing established character growth or romantic progress.'],
-                    ['name' => 'Unresolved Cliffhanger / Axed',   'importance' => 70, 'description' => 'The anime ends abruptly without wrapping up major plot lines, offering zero narrative closure.'],
-                    ['name' => 'Inappropriate Fanservice', 'importance' => 65, 'description' => 'Highly sexualized camera angles, clothing tears, or pervert gags.'],
+                    ['name' => 'Unresolved Cliffhanger / Axed',   'importance' => 70, 'description' => 'The project ends abruptly without wrapping up major plot lines, offering zero narrative closure.'],
+                    ['name' => 'Inappropriate Fanservice',        'importance' => 65, 'description' => 'Highly sexualized camera angles, clothing tears, or pervert gags.'],
                     ['name' => 'Bait-and-Switch Romance',         'importance' => 65, 'description' => 'The narrative builds up a specific romantic pairing over a long duration only to switch to another pairing unexpectedly.'],
                     ['name' => 'Queerbaiting / Relationship Bait', 'importance' => 60, 'description' => 'Intentionally teasing non-heteronormative romantic dynamics for marketing without ever intending to make it canon.'],
-                    ['name' => 'Sudden Harem Pivot',             'importance' => 55, 'description' => 'A unique, high-quality plot that unexpectedly degrades into focusing solely on surrounding the lead with shallow love interests.'],
+                    ['name' => 'Sudden Harem Pivot',              'importance' => 55, 'description' => 'A narrative that shifts focus unexpectedly to surrounding the lead character with multiple love interests.'],
                 ],
             ],
         ];
