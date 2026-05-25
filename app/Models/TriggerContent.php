@@ -32,7 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'description', 'trigger_id', 'importance'])]
+#[Fillable(['name', 'description', 'trigger_id', 'importance', 'slug'])]
 class TriggerContent extends Model
 {
     /**

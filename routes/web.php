@@ -20,6 +20,7 @@ Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');
 Route::get('anime/{slug}', [AnimeController::class, 'show'])->name('anime.show');
 Route::get('/asset/image/{hash}', [ImageProxyController::class, 'show'])->name('proxy.image');
 Route::get('anime/discussion/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
+// Route::get('anime/discussion/{animeslug}/{triggerSlug}')
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
