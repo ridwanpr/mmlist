@@ -12,6 +12,7 @@ import FormComment from "./FormComment";
 import Sorting from "./Sorting";
 import ReplyFormModal from "./ReplyFormModal";
 import TimeAgo from "../../../Components/TimeAgo";
+import EditFormModal from "./EditFormModal";
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
@@ -25,16 +26,30 @@ export type RepliedComment = {
   parent_comment_user: string;
 };
 
+export type EditedComment = {
+  comment_id: number | null;
+  body: string;
+};
+
 const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
 
   const [replyModal, setReplyModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
     parent_comment_body: "",
     parent_comment_user: "",
   });
+
+  const [editComment, setEditComment] = useState<EditedComment>({
+    comment_id: null,
+    body: "",
+  });
+
+  console.log(editComment);
 
   const [comments, setComments] = useState(paginatedComment.data);
   const isUpvoting = useRef(false);
@@ -124,9 +139,17 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     });
   };
 
-  // Placeholder handlers for Edit and Delete actions
-  const handleEditComment = (commentId: number) => {
-    console.log("Edit comment clicked for ID:", commentId);
+  const closeEditModal = () => {
+    setEditModal(false);
+  };
+
+  const handleEditComment = (commentId: number, body: string) => {
+    console.log(commentId);
+    setEditModal(true);
+    setEditComment({
+      comment_id: commentId,
+      body: body,
+    });
   };
 
   const handleDeleteComment = (commentId: number) => {
@@ -191,7 +214,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 )}
 
                 <div
-                  className="prose prose-sm text-text mt-1 max-w-none text-xs whitespace-pre-wrap md:text-sm"
+                  className="prose prose-sm text-text mt-1 mb-0 max-w-none text-xs whitespace-pre-wrap md:text-sm"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
                     if (target.classList.contains("spoiler")) {
@@ -204,12 +227,12 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 />
 
                 {/* Action buttons row */}
-                <div className="mt-2 flex items-center gap-3">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() =>
                       openReplyModal(
                         comment.id,
-                        comment.body,
+                        comment.bodyHtml,
                         comment.user?.name ?? "",
                       )
                     }
@@ -222,7 +245,9 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   {auth.user?.id === comment.userId && (
                     <>
                       <button
-                        onClick={() => handleEditComment(comment.id)}
+                        onClick={() =>
+                          handleEditComment(comment.id, comment.body)
+                        }
                         className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                       >
                         <LuPencil className="size-3" />
@@ -249,6 +274,15 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
           replyModal={replyModal}
           closeReplyModal={closeReplyModal}
           repliedComment={repliedComment}
+          slug={anime.slug}
+        />
+      )}
+
+      {editModal && (
+        <EditFormModal
+          editModal={editModal}
+          closeEditModal={closeEditModal}
+          editComment={editComment}
           slug={anime.slug}
         />
       )}

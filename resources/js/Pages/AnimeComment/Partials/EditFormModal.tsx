@@ -4,31 +4,30 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import {
-  LuX,
-  LuCornerUpLeft,
-  LuBold,
-  LuItalic,
-  LuEyeOff,
-} from "react-icons/lu";
-import type { RepliedComment } from "./Discussion";
 import { Form } from "@inertiajs/react";
-import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { useRef } from "react";
+import {
+  LuBold,
+  LuCornerUpLeft,
+  LuEyeOff,
+  LuItalic,
+  LuX,
+} from "react-icons/lu";
+import type { EditedComment } from "./Discussion";
 
-type ReplyFormModalProps = {
-  replyModal: boolean;
-  closeReplyModal: () => void;
-  repliedComment: RepliedComment;
+type EditFormModalProps = {
+  editModal: boolean;
+  closeEditModal: () => void;
+  editComment: EditedComment;
   slug: string;
 };
 
-const ReplyFormModal = ({
-  replyModal,
-  closeReplyModal,
-  repliedComment,
+const EditFormModal = ({
+  editModal,
+  closeEditModal,
+  editComment,
   slug,
-}: ReplyFormModalProps) => {
+}: EditFormModalProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const insertMarkdown = (before: string, after = "") => {
@@ -61,11 +60,7 @@ const ReplyFormModal = ({
   };
 
   return (
-    <Dialog
-      open={replyModal}
-      onClose={closeReplyModal}
-      className="relative z-50"
-    >
+    <Dialog open={editModal} onClose={closeEditModal} className="relative z-50">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 data-closed:opacity-0"
@@ -81,60 +76,33 @@ const ReplyFormModal = ({
             <div className="flex items-center gap-2">
               <LuCornerUpLeft className="text-primary size-4" />
               <DialogTitle className="text-text text-base font-semibold">
-                Reply
+                Edit comment
               </DialogTitle>
             </div>
             <button
+              onClick={closeEditModal}
               type="button"
-              onClick={closeReplyModal}
               className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg p-1.5 transition-colors active:scale-95"
             >
               <LuX className="size-4" />
             </button>
           </div>
 
-          {/* Quoted comment */}
-          <div className="border-border/50 bg-surface-alt/60 mx-5 mb-1 flex gap-3 rounded-xl border px-4 py-3">
-            <div className="bg-primary/70 mt-0.5 w-0.5 shrink-0 rounded-full" />
-            <div className="min-w-0">
-              <p className="text-primary mb-1 text-xs font-semibold">
-                {repliedComment.parent_comment_user}
-              </p>
-              <div
-                className="prose prose-sm text-text mt-1 mb-0 max-w-none text-xs whitespace-pre-wrap md:text-sm"
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  if (target.classList.contains("spoiler")) {
-                    target.classList.add("revealed");
-                  }
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: repliedComment.parent_comment_body,
-                }}
-              />
-            </div>
-          </div>
-
           {/* Body */}
           <div className="p-5 pt-3">
             <Form
-              action={store.url()}
+              action="#"
               method="post"
               disableWhileProcessing
               resetOnSuccess
-              onFinish={closeReplyModal}
               options={{
                 preserveScroll: true,
               }}
             >
-              <input
-                type="hidden"
-                name="parent_comment_id"
-                value={repliedComment.parent_comment_id ?? ""}
-              />
               <input type="hidden" name="slug" value={slug} />
               <textarea
                 ref={textareaRef}
+                defaultValue={editComment.body ?? ""}
                 name="body"
                 placeholder="Write your reply..."
                 rows={4}
@@ -171,8 +139,8 @@ const ReplyFormModal = ({
 
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={closeEditModal}
                     type="button"
-                    onClick={closeReplyModal}
                     className="text-text-muted hover:text-text hover:bg-surface-alt cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition active:scale-95"
                   >
                     Cancel
@@ -181,7 +149,7 @@ const ReplyFormModal = ({
                     type="submit"
                     className="bg-primary text-primary-soft cursor-pointer rounded-lg px-5 py-2 text-sm font-semibold transition hover:opacity-90 active:scale-95"
                   >
-                    Post reply
+                    Save
                   </button>
                 </div>
               </div>
@@ -193,4 +161,4 @@ const ReplyFormModal = ({
   );
 };
 
-export default ReplyFormModal;
+export default EditFormModal;
