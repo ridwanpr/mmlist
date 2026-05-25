@@ -30,19 +30,26 @@ class GenerateGeminiAdvisory implements ShouldQueue
             return;
         }
 
-        $limit = min(15, $remainingQuota);
+        // Define total maximum items per single job run
+        $maxBatch = min(15, $remainingQuota);
+
+        // Allocate explicit boundaries to guarantee Phase 2 runs.
+        // If a full batch is available, Phase 1 is capped at 10, leaving 5 slots for Phase 2.
+        // If quota is low (under 5), slots are divided evenly.
+        $phase1Cap = $maxBatch > 5 ? $maxBatch - 5 : (int) floor($maxBatch / 2);
+
         $currentYear = (int) date('Y');
 
         $dbTriggerContents = TriggerContent::pluck('id', 'name')->toArray();
         $availableTriggerNames = array_keys($dbTriggerContents);
         $totalTriggerCount = count($dbTriggerContents);
 
-        Log::info("GenerateGeminiAdvisory: Reference data loaded. Total target triggers in DB: {$totalTriggerCount}. Max batch processing limit: {$limit}. Target max year: {$currentYear}");
+        Log::info("GenerateGeminiAdvisory: Reference data loaded. Total target triggers in DB: {$totalTriggerCount}. Total Max Batch: {$maxBatch}. Phase 1 Cap: {$phase1Cap}. Target max year: {$currentYear}");
 
         $processedCount = 0;
 
         // -------------------------------------------------------------------------
-        // Phase 1: Fresh anime (no advisory yet)
+        // Phase 1: Fresh anime (no advisory yet) - Capped to reserve slots for Phase 2
         // -------------------------------------------------------------------------
         $newAnimes = Anime::whereNull('ai_advisory')
             ->where('source', '!=', 'Original')
@@ -51,14 +58,14 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->orderBy('animes.year', 'desc')
             ->orderBy('animes.airing', 'desc')
             ->orderBy('animes.score', 'desc')
-            ->limit($limit)
+            ->limit($phase1Cap)
             ->get();
 
         Log::info("GenerateGeminiAdvisory: Phase 1 (Fresh) found " . $newAnimes->count() . " eligible candidates.");
 
         foreach ($newAnimes as $anime) {
-            if ($processedCount >= $limit) {
-                Log::info("GenerateGeminiAdvisory: Batch limit of {$limit} reached during Phase 1.");
+            if ($processedCount >= $phase1Cap) {
+                Log::info("GenerateGeminiAdvisory: Allocated Phase 1 limit of {$phase1Cap} reached.");
                 break;
             }
 
@@ -82,9 +89,9 @@ class GenerateGeminiAdvisory implements ShouldQueue
         }
 
         // -------------------------------------------------------------------------
-        // Phase 2: Gap-fill (missing rows due to new trigger content metadata)
+        // Phase 2: Gap-fill (Guaranteed to have remaining slots from the total batch)
         // -------------------------------------------------------------------------
-        $remainingSlots = $limit - $processedCount;
+        $remainingSlots = $maxBatch - $processedCount;
         Log::info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
 
         if ($remainingSlots <= 0) {
@@ -111,8 +118,8 @@ class GenerateGeminiAdvisory implements ShouldQueue
         Log::info("GenerateGeminiAdvisory: Phase 2 (Gap-fill) found " . $gapAnimes->count() . " candidates matching discrepancy criteria.");
 
         foreach ($gapAnimes as $anime) {
-            if ($processedCount >= $limit) {
-                Log::info("GenerateGeminiAdvisory: Batch limit of {$limit} reached during Phase 2.");
+            if ($processedCount >= $maxBatch) {
+                Log::info("GenerateGeminiAdvisory: Total batch limit of {$maxBatch} reached during Phase 2.");
                 break;
             }
 
