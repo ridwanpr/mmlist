@@ -39,7 +39,7 @@ class BrowseController extends Controller
         $animes = $this->animeService->fetchAnimes(
             filter: $filter,
             sort: $sort,
-            paginateLimit: 24
+            paginateLimit: 28
         );
 
         $genres = $this->masterService->getGenres();

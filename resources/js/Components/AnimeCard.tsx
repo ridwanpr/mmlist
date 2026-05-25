@@ -6,23 +6,12 @@ interface AnimeCardProps {
   index: number;
 }
 
-const SEASON_ICON: Record<string, string> = {
-  spring: "🌸",
-  summer: "☀️",
-  fall: "🍂",
-  winter: "❄️",
-};
-
 const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const { proxyImage } = useImageProxy();
 
   const season = animeData?.season?.toLowerCase();
-  const seasonIcon = season ? (SEASON_ICON[season] ?? "") : "";
-
   const seasonYear = (() => {
-    const s = season
-      ? `${seasonIcon} ${season.charAt(0).toUpperCase() + season.slice(1)}`
-      : "";
+    const s = season ? season.charAt(0).toUpperCase() + season.slice(1) : "";
     const y = animeData?.year ? String(animeData.year) : "";
     if (s && y) return `${s} ${y}`;
     if (s) return s;
@@ -30,8 +19,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     return null;
   })();
 
-  const genres = animeData?.genres?.slice(0, 3) ?? [];
-
+  const genres = animeData?.genres?.slice(0, 2) ?? [];
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
@@ -41,145 +29,161 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     animeData?.titles?.find((t) => t.type === "English")?.title ||
     animeData?.titles?.[0]?.title;
 
-  const seenUserIds = new Set<number>();
-  let totalVotes = 0;
+  const studio = animeData?.studios?.[0]?.name || animeData?.source || "";
 
-  const uniqueTriggers =
-    animeData?.triggers?.filter((trigger) => {
-      if (trigger.is_appear) {
-        totalVotes++;
+  // Count raw total votes across all trigger categories
+  let yesVotes = 0;
+  let noVotes = 0;
 
-        if (!seenUserIds.has(trigger.user_id)) {
-          seenUserIds.add(trigger.user_id);
-          return true;
-        }
-      }
+  animeData?.triggers?.forEach((trigger) => {
+    if (trigger.is_appear) {
+      yesVotes++;
+    } else {
+      noVotes++;
+    }
+  });
 
-      return false;
-    }) ?? [];
+  const totalVotes = yesVotes + noVotes;
 
-  const uniqueUserCount = seenUserIds.size;
+  // Calculate trigger presence based on total vote ratio
+  const yesRatio = totalVotes > 0 ? yesVotes / totalVotes : 0;
+  const hasTrigger = totalVotes > 0 && yesRatio >= 0.15;
 
-  const getTriggerBadgeStyle = (count: number) => {
-    if (count < 3)
+  const getStatusStyle = () => {
+    if (totalVotes === 0) {
+      return { border: "border-border/60", text: "text-text-muted/70" };
+    }
+    if (!hasTrigger) {
+      return { border: "border-success/30", text: "text-success" };
+    }
+    if (yesVotes < 5) {
       return {
-        wrapper:
-          "border-severity-unverified/40 bg-severity-unverified/10 text-severity-unverified",
+        border: "border-severity-unverified/40",
+        text: "text-severity-unverified",
       };
-    if (count < 10)
+    }
+    if (yesVotes < 15) {
+      return { border: "border-severity-mild/40", text: "text-severity-mild" };
+    }
+    if (yesVotes < 40) {
       return {
-        wrapper:
-          "border-severity-mild/40 bg-severity-mild/10 text-severity-mild",
+        border: "border-severity-moderate/40",
+        text: "text-severity-moderate",
       };
-    if (count < 25)
-      return {
-        wrapper:
-          "border-severity-moderate/40 bg-severity-moderate/10 text-severity-moderate",
-      };
-    if (count < 50)
-      return {
-        wrapper:
-          "border-severity-high/40 bg-severity-high/10 text-severity-high",
-      };
+    }
+    if (yesVotes < 100) {
+      return { border: "border-severity-high/40", text: "text-severity-high" };
+    }
     return {
-      wrapper:
-        "border-severity-severe/40 bg-severity-severe/10 text-severity-severe",
+      border: "border-severity-severe/50",
+      text: "text-severity-severe",
     };
   };
+
+  const statusStyle = getStatusStyle();
+
   return (
     <Link
       href={`/anime/${animeData.slug}`}
       prefetch={["click"]}
       className="group mb-4 block lg:mb-0"
     >
-      <div className="border-border bg-surface group-hover:border-primary-soft relative flex h-48 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(179,77,86,0.18)]">
-        <span
-          aria-hidden="true"
-          className="bg-primary pointer-events-none absolute inset-y-0 left-0 w-0.75 rounded-l-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        />
-
-        {/* -- Image -- */}
-        <div className="relative w-32 shrink-0 overflow-hidden">
+      <div className="border-border bg-surface group-hover:border-primary-dark/30 relative flex h-48 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(145,51,59,0.08)]">
+        {/* Left Side: Cover Asset */}
+        <div className="bg-surface-alt relative w-32 shrink-0 overflow-hidden">
           <img
             src={proxyImage(animeData?.images.jpg.image_url)}
-            alt={animeData ? `${animeData.title} cover image` : ""}
+            alt={title ? `${title} cover` : ""}
             loading={index >= 6 ? "lazy" : "eager"}
             fetchPriority={index < 4 ? "high" : "auto"}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
           />
-
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent"
+            className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"
           />
-
-          {/* Type badge */}
           {animeData?.type && (
-            <span className="absolute bottom-2 left-2 rounded-sm bg-black/55 px-1.5 py-0.75 text-[9px] font-semibold tracking-widest text-white/90 uppercase backdrop-blur-[2px]">
+            <span className="absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white/95 uppercase backdrop-blur-xs">
               {animeData.type}
             </span>
           )}
         </div>
 
-        {/* -- Content -- */}
-        <div className="flex min-w-0 flex-1 flex-col gap-2 p-3">
-          {/* Title */}
-          <p
-            className="text-text line-clamp-2 pb-px text-sm leading-snug font-bold md:text-[0.9rem]"
-            title={title}
-          >
-            {title}
-          </p>
+        {/* Right Side: Content Area */}
+        <div className="flex min-w-0 flex-1 flex-col justify-between p-3.5">
+          {/* Top Section: Title and Metadata */}
+          <div className="space-y-1">
+            <h3
+              className="text-text line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
+              title={title}
+            >
+              {title}
+            </h3>
 
-          {/* Meta - season and eps */}
-          {metaParts.length > 0 && (
-            <div className="text-text-muted flex flex-wrap items-center gap-x-0.5 gap-y-1 text-[11px]">
+            <div className="text-text-muted flex flex-wrap items-center gap-x-1.5 font-sans text-[11px] font-medium">
               {metaParts.map((part, i) => (
                 <span key={i} className="flex items-center">
                   {i > 0 && (
                     <span
                       aria-hidden="true"
-                      className="bg-text-muted/40 mx-2 inline-block h-0.75 w-0.75 shrink-0 rounded-full"
+                      className="bg-border mx-1.5 h-1 w-1 shrink-0 rounded-full"
                     />
                   )}
                   {part}
                 </span>
               ))}
+              {studio && (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="bg-border mx-1.5 h-1 w-1 shrink-0 rounded-full"
+                  />
+                  <span className="max-w-30 truncate" title={studio}>
+                    {studio}
+                  </span>
+                </>
+              )}
             </div>
-          )}
+          </div>
 
-          {/* 2. Redesigned Genres as badges */}
+          {/* Middle Section: Genre Badges */}
           {genres.length > 0 && (
-            <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5">
               {genres.map((g, i) => (
                 <span
                   key={i}
-                  className="bg-text-muted/10 text-text-muted border-text-muted/20 rounded border px-1.5 py-0.5 text-[10px] font-medium"
+                  className="bg-surface-alt text-text-muted border-border/60 rounded-md border px-2 py-0.5 font-sans text-[10px] font-semibold"
                 >
                   {g.name}
                 </span>
               ))}
-              {(animeData?.genres?.length ?? 0) > 3 && (
-                <span className="text-text-muted/60 ml-0.5 text-[10px] font-medium">
-                  +{animeData!.genres!.length - 3}
+              {(animeData?.genres?.length ?? 0) > 2 && (
+                <span className="text-text-muted/50 pl-0.5 font-sans text-[10px] font-bold">
+                  +{animeData!.genres!.length - 2}
                 </span>
               )}
             </div>
           )}
 
-          {/* -- Trigger warning -- */}
-          {uniqueTriggers.length !== 0 && (
-            <div className="mt-auto pt-1">
-              <div
-                className={`text-[11px] leading-tight font-bold ${getTriggerBadgeStyle(uniqueTriggers.length).wrapper.split(" ")[2]}`}
+          {/* Bottom Section */}
+          <div
+            className={`bg-surface-alt/70 flex items-center justify-between rounded-lg border px-2.5 py-1.5 transition-colors duration-300 ${statusStyle.border}`}
+          >
+            <div className="flex min-w-0 flex-col">
+              <span
+                className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
               >
-                {totalVotes.toLocaleString()} Trigger Reports
-              </div>
-              <div className="text-text-muted text-[10px] leading-tight opacity-80">
-                from {uniqueUserCount.toLocaleString()} users
-              </div>
+                {totalVotes === 0 && "No Reports"}
+                {totalVotes > 0 && !hasTrigger && "Voted Safe"}
+                {hasTrigger && `${yesVotes} Trigger Reports`}
+              </span>
+              <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
+                {totalVotes === 0
+                  ? "0 reports submitted"
+                  : `From ${totalVotes.toLocaleString()} total votes`}
+              </span>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </Link>

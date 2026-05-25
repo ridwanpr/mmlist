@@ -35,6 +35,59 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\CommentController::update
+ * @see app/Http/Controllers/CommentController.php:74
+ * @route '/comment/{commentId}'
+ */
+export const update = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: update.url(args, options),
+    method: 'put',
+})
+
+update.definition = {
+    methods: ["put"],
+    url: '/comment/{commentId}',
+} satisfies RouteDefinition<["put"]>
+
+/**
+* @see \App\Http\Controllers\CommentController::update
+ * @see app/Http/Controllers/CommentController.php:74
+ * @route '/comment/{commentId}'
+ */
+update.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { commentId: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    commentId: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        commentId: args.commentId,
+                }
+
+    return update.definition.url
+            .replace('{commentId}', parsedArgs.commentId.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CommentController::update
+ * @see app/Http/Controllers/CommentController.php:74
+ * @route '/comment/{commentId}'
+ */
+update.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: update.url(args, options),
+    method: 'put',
+})
+
+/**
 * @see \App\Http\Controllers\CommentController::upvote
  * @see app/Http/Controllers/CommentController.php:66
  * @route '/comment/upvote/{commentId}'
@@ -89,6 +142,7 @@ upvote.put = (args: { commentId: string | number } | [commentId: string | number
 const comment = {
     anime: Object.assign(anime, anime),
 store: Object.assign(store, store),
+update: Object.assign(update, update),
 upvote: Object.assign(upvote, upvote),
 }
 

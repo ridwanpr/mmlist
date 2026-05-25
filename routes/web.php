@@ -53,5 +53,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::put('watchlist/{watchlistId}', [WatchlistController::class, 'update'])->name('watchlist.update');
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::put('comment/{commentId}', [CommentController::class, 'update'])->name('comment.update');
     Route::put('comment/upvote/{commentId}', [CommentController::class, 'upvote'])->name('comment.upvote');
 });

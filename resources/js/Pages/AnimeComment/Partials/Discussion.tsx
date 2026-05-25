@@ -227,42 +227,44 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 />
 
                 {/* Action buttons row */}
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() =>
-                      openReplyModal(
-                        comment.id,
-                        comment.bodyHtml,
-                        comment.user?.name ?? "",
-                      )
-                    }
-                    className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
-                  >
-                    <LuReply className="size-3" />
-                    Reply
-                  </button>
+                {auth.user && (
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() =>
+                        openReplyModal(
+                          comment.id,
+                          comment.bodyHtml,
+                          comment.user?.name ?? "",
+                        )
+                      }
+                      className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                    >
+                      <LuReply className="size-3" />
+                      Reply
+                    </button>
 
-                  {auth.user?.id === comment.userId && (
-                    <>
-                      <button
-                        onClick={() =>
-                          handleEditComment(comment.id, comment.body)
-                        }
-                        className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
-                      >
-                        <LuPencil className="size-3" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteComment(comment.id)}
-                        className="text-text-muted hover:text-accent-red flex items-center gap-1 text-xs hover:cursor-pointer"
-                      >
-                        <LuTrash2 className="size-3" />
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </div>
+                    {auth.user.id === comment.userId && (
+                      <>
+                        <button
+                          onClick={() =>
+                            handleEditComment(comment.id, comment.body)
+                          }
+                          className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                        >
+                          <LuPencil className="size-3" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteComment(comment.id)}
+                          className="text-text-muted hover:text-accent-red flex items-center gap-1 text-xs hover:cursor-pointer"
+                        >
+                          <LuTrash2 className="size-3" />
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -283,7 +285,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
           editModal={editModal}
           closeEditModal={closeEditModal}
           editComment={editComment}
-          slug={anime.slug}
         />
       )}
     </>

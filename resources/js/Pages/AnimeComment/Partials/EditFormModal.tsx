@@ -19,14 +19,12 @@ type EditFormModalProps = {
   editModal: boolean;
   closeEditModal: () => void;
   editComment: EditedComment;
-  slug: string;
 };
 
 const EditFormModal = ({
   editModal,
   closeEditModal,
   editComment,
-  slug,
 }: EditFormModalProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -99,10 +97,9 @@ const EditFormModal = ({
                 preserveScroll: true,
               }}
             >
-              <input type="hidden" name="slug" value={slug} />
               <textarea
                 ref={textareaRef}
-                defaultValue={editComment.body ?? ""}
+                defaultValue={editComment.body}
                 name="body"
                 placeholder="Write your reply..."
                 rows={4}

@@ -49,7 +49,7 @@ class CommentController extends Controller
         $anime = $this->animeService->getAnimeInfo($animeSlug);
 
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
-        
+
         $transformedPaginator = $animeComments->through(
             fn(Comment $item): CommentData => CommentData::fromModel($item)
         );
@@ -69,5 +69,12 @@ class CommentController extends Controller
         $this->commentService->toggleCommentUpvote($commentId, $user->id);
 
         return back();
+    }
+
+    public function update(Request $request, int $commentId)
+    {
+        $validated = $request->validate([
+            'body' => 'required',
+        ]);
     }
 }
