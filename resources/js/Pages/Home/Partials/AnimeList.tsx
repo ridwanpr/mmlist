@@ -18,7 +18,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
         icon={<LuFilm size="22px" />}
       />
 
-      <section id="now-airing" className="mb-8">
+      <section id="now-airing" className="mb-12">
         <div className="gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
           {nowAiring &&
             nowAiring.map((airing, index) => (

@@ -4,7 +4,7 @@ import { register } from "../../../actions/App/Http/Controllers/AuthController";
 
 const CTA = () => {
   return (
-    <div className="mb-6 p-4 lg:py-8">
+    <div className="mb-8 mt-6 p-4 lg:py-8">
       <div className="bg-primary-soft border-surface-alt mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 rounded-lg border p-6 text-center md:flex-row md:p-8 md:text-left">
         <div className="shrink-0">
           <LuShieldAlert size={70} className="text-primary" />

@@ -130,7 +130,7 @@ class AnimeService
     /**
      * @return array<int, AnimeData>
      */
-    public function fetchTopAnime(int $limit = 8): array
+    public function fetchTopAnime(int $limit = 12): array
     {
         $topIds = Anime::query()
             ->where('rating', '!=', 'Rx - Hentai')
