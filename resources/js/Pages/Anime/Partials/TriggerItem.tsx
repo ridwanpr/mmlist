@@ -4,8 +4,7 @@ import { HiMiniSparkles } from "react-icons/hi2";
 import {
   LuCheck,
   LuChevronDown,
-  LuThumbsDown,
-  LuThumbsUp,
+  LuX,
 } from "react-icons/lu";
 import VoteGroup from "./VoteGroup";
 import AuthGate from "./AuthGate";
@@ -119,13 +118,13 @@ const TriggerItem = ({
               </span>
               <div className="flex items-center gap-3">
                 <span className="text-success flex items-center gap-1 text-xs font-semibold">
-                  <LuThumbsUp className="text-xs" />
+                  <LuCheck className="text-xs" />
                   <span className="tabular-nums">
                     {triggerContent.stats?.appear_true}
                   </span>
                 </span>
                 <span className="text-accent-red flex items-center gap-1 text-xs font-semibold">
-                  <LuThumbsDown className="text-xs" />
+                  <LuX className="text-xs" />
                   <span className="tabular-nums">
                     {triggerContent.stats?.appear_false}
                   </span>
@@ -160,11 +159,11 @@ const TriggerItem = ({
               {/* Mobile Fallback: Fully Spelled Out Wrapped Rows */}
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
                 <span className="text-success flex items-center gap-0.5">
-                  <LuThumbsUp className="text-xs" />{" "}
+                  <LuCheck className="text-xs" />{" "}
                   {triggerContent.stats?.appear_true}
                 </span>
                 <span className="text-accent-red flex items-center gap-0.5">
-                  <LuThumbsDown className="text-xs" />{" "}
+                  <LuX className="text-xs" />{" "}
                   {triggerContent.stats?.appear_false}
                 </span>
 
@@ -294,13 +293,13 @@ const TriggerItem = ({
                     <strong className="text-success text-sm font-semibold tabular-nums">
                       {triggerContent.stats?.appear_true}
                     </strong>
-                    <LuThumbsUp className="text-success text-base" />
+                    <LuCheck className="text-success text-base" />
                   </div>
                   <div className="flex w-10 flex-col items-center gap-0.5">
                     <strong className="text-accent-red text-sm font-semibold tabular-nums">
                       {triggerContent.stats?.appear_false}
                     </strong>
-                    <LuThumbsDown className="text-accent-red text-base" />
+                    <LuX className="text-accent-red text-base" />
                   </div>
                 </div>
               </div>
