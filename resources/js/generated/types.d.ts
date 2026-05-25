@@ -65,6 +65,18 @@ declare namespace App {
       readonly created_at: string | null;
       readonly updated_at: string | null;
     };
+    export type AnimeTriggerStatData = {
+      readonly totalReports: number;
+      readonly appearYesCount: number;
+      readonly appearNoCount: number;
+      readonly severityMild: number;
+      readonly severityModerate: number;
+      readonly severitySevere: number;
+      readonly framingSerious: number;
+      readonly framingNeutral: number;
+      readonly framingRomanticized: number;
+      readonly framingComedic: number;
+    };
     export type CommentData = {
       readonly id: number;
       readonly commentableType: string;

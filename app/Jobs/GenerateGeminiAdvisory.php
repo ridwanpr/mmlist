@@ -19,7 +19,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
     public function handle(GeminiService $geminiService): void
     {
-        $cacheKey = 'gemini_daily_requests_'.date('Y-m-d');
+        $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
         $remainingQuota = 800 - $dailyRequests;
 
@@ -50,58 +50,8 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $processedCount = 0;
 
         // -------------------------------------------------------------------------
-        // Phase 1: Fresh anime (no advisory yet) - Capped to reserve slots for Phase 2
+        // Phase 1: Gap-fill (Prioritized) : Capped to reserve slots for Phase 2
         // -------------------------------------------------------------------------
-        $newAnimes = Anime::whereNull('ai_advisory')
-            ->where('source', '!=', 'Original')
-            ->where('rating', '!=', 'Rx - Hentai')
-            ->where('animes.year', '<=', $currentYear)
-            ->orderBy('animes.year', 'desc')
-            ->orderBy('animes.airing', 'desc')
-            ->orderBy('animes.score', 'desc')
-            ->limit($phase1Cap)
-            ->get();
-
-        Log::info('GenerateGeminiAdvisory: Phase 1 (Fresh) found '.$newAnimes->count().' eligible candidates.');
-
-        foreach ($newAnimes as $anime) {
-            if ($processedCount >= $phase1Cap) {
-                Log::info("GenerateGeminiAdvisory: Allocated Phase 1 limit of {$phase1Cap} reached.");
-                break;
-            }
-
-            Log::info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Airing: {$anime->airing} | Score: {$anime->score}");
-
-            try {
-                $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
-
-                $anime->update(['ai_advisory' => $result['ai_advisory']]);
-
-                if ($result['ai_advisory'] !== GeminiService::FALLBACK_ADVISORY) {
-                    $this->syncTriggerContexts($anime->id, $result['matched_triggers'], $dbTriggerContents, $availableTriggerNames);
-                }
-
-                $processedCount++;
-                sleep(2);
-            } catch (\Exception $e) {
-                Log::error("GenerateGeminiAdvisory: Phase 1 failed for Anime ID {$anime->id}: ".$e->getMessage());
-                $anime->update(['ai_advisory' => GeminiService::FALLBACK_ADVISORY]);
-            }
-        }
-
-        // -------------------------------------------------------------------------
-        // Phase 2: Gap-fill (Guaranteed to have remaining slots from the total batch)
-        // -------------------------------------------------------------------------
-        $remainingSlots = $maxBatch - $processedCount;
-        Log::info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
-
-        if ($remainingSlots <= 0) {
-            Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
-            Log::info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2 gap-filling.');
-
-            return;
-        }
-
         $gapAnimes = Anime::whereNotNull('ai_advisory')
             ->where('ai_advisory', '!=', GeminiService::FALLBACK_ADVISORY)
             ->where('source', '!=', 'Original')
@@ -114,14 +64,14 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->orderBy('animes.year', 'desc')
             ->orderBy('animes.airing', 'desc')
             ->orderBy('animes.score', 'desc')
-            ->limit($remainingSlots)
+            ->limit($phase1Cap)
             ->get();
 
-        Log::info('GenerateGeminiAdvisory: Phase 2 (Gap-fill) found '.$gapAnimes->count().' candidates matching discrepancy criteria.');
+        Log::info('GenerateGeminiAdvisory: Phase 1 (Gap-fill) found ' . $gapAnimes->count() . ' candidates matching discrepancy criteria.');
 
         foreach ($gapAnimes as $anime) {
-            if ($processedCount >= $maxBatch) {
-                Log::info("GenerateGeminiAdvisory: Total batch limit of {$maxBatch} reached during Phase 2.");
+            if ($processedCount >= $phase1Cap) {
+                Log::info("GenerateGeminiAdvisory: Allocated Phase 1 limit of {$phase1Cap} reached.");
                 break;
             }
 
@@ -131,10 +81,10 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 ->all();
 
             $missingTriggerNames = array_keys(
-                array_filter($dbTriggerContents, fn ($id) => ! isset($existingTriggerIds[$id]))
+                array_filter($dbTriggerContents, fn($id) => ! isset($existingTriggerIds[$id]))
             );
 
-            Log::info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Current Context Count: ".count($existingTriggerIds)." / {$totalTriggerCount} | Missing Triggers Count: ".count($missingTriggerNames));
+            Log::info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Current Context Count: " . count($existingTriggerIds) . " / {$totalTriggerCount} | Missing Triggers Count: " . count($missingTriggerNames));
 
             if (empty($missingTriggerNames)) {
                 Log::info("GenerateGeminiAdvisory: Skipping Anime ID {$anime->id}. Discrepancy resolved dynamically via concurrent process.");
@@ -152,7 +102,57 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                Log::error("GenerateGeminiAdvisory: Phase 2 gap-fill failed for Anime ID {$anime->id}: ".$e->getMessage());
+                Log::error("GenerateGeminiAdvisory: Phase 1 gap-fill failed for Anime ID {$anime->id}: " . $e->getMessage());
+            }
+        }
+
+        // -------------------------------------------------------------------------
+        // Phase 2: Fresh anime (Guaranteed to have remaining slots from the total batch)
+        // -------------------------------------------------------------------------
+        $remainingSlots = $maxBatch - $processedCount;
+        Log::info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
+
+        if ($remainingSlots <= 0) {
+            Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
+            Log::info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2 fresh anime processing.');
+
+            return;
+        }
+
+        $newAnimes = Anime::whereNull('ai_advisory')
+            ->where('source', '!=', 'Original')
+            ->where('rating', '!=', 'Rx - Hentai')
+            ->where('animes.year', '<=', $currentYear)
+            ->orderBy('animes.year', 'desc')
+            ->orderBy('animes.airing', 'desc')
+            ->orderBy('animes.score', 'desc')
+            ->limit($remainingSlots)
+            ->get();
+
+        Log::info('GenerateGeminiAdvisory: Phase 2 (Fresh) found ' . $newAnimes->count() . ' eligible candidates.');
+
+        foreach ($newAnimes as $anime) {
+            if ($processedCount >= $maxBatch) {
+                Log::info("GenerateGeminiAdvisory: Total batch limit of {$maxBatch} reached during Phase 2.");
+                break;
+            }
+
+            Log::info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Airing: {$anime->airing} | Score: {$anime->score}");
+
+            try {
+                $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
+
+                $anime->update(['ai_advisory' => $result['ai_advisory']]);
+
+                if ($result['ai_advisory'] !== GeminiService::FALLBACK_ADVISORY) {
+                    $this->syncTriggerContexts($anime->id, $result['matched_triggers'], $dbTriggerContents, $availableTriggerNames);
+                }
+
+                $processedCount++;
+                sleep(2);
+            } catch (\Exception $e) {
+                Log::error("GenerateGeminiAdvisory: Phase 2 failed for Anime ID {$anime->id}: " . $e->getMessage());
+                $anime->update(['ai_advisory' => GeminiService::FALLBACK_ADVISORY]);
             }
         }
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('anime_id')->constrained('animes')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_appear');
-            $table->enum('severity', ['Mild', 'Moderate', 'Severe', 'Extreme'])->nullable();
+            $table->enum('severity', ['Mild', 'Moderate', 'Severe'])->nullable();
             $table->enum('framing', ['Serious', 'Neutral', 'Romanticized', 'Comedic'])->nullable();
             $table->timestamps();
 
