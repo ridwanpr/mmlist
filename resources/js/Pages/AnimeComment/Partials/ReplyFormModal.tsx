@@ -140,6 +140,7 @@ const ReplyFormModal = ({
                 rows={4}
                 autoFocus
                 className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
+                required
               />
 
               <div className="border-border/60 mt-3 flex items-center justify-between border-t border-dashed pt-2">
