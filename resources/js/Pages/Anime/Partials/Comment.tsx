@@ -78,7 +78,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
       <h2 className="text-text mb-2 text-base font-bold">Comments</h2>
 
       {/* Comments Preview List */}
-      <div className="bg-surface space-y-1 rounded-lg px-4">
+      <div className="bg-surface border border-border space-y-1 rounded-lg px-4">
         {topComments && topComments.length > 0 ? (
           topComments.map((comment, i) => (
             <div
@@ -131,7 +131,7 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
       </div>
 
       {/* View All Link */}
-      <div className="border-border mt-4 border-t pt-3">
+      <div className="mt-3">
         <Link
           href={getAnimeComment.url(anime.slug)}
           prefetch={"click"}

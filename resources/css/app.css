@@ -2,64 +2,57 @@
 
 /*
  * Graphite & Crimson - Soft Balanced Palette
- * Designed for an anime trigger-warning, discussion, and watchlist site.
+ * Optimized for an anime trigger-warning, discussion, and watchlist site.
  */
 
 @theme {
-  /* ── Backgrounds (Soft Neutral Light Mode) ── */
-  --color-background: #f2f2f2;
-  --color-surface: #fafafa;
-  --color-surface-alt: #eaeaea;
-  --color-border: #dbdbdb;
+  /* Backgrounds (Clean Milk Light Mode) */
+  --color-background: #f4f1eb; /* Main page background */
+  --color-surface: #fcfbfa; /* Primary content card background */
+  --color-surface-alt: #eae5da; /* Secondary container background */
+  --color-border: #ded7c9; /* Structural dividers and borders */
+  --color-spoiler-bg: #e3d9db; /* Unrevealed spoiler block overlay */
 
-  /* ── Dedicated Spoiler Color (Light Mode) ── */
-  --color-spoiler-bg: #d6cbd0;
-  /* A distinct, muted crimson-graphite tint that stands out on off-white surfaces */
+  /* Typography (Contrast vs --color-surface) */
+  --color-text: #1f1b18; /* Body text (16.54:1 - AAA) */
+  --color-text-muted: #524a43; /* Captions, metadata, and timestamps (8.40:1 - AAA) */
 
-  /* ── Typography ─────────────────────────────────────── */
-  --color-text: #222222;
-  --color-text-muted: #666666;
+  /* Primary - Crimson & Rose */
+  --color-primary: #ae444d; /* Main links, buttons, interactive states (5.44:1 - AA) */
+  --color-primary-dark: #91333b; /* Hover/active states for primary elements (7.41:1 - AAA) */
+  --color-primary-soft: #fde8e9; /* Light alert backgrounds or soft badge tints */
 
-  /* ── Primary - Crimson & Rose ───────────────────────── */
-  --color-primary: #b34d56;
-  --color-primary-dark: #9c494f;
-  --color-primary-soft: #fde8e9;
+  /* Accents */
+  --color-accent-gold: #905f00; /* Focus states, bookmarks, or highlights (5.32:1 - AA) */
+  --color-accent-orange: #b34400; /* Secondary notifications (5.43:1 - AA) */
+  --color-accent-red: #bc3838; /* Delete, destructive actions, or errors (5.40:1 - AA) */
+  --color-accent-rose: #ad4461; /* Meta categories, genres, or alternative tags (5.38:1 - AA) */
+  --color-success: #1e753e; /* Approved, completed, or safe status states (5.54:1 - AA) */
 
-  /* ── Accents ────────────────────────────────────────── */
-  --color-accent-gold: #946300;
-  --color-accent-orange: #b84a00;
-  --color-accent-red: #c24646;
-  --color-accent-rose: #b8516d;
-  --color-success: #247a44;
+  /* Severity Scale (Light Mode) */
+  --color-severity-mild: #3b6580; /* Steel Blue: Differentiates mild alerts from text-muted (6.05:1 - AA) */
+  --color-severity-moderate: #905f00; /* Saturated gold: mid-tier warnings (5.32:1 - AA) */
+  --color-severity-high: #bc3838; /* Solid crimson: high-tier warnings (5.40:1 - AA) */
+  --color-severity-severe: #82131d; /* Deep maroon: critical trigger warnings (9.86:1 - AAA) */
+  --color-severity-unverified: #525252; /* Neutral gray: unconfirmed report status (7.56:1 - AAA) */
 
-  /* ── Severity Scale ──────────────────────────────────── */
-  --color-severity-mild: #737373;
-  --color-severity-moderate: #946300;
-  --color-severity-high: #c24646;
-  --color-severity-severe: #82131d;
-  --color-severity-unverified: #525252;
-
-  /* ── Typography ─────────────────────────────────────── */
+  /* Typography Font Configurations */
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-serif:
     "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 @layer base {
-
-  /* ── Dark Mode ── */
+  /* Dark Mode Content Configuration */
   .dark {
     --color-background: #121212;
     --color-surface: #1e1e1e;
     --color-surface-alt: #2a2a2a;
     --color-border: #333333;
-
-    /* ── Dedicated Spoiler Color (Dark Mode) ── */
     --color-spoiler-bg: #403234;
-    /* A visible, deep dark-rose ember block that contrasts perfectly with charcoal surfaces */
 
     --color-text: #f5f5f5;
-    --color-text-muted: #a3a3a3;
+    --color-text-muted: #a3a3a3; /* Neutral UI text */
 
     --color-primary: #e8a0a6;
     --color-primary-dark: #d98b92;
@@ -71,7 +64,8 @@
     --color-accent-rose: #f43f5e;
     --color-success: #34d399;
 
-    --color-severity-mild: #a3a3a3;
+    /* Severity Scale (Dark Mode Custom Overrides) */
+    --color-severity-mild: #86a5bd; /* Muted Ice Blue: Differentiates mild alerts from gray text-muted (6.45:1 - AA) */
     --color-severity-moderate: #f59e0b;
     --color-severity-high: #ef4444;
     --color-severity-severe: #ff6b6b;
@@ -85,23 +79,19 @@
   }
 }
 
-/* ── Custom Markdown & Spoiler Layer ───────────────────── */
+/* Custom Markdown & Spoiler Utility Implementations */
 @layer utilities {
-
-  /* Restores bold formatting for ** text */
   .prose strong,
   .prose b {
     font-weight: 700;
     color: var(--color-text);
   }
 
-  /* Restores italic formatting for * text */
   .prose em,
   .prose i {
     font-style: italic;
   }
 
-  /* Your existing spoiler system */
   .prose .spoiler {
     background-color: var(--color-spoiler-bg);
     color: transparent;
@@ -110,7 +100,9 @@
     padding-right: 0.375rem;
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
   }
 
   .prose .spoiler.revealed {
