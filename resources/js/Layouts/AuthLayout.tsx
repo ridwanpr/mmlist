@@ -1,15 +1,25 @@
 import { usePage } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import { toast, Toaster } from "sonner";
+import AntiDevtoolsGuard from "../Components/AntiDevtoolsGuard";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
+interface FlashMessages {
+  success?: string;
+  error?: string;
+  warning?: string;
+  info?: string;
+}
+
 const AuthLayout = ({ children }: AuthLayoutProps) => {
-  const { flash } = usePage();
+  const { flash } = usePage() as unknown as { flash: FlashMessages };
 
   useEffect(() => {
+    if (!flash) return;
+
     if (flash.success) toast.success(flash.success);
     if (flash.error) toast.error(flash.error);
     if (flash.warning) toast.warning(flash.warning);
@@ -17,7 +27,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
   }, [flash]);
 
   return (
-    <div className="bg-background">
+    <>
       <Toaster
         position="top-right"
         closeButton
@@ -36,10 +46,15 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
           },
         }}
       />
-      <div className="mx-auto min-h-dvh max-w-xl p-4 md:flex md:flex-col md:items-center md:justify-center">
-        {children}
-      </div>
-    </div>
+
+      <AntiDevtoolsGuard>
+        <div className="bg-background">
+          <div className="mx-auto min-h-dvh max-w-xl p-4 md:flex md:flex-col md:items-center md:justify-center">
+            {children}
+          </div>
+        </div>
+      </AntiDevtoolsGuard>
+    </>
   );
 };
 

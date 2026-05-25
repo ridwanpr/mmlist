@@ -50,8 +50,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     body: "",
   });
 
-  console.log(editComment);
-
   const [comments, setComments] = useState(paginatedComment.data);
   const isUpvoting = useRef(false);
 
@@ -149,7 +147,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   };
 
   const handleEditComment = (commentId: number, body: string) => {
-    console.log(commentId);
     setEditModal(true);
     setEditComment({
       comment_id: commentId,
