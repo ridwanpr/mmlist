@@ -54,5 +54,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
 
     Route::post('comment', [CommentController::class, 'store'])->name('comment.store');
     Route::put('comment/{commentId}', [CommentController::class, 'update'])->name('comment.update');
+    Route::delete('comment/{commentId}', [CommentController::class, 'destroy'])->name('comment.destroy');
     Route::put('comment/upvote/{commentId}', [CommentController::class, 'upvote'])->name('comment.upvote');
 });

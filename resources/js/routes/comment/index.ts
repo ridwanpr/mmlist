@@ -88,6 +88,59 @@ update.put = (args: { commentId: string | number } | [commentId: string | number
 })
 
 /**
+* @see \App\Http\Controllers\CommentController::destroy
+ * @see app/Http/Controllers/CommentController.php:87
+ * @route '/comment/{commentId}'
+ */
+export const destroy = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+destroy.definition = {
+    methods: ["delete"],
+    url: '/comment/{commentId}',
+} satisfies RouteDefinition<["delete"]>
+
+/**
+* @see \App\Http\Controllers\CommentController::destroy
+ * @see app/Http/Controllers/CommentController.php:87
+ * @route '/comment/{commentId}'
+ */
+destroy.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { commentId: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    commentId: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        commentId: args.commentId,
+                }
+
+    return destroy.definition.url
+            .replace('{commentId}', parsedArgs.commentId.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CommentController::destroy
+ * @see app/Http/Controllers/CommentController.php:87
+ * @route '/comment/{commentId}'
+ */
+destroy.delete = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+/**
 * @see \App\Http\Controllers\CommentController::upvote
  * @see app/Http/Controllers/CommentController.php:66
  * @route '/comment/upvote/{commentId}'
@@ -143,6 +196,7 @@ const comment = {
     anime: Object.assign(anime, anime),
 store: Object.assign(store, store),
 update: Object.assign(update, update),
+destroy: Object.assign(destroy, destroy),
 upvote: Object.assign(upvote, upvote),
 }
 

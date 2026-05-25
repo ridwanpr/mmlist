@@ -83,4 +83,13 @@ class CommentController extends Controller
         Inertia::flash('success', 'Comment updated');
         return back();
     }
+
+    public function destroy(int $commentId)
+    {
+        $user = Auth::user();
+        $this->commentService->deleteComment($commentId, $user->id);
+
+        Inertia::flash('success', 'Comment deleted');
+        return back();
+    }
 }

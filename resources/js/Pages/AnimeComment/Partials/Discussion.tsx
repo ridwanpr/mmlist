@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { LuHeart, LuReply, LuPencil, LuTrash2 } from "react-icons/lu";
 import {
+  destroy,
   getAnimeComment,
   upvote,
 } from "../../../actions/App/Http/Controllers/CommentController";
@@ -157,7 +158,11 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   };
 
   const handleDeleteComment = (commentId: number) => {
-    console.log("Delete comment clicked for ID:", commentId);
+    if (confirm("Are you sure want to delete this comment?")) {
+      router.delete(destroy.url({ commentId: commentId }), {
+        preserveScroll: true,
+      });
+    }
   };
 
   return (

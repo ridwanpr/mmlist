@@ -70,6 +70,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        Inertia::clearHistory();
         return redirect()->route('home.index');
     }
 }

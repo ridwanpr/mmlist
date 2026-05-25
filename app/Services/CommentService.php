@@ -99,4 +99,11 @@ class CommentService
                 'body' => $data['body']
             ]);
     }
+
+    public function deleteComment(int $commentId, int $userId)
+    {
+        return Comment::where('id', $commentId)
+            ->where('user_id', $userId)
+            ->delete();
+    }
 }
