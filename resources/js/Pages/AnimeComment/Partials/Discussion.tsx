@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
-import { LuHeart, LuReply } from "react-icons/lu";
+import { LuHeart, LuReply, LuPencil, LuTrash2 } from "react-icons/lu";
 import {
   getAnimeComment,
-  store,
   upvote,
 } from "../../../actions/App/Http/Controllers/CommentController";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
@@ -125,6 +124,15 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     });
   };
 
+  // Placeholder handlers for Edit and Delete actions
+  const handleEditComment = (commentId: number) => {
+    console.log("Edit comment clicked for ID:", commentId);
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    console.log("Delete comment clicked for ID:", commentId);
+  };
+
   return (
     <>
       <section id="discussion">
@@ -167,7 +175,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="text-primary text-sm font-semibold">
-                    {comment.user?.name}
+                    {comment.user?.name ?? ""}
                   </span>
 
                   <span className="text-text-muted text-xs">
@@ -177,7 +185,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
                 {comment.parent && (
                   <QuoteBlock
-                    authorName={comment.parent.user?.name!}
+                    authorName={comment.parent.user?.name ?? ""}
                     body={comment.parent.body}
                   />
                 )}
@@ -195,19 +203,41 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   }}
                 />
 
-                <button
-                  onClick={() =>
-                    openReplyModal(
-                      comment.id,
-                      comment.body,
-                      comment.user?.name!,
-                    )
-                  }
-                  className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
-                >
-                  <LuReply className="size-3" />
-                  Reply
-                </button>
+                {/* Action buttons row */}
+                <div className="mt-2 flex items-center gap-3">
+                  <button
+                    onClick={() =>
+                      openReplyModal(
+                        comment.id,
+                        comment.body,
+                        comment.user?.name ?? "",
+                      )
+                    }
+                    className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                  >
+                    <LuReply className="size-3" />
+                    Reply
+                  </button>
+
+                  {auth.user?.id === comment.userId && (
+                    <>
+                      <button
+                        onClick={() => handleEditComment(comment.id)}
+                        className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                      >
+                        <LuPencil className="size-3" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-text-muted hover:text-accent-red flex items-center gap-1 text-xs hover:cursor-pointer"
+                      >
+                        <LuTrash2 className="size-3" />
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
