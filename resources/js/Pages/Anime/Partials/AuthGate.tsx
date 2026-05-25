@@ -12,7 +12,7 @@ const AuthGate = ({ loginHref, registerHref }: AuthGateProps) => (
       <LuLogIn className="text-text-muted mt-0.5 shrink-0 text-sm" />
       <div>
         <p className="text-text text-xs font-semibold">
-          Sign in to share your experience
+          Sign in to help others watch safely
         </p>
         <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
           Only members can vote. Your votes help others make informed decisions.

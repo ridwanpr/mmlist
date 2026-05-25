@@ -225,7 +225,7 @@ const TriggerItem = ({
             {isLoggedIn ? (
               <>
                 <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
-                  Share your experience
+                  Help Others Watch Safely
                 </p>
                 <form onSubmit={(e) => handleSubmit(e, triggerContent.id)}>
                   <div className="flex flex-col gap-3">
