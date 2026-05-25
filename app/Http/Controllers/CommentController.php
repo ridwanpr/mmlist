@@ -48,15 +48,12 @@ class CommentController extends Controller
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
 
-        // 1. Fetch raw paginated models from service
         $animeComments = $this->commentService->getAnimeComments($anime->id, 25, $sortBy);
-
-        // 2. Transform the collection items inside the paginator into CommentData DTOs
+        
         $transformedPaginator = $animeComments->through(
             fn(Comment $item): CommentData => CommentData::fromModel($item)
         );
 
-        // 3. Build the final paginated response structure
         $paginatedComment = PaginatedCommentData::fromPaginator($transformedPaginator);
 
         return Inertia::render('AnimeComment/Index', [

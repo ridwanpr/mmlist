@@ -54,15 +54,20 @@ class Comment extends Model
     {
         $body = $this->body;
 
-        // Shift trapped trailing spaces inside formatting tags to the outside
-        $body = preg_replace('/_*\s*([^*]+?)\s+(\*\*)(\s?)/', '**$1** ', $body);
-        $body = preg_replace('/(?<!\*)\*([^*]+?)\s+\*(?!\*)(\s?)/', '*$1* ', $body);
-        $body = preg_replace('/\|\|([^|]+?)\s+\|\|(\s?)/', '||$1|| ', $body);
+        // Clean up Double Asterisks (**bold**)
+        // Shift leading spaces inside to the outside, normalizing to a single outer space
+        $body = preg_replace('/\s*\*\*\s+([^*]+?)\*\*/', ' **$1**', $body);
+        // Shift trailing spaces inside to the outside, normalizing to a single outer space
+        $body = preg_replace('/\*\*([^*]+?)\s+\*\*\s*/', '**$1** ', $body);
 
-        // Shift trapped leading spaces inside formatting tags to the outside
-        $body = preg_replace('/(\s?)\*\*\s+([^*]+?)\*\*/', ' **$2**', $body);
-        $body = preg_replace('/(\s?)(?<!\*)\*\s+([^*]+?)\*(?!\*)/', ' *$2*', $body);
-        $body = preg_replace('/(\s?)\|\|\s+([^|]+?)\|\|/', ' ||$2||', $body);
+        // Clean up Single Asterisks (*italics*)
+        // Uses lookarounds to prevent matching double asterisks
+        $body = preg_replace('/\s*(?<!\*)\*\s+([^*]+?)\*(?!\*)/', ' *$1*', $body);
+        $body = preg_replace('/(?<!\*)\*([^*]+?)\s+\*(?!\*)\s*/', '*$1* ', $body);
+
+        // Clean up Spoilers (||spoiler||)
+        $body = preg_replace('/\s*\|\|\s+([^|]+?)\|\|/', ' ||$1||', $body);
+        $body = preg_replace('/\|\|([^|]+?)\s+\|\|\s*/', '||$1|| ', $body);
 
         // Run the cleaned markdown text through the secure compiler
         $html = Str::markdown(
