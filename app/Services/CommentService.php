@@ -90,4 +90,13 @@ class CommentService
             throw $e;
         }
     }
+
+    public function updateComment(int $commentId, int $userId, array $data)
+    {
+        return Comment::where('id', $commentId)
+            ->where('user_id', $userId)
+            ->update([
+                'body' => $data['body']
+            ]);
+    }
 }

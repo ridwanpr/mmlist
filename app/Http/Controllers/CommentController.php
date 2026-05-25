@@ -76,5 +76,11 @@ class CommentController extends Controller
         $validated = $request->validate([
             'body' => 'required',
         ]);
+
+        $user = Auth::user();
+        $this->commentService->updateComment($commentId, $user->id, $validated);
+
+        Inertia::flash('success', 'Comment updated');
+        return back();
     }
 }

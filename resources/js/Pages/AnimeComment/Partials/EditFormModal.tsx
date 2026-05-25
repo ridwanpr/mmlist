@@ -14,6 +14,7 @@ import {
   LuX,
 } from "react-icons/lu";
 import type { EditedComment } from "./Discussion";
+import { update } from "../../../actions/App/Http/Controllers/CommentController";
 
 type EditFormModalProps = {
   editModal: boolean;
@@ -89,10 +90,11 @@ const EditFormModal = ({
           {/* Body */}
           <div className="p-5 pt-3">
             <Form
-              action="#"
-              method="post"
+              action={update.url({ commentId: editComment.comment_id ?? "" })}
+              method="put"
               disableWhileProcessing
               resetOnSuccess
+              onFinish={closeEditModal}
               options={{
                 preserveScroll: true,
               }}
@@ -105,6 +107,7 @@ const EditFormModal = ({
                 rows={4}
                 autoFocus
                 className="border-border bg-surface-alt text-text placeholder:text-text-muted focus:border-primary focus:ring-primary/30 w-full resize-none rounded-xl border px-4 py-3 text-sm transition outline-none focus:ring-2"
+                required
               />
 
               <div className="border-border/60 mt-3 flex items-center justify-between border-t border-dashed pt-2">

@@ -141,6 +141,10 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
   const closeEditModal = () => {
     setEditModal(false);
+    setEditComment({
+      comment_id: null,
+      body: "",
+    });
   };
 
   const handleEditComment = (commentId: number, body: string) => {
