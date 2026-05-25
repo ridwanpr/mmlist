@@ -1,7 +1,7 @@
 import type React from "react";
 import FrontLayout from "../../Layouts/FrontLayout";
 import Discussion from "./Partials/Discussion";
-import AnimeInfo from "./Partials/AnimeInfo";
+import AnimeInfo from "../../Components/AnimeInfo";
 import AnimeCommentBreadcrumb from "./Partials/AnimeCommentBreadcrumb";
 import Pagination from "../../Components/UI/Pagination";
 

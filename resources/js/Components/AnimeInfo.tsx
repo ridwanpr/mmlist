@@ -1,5 +1,5 @@
-import { MetaInfo } from "../../../Components/MetaInfo";
-import { useImageProxy } from "../../../utils/image-proxy";
+import { MetaInfo } from "./MetaInfo";
+import { useImageProxy } from "../utils/image-proxy";
 
 type AnimeInfoProps = {
   anime: App.DTOs.AnimeData;

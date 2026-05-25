@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TriggerCommentController::getTriggerComment
- * @see app/Http/Controllers/TriggerCommentController.php:9
+ * @see app/Http/Controllers/TriggerCommentController.php:20
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 export const getTriggerComment = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ getTriggerComment.definition = {
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::getTriggerComment
- * @see app/Http/Controllers/TriggerCommentController.php:9
+ * @see app/Http/Controllers/TriggerCommentController.php:20
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 getTriggerComment.url = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions) => {
@@ -42,7 +42,7 @@ getTriggerComment.url = (args: { animeslug: string | number, triggerContentSlug:
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::getTriggerComment
- * @see app/Http/Controllers/TriggerCommentController.php:9
+ * @see app/Http/Controllers/TriggerCommentController.php:20
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 getTriggerComment.get = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -51,7 +51,7 @@ getTriggerComment.get = (args: { animeslug: string | number, triggerContentSlug:
 })
 /**
 * @see \App\Http\Controllers\TriggerCommentController::getTriggerComment
- * @see app/Http/Controllers/TriggerCommentController.php:9
+ * @see app/Http/Controllers/TriggerCommentController.php:20
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 getTriggerComment.head = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
