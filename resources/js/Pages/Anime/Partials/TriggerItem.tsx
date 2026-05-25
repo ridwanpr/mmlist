@@ -15,6 +15,7 @@ interface TriggerItemProps {
   animeSlug: string;
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
   aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
+  isCompact?: boolean;
 }
 
 export interface VoteProps {
@@ -28,6 +29,7 @@ const TriggerItem = ({
   animeSlug,
   userTriggerVote,
   aiTriggerContext,
+  isCompact = false,
 }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +64,7 @@ const TriggerItem = ({
     setData(category, option);
   };
 
-  const handleSubmit = (e: React.SubmitEvent, triggerContentId: number) => {
+  const handleSubmit = (e: React.FormEvent, triggerContentId: number) => {
     e.preventDefault();
     post(`/vote-anime-trigger/${triggerContentId}/${animeSlug}`, {
       preserveScroll: true,
@@ -70,145 +72,263 @@ const TriggerItem = ({
   };
 
   const isLoggedIn = auth.user !== null;
-
   const toggleTrigger = () => setIsOpen((prev) => !prev);
 
   return (
     <div
-      className={`overflow-hidden rounded-lg border border-l-4 ${
+      className={`overflow-hidden rounded-lg border ${
+        isCompact ? "border-l-2" : "border-l-4"
+      } ${
         findUserTriggerVote
           ? "border-primary border-l-primary-dark bg-surface"
           : "border-border bg-surface border-l-transparent"
       }`}
     >
-      {/* Header Row */}
+      {/* Clickable Header Area */}
       <button
         type="button"
         onClick={toggleTrigger}
-        className="hover:bg-surface-alt focus-visible:ring-border flex w-full flex-col gap-4 self-start p-4 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
+        className={`hover:bg-surface-alt focus-visible:ring-border w-full min-w-0 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset ${
+          isCompact
+            ? "flex flex-col gap-3 p-3.5 text-xs sm:grid sm:grid-cols-12 sm:items-center sm:gap-x-6 md:gap-x-8 lg:gap-x-10"
+            : "flex flex-col gap-4 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
+        }`}
       >
-        {/* Left - Name & Description */}
-        <div className="min-w-0 flex-1 sm:min-w-40">
-          <p className="text-text text-sm font-semibold">
-            {triggerContent.name}
-          </p>
-          <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
-            {triggerContent?.description}
-          </p>
-          <Link
-            href="#"
-            prefetch
-            className="text-primary text-xs font-medium hover:underline"
-          >
-            Discussion (32)
-          </Link>
-        </div>
+        {isCompact ? (
+          /* ================= COMPACT VIEW LAYOUT ================= */
+          <>
+            {/* Column 1: Core Content Label */}
+            <div className="flex min-w-0 items-center justify-between gap-4 sm:col-span-4 sm:justify-start md:col-span-4 lg:col-span-5">
+              <span className="text-text truncate text-sm font-semibold">
+                {triggerContent.name}
+              </span>
+              <Link
+                href="#"
+                prefetch
+                className="text-primary shrink-0 text-[11px] font-medium hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Discussion (32)
+              </Link>
+            </div>
 
-        {/* Middle - Severity & Framing */}
-        <div className="flex flex-1 flex-col gap-2">
-          {/* Severity */}
-          <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
-            <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
-              Severity
-            </span>
-            <div className="flex flex-wrap gap-x-3 gap-y-1">
-              <span className="text-severity-mild text-xs">
+            {/* Column 2: Total Community Voting Metrics */}
+            <div className="hidden items-center gap-4 sm:col-span-3 sm:flex md:col-span-3 lg:col-span-2">
+              <span className="text-text-muted shrink-0 text-[10px] font-bold tracking-wider uppercase">
+                Votes:
+              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-success flex items-center gap-1 text-xs font-semibold">
+                  <LuThumbsUp className="text-xs" />
+                  <span className="tabular-nums">
+                    {triggerContent.stats?.appear_true}
+                  </span>
+                </span>
+                <span className="text-accent-red flex items-center gap-1 text-xs font-semibold">
+                  <LuThumbsDown className="text-xs" />
+                  <span className="tabular-nums">
+                    {triggerContent.stats?.appear_false}
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            {/* Column 3: Full, Unabbreviated Severity Breakdown */}
+            <div className="hidden items-center justify-between gap-2 sm:col-span-4 sm:flex md:col-span-4 lg:col-span-4">
+              <span className="text-severity-mild text-xs font-medium">
                 Mild{" "}
-                <strong className="font-semibold tabular-nums">
+                <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Mild}
                 </strong>
               </span>
-              <span className="text-severity-moderate text-xs">
+              <span className="text-severity-moderate text-xs font-medium">
                 Moderate{" "}
-                <strong className="font-semibold tabular-nums">
+                <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Moderate}
                 </strong>
               </span>
-              <span className="text-severity-high text-xs">
+              <span className="text-severity-high text-xs font-medium">
                 Severe{" "}
-                <strong className="font-semibold tabular-nums">
+                <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Severe}
                 </strong>
               </span>
             </div>
-          </div>
 
-          {/* Framing */}
-          <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
-            <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
-              Framing
-            </span>
-            <div className="flex flex-wrap gap-x-3 gap-y-1">
-              <span className="text-text-muted text-xs">
-                Serious{" "}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.framing.Serious}
-                </strong>
-              </span>
-              <span className="text-text-muted text-xs">
-                Neutral{" "}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.framing.Neutral}
-                </strong>
-              </span>
-              <span className="text-text-muted text-xs">
-                Romanticized{" "}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.framing.Romanticized}
-                </strong>
-              </span>
-              <span className="text-text-muted text-xs">
-                Comedic{" "}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.framing.Comedic}
-                </strong>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right - Appears? + Voted badge + Chevron */}
-        <div className="flex items-center justify-between sm:shrink-0 sm:justify-normal sm:gap-4">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-text-muted text-[10px] font-medium tracking-widest uppercase">
-              Appears?
-            </span>
-            <div className="flex gap-3">
-              <div className="flex w-10 flex-col items-center gap-0.5">
-                <strong className="text-success text-sm font-semibold tabular-nums">
+            {/* Column 4: Status Badges & Layout Controls */}
+            <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:col-span-1 sm:justify-end">
+              {/* Mobile Fallback: Fully Spelled Out Wrapped Rows */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
+                <span className="text-success flex items-center gap-0.5">
+                  <LuThumbsUp className="text-xs" />{" "}
                   {triggerContent.stats?.appear_true}
-                </strong>
-                <LuThumbsUp className="text-success text-base" />
-              </div>
-              <div className="flex w-10 flex-col items-center gap-0.5">
-                <strong className="text-accent-red text-sm font-semibold tabular-nums">
+                </span>
+                <span className="text-accent-red flex items-center gap-0.5">
+                  <LuThumbsDown className="text-xs" />{" "}
                   {triggerContent.stats?.appear_false}
-                </strong>
-                <LuThumbsDown className="text-accent-red text-base" />
+                </span>
+
+                <div className="border-border flex flex-wrap gap-x-2 border-l pl-2.5 text-[10px]">
+                  <span className="text-severity-mild">
+                    Mild:{" "}
+                    <strong className="text-text font-semibold">
+                      {triggerContent.stats?.severity.Mild}
+                    </strong>
+                  </span>
+                  <span className="text-severity-moderate">
+                    Moderate:{" "}
+                    <strong className="text-text font-semibold">
+                      {triggerContent.stats?.severity.Moderate}
+                    </strong>
+                  </span>
+                  <span className="text-severity-high">
+                    Severe:{" "}
+                    <strong className="text-text font-semibold">
+                      {triggerContent.stats?.severity.Severe}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex shrink-0 items-center gap-2">
+                {findUserTriggerVote && (
+                  <span className="bg-primary text-surface rounded px-1.5 py-0.5 text-[9px] font-bold tracking-wide uppercase">
+                    Voted
+                  </span>
+                )}
+                <LuChevronDown
+                  className={`text-text-muted text-base transition-transform duration-200 ${
+                    isOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                />
               </div>
             </div>
-          </div>
+          </>
+        ) : (
+          /* ================= COMFORTABLE VIEW LAYOUT ================= */
+          <>
+            <div className="min-w-0 flex-1 sm:min-w-40">
+              <p className="text-text text-sm font-semibold">
+                {triggerContent.name}
+              </p>
+              <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
+                {triggerContent?.description}
+              </p>
+              <Link
+                href="#"
+                prefetch
+                className="text-primary text-xs font-medium hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Discussion (32)
+              </Link>
+            </div>
 
-          <div className="flex items-center gap-2">
-            {findUserTriggerVote && (
-              <span className="bg-primary text-surface flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide">
-                <LuCheck className="text-xs" aria-hidden="true" />
-                Voted
-              </span>
-            )}
-            <LuChevronDown
-              className={`shrink-0 text-base transition-transform duration-200 ${
-                findUserTriggerVote ? "text-primary-dark" : "text-text-muted"
-              } ${isOpen ? "rotate-180" : "rotate-0"}`}
-            />
-          </div>
-        </div>
+            <div className="flex flex-1 flex-col gap-2">
+              <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
+                <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
+                  Severity
+                </span>
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
+                  <span className="text-severity-mild text-xs">
+                    Mild{" "}
+                    <strong className="font-semibold tabular-nums">
+                      {triggerContent.stats?.severity.Mild}
+                    </strong>
+                  </span>
+                  <span className="text-severity-moderate text-xs">
+                    Moderate{" "}
+                    <strong className="font-semibold tabular-nums">
+                      {triggerContent.stats?.severity.Moderate}
+                    </strong>
+                  </span>
+                  <span className="text-severity-high text-xs">
+                    Severe{" "}
+                    <strong className="font-semibold tabular-nums">
+                      {triggerContent.stats?.severity.Severe}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
+                <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
+                  Framing
+                </span>
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
+                  <span className="text-text-muted text-xs">
+                    Serious{" "}
+                    <strong className="text-text font-semibold tabular-nums">
+                      {triggerContent.stats?.framing.Serious}
+                    </strong>
+                  </span>
+                  <span className="text-text-muted text-xs">
+                    Neutral{" "}
+                    <strong className="text-text font-semibold tabular-nums">
+                      {triggerContent.stats?.framing.Neutral}
+                    </strong>
+                  </span>
+                  <span className="text-text-muted text-xs">
+                    Romanticized{" "}
+                    <strong className="text-text font-semibold tabular-nums">
+                      {triggerContent.stats?.framing.Romanticized}
+                    </strong>
+                  </span>
+                  <span className="text-text-muted text-xs">
+                    Comedic{" "}
+                    <strong className="text-text font-semibold tabular-nums">
+                      {triggerContent.stats?.framing.Comedic}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between sm:shrink-0 sm:justify-normal sm:gap-4">
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-text-muted text-[10px] font-medium tracking-widest uppercase">
+                  Appears?
+                </span>
+                <div className="flex gap-3">
+                  <div className="flex w-10 flex-col items-center gap-0.5">
+                    <strong className="text-success text-sm font-semibold tabular-nums">
+                      {triggerContent.stats?.appear_true}
+                    </strong>
+                    <LuThumbsUp className="text-success text-base" />
+                  </div>
+                  <div className="flex w-10 flex-col items-center gap-0.5">
+                    <strong className="text-accent-red text-sm font-semibold tabular-nums">
+                      {triggerContent.stats?.appear_false}
+                    </strong>
+                    <LuThumbsDown className="text-accent-red text-base" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {findUserTriggerVote && (
+                  <span className="bg-primary text-surface flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide">
+                    <LuCheck className="text-xs" aria-hidden="true" />
+                    Voted
+                  </span>
+                )}
+                <LuChevronDown
+                  className={`shrink-0 text-base transition-transform duration-200 ${
+                    findUserTriggerVote
+                      ? "text-primary-dark"
+                      : "text-text-muted"
+                  } ${isOpen ? "rotate-180" : "rotate-0"}`}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </button>
 
-      {/* Expanded Panel */}
+      {/* Expanded Actions Panel */}
       {isOpen && (
         <div className="border-border divide-border grid grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
-          {/* AI Context */}
+          {/* AI Automated Context */}
           <div className="bg-primary-soft/40 flex flex-col gap-2 p-4">
             <p className="text-primary-dark flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase">
               <HiMiniSparkles className="text-sm" />
@@ -220,7 +340,7 @@ const TriggerItem = ({
             </p>
           </div>
 
-          {/* Vote Section */}
+          {/* Voting Action Segment */}
           <div className="flex flex-col gap-3 p-4">
             {isLoggedIn ? (
               <>
@@ -280,38 +400,36 @@ const TriggerItem = ({
                       (data.appears === "Yes" &&
                         data.severity &&
                         data.framing)) && (
-                      <>
-                        <div className="flex justify-end">
-                          <button
-                            type="submit"
-                            disabled={processing}
-                            className="bg-primary disabled:bg-primary/60 text-surface flex items-center gap-1.5 rounded px-3 py-1.5 text-sm transition-opacity disabled:cursor-not-allowed"
-                          >
-                            {processing && (
-                              <svg
-                                className="h-3.5 w-3.5 animate-spin"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <circle
-                                  className="opacity-25"
-                                  cx="12"
-                                  cy="12"
-                                  r="10"
-                                  stroke="currentColor"
-                                  strokeWidth="4"
-                                />
-                                <path
-                                  className="opacity-75"
-                                  fill="currentColor"
-                                  d="M4 12a8 8 0 018-8v8H4z"
-                                />
-                              </svg>
-                            )}
-                            {processing ? "Submitting..." : "Submit Vote"}
-                          </button>
-                        </div>
-                      </>
+                      <div className="flex justify-end">
+                        <button
+                          type="submit"
+                          disabled={processing}
+                          className="bg-primary disabled:bg-primary/60 text-surface flex items-center gap-1.5 rounded px-3 py-1.5 text-sm transition-opacity disabled:cursor-not-allowed"
+                        >
+                          {processing && (
+                            <svg
+                              className="h-3.5 w-3.5 animate-spin"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8H4z"
+                              />
+                            </svg>
+                          )}
+                          {processing ? "Submitting..." : "Submit Vote"}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </form>
