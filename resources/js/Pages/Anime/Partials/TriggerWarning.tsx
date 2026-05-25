@@ -39,12 +39,16 @@ const TriggerWarning = ({
 
       <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
         {/* Trigger Category Filter */}
-        <section className="bg-surface border-border w-full self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col lg:gap-6">
-          <div className="border-border flex w-full items-center justify-between border-b pb-4">
-            <h2 className="text-text font-bold">Filter Triggers</h2>
-            <p className="text-text-muted text-xs">Categories</p>
+        <section className="bg-surface border-border w-full self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col">
+          <div className="border-border flex w-full items-end justify-between border-b pb-4">
+            <div>
+              <h2 className="text-text text-sm font-bold">Filter Triggers</h2>
+              <p className="text-text-muted mt-0.5 text-xs">
+                Click to filter trigger by category
+              </p>
+            </div>
           </div>
-          <div className="mt-1 flex flex-col gap-3">
+          <div className="mt-4 flex flex-col gap-3">
             <div className="flex flex-col gap-2.5">
               <FilterButton
                 label="All Categories"
