@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
 /**
  * @property int $id
+ * @property string $commentable_type
+ * @property int $commentable_id
  * @property int $user_id
- * @property int $anime_id
  * @property int|null $episode_number
  * @property string $body
  * @property int $upvotes
@@ -18,16 +21,20 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $parent_comment_id
- * @property-read \App\Models\Anime $anime
+ * @property-read Model|\Eloquent $commentable
  * @property-read string $body_html
+ * @property-read Comment|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $replies
+ * @property-read int|null $replies_count
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CommentVote> $votes
  * @property-read int|null $votes_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereAnimeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereCommentableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereCommentableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereDownvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereEpisodeNumber($value)
@@ -42,12 +49,12 @@ class Comment extends Model
 {
     protected $fillable = [
         'user_id',
-        'anime_id',
-        'episode_number',
+        'commentable_type',
+        'commentable_id',
         'body',
         'upvotes',
         'downvotes',
-        'parent_comment_id'
+        'parent_comment_id',
     ];
 
     public function getBodyHtmlAttribute(): string
@@ -55,13 +62,10 @@ class Comment extends Model
         $body = $this->body;
 
         // Clean up Double Asterisks (**bold**)
-        // Shift leading spaces inside to the outside, normalizing to a single outer space
         $body = preg_replace('/\s*\*\*\s+([^*]+?)\*\*/', ' **$1**', $body);
-        // Shift trailing spaces inside to the outside, normalizing to a single outer space
         $body = preg_replace('/\*\*([^*]+?)\s+\*\*\s*/', '**$1** ', $body);
 
         // Clean up Single Asterisks (*italics*)
-        // Uses lookarounds to prevent matching double asterisks
         $body = preg_replace('/\s*(?<!\*)\*\s+([^*]+?)\*(?!\*)/', ' *$1*', $body);
         $body = preg_replace('/(?<!\*)\*([^*]+?)\s+\*(?!\*)\s*/', '*$1* ', $body);
 
@@ -69,14 +73,10 @@ class Comment extends Model
         $body = preg_replace('/\s*\|\|\s+([^|]+?)\|\|/', ' ||$1||', $body);
         $body = preg_replace('/\|\|([^|]+?)\s+\|\|\s*/', '||$1|| ', $body);
 
-        // Run the cleaned markdown text through the secure compiler
-        $html = Str::markdown(
-            $body,
-            [
-                'html_input' => 'strip',
-                'allow_unsafe_links' => false,
-            ]
-        );
+        $html = Str::markdown($body, [
+            'html_input'         => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
 
         return preg_replace(
             '/\|\|(.*?)\|\|/',
@@ -85,14 +85,14 @@ class Comment extends Model
         );
     }
 
+    public function commentable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function anime(): BelongsTo
-    {
-        return $this->belongsTo(Anime::class);
     }
 
     public function votes(): HasMany
