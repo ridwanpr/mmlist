@@ -17,31 +17,31 @@ interface PageProps {
 
 const NavItem = ({ href, active, icon: Icon, label }: NavItemProps) => {
   return (
-    <li className="flex-1">
+    <li className="h-full flex-1 list-none">
       <Link
         href={href}
         prefetch={"click"}
-        className="group flex w-full flex-col items-center justify-center gap-1 py-2"
+        className="group flex h-full w-full flex-col items-center justify-center gap-1 select-none"
       >
         <div
-          className={`flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ${
+          className={`flex h-8 w-16 items-center justify-center rounded-full transition-all duration-200 ease-in-out ${
             active
               ? "bg-primary-soft text-primary-dark"
-              : "text-text-muted group-hover:bg-surface-alt group-hover:text-text"
+              : "text-text-muted group-hover:bg-surface-alt group-active:scale-95"
           }`}
         >
           <Icon
-            size="20px"
+            size="22px"
             strokeWidth={active ? 2.5 : 2}
-            className={`transition-transform duration-300 ${
-              active ? "scale-110" : "scale-100"
+            className={`transition-transform duration-200 ease-in-out ${
+              active ? "scale-105" : "scale-100"
             }`}
           />
         </div>
 
         <span
-          className={`font-sans text-[10px] font-medium transition-colors duration-300 ${
-            active ? "text-primary-dark" : "text-text-muted"
+          className={`font-sans text-xs font-medium tracking-wide transition-colors duration-200 ease-in-out ${
+            active ? "text-primary-dark font-semibold" : "text-text-muted"
           }`}
         >
           {label}
@@ -57,11 +57,11 @@ const MobileNav = () => {
 
   return (
     <div
-      className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t shadow-[0_-4px_20px_-10px_rgba(102,114,74,0.1)]"
-      style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+      className="bg-surface border-border fixed bottom-0 left-0 z-50 w-full border-t shadow-sm"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <nav>
-        <ul className="flex w-full items-center">
+      <nav className="h-20 w-full px-2">
+        <ul className="flex h-full w-full items-center justify-between">
           <NavItem
             href={routes["home.index"]}
             active={component === "Home/Index"}

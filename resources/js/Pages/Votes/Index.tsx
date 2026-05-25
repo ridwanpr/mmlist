@@ -24,7 +24,7 @@ const Votes = ({ votes }: VotesProps) => {
 
   return (
     <DashContainer>
-      <div className="px-4 py-4 sm:px-0">
+      <div className="px-4 py-4 mb-6 sm:px-0">
         {/* Page Header */}
         <div className="mb-4">
           <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
