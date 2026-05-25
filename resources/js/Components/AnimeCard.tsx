@@ -56,22 +56,22 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     if (!hasTrigger) {
       return { border: "border-success/30", text: "text-success" };
     }
-    if (yesVotes < 5) {
+    if (yesVotes < 3) {
       return {
         border: "border-severity-unverified/40",
         text: "text-severity-unverified",
       };
     }
-    if (yesVotes < 15) {
+    if (yesVotes < 7) {
       return { border: "border-severity-mild/40", text: "text-severity-mild" };
     }
-    if (yesVotes < 40) {
+    if (yesVotes < 13) {
       return {
         border: "border-severity-moderate/40",
         text: "text-severity-moderate",
       };
     }
-    if (yesVotes < 100) {
+    if (yesVotes < 25) {
       return { border: "border-severity-high/40", text: "text-severity-high" };
     }
     return {
