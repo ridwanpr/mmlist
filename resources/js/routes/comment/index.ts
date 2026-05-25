@@ -1,5 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
 import anime from './anime'
+import trigger from './trigger'
 /**
 * @see \App\Http\Controllers\CommentController::store
  * @see app/Http/Controllers/CommentController.php:21
@@ -36,7 +37,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\CommentController::update
- * @see app/Http/Controllers/CommentController.php:69
+ * @see app/Http/Controllers/CommentController.php:71
  * @route '/comment/{commentId}'
  */
 export const update = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -51,7 +52,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::update
- * @see app/Http/Controllers/CommentController.php:69
+ * @see app/Http/Controllers/CommentController.php:71
  * @route '/comment/{commentId}'
  */
 update.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -79,7 +80,7 @@ update.url = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::update
- * @see app/Http/Controllers/CommentController.php:69
+ * @see app/Http/Controllers/CommentController.php:71
  * @route '/comment/{commentId}'
  */
 update.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -89,7 +90,7 @@ update.put = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:79
+ * @see app/Http/Controllers/CommentController.php:82
  * @route '/comment/{commentId}'
  */
 export const destroy = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -104,7 +105,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:79
+ * @see app/Http/Controllers/CommentController.php:82
  * @route '/comment/{commentId}'
  */
 destroy.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -132,7 +133,7 @@ destroy.url = (args: { commentId: string | number } | [commentId: string | numbe
 
 /**
 * @see \App\Http\Controllers\CommentController::destroy
- * @see app/Http/Controllers/CommentController.php:79
+ * @see app/Http/Controllers/CommentController.php:82
  * @route '/comment/{commentId}'
  */
 destroy.delete = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -142,7 +143,7 @@ destroy.delete = (args: { commentId: string | number } | [commentId: string | nu
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:63
+ * @see app/Http/Controllers/CommentController.php:64
  * @route '/comment/upvote/{commentId}'
  */
 export const upvote = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -157,7 +158,7 @@ upvote.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:63
+ * @see app/Http/Controllers/CommentController.php:64
  * @route '/comment/upvote/{commentId}'
  */
 upvote.url = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -185,7 +186,7 @@ upvote.url = (args: { commentId: string | number } | [commentId: string | number
 
 /**
 * @see \App\Http\Controllers\CommentController::upvote
- * @see app/Http/Controllers/CommentController.php:63
+ * @see app/Http/Controllers/CommentController.php:64
  * @route '/comment/upvote/{commentId}'
  */
 upvote.put = (args: { commentId: string | number } | [commentId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -194,6 +195,7 @@ upvote.put = (args: { commentId: string | number } | [commentId: string | number
 })
 const comment = {
     anime: Object.assign(anime, anime),
+trigger: Object.assign(trigger, trigger),
 store: Object.assign(store, store),
 update: Object.assign(update, update),
 destroy: Object.assign(destroy, destroy),

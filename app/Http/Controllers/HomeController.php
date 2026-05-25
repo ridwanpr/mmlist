@@ -19,7 +19,7 @@ class HomeController extends Controller
         return Inertia::render('Home/Index', [
             'nowAiring' => $nowAiring,
             'topAnime' => $topAnime,
-            'staffPick' => $staffPick
+            'staffPick' => $staffPick,
         ]);
     }
 }

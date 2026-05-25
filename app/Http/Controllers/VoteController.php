@@ -46,9 +46,9 @@ class VoteController extends Controller
     {
         $user = Auth::user();
         $votes = $this->voteService->getUserVotes($user->id);
-        
-        return Inertia::render("Votes/Index", [
-            'votes' => $votes
+
+        return Inertia::render('Votes/Index', [
+            'votes' => $votes,
         ]);
     }
 }

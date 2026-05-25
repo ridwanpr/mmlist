@@ -20,7 +20,7 @@ return new class extends Migration
         // Migrate existing anime_id data
         DB::table('comments')->update([
             'commentable_type' => 'anime',
-            'commentable_id'   => DB::raw('anime_id'),
+            'commentable_id' => DB::raw('anime_id'),
         ]);
 
         Schema::table('comments', function (Blueprint $table) {

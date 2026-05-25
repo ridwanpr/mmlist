@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * @property int $studio_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio query()
@@ -20,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereStudioId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeStudio whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['anime_id', 'studio_id'])]

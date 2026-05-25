@@ -34,21 +34,21 @@ class AnimeController extends Controller
         }
 
         $aiTriggerContext = $anime->triggerContexts->map(
-            fn($item) => AnimeTriggerContextData::fromModel($item)
+            fn ($item) => AnimeTriggerContextData::fromModel($item)
         );
 
         $topComments = $this->commentService->getTopComments('anime', $anime->id);
-        $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
+        $topCommentsDto = $topComments->map(fn (Comment $item) => CommentData::fromModel($item));
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
 
         return Inertia::render('Anime/Show', [
-            'anime'           => $anime,
-            'triggers'        => $triggers,
+            'anime' => $anime,
+            'triggers' => $triggers,
             'userTriggerVote' => $userTriggerVote ?? null,
-            'userWatchlist'   => $watchlist ?? null,
+            'userWatchlist' => $watchlist ?? null,
             'aiTriggerContext' => $aiTriggerContext ?? null,
-            'topComments'     => $topCommentsDto ?? null,
-            'countComments'   => $countComments,
+            'topComments' => $topCommentsDto ?? null,
+            'countComments' => $countComments,
         ]);
     }
 }

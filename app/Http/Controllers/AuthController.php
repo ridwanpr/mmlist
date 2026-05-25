@@ -71,6 +71,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         Inertia::clearHistory();
+
         return redirect()->route('home.index');
     }
 }

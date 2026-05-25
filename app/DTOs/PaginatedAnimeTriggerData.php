@@ -2,7 +2,6 @@
 
 namespace App\DTOs;
 
-use App\DTOs\AnimeTriggerData;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 

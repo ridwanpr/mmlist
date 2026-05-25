@@ -65,7 +65,7 @@ class WatchlistService
 
         $paginator = $query->paginate($paginateLimit)->withQueryString();
 
-        $paginator->through(fn($item) => WatchlistData::fromModel($item));
+        $paginator->through(fn ($item) => WatchlistData::fromModel($item));
 
         return PaginatedWatchlistData::fromPaginator($paginator);
     }

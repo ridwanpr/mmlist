@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -18,17 +19,18 @@ use Illuminate\Support\Str;
  * @property string $body
  * @property int $upvotes
  * @property int $downvotes
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int|null $parent_comment_id
  * @property-read Model|\Eloquent $commentable
  * @property-read string $body_html
  * @property-read Comment|null $parent
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Comment> $replies
+ * @property-read Collection<int, Comment> $replies
  * @property-read int|null $replies_count
- * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CommentVote> $votes
+ * @property-read User $user
+ * @property-read Collection<int, CommentVote> $votes
  * @property-read int|null $votes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
@@ -43,6 +45,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Comment extends Model
@@ -74,7 +77,7 @@ class Comment extends Model
         $body = preg_replace('/\|\|([^|]+?)\s+\|\|\s*/', '||$1|| ', $body);
 
         $html = Str::markdown($body, [
-            'html_input'         => 'strip',
+            'html_input' => 'strip',
             'allow_unsafe_links' => false,
         ]);
 

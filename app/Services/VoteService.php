@@ -29,7 +29,7 @@ class VoteService
             ->where('anime_id', $animeId)
             ->get();
 
-        return $data->map(fn($item) => AnimeTriggerData::fromModel($item));
+        return $data->map(fn ($item) => AnimeTriggerData::fromModel($item));
     }
 
     public function getUserVotes(int $userId)
@@ -41,7 +41,8 @@ class VoteService
             ->onEachSide(1)
             ->withQueryString();
 
-        $transformed = $paginatedData->through(fn(AnimeTrigger $item): AnimeTriggerData => AnimeTriggerData::fromModel($item));
+        $transformed = $paginatedData->through(fn (AnimeTrigger $item): AnimeTriggerData => AnimeTriggerData::fromModel($item));
+
         return PaginatedAnimeTriggerData::fromPaginator($transformed);
     }
 }

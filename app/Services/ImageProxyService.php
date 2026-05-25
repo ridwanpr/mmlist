@@ -99,7 +99,7 @@ class ImageProxyService
             'Expires' => gmdate(
                 'D, d M Y H:i:s',
                 time() + 31536000
-            ) . ' GMT',
+            ).' GMT',
             'CDN-Cache-Control' => 'public, max-age=31536000',
             'X-Content-Type-Options' => 'nosniff',
         ];

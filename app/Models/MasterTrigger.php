@@ -15,8 +15,9 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, \App\Models\TriggerContent> $triggerContents
+ * @property-read Collection<int, TriggerContent> $triggerContents
  * @property-read int|null $trigger_contents_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger query()
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger whereImportance($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MasterTrigger whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'description', 'importance'])]

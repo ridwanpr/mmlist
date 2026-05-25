@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Log;
 class GeminiService
 {
     public const FALLBACK_ADVISORY = 'Insufficient data to provide a reliable advisory.';
-    public const FALLBACK_CONTEXT  = 'No significant content found for this trigger.';
+
+    public const FALLBACK_CONTEXT = 'No significant content found for this trigger.';
 
     private string $apiKey;
 
@@ -71,10 +72,10 @@ class GeminiService
             ? " Official Age Rating: {$rating}."
             : " Official Age Rating: Unknown — calibrate tone based on the anime's known content and target demographic.";
 
-        $triggerListStr = implode(', ', array_map(fn($t) => "'{$t}'", $availableTriggers));
+        $triggerListStr = implode(', ', array_map(fn ($t) => "'{$t}'", $availableTriggers));
 
-        $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n" .
-            "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n" .
+        $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n".
+            "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n".
             "Allowed Trigger Names: [{$triggerListStr}]";
 
         $response = null;
@@ -123,12 +124,12 @@ class GeminiService
                 if ($fallbackResponse->successful()) {
                     return $this->parseJsonOutput($this->extractText($fallbackResponse->json()));
                 }
-                Log::error("Gemma fallback failed for {$title}: " . $fallbackResponse->body());
+                Log::error("Gemma fallback failed for {$title}: ".$fallbackResponse->body());
             } catch (ConnectionException $e) {
                 Log::error("Gemma fallback also timed out for {$title}.");
             }
         } else {
-            Log::error("Gemini API failed for {$title}: " . $response->body());
+            Log::error("Gemini API failed for {$title}: ".$response->body());
         }
 
         throw new Exception('Failed to generate advisory after fallback.');
@@ -228,13 +229,13 @@ class GeminiService
         $decoded = json_decode(trim($cleaned), true);
 
         if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
-            Log::error('Failed to decode valid JSON content structural layout. Raw Output: ' . $rawText);
+            Log::error('Failed to decode valid JSON content structural layout. Raw Output: '.$rawText);
 
             return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
 
         return [
-            'ai_advisory'     => $decoded['ai_advisory'],
+            'ai_advisory' => $decoded['ai_advisory'],
             'matched_triggers' => $decoded['matched_triggers'] ?? [],
         ];
     }

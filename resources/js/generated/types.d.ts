@@ -167,6 +167,7 @@ declare namespace App {
       readonly name: string;
       readonly importance: number;
       readonly description: string | null;
+      readonly slug: string;
       readonly created_at: string | null;
       readonly updated_at: string | null;
       readonly animeTriggers: App.DTOs.AnimeTriggerData[];

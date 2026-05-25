@@ -1,13 +1,10 @@
 import { Link, useForm, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { HiMiniSparkles } from "react-icons/hi2";
-import {
-  LuCheck,
-  LuChevronDown,
-  LuX,
-} from "react-icons/lu";
+import { LuCheck, LuChevronDown, LuX } from "react-icons/lu";
 import VoteGroup from "./VoteGroup";
 import AuthGate from "./AuthGate";
+import { getTriggerComment } from "../../../actions/App/Http/Controllers/TriggerCommentController";
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
@@ -102,7 +99,10 @@ const TriggerItem = ({
                 {triggerContent.name}
               </span>
               <Link
-                href="#"
+                href={getTriggerComment.url({
+                  animeslug: animeSlug,
+                  triggerContentSlug: triggerContent.slug,
+                })}
                 prefetch
                 className="text-primary shrink-0 text-[11px] font-medium hover:underline"
                 onClick={(e) => e.stopPropagation()}
@@ -214,7 +214,10 @@ const TriggerItem = ({
                 {triggerContent?.description}
               </p>
               <Link
-                href="#"
+                href={getTriggerComment.url({
+                  animeslug: animeSlug,
+                  triggerContentSlug: triggerContent.slug,
+                })}
                 prefetch
                 className="text-primary text-xs font-medium hover:underline"
                 onClick={(e) => e.stopPropagation()}

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -15,8 +16,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property string|null $note
  * @property string|null $started_at
  * @property string|null $completed_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist query()
@@ -31,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['user_id', 'anime_id', 'status', 'progress', 'score', 'note', 'started_at', 'completed_at'])]

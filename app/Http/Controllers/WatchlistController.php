@@ -7,8 +7,8 @@ use App\Http\Requests\StoreWatchlistRequest;
 use App\Http\Requests\UpdateWatchlistRequest;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -55,9 +55,9 @@ class WatchlistController extends Controller
         return Inertia::render(
             'Watchlist/Index',
             [
-                "watchlists" => $watchlists,
-                "status" => $status,
-                "tabCounts" => $tabCounts
+                'watchlists' => $watchlists,
+                'status' => $status,
+                'tabCounts' => $tabCounts,
             ]
         );
     }
@@ -71,6 +71,7 @@ class WatchlistController extends Controller
         );
 
         Inertia::flash('success', 'Update data success');
+
         return back();
     }
 }

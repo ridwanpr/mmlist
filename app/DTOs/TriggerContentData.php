@@ -15,6 +15,7 @@ readonly class TriggerContentData
         public string $name,
         public int $importance,
         public ?string $description,
+        public string $slug,
         public ?CarbonInterface $created_at,
         public ?CarbonInterface $updated_at,
         /** @var AnimeTriggerData[] */
@@ -72,6 +73,7 @@ readonly class TriggerContentData
             updated_at: $data->updated_at,
             animeTriggers: $animeTriggers,
             stats: $stats,
+            slug: $data->slug
         );
     }
 }
