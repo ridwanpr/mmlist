@@ -18,14 +18,19 @@ const DesktopNav = () => {
   return (
     <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4">
-        {/* Logo */}
-        <Link
-          href={homeIndex.url()}
-          prefetch
-          className="text-primary font-serif text-2xl font-bold transition-opacity hover:opacity-90"
-        >
-          Mamorulist
-        </Link>
+        {/* Logo with Beta Badge */}
+        <div className="relative flex items-center">
+          <Link
+            href={homeIndex.url()}
+            prefetch
+            className="text-primary font-serif text-2xl font-bold transition-opacity hover:opacity-90"
+          >
+            Mamorulist
+          </Link>
+          <span className="bg-primary/10 text-primary border-primary/20 ml-1.5 self-start rounded border px-1 py-0.5 text-[10px] font-semibold tracking-wider uppercase">
+            Beta
+          </span>
+        </div>
 
         {/* Navigation Links */}
         <nav className="h-full">

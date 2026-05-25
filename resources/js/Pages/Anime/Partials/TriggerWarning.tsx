@@ -30,7 +30,7 @@ const TriggerWarning = ({
       <div className="mt-4">
         <h1 className="text-text font-semibold">Trigger Warning</h1>
         <p className="text-text-muted text-sm">
-          Click each trigger to see detail and vote.
+          Click each trigger to see detail and vote. Might contain spoiler.
         </p>
       </div>
 

@@ -1,7 +1,6 @@
 import React from "react";
 
 import AnimeList from "./Partials/AnimeList";
-import CTA from "./Partials/CTA";
 import Hero from "./Partials/Hero";
 import FrontLayout from "../../Layouts/FrontLayout";
 import AppHead from "../../Components/AppHead";
@@ -25,7 +24,6 @@ const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <RecentComment />
       <RecentVotes />
-      <CTA />
     </>
   );
 };

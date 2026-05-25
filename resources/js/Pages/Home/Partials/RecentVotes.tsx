@@ -1,6 +1,6 @@
 const RecentVotes = () => {
   return (
-    <div>
+    <div className="mb-8">
       <div className="mx-auto max-w-7xl p-4">
         <h2 className="text-text font-serif text-lg font-bold tracking-tight">
           Recent Votes
