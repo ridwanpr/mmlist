@@ -108,7 +108,7 @@ const Hero = ({ staffPick }: HeroProps) => {
             {covers.map((cover) => (
               <div
                 key={cover.title}
-                className={`absolute overflow-hidden rounded-[26px] shadow-[0_24px_60px_rgba(0,0,0,0.22)] ring-1 ring-black/5 transition duration-500 hover:z-50 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(0,0,0,0.28)] ${cover.className}`}
+                className={`absolute overflow-hidden rounded-[26px] shadow-[0_24px_60px_rgba(0,0,0,0.22)] ring-1 ring-black/5 ${cover.className}`}
               >
                 <img
                   src={cover.image}
