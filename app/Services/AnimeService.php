@@ -8,6 +8,7 @@ use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\MasterTrigger;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 use function Illuminate\Support\now;
 
@@ -22,34 +23,39 @@ class AnimeService
         array $sort,
         int $paginateLimit = 15
     ): PaginatedAnimeData {
+        $user = Auth::user();
+
         $query = Anime::query()
-            ->where('animes.rating', '!=', 'Rx - Hentai');
-
-        $query->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
-            $rawTerm = trim($filter['query']);
-            $booleanTerm = $this->buildBooleanSearch($rawTerm);
-
-            if ($booleanTerm !== null) {
-                $q->whereRaw(
-                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
-                    [$booleanTerm]
-                );
-
-                $q->select('animes.id')
-                    ->selectRaw(
-                        'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE) AS relevance',
-                        [$booleanTerm]
-                    )
-                    ->orderByDesc('relevance');
-            } else {
-                $q->where(function ($subQuery) use ($rawTerm) {
-                    $subQuery->where('title', 'like', '%'.$rawTerm.'%')
-                        ->orWhere('title_english', 'like', '%'.$rawTerm.'%')
-                        ->orWhere('title_japanese', 'like', '%'.$rawTerm.'%')
-                        ->orWhere('title_synonyms_text', 'like', '%'.$rawTerm.'%');
+            ->when($user?->show_nsfw !== true, function ($q) {
+                $q->where(function ($subQuery) {
+                    $subQuery->where('animes.rating', '!=', 'Rx - Hentai')
+                        ->orWhereNull('animes.rating');
                 });
-            }
-        });
+            })->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
+                $rawTerm = trim($filter['query']);
+                $booleanTerm = $this->buildBooleanSearch($rawTerm);
+
+                if ($booleanTerm !== null) {
+                    $q->whereRaw(
+                        'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
+                        [$booleanTerm]
+                    );
+
+                    $q->select('animes.id')
+                        ->selectRaw(
+                            'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE) AS relevance',
+                            [$booleanTerm]
+                        )
+                        ->orderByDesc('relevance');
+                } else {
+                    $q->where(function ($subQuery) use ($rawTerm) {
+                        $subQuery->where('title', 'like', '%' . $rawTerm . '%')
+                            ->orWhere('title_english', 'like', '%' . $rawTerm . '%')
+                            ->orWhere('title_japanese', 'like', '%' . $rawTerm . '%')
+                            ->orWhere('title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                    });
+                }
+            });
 
         // Force the base query to only select IDs if the search didn't already
         if (empty($filter['query']) || $this->buildBooleanSearch(trim($filter['query'])) === null) {
@@ -94,7 +100,7 @@ class AnimeService
 
         $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-            $q->orderBy('animes.'.$sort['sort'], $direction);
+            $q->orderBy('animes.' . $sort['sort'], $direction);
         }, function ($q) {
             $q->orderByRaw("animes.type = 'TV' DESC")
                 ->orderBy('animes.year', 'desc')
@@ -118,11 +124,11 @@ class AnimeService
                 ->keyBy('id'); // Index by ID for easy lookup
 
             // Replace the bare IDs in the paginator with the fully loaded models, preserving the sorted order
-            $sortedModels = collect($ids)->map(fn ($id) => $models[$id]);
+            $sortedModels = collect($ids)->map(fn($id) => $models[$id]);
             $paginator->setCollection($sortedModels);
         }
 
-        $transformed = $paginator->through(fn (Anime $item): AnimeData => AnimeData::fromModel($item));
+        $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
 
         return PaginatedAnimeData::fromPaginator($transformed);
     }
@@ -150,7 +156,7 @@ class AnimeService
             ->get()
             ->keyBy('id');
 
-        return $topIds->map(fn ($id) => AnimeData::fromModel($animes[$id]))->values()->all();
+        return $topIds->map(fn($id) => AnimeData::fromModel($animes[$id]))->values()->all();
     }
 
     /**
@@ -179,7 +185,7 @@ class AnimeService
             ->get()
             ->keyBy('id');
 
-        return $animes->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
+        return $animes->map(fn($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     public function getAnimeInfo(string $slug): Anime
@@ -203,7 +209,7 @@ class AnimeService
         ])
             ->orderBy('importance', 'desc')->get();
 
-        return $triggersFromDb->map(fn (MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+        return $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
     }
 
     /**
@@ -283,6 +289,6 @@ class AnimeService
             return null;
         }
 
-        return implode(' ', array_map(static fn ($token) => '+'.$token.'*', $tokens));
+        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
     }
 }
