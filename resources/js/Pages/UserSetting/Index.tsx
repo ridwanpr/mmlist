@@ -3,6 +3,7 @@ import DashContainer from "../UserDash/Partials/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
 import { Form, usePage } from "@inertiajs/react";
 import { update } from "../../actions/App/Http/Controllers/UserProfileController";
+import ThemeToggle from "../../Components/UI/ThemeToggle";
 
 const UserSetting = () => {
   const { auth } = usePage().props;
@@ -20,6 +21,19 @@ const UserSetting = () => {
           </p>
         </div>
 
+        {/* Mobile-Only Theme Toggle Section */}
+        <div className="bg-surface border-border mb-6 flex items-center justify-between rounded-lg border p-4 lg:hidden">
+          <div className="flex flex-col gap-0.5">
+            <h2 className="text-text font-serif text-sm font-medium">
+              Interface Theme
+            </h2>
+            <p className="text-text-muted text-xs">
+              Toggle between light and dark theme.
+            </p>
+          </div>
+          <ThemeToggle />
+        </div>
+
         {/* Main Settings Form Container */}
         <div className="bg-surface border-border flex flex-col gap-8 rounded-lg border p-6">
           <Form
@@ -29,6 +43,7 @@ const UserSetting = () => {
               preserveScroll: true,
             }}
           >
+            {/* Destructured errors directly from the template context */}
             {({ errors }) => (
               <>
                 {/* Profile Information */}
@@ -55,7 +70,7 @@ const UserSetting = () => {
                         id="name"
                         name="name"
                         defaultValue={auth.user!.name}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Your display name"
                       />
                       {errors.name && (
@@ -77,7 +92,7 @@ const UserSetting = () => {
                         id="username"
                         name="username"
                         defaultValue={auth.user!.username}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Username"
                       />
                       {errors.username && (
@@ -98,7 +113,7 @@ const UserSetting = () => {
                         type="type"
                         id="email"
                         name="email"
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Your active email address"
                       />
                       {errors.email && (
@@ -120,7 +135,7 @@ const UserSetting = () => {
                         id="birth_date"
                         name="birth_date"
                         defaultValue={auth.user!.birth_date ?? ""}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                       />
                       {errors.birth_date && (
                         <span className="text-accent-red mt-1 block text-xs">
@@ -152,7 +167,7 @@ const UserSetting = () => {
                           id="show_nsfw"
                           name="show_nsfw"
                           defaultChecked={auth.user!.show_nsfw}
-                          className="border-border text-primary focus:ring-accent-gold bg-background h-4 w-4 rounded-sm transition-colors"
+                          className="border-border text-primary focus:ring-accent-gold bg-surface-alt h-4 w-4 rounded-sm transition-colors"
                         />
                       </div>
                       <div className="flex flex-col gap-0.5">
@@ -201,7 +216,7 @@ const UserSetting = () => {
                         type="password"
                         id="current_password"
                         name="current_password"
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Confirm your old password"
                       />
                       {errors.current_password && (
@@ -223,7 +238,7 @@ const UserSetting = () => {
                           type="password"
                           id="password"
                           name="password"
-                          className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                          className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                           placeholder="Minimum 6 characters"
                         />
                         {errors.password && (
@@ -244,7 +259,7 @@ const UserSetting = () => {
                           type="password"
                           id="password_confirmation"
                           name="password_confirmation"
-                          className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                          className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                           placeholder="Repeat new password"
                         />
                       </div>
@@ -263,6 +278,26 @@ const UserSetting = () => {
                 </div>
               </>
             )}
+          </Form>
+        </div>
+
+        {/* Mobile-Only Logout Section */}
+        <div className="bg-surface border-border mt-6 flex items-center justify-between rounded-lg border p-4 lg:hidden">
+          <div className="flex flex-col gap-0.5">
+            <h2 className="text-text font-serif text-sm font-medium">
+              Account Session
+            </h2>
+            <p className="text-text-muted text-xs">
+              Sign out of your active session on this device.
+            </p>
+          </div>
+          <Form action="/logout" method="post">
+            <button
+              type="submit"
+              className="text-accent-red hover:bg-accent-red/10 border-border bg-surface-alt inline-flex items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium tracking-wide transition-colors hover:cursor-pointer"
+            >
+              Log Out
+            </button>
           </Form>
         </div>
       </div>

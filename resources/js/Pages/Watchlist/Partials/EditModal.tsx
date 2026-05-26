@@ -107,7 +107,7 @@ const EditModal = ({
                     onChange={(e) => setData("status", e.target.value)}
                     name="status"
                     id="status"
-                    className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                    className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   >
                     {statusSelectItem.map((item) => (
                       <option key={item.value} value={item.value}>
@@ -132,7 +132,7 @@ const EditModal = ({
                       onChange={(e) =>
                         setData("progress", Number(e.target.value))
                       }
-                      className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 pr-28 text-sm outline-hidden transition-colors"
+                      className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 pr-28 text-sm outline-hidden transition-colors"
                     />
                     <div className="absolute right-3 flex items-center gap-2">
                       {editWatchlist?.episodes && (
@@ -161,7 +161,7 @@ const EditModal = ({
                     onChange={(e) => setData("score", Number(e.target.value))}
                     name="score"
                     id="score"
-                    className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                    className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   >
                     <option value="">Select</option>
                     {scoreSelectItem.map((item) => (
@@ -187,7 +187,7 @@ const EditModal = ({
                           : ""
                       }
                       onChange={(e) => setData("started_at", e.target.value)}
-                      className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                      className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -208,7 +208,7 @@ const EditModal = ({
                           : ""
                       }
                       onChange={(e) => setData("completed_at", e.target.value)}
-                      className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                      className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     />
                   </div>
                 </div>
@@ -223,7 +223,7 @@ const EditModal = ({
                     value={data.note ?? ""}
                     id="note"
                     onChange={(e) => setData("note", e.target.value)}
-                    className="border-border bg-background text-text focus:border-accent-gold w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                    className="border-border bg-surface-alt text-text focus:border-accent-gold w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   />
                 </div>
               </div>

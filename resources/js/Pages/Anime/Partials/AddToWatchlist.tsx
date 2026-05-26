@@ -120,7 +120,7 @@ export const AddToWatchlist = ({
                         min={0}
                         value={watchlistFormData.progress}
                         onChange={handleWatchlistFormChange}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 pr-28 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 pr-28 text-sm outline-hidden transition-colors"
                       />
                       <div className="absolute right-3 flex items-center gap-2">
                         {anime.episodes && (
@@ -162,7 +162,7 @@ export const AddToWatchlist = ({
                         id="started_at"
                         value={watchlistFormData.started_at}
                         onChange={handleWatchlistFormChange}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -178,7 +178,7 @@ export const AddToWatchlist = ({
                         id="completed_at"
                         value={watchlistFormData.completed_at}
                         onChange={handleWatchlistFormChange}
-                        className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                       />
                     </div>
                   </div>
@@ -193,7 +193,7 @@ export const AddToWatchlist = ({
                       name="note"
                       id="note"
                       onChange={handleWatchlistFormChange}
-                      className="border-border bg-background text-text focus:border-accent-gold w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                      className="border-border bg-surface-alt text-text focus:border-accent-gold w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     />
                   </div>
                 </div>

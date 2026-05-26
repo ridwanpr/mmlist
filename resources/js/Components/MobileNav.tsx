@@ -2,6 +2,10 @@ import { Link, usePage } from "@inertiajs/react";
 import { LuBookmark, LuCog, LuHouse, LuSearch, LuUser } from "react-icons/lu";
 import type { IconType } from "react-icons";
 import { index as watchlistIndex } from "../actions/App/Http/Controllers/WatchlistController";
+import {
+  index,
+  settingIndex,
+} from "../actions/App/Http/Controllers/UserDashboardController";
 
 interface NavItemProps {
   href: string;
@@ -71,26 +75,27 @@ const MobileNav = () => {
           <NavItem
             href={routes["browse.index"]}
             active={
-              component.startsWith("Browse/") || component.startsWith("Anime/")
+              component.startsWith("Browse/") ||
+              component.startsWith("Anime/") ||
+              component.startsWith("AnimeComment/") ||
+              component.startsWith("TriggerComment/")
             }
             icon={LuSearch}
             label="Browse"
           />
           <NavItem
-            href={watchlistIndex.url()}
-            active={component.startsWith("Watchlist/")}
-            icon={LuBookmark}
-            label="Watchlist"
-          />
-          <NavItem
-            href="#"
-            active={component.startsWith("Profile/")}
+            href={index.url()}
+            active={
+              component.startsWith("UserDash/") ||
+              component.startsWith("Watchlist/") ||
+              component.startsWith("Votes/")
+            }
             icon={LuUser}
             label="Profile"
           />
           <NavItem
-            href="#"
-            active={component.startsWith("Settings/")}
+            href={settingIndex.url()}
+            active={component.startsWith("UserSetting/")}
             icon={LuCog}
             label="Settings"
           />

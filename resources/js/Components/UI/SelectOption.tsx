@@ -32,7 +32,7 @@ export const SelectOption = ({
         name={name}
         id={id}
         value={value}
-        className="border-border bg-background text-text focus:border-accent-gold w-full cursor-pointer rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+        className="border-border bg-surface-alt text-text focus:border-accent-gold w-full cursor-pointer rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
       >
         <option value="">Select</option>
         {items.map((item) => (
