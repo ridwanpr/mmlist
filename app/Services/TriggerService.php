@@ -14,6 +14,12 @@ class TriggerService
             ->with('animeTriggers')->firstOrFail();
     }
 
+    public function findTriggerContentById(int $id)
+    {
+        return TriggerContent::where('id', $id)
+            ->with('animeTriggers')->firstOrFail();
+    }
+
     public function getTriggerStat(int $animeId, int $triggerContentId): AnimeTriggerStatData
     {
         $stats = AnimeTrigger::where('anime_id', $animeId)

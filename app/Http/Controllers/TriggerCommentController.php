@@ -7,6 +7,9 @@ use App\DTOs\TriggerContentData;
 use App\Services\AnimeService;
 use App\Services\CommentService;
 use App\Services\TriggerService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class TriggerCommentController extends Controller
@@ -21,12 +24,31 @@ class TriggerCommentController extends Controller
     {
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $triggerContent = $this->triggerService->findTriggerContentBySlug($triggerContentSlug);
-        $triggerStatData = $this->triggerService->getTriggerStat($anime->id, $triggerContent->id);
 
         return Inertia::render('TriggerComment/Index', [
             'anime' => AnimeData::fromModel($anime),
             'triggerContent' => TriggerContentData::fromModel($triggerContent),
-            'triggerStatData' => $triggerStatData
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'commentable_type' => ['required', Rule::in(['trigger_content'])],
+            'commentable_id' => ['required'],
+            'body' => ['required']
+        ]);
+
+        $user = Auth::user();
+
+        $this->commentService->storeComment(
+            userId: $user->id,
+            commentableType: $validated['commentable_type'],
+            commentableId: $validated['commentable_id'],
+            data: $validated
+        );
+
+        Inertia::flash('success', 'Comment submitted');
+        return back();
     }
 }

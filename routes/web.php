@@ -59,4 +59,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::put('comment/{commentId}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('comment/{commentId}', [CommentController::class, 'destroy'])->name('comment.destroy');
     Route::put('comment/upvote/{commentId}', [CommentController::class, 'upvote'])->name('comment.upvote');
+
+    Route::post('trigger-comment', [TriggerCommentController::class, 'store'])->name('trigger-comment.store');
 });

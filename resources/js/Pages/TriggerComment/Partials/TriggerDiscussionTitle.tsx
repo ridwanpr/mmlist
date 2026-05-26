@@ -1,11 +1,15 @@
 import { Link } from "@inertiajs/react";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
-type TriggerDiscussionProps = {
+type TriggerDiscussionTitleProps = {
   anime: App.DTOs.AnimeData;
+  triggerContent: App.DTOs.TriggerContentData;
 };
 
-const TriggerDiscussion = ({ anime }: TriggerDiscussionProps) => {
+const TriggerDiscussionTitle = ({
+  anime,
+  triggerContent,
+}: TriggerDiscussionTitleProps) => {
   return (
     <>
       <section id="discussion" className="mt-4">
@@ -15,9 +19,10 @@ const TriggerDiscussion = ({ anime }: TriggerDiscussionProps) => {
         >
           {anime.title_english || anime.title} - Trigger Discussion
         </Link>
+        <p className="text-text/80 text-sm">{triggerContent.description}</p>
       </section>
     </>
   );
 };
 
-export default TriggerDiscussion;
+export default TriggerDiscussionTitle;
