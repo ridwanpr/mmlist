@@ -44,6 +44,7 @@ const UserSetting = () => {
                     name="name"
                     className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     placeholder="Your display name"
+                    required
                   />
                 </div>
 
@@ -60,6 +61,7 @@ const UserSetting = () => {
                     name="username"
                     className="border-border bg-background text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     placeholder="Username"
+                    required
                   />
                 </div>
 

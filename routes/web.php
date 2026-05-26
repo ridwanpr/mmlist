@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\TriggerCommentController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
@@ -63,4 +64,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::post('trigger-comment', [TriggerCommentController::class, 'store'])->name('trigger-comment.store');
 
     Route::get('settings', [UserDashboardController::class, 'settingIndex'])->name('user-setting.index');
+
+    Route::put('profile/{username}', [UserProfileController::class, 'update'])->name('profile.update');
 });
