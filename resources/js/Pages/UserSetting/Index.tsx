@@ -51,7 +51,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                       Profile Information
                     </h2>
                     <p className="text-text-muted text-xs">
-                      Update your public display identity and email address.
+                      Update your account information.
                     </p>
                   </div>
 
@@ -152,10 +152,6 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                     <h2 className="text-text font-serif text-base font-medium">
                       Content Preferences
                     </h2>
-                    <p className="text-text-muted text-xs">
-                      Manage how explicit media and community tags display for
-                      your account.
-                    </p>
                   </div>
 
                   <div className="bg-surface-alt/40 border-border rounded-lg border p-4">
