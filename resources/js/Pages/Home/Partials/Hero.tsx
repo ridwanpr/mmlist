@@ -53,8 +53,8 @@ const Hero = ({ staffPick }: HeroProps) => {
             </h1>
 
             <p className="text-text mt-3 max-w-lg text-sm leading-7 sm:text-[15px]">
-              Search anime and check community submitted content warnings before
-              watching.
+              Check content warnings before you watch and track your personal
+              library.
             </p>
 
             <form onSubmit={(e) => handleSearch(e)} className="mt-5 max-w-xl">
@@ -66,7 +66,7 @@ const Hero = ({ staffPick }: HeroProps) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search anime title..."
-                  className="text-text h-12 w-full bg-surface-alt pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
+                  className="text-text bg-surface-alt h-12 w-full pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
                 />
 
                 <button
