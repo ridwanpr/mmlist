@@ -72,7 +72,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'show_nsfw' => 'boolean',
             'is_banned' => 'boolean',
-            'birth_date' => 'date',
+            'birth_date' => 'date:Y-m-d'
         ];
     }
 

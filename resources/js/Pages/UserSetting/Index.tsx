@@ -5,9 +5,7 @@ import { Form, usePage } from "@inertiajs/react";
 import { update } from "../../actions/App/Http/Controllers/UserProfileController";
 import ThemeToggle from "../../Components/UI/ThemeToggle";
 
-const UserSetting = () => {
-  const { auth } = usePage().props;
-
+const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
   return (
     <DashContainer>
       <div className="mb-6 p-4 lg:p-0">
@@ -37,7 +35,7 @@ const UserSetting = () => {
         {/* Main Settings Form Container */}
         <div className="bg-surface border-border flex flex-col gap-8 rounded-lg border p-6">
           <Form
-            action={update.url({ username: auth.user!.username })}
+            action={update.url({ username: user.username })}
             method="put"
             options={{
               preserveScroll: true,
@@ -69,7 +67,7 @@ const UserSetting = () => {
                         type="text"
                         id="name"
                         name="name"
-                        defaultValue={auth.user!.name}
+                        defaultValue={user.name}
                         className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Your display name"
                       />
@@ -91,7 +89,7 @@ const UserSetting = () => {
                         type="text"
                         id="username"
                         name="username"
-                        defaultValue={auth.user!.username}
+                        defaultValue={user.username}
                         className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Username"
                       />
@@ -110,9 +108,10 @@ const UserSetting = () => {
                         Email Address
                       </label>
                       <input
-                        type="type"
+                        type="email"
                         id="email"
                         name="email"
+                        defaultValue={user.email ?? ""}
                         className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         placeholder="Your active email address"
                       />
@@ -134,7 +133,7 @@ const UserSetting = () => {
                         type="date"
                         id="birth_date"
                         name="birth_date"
-                        defaultValue={auth.user!.birth_date ?? ""}
+                        defaultValue={user.birth_date ?? ""}
                         className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                       />
                       {errors.birth_date && (
@@ -162,11 +161,14 @@ const UserSetting = () => {
                   <div className="bg-surface-alt/40 border-border rounded-lg border p-4">
                     <div className="flex items-start gap-3">
                       <div className="flex h-5 items-center">
+                        <input type="hidden" name="show_nsfw" value="0" />
+
                         <input
                           type="checkbox"
                           id="show_nsfw"
                           name="show_nsfw"
-                          defaultChecked={auth.user!.show_nsfw}
+                          value="1"
+                          defaultChecked={user.show_nsfw ?? false}
                           className="border-border text-primary focus:ring-accent-gold bg-surface-alt h-4 w-4 rounded-sm transition-colors"
                         />
                       </div>

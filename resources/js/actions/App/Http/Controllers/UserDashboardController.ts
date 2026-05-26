@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\UserDashboardController::index
- * @see app/Http/Controllers/UserDashboardController.php:10
+ * @see app/Http/Controllers/UserDashboardController.php:14
  * @route '/dash'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::index
- * @see app/Http/Controllers/UserDashboardController.php:10
+ * @see app/Http/Controllers/UserDashboardController.php:14
  * @route '/dash'
  */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::index
- * @see app/Http/Controllers/UserDashboardController.php:10
+ * @see app/Http/Controllers/UserDashboardController.php:14
  * @route '/dash'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\UserDashboardController::index
- * @see app/Http/Controllers/UserDashboardController.php:10
+ * @see app/Http/Controllers/UserDashboardController.php:14
  * @route '/dash'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:15
+ * @see app/Http/Controllers/UserDashboardController.php:19
  * @route '/settings'
  */
 export const settingIndex = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ settingIndex.definition = {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:15
+ * @see app/Http/Controllers/UserDashboardController.php:19
  * @route '/settings'
  */
 settingIndex.url = (options?: RouteQueryOptions) => {
@@ -68,7 +68,7 @@ settingIndex.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:15
+ * @see app/Http/Controllers/UserDashboardController.php:19
  * @route '/settings'
  */
 settingIndex.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -77,7 +77,7 @@ settingIndex.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:15
+ * @see app/Http/Controllers/UserDashboardController.php:19
  * @route '/settings'
  */
 settingIndex.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
