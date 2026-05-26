@@ -16,6 +16,7 @@ class ImageProxyService
         $cachePath = "image_proxy/{$hash}.bin";
         $metaPath = "image_proxy/{$hash}.meta";
 
+        // Serve from cache immediately if both files are intact
         if ($disk->exists($cachePath) && $disk->exists($metaPath)) {
             $contentType = $disk->get($metaPath);
 
@@ -32,7 +33,6 @@ class ImageProxyService
             );
         }
 
-        // Cache Miss: Decode and validate the URL
         $url = ImageProxy::decode($hash);
 
         if (! $url) {
@@ -44,13 +44,12 @@ class ImageProxyService
 
         $this->assertAllowedUrl($url, $hash);
 
-        // Fetch the remote image
         $response = Http::withHeaders([
             'Accept' => 'image/*',
         ])
             ->timeout(config('image-proxy.timeout'))
             ->withOptions([
-                'stream' => true,
+                'stream' => true, // Keep memory low by processing chunks reactively
             ])
             ->get($url);
 
@@ -86,18 +85,19 @@ class ImageProxyService
             abort(413);
         }
 
-        // Simultaneous Write & Output (TEE Streaming)
         return response()->stream(
             function () use ($disk, $cachePath, $metaPath, $response, $contentType) {
-                $disk->ensureDirectoryExists('image_proxy');
+                $disk->makeDirectory('image_proxy');
 
                 $tmpPath = "{$cachePath}.tmp";
                 $absoluteTmpPath = $disk->path($tmpPath);
-                $localFile = fopen($absoluteTmpPath, 'wb');
+
+                // Suppress errors to catch directory or write blocks cleanly without throwing 500s
+                $localFile = @fopen($absoluteTmpPath, 'wb');
                 $remoteBody = $response->toPsrResponse()->getBody();
 
                 if (! $localFile) {
-                    // Fallback to direct streaming without caching if local file cannot be opened
+                    // Fail open: pass the image through even if storage isn't writable
                     while (! $remoteBody->eof()) {
                         echo $remoteBody->read(8192);
                     }
@@ -110,23 +110,26 @@ class ImageProxyService
                         fwrite($localFile, $chunk);
                         echo $chunk;
 
-                        // Terminate early if the frontend user closes the connection
+                        // Explicitly flush buffers so Valet/Herd web servers pass chunks to the browser immediately
+                        if (ob_get_level() > 0) {
+                            ob_flush();
+                        }
+                        flush();
+
                         if (connection_aborted()) {
                             break;
                         }
                     }
 
-                    // The download is only successful if we reached the true end of the remote stream
                     $isComplete = $remoteBody->eof();
                 } finally {
                     fclose($localFile);
 
+                    // Only save to production path if the file finished transferring intact
                     if (isset($isComplete) && $isComplete) {
-                        // Atomic switch: convert temporary file to production cache
                         $disk->move($tmpPath, $cachePath);
                         $disk->put($metaPath, $contentType);
                     } else {
-                        // Clean up partial files from failed or aborted transfers
                         $disk->delete($tmpPath);
                     }
                 }
