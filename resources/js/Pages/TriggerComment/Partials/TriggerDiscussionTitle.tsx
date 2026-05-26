@@ -1,6 +1,5 @@
 import { Link } from "@inertiajs/react";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
-import { LuDot } from "react-icons/lu";
 
 type TriggerDiscussionTitleProps = {
   anime: App.DTOs.AnimeData;
