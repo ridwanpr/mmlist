@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\UserProfileController::update
- * @see app/Http/Controllers/UserProfileController.php:12
+ * @see app/Http/Controllers/UserProfileController.php:14
  * @route '/profile/{username}'
  */
 export const update = (args: { username: string | number } | [username: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -16,7 +16,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\UserProfileController::update
- * @see app/Http/Controllers/UserProfileController.php:12
+ * @see app/Http/Controllers/UserProfileController.php:14
  * @route '/profile/{username}'
  */
 update.url = (args: { username: string | number } | [username: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -44,7 +44,7 @@ update.url = (args: { username: string | number } | [username: string | number ]
 
 /**
 * @see \App\Http\Controllers\UserProfileController::update
- * @see app/Http/Controllers/UserProfileController.php:12
+ * @see app/Http/Controllers/UserProfileController.php:14
  * @route '/profile/{username}'
  */
 update.put = (args: { username: string | number } | [username: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({

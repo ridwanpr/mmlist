@@ -12,7 +12,6 @@ use Illuminate\Support\Carbon;
  * @property int $producer_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer query()
@@ -21,7 +20,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereProducerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeProducer whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 #[Fillable(['anime_id', 'producer_id'])]

@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'disposable_email' => 'Temporary or disposable emails are not allowed',
+            'disposable_email' => 'Please use valid known email address provider',
         ];
     }
 }

@@ -15,6 +15,9 @@ readonly class UserData
         public ?string $email,
         public ?string $createdAt,
         public ?string $updatedAt,
+        public ?string $birth_date,
+        public ?bool $is_banned,
+        public ?bool $show_nsfw,
     ) {}
 
     public static function fromModel(User $model): self
@@ -26,6 +29,9 @@ readonly class UserData
             email: $model->email ?? null,
             createdAt: $model->created_at ?? null,
             updatedAt: $model->updated_at ?? null,
+            birth_date: $model->birth_date ?? null,
+            is_banned: $model->is_banned ?? null,
+            show_nsfw: $model->show_nsfw ?? null,
         );
     }
 }

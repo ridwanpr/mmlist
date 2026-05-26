@@ -64,6 +64,5 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::post('trigger-comment', [TriggerCommentController::class, 'store'])->name('trigger-comment.store');
 
     Route::get('settings', [UserDashboardController::class, 'settingIndex'])->name('user-setting.index');
-
     Route::put('profile/{username}', [UserProfileController::class, 'update'])->name('profile.update');
 });

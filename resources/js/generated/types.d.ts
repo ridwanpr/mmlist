@@ -217,6 +217,9 @@ declare namespace App {
       readonly email: string | null;
       readonly createdAt: string | null;
       readonly updatedAt: string | null;
+      readonly birth_date: string | null;
+      readonly is_banned: boolean | null;
+      readonly show_nsfw: boolean | null;
     };
     export type WatchlistData = {
       readonly id: number | null;
