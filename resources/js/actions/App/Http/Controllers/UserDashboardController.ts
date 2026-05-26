@@ -41,6 +41,49 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
-const UserDashboardController = { index }
+
+/**
+* @see \App\Http\Controllers\UserDashboardController::settingIndex
+ * @see app/Http/Controllers/UserDashboardController.php:15
+ * @route '/settings'
+ */
+export const settingIndex = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: settingIndex.url(options),
+    method: 'get',
+})
+
+settingIndex.definition = {
+    methods: ["get","head"],
+    url: '/settings',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\UserDashboardController::settingIndex
+ * @see app/Http/Controllers/UserDashboardController.php:15
+ * @route '/settings'
+ */
+settingIndex.url = (options?: RouteQueryOptions) => {
+    return settingIndex.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\UserDashboardController::settingIndex
+ * @see app/Http/Controllers/UserDashboardController.php:15
+ * @route '/settings'
+ */
+settingIndex.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: settingIndex.url(options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\UserDashboardController::settingIndex
+ * @see app/Http/Controllers/UserDashboardController.php:15
+ * @route '/settings'
+ */
+settingIndex.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: settingIndex.url(options),
+    method: 'head',
+})
+const UserDashboardController = { index, settingIndex }
 
 export default UserDashboardController

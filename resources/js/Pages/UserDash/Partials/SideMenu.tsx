@@ -9,6 +9,7 @@ import {
 } from "react-icons/lu";
 import SidebarLink from "../../../Components/UI/SidebarLink";
 import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
+import { settingIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
 
 const SideMenu = () => {
   const { auth } = usePage().props;
@@ -18,7 +19,7 @@ const SideMenu = () => {
   const joinedAt = auth?.user?.joined_at || "Recent";
 
   return (
-    <aside className="bg-surface border-border hidden w-72 flex-col rounded-xl border p-5 md:flex self-start">
+    <aside className="bg-surface border-border hidden w-72 flex-col self-start rounded-xl border p-5 md:flex">
       <div className="mb-5 flex items-center gap-4">
         <div className="min-w-0">
           <p className="text-text truncate font-medium">{userName}</p>
@@ -54,7 +55,7 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="#">
+      <SidebarLink href={settingIndex.url()} routeName="user-setting.index">
         <span className="flex items-center gap-3">
           <LuCog size={18} />
           <span>Settings</span>

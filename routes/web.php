@@ -61,4 +61,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::put('comment/upvote/{commentId}', [CommentController::class, 'upvote'])->name('comment.upvote');
 
     Route::post('trigger-comment', [TriggerCommentController::class, 'store'])->name('trigger-comment.store');
+
+    Route::get('settings', [UserDashboardController::class, 'settingIndex'])->name('user-setting.index');
 });

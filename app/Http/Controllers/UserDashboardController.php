@@ -11,4 +11,9 @@ class UserDashboardController extends Controller
     {
         return Inertia::render('UserDash/Index');
     }
+
+    public function settingIndex(): Response
+    {
+        return Inertia::render("UserSetting/Index");
+    }
 }
