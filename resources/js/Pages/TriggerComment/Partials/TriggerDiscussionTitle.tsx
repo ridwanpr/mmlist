@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
+import { LuDot } from "react-icons/lu";
 
 type TriggerDiscussionTitleProps = {
   anime: App.DTOs.AnimeData;
@@ -17,9 +18,12 @@ const TriggerDiscussionTitle = ({
           href={show.url(anime.slug)}
           className="text-primary text-lg font-semibold"
         >
-          {anime.title_english || anime.title} - Trigger Discussion
+          {anime.title_english || anime.title}
         </Link>
-        <p className="text-text/80 text-sm">{triggerContent.description}</p>
+        <p className="text-text text-sm">
+          {triggerContent.name} -{" "}
+          <span className="text-text-muted">{triggerContent.description}</span>
+        </p>
       </section>
     </>
   );
