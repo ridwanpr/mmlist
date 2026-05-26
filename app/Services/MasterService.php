@@ -94,8 +94,7 @@ class MasterService
     {
         $raw = Cache::rememberForever('rating', function () {
             return Anime::whereNotNull('rating')
-                ->where('rating', '!=', 'Rx - Hentai')
-                ->orderBy('rating', 'desc')
+                ->orderBy('rating', 'asc')
                 ->distinct()
                 ->pluck('rating')
                 ->all();
