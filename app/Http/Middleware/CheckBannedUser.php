@@ -17,9 +17,9 @@ class CheckBannedUser
 
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            
+
             Inertia::clearHistory();
-            Inertia::flash('error', 'Your account has been permanently suspended.');
+            Inertia::flash('error', 'Your account has been suspended. Contact admin for more information');
             return redirect()->route('login');
         }
 
