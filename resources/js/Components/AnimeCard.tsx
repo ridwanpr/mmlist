@@ -10,16 +10,20 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const { proxyImage } = useImageProxy();
 
   const season = animeData?.season?.toLowerCase();
+
   const seasonYear = (() => {
     const s = season ? season.charAt(0).toUpperCase() + season.slice(1) : "";
     const y = animeData?.year ? String(animeData.year) : "";
+
     if (s && y) return `${s} ${y}`;
     if (s) return s;
     if (y) return y;
+
     return null;
   })();
 
   const genres = animeData?.genres?.slice(0, 2) ?? [];
+
   const metaParts = [
     seasonYear,
     animeData?.episodes ? `${animeData.episodes} eps` : null,
@@ -27,11 +31,11 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const title =
     animeData?.titles?.find((t) => t.type === "English")?.title ||
-    animeData?.titles?.[0]?.title;
+    animeData?.titles?.[0]?.title ||
+    "Untitled";
 
   const studio = animeData?.studios?.[0]?.name || animeData?.source || "";
 
-  // Count raw total votes across all trigger categories
   let yesVotes = 0;
   let noVotes = 0;
 
@@ -45,35 +49,52 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const totalVotes = yesVotes + noVotes;
 
-  // Calculate trigger presence based on total vote ratio
   const yesRatio = totalVotes > 0 ? yesVotes / totalVotes : 0;
   const hasTrigger = totalVotes > 0 && yesRatio >= 0.15;
 
   const getStatusStyle = () => {
     if (totalVotes === 0) {
-      return { border: "border-border/60", text: "text-text-muted/70" };
+      return {
+        border: "border-border/60",
+        text: "text-text-muted/70",
+      };
     }
+
     if (!hasTrigger) {
-      return { border: "border-success/30", text: "text-success" };
+      return {
+        border: "border-success/30",
+        text: "text-success",
+      };
     }
+
     if (yesVotes < 3) {
       return {
         border: "border-severity-unverified/40",
         text: "text-severity-unverified",
       };
     }
+
     if (yesVotes < 7) {
-      return { border: "border-severity-mild/40", text: "text-severity-mild" };
+      return {
+        border: "border-severity-mild/40",
+        text: "text-severity-mild",
+      };
     }
+
     if (yesVotes < 13) {
       return {
         border: "border-severity-moderate/40",
         text: "text-severity-moderate",
       };
     }
+
     if (yesVotes < 25) {
-      return { border: "border-severity-high/40", text: "text-severity-high" };
+      return {
+        border: "border-severity-high/40",
+        text: "text-severity-high",
+      };
     }
+
     return {
       border: "border-severity-severe/50",
       text: "text-severity-severe",
@@ -88,30 +109,31 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
       prefetch={["click"]}
       className="group mb-4 block lg:mb-0"
     >
-      <div className="border-border bg-surface group-hover:border-primary-dark/30 relative flex h-48 overflow-hidden rounded-xl border transition-all duration-300 ease-out group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_24px_-4px_rgba(145,51,59,0.08)]">
-        {/* Left Side: Cover Asset */}
+      <div className="border-border bg-surface relative flex h-48 overflow-hidden rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5">
+        {/* Cover */}
         <div className="bg-surface-alt relative w-32 shrink-0 overflow-hidden">
           <img
-            src={proxyImage(animeData?.images.jpg.image_url)}
+            src={proxyImage(
+              animeData?.images.webp.image_url ||
+                animeData?.images.jpg.image_url,
+            )}
             alt={title ? `${title} cover` : ""}
-            loading={index >= 6 ? "lazy" : "eager"}
-            fetchPriority={index < 4 ? "high" : "auto"}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            decoding="async"
+            loading={index >= 15 ? "lazy" : "eager"}
+            fetchPriority={index < 5 ? "high" : "auto"}
+            className="h-full w-full object-cover"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"
-          />
+
           {animeData?.type && (
-            <span className="absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white/95 uppercase backdrop-blur-xs">
+            <span className="absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white uppercase">
               {animeData.type}
             </span>
           )}
         </div>
 
-        {/* Right Side: Content Area */}
+        {/* Content */}
         <div className="flex min-w-0 flex-1 flex-col justify-between p-3.5">
-          {/* Top Section: Title and Metadata */}
+          {/* Header */}
           <div className="space-y-1">
             <h3
               className="text-text line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
@@ -132,12 +154,14 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   {part}
                 </span>
               ))}
+
               {studio && (
                 <>
                   <span
                     aria-hidden="true"
                     className="bg-border mx-1.5 h-1 w-1 shrink-0 rounded-full"
                   />
+
                   <span className="max-w-30 truncate" title={studio}>
                     {studio}
                   </span>
@@ -146,7 +170,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             </div>
           </div>
 
-          {/* Middle Section: Genre Badges */}
+          {/* Genres */}
           {genres.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5">
               {genres.map((g, i) => (
@@ -157,17 +181,18 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   {g.name}
                 </span>
               ))}
+
               {(animeData?.genres?.length ?? 0) > 2 && (
                 <span className="text-text-muted/50 pl-0.5 font-sans text-[10px] font-bold">
-                  +{animeData!.genres!.length - 2}
+                  +{animeData.genres!.length - 2}
                 </span>
               )}
             </div>
           )}
 
-          {/* Bottom Section */}
+          {/* Footer */}
           <div
-            className={`bg-surface-alt/70 flex items-center justify-between rounded-lg border px-2.5 py-1.5 transition-colors duration-300 ${statusStyle.border}`}
+            className={`bg-surface-alt/70 flex items-center justify-between rounded-lg border px-2.5 py-1.5 ${statusStyle.border}`}
           >
             <div className="flex min-w-0 flex-col">
               <span
@@ -177,6 +202,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                 {totalVotes > 0 && !hasTrigger && "Voted Safe"}
                 {hasTrigger && `${yesVotes} Trigger Reports`}
               </span>
+
               <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
                 {totalVotes === 0
                   ? "0 reports submitted"
