@@ -39,7 +39,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
 
           <p className="text-text-muted mb-4 text-sm">
             {!user
-              ? "You must have an account and enable the NSFW setting to view adult content matching this search."
+              ? "You must have an account and enable the NSFW setting to view this rating."
               : "You need to update your preference to view content with this rating."}
           </p>
 
@@ -47,7 +47,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
             <div className="flex justify-center gap-3">
               <Link
                 href="/login"
-                className="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-sm font-semibold text-white transition-colors"
+                className="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-sm font-semibold text-surface transition-colors"
               >
                 Log In
               </Link>
