@@ -66,7 +66,7 @@ const Hero = ({ staffPick }: HeroProps) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search anime title..."
-                  className="text-text h-12 w-full bg-background pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
+                  className="text-text h-12 w-full bg-surface-alt pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
                 />
 
                 <button

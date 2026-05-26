@@ -6,6 +6,7 @@ import TriggerDiscussionTitle from "./Partials/TriggerDiscussionTitle";
 import TriggerFormComment from "./Partials/TriggerFormComment";
 import Sorting from "../../Components/Sorting";
 import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCommentController";
+import TriggerStat from "./Partials/TriggerStat";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -18,6 +19,7 @@ const TriggerComment = ({
   anime,
   triggerContent,
   sortBy,
+  triggerStatData,
 }: TriggerCommentProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
@@ -44,6 +46,7 @@ const TriggerComment = ({
               anime={anime}
               triggerContent={triggerContent}
             />
+            <TriggerStat triggerStatData={triggerStatData} />
             <TriggerFormComment
               triggerContent={triggerContent}
               isGuest={isGuest}
