@@ -49,7 +49,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'username', 'email', 'password'])]
+#[Fillable(['name', 'username', 'email', 'password', 'show_nsfw', 'birth_date'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -66,6 +66,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'show_nsfw' => 'boolean',
+            'is_banned' => 'boolean',
+            'birth_date' => 'date',
         ];
     }
 

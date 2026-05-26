@@ -11,6 +11,7 @@ type SelectOptionProps = {
   id: string;
   items: SelectItem[];
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  value?: string | number;
 };
 
 export const SelectOption = ({
@@ -19,17 +20,19 @@ export const SelectOption = ({
   id,
   items,
   onChange,
+  value,
 }: SelectOptionProps) => {
   return (
-    <div>
-      <label htmlFor={id} className="mb-1 block text-sm font-medium">
+    <div className="flex flex-col gap-1">
+      <label htmlFor={id} className="text-sm font-medium">
         {label}
       </label>
       <select
         onChange={onChange}
         name={name}
         id={id}
-        className="border-border bg-surface text-text hover:bg-surface-alt w-full rounded-lg border px-3 py-2.5 outline-none hover:cursor-pointer"
+        value={value}
+        className="border-border bg-background text-text focus:border-accent-gold w-full cursor-pointer rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
       >
         <option value="">Select</option>
         {items.map((item) => (

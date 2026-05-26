@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('show_nsfw')->default(false);
             $table->boolean('is_banned')->default(false);
+            $table->date('birth_date')->nullable();
         });
     }
 
@@ -25,6 +26,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('show_nsfw');
             $table->dropColumn('is_banned');
+            $table->dropColumn('birth_date');
         });
     }
 };

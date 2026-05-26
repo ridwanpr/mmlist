@@ -97,6 +97,10 @@ const Register = () => {
                   {errors.email}
                 </span>
               )}
+              <span className="text-text-muted text-xs tracking-tight italic">
+                We need your email to verify account ownership in case
+                of any issue
+              </span>
             </div>
 
             <div>

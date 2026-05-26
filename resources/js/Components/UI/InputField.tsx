@@ -1,3 +1,4 @@
+import type React from "react";
 import { Field, Input, Label } from "@headlessui/react";
 
 interface InputFieldProps {
@@ -16,8 +17,12 @@ const InputField = ({
   handleChange,
 }: InputFieldProps) => {
   return (
-    <Field className="space-y-1">
-      <Label className="text-text text-sm font-medium">{label}</Label>
+    <Field className="flex flex-col gap-1.5">
+      {label && (
+        <Label htmlFor={name} className="text-text text-sm font-medium">
+          {label}
+        </Label>
+      )}
 
       <Input
         id={name}
@@ -26,7 +31,7 @@ const InputField = ({
         autoComplete={name}
         placeholder={placeholder}
         onChange={handleChange}
-        className="border-border text-text placeholder:text-text-muted/70 focus:border-primary focus:ring-primary/15 w-full rounded-lg border bg-transparent px-3 py-2.5 text-sm transition outline-none focus:ring-2"
+        className="border-border bg-background text-text focus:border-accent-gold placeholder:text-text-muted/70 w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
       />
     </Field>
   );

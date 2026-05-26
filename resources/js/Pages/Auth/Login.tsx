@@ -33,7 +33,7 @@ const Login = () => {
         meta="Log in to Mamorulist. Create your personalized anime watchlist, rate trigger warnings, and contribute to our community database."
       />
       <div className="bg-background flex min-h-screen items-center justify-center">
-        <div className="bg-surface border-border w-full max-w-md rounded-xl border p-5 shadow-sm">
+        <div className="bg-surface border-border w-full lg:w-87.5 max-w-md rounded-xl border p-5 shadow-sm">
           <div className="mb-5">
             <h1 className="text-text font-serif text-2xl font-bold">
               Welcome back
