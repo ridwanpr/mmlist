@@ -10,7 +10,7 @@ import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
 import QuoteBlock from "./QuoteBlock";
 import FormComment from "./FormComment";
-import Sorting from "./Sorting";
+import Sorting from "../../../Components/Sorting";
 import ReplyFormModal from "./ReplyFormModal";
 import TimeAgo from "../../../Components/TimeAgo";
 import EditFormModal from "./EditFormModal";
@@ -220,7 +220,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 )}
 
                 <div
-                  className="prose prose-sm text-text mt-1 mb-0 max-w-none text-xs whitespace-pre-wrap md:text-sm"
+                  className="prose prose-sm text-text mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
                     if (target.classList.contains("spoiler")) {
@@ -228,7 +228,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                     }
                   }}
                   dangerouslySetInnerHTML={{
-                    __html: comment.bodyHtml,
+                    __html: comment.bodyHtml.trim(),
                   }}
                 />
 

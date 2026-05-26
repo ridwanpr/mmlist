@@ -20,14 +20,22 @@ class TriggerCommentController extends Controller
         private TriggerService $triggerService,
     ) {}
 
-    public function getTriggerComment(string $animeSlug, string $triggerContentSlug)
-    {
+    public function getTriggerComment(
+        Request $request,
+        string $animeSlug,
+        string $triggerContentSlug
+    ) {
+        $sortInput = $request->query('sort');
+        $allowedSorts = ['latest', 'most-loved', 'oldest'];
+        $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'most-loved';
+
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $triggerContent = $this->triggerService->findTriggerContentBySlug($triggerContentSlug);
 
         return Inertia::render('TriggerComment/Index', [
             'anime' => AnimeData::fromModel($anime),
             'triggerContent' => TriggerContentData::fromModel($triggerContent),
+            'sortBy' => $sortBy
         ]);
     }
 

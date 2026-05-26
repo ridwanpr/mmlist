@@ -1,18 +1,37 @@
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import AnimeInfo from "../../Components/AnimeInfo";
 import FrontLayout from "../../Layouts/FrontLayout";
 import TriggerCommentbread from "./Partials/TriggerCommentBread";
 import TriggerDiscussionTitle from "./Partials/TriggerDiscussionTitle";
 import TriggerFormComment from "./Partials/TriggerFormComment";
+import Sorting from "../../Components/Sorting";
+import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCommentController";
+
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
   triggerContent: App.DTOs.TriggerContentData;
   triggerStatData: App.DTOs.AnimeTriggerStatData;
+  sortBy: "latest" | "most-loved" | "oldest";
 };
 
-const TriggerComment = ({ anime, triggerContent }: TriggerCommentProps) => {
+const TriggerComment = ({
+  anime,
+  triggerContent,
+  sortBy,
+}: TriggerCommentProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
+
+  const handleFilter = (filter: string) => {
+    router.get(
+      getTriggerComment.url({
+        animeslug: anime.slug,
+        triggerContentSlug: triggerContent.slug,
+      }),
+      { sort: filter },
+      { preserveScroll: true },
+    );
+  };
 
   return (
     <div>
@@ -29,6 +48,7 @@ const TriggerComment = ({ anime, triggerContent }: TriggerCommentProps) => {
               triggerContent={triggerContent}
               isGuest={isGuest}
             />
+            <Sorting sortBy={sortBy} handleFilter={handleFilter} />
           </div>
         </div>
       </div>
