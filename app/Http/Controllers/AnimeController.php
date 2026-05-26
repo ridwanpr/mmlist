@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\AnimeTriggerContextData;
 use App\DTOs\CommentData;
+use App\DTOs\UserData; // Import your UserData DTO
 use App\Models\Comment;
 use App\Services\AnimeService;
 use App\Services\CommentService;
@@ -25,30 +26,54 @@ class AnimeController extends Controller
     public function show(string $slug): Response
     {
         $anime = $this->animeService->getAnimeInfo($slug);
-        $triggers = $this->animeService->getAnimeTriggers($anime->id);
-
         $user = Auth::user();
-        if ($user) {
-            $userTriggerVote = $this->voteService->getUserTriggerVote($user->id, $anime->id);
-            $watchlist = $this->watchlistService->findUserWatchlist($user->id, $anime->id);
+
+        // Convert user model to DTO to match your TypeScript interface
+        $userData = $user ? UserData::fromModel($user) : null;
+
+        // Check if the anime is NSFW and if the viewer is restricted
+        $isRestrictedNsfw = ($anime->rating === 'Rx - Hentai') && (!$user || !$user->show_nsfw);
+
+        if ($isRestrictedNsfw) {
+            return Inertia::render('Anime/Show', [
+                'anime' => [
+                    'title' => $anime->title,
+                    'title_english' => $anime->title_english,
+                    'rating' => $anime->rating,
+                    'is_restricted' => true,
+                ],
+                'triggers' => [],
+                'userTriggerVote' => null,
+                'userWatchlist' => null,
+                'aiTriggerContext' => null,
+                'topComments' => null,
+                'countComments' => 0,
+                'user' => $userData
+            ]);
         }
 
+        // Standard logic for authorized viewers
+        $triggers = $this->animeService->getAnimeTriggers($anime->id);
+        $userTriggerVote = $user ? $this->voteService->getUserTriggerVote($user->id, $anime->id) : null;
+        $watchlist = $user ? $this->watchlistService->findUserWatchlist($user->id, $anime->id) : null;
+
         $aiTriggerContext = $anime->triggerContexts->map(
-            fn ($item) => AnimeTriggerContextData::fromModel($item)
+            fn($item) => AnimeTriggerContextData::fromModel($item)
         );
 
         $topComments = $this->commentService->getTopComments('anime', $anime->id);
-        $topCommentsDto = $topComments->map(fn (Comment $item) => CommentData::fromModel($item));
+        $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
 
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
-            'userTriggerVote' => $userTriggerVote ?? null,
-            'userWatchlist' => $watchlist ?? null,
-            'aiTriggerContext' => $aiTriggerContext ?? null,
-            'topComments' => $topCommentsDto ?? null,
+            'userTriggerVote' => $userTriggerVote,
+            'userWatchlist' => $watchlist,
+            'aiTriggerContext' => $aiTriggerContext,
+            'topComments' => $topCommentsDto,
             'countComments' => $countComments,
+            'user' => $userData
         ]);
     }
 }
