@@ -119,7 +119,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             )}
             alt={title ? `${title} cover` : ""}
             decoding="async"
-            loading={index >= 15 ? "lazy" : "eager"}
+            loading={index >= 11 ? "lazy" : "eager"}
             fetchPriority={index < 5 ? "high" : "auto"}
             className="h-full w-full object-cover"
           />

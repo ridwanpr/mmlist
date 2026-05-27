@@ -5,24 +5,6 @@ import { show as showAnime } from "../../../actions/App/Http/Controllers/AnimeCo
 import type React from "react";
 import { useState } from "react";
 
-const covers = [
-  {
-    title: "Tensei Shitara Slime Datta Ken 4th Season",
-    image: "/assets/img/hero-1.webp",
-    className: "left-0 top-14 z-10 w-[165px] -rotate-[9deg] opacity-80",
-  },
-  {
-    title: "Sousou no Frieren 2nd Season",
-    image: "/assets/img/hero-2.webp",
-    className: "left-[115px] top-0 z-30 w-[220px] rotate-[2deg]",
-  },
-  {
-    title: "Witch Hat Atelier",
-    image: "/assets/img/hero-3.webp",
-    className: "right-0 top-18 z-20 w-[160px] rotate-[10deg] opacity-90",
-  },
-];
-
 type HeroProps = {
   staffPick: App.DTOs.AnimeData[];
 };
@@ -42,83 +24,64 @@ const Hero = ({ staffPick }: HeroProps) => {
   };
 
   return (
-    <section className="border-border bg-surface overflow-hidden border-b">
-      <div className="mx-auto max-w-7xl px-4">
-        <div className="grid items-center gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10">
-          <div className="min-w-0">
-            <h1 className="text-text max-w-2xl font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
+    <section className="border-border bg-surface border-b">
+      <div className="mx-auto max-w-7xl px-4 py-10 lg:py-14">
+        <div className="grid gap-6 lg:grid-cols-[1fr_460px] lg:items-center lg:gap-12">
+          <div className="max-w-xl">
+            <h1 className="text-text font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
               Anime <span className="text-primary">trigger</span>
               <br />
               warnings.
             </h1>
 
-            <p className="text-text mt-3 max-w-lg text-sm leading-7 sm:text-[15px]">
-              Check content warnings before you watch and track your personal
-              library.
+            <p className="text-text mt-3 text-sm leading-7 sm:text-[15px]">
+              Check crowdsourced content warnings before watching and track your
+              personal library.
             </p>
+          </div>
 
-            <form onSubmit={(e) => handleSearch(e)} className="mt-5 max-w-xl">
-              <div className="bg-surface ring-border focus-within:ring-primary/30 relative overflow-hidden rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.06)] ring-1 transition focus-within:ring-2">
-                <FiSearch className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-[#72776d]" />
+          <div className="w-full">
+            <form onSubmit={handleSearch} className="w-full">
+              <div className="bg-surface-alt ring-border focus-within:ring-primary/30 relative flex h-12 items-center rounded-lg shadow-sm ring-1 transition focus-within:ring-2">
+                <FiSearch className="text-text-muted pointer-events-none absolute left-4 h-5 w-5" />
 
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search anime title..."
-                  className="text-text bg-surface-alt h-12 w-full pr-28 pl-12 text-[15px] outline-none placeholder:text-[#8b9085]"
+                  className="text-text placeholder:text-text-muted/60 h-full w-full bg-transparent pr-28 pl-12 text-[15px] outline-none"
                 />
 
                 <button
                   type="submit"
-                  className="bg-primary text-surface hover:bg-primary-dark absolute top-1.5 right-1.5 h-9 rounded-lg px-4 text-sm font-semibold transition hover:cursor-pointer"
+                  className="bg-primary text-surface hover:bg-primary-dark absolute right-1.5 h-9 rounded-md px-4 text-sm font-semibold transition hover:cursor-pointer"
                 >
                   Search
                 </button>
               </div>
             </form>
 
-            <div className="mt-6 space-y-5">
-              <div>
+            {staffPick && staffPick.length > 0 && (
+              <div className="mt-4">
                 <div className="text-text-muted mb-2 text-[11px] font-bold tracking-[0.18em] uppercase">
-                  Staff Pick
+                  Staff Picks
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {staffPick?.map((item) => (
+                  {staffPick.map((item) => (
                     <Link
                       key={item.slug}
                       href={showAnime.url(item.slug)}
                       prefetch={["click", "hover"]}
-                      className="border-border bg-surface text-text hover:border-primary/20 hover:bg-primary-soft/30 hover:text-primary-dark rounded-lg border px-2.5 py-1 text-sm font-medium transition"
+                      className="border-border bg-surface-alt/40 text-text hover:border-primary/20 hover:bg-primary-soft/30 hover:text-primary-dark rounded-lg border px-2.5 py-1 text-xs font-medium transition"
                     >
                       {item.title_english || item.title}
                     </Link>
                   ))}
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="relative hidden h-80 lg:block">
-            <div className="from-primary-soft/20 to-accent-gold/10 absolute inset-0 bg-linear-to-b via-transparent blur-3xl" />
-
-            <div className="bg-primary-soft/20 absolute top-1/2 left-1/2 h-85 w-85 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
-
-            {covers.map((cover) => (
-              <div
-                key={cover.title}
-                className={`absolute overflow-hidden rounded-[26px] shadow-[0_24px_60px_rgba(0,0,0,0.22)] ring-1 ring-black/5 ${cover.className}`}
-              >
-                <img
-                  src={cover.image}
-                  alt={cover.title}
-                  className="aspect-2/3 w-full object-cover"
-                  fetchPriority="high"
-                  loading="eager"
-                />
-              </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
