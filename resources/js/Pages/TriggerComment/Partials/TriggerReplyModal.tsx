@@ -21,6 +21,7 @@ type TriggerReplyModalProps = {
   closeReplyModal: () => void;
   repliedComment: RepliedComment;
   triggerContentId: number;
+  slug: string;
 };
 
 const TriggerReplyModal = ({
@@ -28,6 +29,7 @@ const TriggerReplyModal = ({
   closeReplyModal,
   repliedComment,
   triggerContentId,
+  slug,
 }: TriggerReplyModalProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -127,6 +129,7 @@ const TriggerReplyModal = ({
                 preserveScroll: true,
               }}
             >
+              <input type="hidden" name="slug" value={slug} />
               <input
                 type="hidden"
                 name="parent_comment_id"

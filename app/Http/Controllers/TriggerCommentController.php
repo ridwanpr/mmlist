@@ -55,13 +55,21 @@ class TriggerCommentController extends Controller
             'commentable_id' => ['required'],
             'body' => ['required'],
             'parent_comment_id' => 'nullable|exists:comments,id',
+            'slug' => ['required']
         ]);
 
         $user = Auth::user();
 
-        $parentId = $validated['parent_comment_id']
-            ? $this->commentService->findCommentFirst($validated['parent_comment_id'])->id
-            : null;
+        $anime = $this->animeService->getAnimeInfo($validated['slug']);
+        $validated['anime_id'] = $anime->id;
+
+        if (isset($validated['parent_comment_id'])) {
+            $parentId = $validated['parent_comment_id']
+                ? $this->commentService->findCommentFirst($validated['parent_comment_id'])->id
+                : null;
+        } else {
+            $parentId = null;
+        }
 
         $this->commentService->storeComment(
             userId: $user->id,

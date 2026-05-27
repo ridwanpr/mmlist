@@ -3,6 +3,8 @@
 namespace App\DTOs;
 
 use App\Models\Comment;
+use App\Models\Anime;
+use App\Models\TriggerContent;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -23,10 +25,20 @@ readonly class CommentData
         public ?int $parentCommentId = null,
         public ?UserData $user = null,
         public ?CommentData $parent = null,
+        public AnimeData|TriggerContentData|null $commentable = null,
     ) {}
 
     public static function fromModel(Comment $model): self
     {
+        $commentable = null;
+        if ($model->relationLoaded('commentable') && $model->commentable) {
+            $commentable = match (true) {
+                $model->commentable instanceof Anime => AnimeData::fromModel($model->commentable),
+                $model->commentable instanceof TriggerContent => TriggerContentData::fromModel($model->commentable),
+                default => null,
+            };
+        }
+
         return new self(
             id: $model->id,
             commentableType: $model->commentable_type,
@@ -46,6 +58,7 @@ readonly class CommentData
             parent: $model->relationLoaded('parent') && $model->parent
                 ? CommentData::fromModel($model->parent)
                 : null,
+            commentable: $commentable,
         );
     }
 }

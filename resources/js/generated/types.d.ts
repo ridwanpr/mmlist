@@ -92,6 +92,10 @@ declare namespace App {
       readonly parentCommentId: number | null;
       readonly user: App.DTOs.UserData | null;
       readonly parent: App.DTOs.CommentData | null;
+      readonly commentable:
+        | App.DTOs.AnimeData
+        | App.DTOs.TriggerContentData
+        | null;
     };
     export type GenreData = {
       readonly id: number;

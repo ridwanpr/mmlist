@@ -11,9 +11,16 @@ interface HomeProps {
   nowAiring: App.DTOs.AnimeData[];
   topAnime: App.DTOs.AnimeData[];
   staffPick: App.DTOs.AnimeData[];
+  latestComments: App.DTOs.CommentData[];
 }
 
-const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
+const Home = ({
+  nowAiring,
+  topAnime,
+  staffPick,
+  latestComments,
+}: HomeProps) => {
+  console.log(latestComments);
   return (
     <>
       <AppHead
@@ -22,7 +29,7 @@ const Home = ({ nowAiring, topAnime, staffPick }: HomeProps) => {
       />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
-      <RecentComment />
+      <RecentComment latestComments={latestComments} />
       <RecentVotes />
     </>
   );

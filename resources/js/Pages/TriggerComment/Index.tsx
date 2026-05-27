@@ -121,6 +121,7 @@ const TriggerComment = ({
             <TriggerFormComment
               triggerContent={triggerContent}
               isGuest={isGuest}
+              slug={anime.slug}
             />
             <Sorting sortBy={sortBy} handleFilter={handleFilter} />
             {triggerComments.data?.map((comment) => (
@@ -142,6 +143,7 @@ const TriggerComment = ({
             replyModal={replyModal}
             closeReplyModal={closeReplyModal}
             triggerContentId={triggerContent.id}
+            slug={anime.slug}
           />
         )}
         {editModal && (

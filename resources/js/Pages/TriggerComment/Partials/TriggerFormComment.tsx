@@ -8,11 +8,13 @@ import { LuBold, LuEyeOff, LuItalic } from "react-icons/lu";
 type TriggerFormCommentProps = {
   isGuest: boolean;
   triggerContent: App.DTOs.TriggerContentData;
+  slug: string;
 };
 
 const TriggerFormComment = ({
   isGuest,
   triggerContent,
+  slug,
 }: TriggerFormCommentProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   // Tracks selection coordinates safely across re-renders
@@ -21,6 +23,7 @@ const TriggerFormComment = ({
   );
 
   const { data, setData, post, reset } = useForm({
+    slug: slug,
     commentable_id: triggerContent.id,
     commentable_type: "trigger_content",
     body: "",

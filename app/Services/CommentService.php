@@ -22,6 +22,7 @@ class CommentService
             'user_id' => $userId,
             'commentable_type' => $commentableType,
             'commentable_id' => $commentableId,
+            'anime_id' => $data['anime_id'],
             'body' => $data['body'],
             'parent_comment_id' => $parentCommentId,
         ]);
@@ -36,10 +37,10 @@ class CommentService
         return Comment::where('commentable_type', $commentableType)
             ->where('commentable_id', $commentableId)
             ->with(['user', 'parent', 'parent.user'])
-            ->withExists(['votes' => fn ($q) => $q->where('user_id', Auth::id())])
-            ->when($sortBy === 'latest', fn ($q) => $q->latest())
-            ->when($sortBy === 'most-loved', fn ($q) => $q->orderBy('upvotes', 'desc'))
-            ->when($sortBy === 'oldest', fn ($q) => $q->orderBy('created_at', 'asc'))
+            ->withExists(['votes' => fn($q) => $q->where('user_id', Auth::id())])
+            ->when($sortBy === 'latest', fn($q) => $q->latest())
+            ->when($sortBy === 'most-loved', fn($q) => $q->orderBy('upvotes', 'desc'))
+            ->when($sortBy === 'oldest', fn($q) => $q->orderBy('created_at', 'asc'))
             ->paginate($paginateLimit)
             ->onEachSide(1)
             ->withQueryString();
@@ -56,6 +57,12 @@ class CommentService
             ->orderBy('upvotes', 'desc')
             ->limit($limit)
             ->get();
+    }
+
+    public function getLatestCommentLimit(int $limit = 10)
+    {
+        return Comment::with(['user', 'commentable'])
+            ->limit($limit)->orderBy('created_at', 'desc')->get();
     }
 
     public function getCommentCount(

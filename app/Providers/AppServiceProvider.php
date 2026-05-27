@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use RateLimiter;
@@ -25,5 +26,10 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('auth', function (Request $request) {
             return Limit::perMinute(7)->by($request->ip());
         });
+
+        Relation::enforceMorphMap([
+            'anime' => \App\Models\Anime::class,
+            'trigger_content' => \App\Models\TriggerContent::class,
+        ]);
     }
 }

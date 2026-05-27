@@ -52,6 +52,7 @@ class Comment extends Model
         'user_id',
         'commentable_type',
         'commentable_id',
+        'anime_id',
         'body',
         'upvotes',
         'downvotes',
@@ -109,5 +110,10 @@ class Comment extends Model
     public function replies(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_comment_id');
+    }
+
+    public function anime(): BelongsTo
+    {
+        return $this->belongsTo(Anime::class);
     }
 }
