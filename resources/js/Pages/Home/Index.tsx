@@ -28,8 +28,8 @@ const Home = ({
       />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
-      <RecentComment latestComments={latestComments} />
       <RecentVotes />
+      <RecentComment latestComments={latestComments} />
     </>
   );
 };

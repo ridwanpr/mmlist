@@ -89,6 +89,7 @@ declare namespace App {
       readonly createdAt: string;
       readonly updatedAt: string;
       readonly isUpvoted: boolean;
+      readonly animeId: number;
       readonly parentCommentId: number | null;
       readonly user: App.DTOs.UserData | null;
       readonly parent: App.DTOs.CommentData | null;
@@ -96,6 +97,7 @@ declare namespace App {
         | App.DTOs.AnimeData
         | App.DTOs.TriggerContentData
         | null;
+      readonly anime: App.DTOs.AnimeData | null;
     };
     export type GenreData = {
       readonly id: number;

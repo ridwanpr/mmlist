@@ -47,17 +47,17 @@ type TimeAgoProps = {
 };
 
 export const TimeAgo = ({ dateString }: TimeAgoProps) => {
-  const [displayTime, setDisplayTime] = useState("");
+  const [, setTick] = useState(0);
 
   useEffect(() => {
-    setDisplayTime(formatRelativeTime(dateString));
-
     const interval = setInterval(() => {
-      setDisplayTime(formatRelativeTime(dateString));
+      setTick((t) => t + 1);
     }, 60000);
 
     return () => clearInterval(interval);
   }, [dateString]);
+
+  const displayTime = formatRelativeTime(dateString);
 
   return <>{displayTime || "..."}</>;
 };

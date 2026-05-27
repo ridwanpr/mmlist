@@ -22,10 +22,12 @@ readonly class CommentData
         public string $createdAt,
         public string $updatedAt,
         public bool $isUpvoted,
+        public int $animeId,
         public ?int $parentCommentId = null,
         public ?UserData $user = null,
         public ?CommentData $parent = null,
         public AnimeData|TriggerContentData|null $commentable = null,
+        public ?AnimeData $anime = null,
     ) {}
 
     public static function fromModel(Comment $model): self
@@ -44,6 +46,7 @@ readonly class CommentData
             commentableType: $model->commentable_type,
             commentableId: $model->commentable_id,
             userId: $model->user_id,
+            animeId: $model->anime_id,
             body: $model->body,
             bodyHtml: $model->body_html,
             upvotes: $model->upvotes,
@@ -59,6 +62,8 @@ readonly class CommentData
                 ? CommentData::fromModel($model->parent)
                 : null,
             commentable: $commentable,
+            anime: $model->relationLoaded('anime') && $model->anime ?
+                AnimeData::fromModel($model->anime) : null,
         );
     }
 }

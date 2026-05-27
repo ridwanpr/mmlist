@@ -24,7 +24,7 @@ class HomeController extends Controller
         $latestCommentsData = $this->commentService->getLatestCommentLimit(10);
 
         $latestComments = $latestCommentsData->map(fn(Comment $item) => CommentData::fromModel($item));
-        // dd($latestComments);
+        
         return Inertia::render('Home/Index', [
             'nowAiring' => $nowAiring,
             'topAnime' => $topAnime,
