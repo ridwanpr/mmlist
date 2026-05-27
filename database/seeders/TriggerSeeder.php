@@ -52,6 +52,7 @@ class TriggerSeeder extends Seeder
                     ['name' => 'Eaten Alive',                    'importance' => 88,  'description' => 'Characters being swallowed whole, chewed, or consumed alive by monsters, titans, or demons.'],
                     ['name' => 'Cannibalism',                    'importance' => 85,  'description' => 'Depiction of characters consuming human or humanoid flesh.'],
                     ['name' => 'Graphic Vomiting',               'importance' => 80,  'description' => 'Detailed, onscreen vomiting.'],
+                    ['name' => 'Severed Bodies',                  'importance' => 96,  'description' => 'Severe fight injuries, torn limbs, and bodies ripped apart.'],
                 ],
             ],
             [
