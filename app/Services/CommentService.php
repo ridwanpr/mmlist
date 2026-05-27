@@ -147,4 +147,9 @@ class CommentService
             ->orderBy('comments.created_at', 'asc')
             ->paginate($paginateLimit);
     }
+
+    public function getUserCommentCount(int $userId)
+    {
+        return Comment::where('user_id', $userId)->count();
+    }
 }

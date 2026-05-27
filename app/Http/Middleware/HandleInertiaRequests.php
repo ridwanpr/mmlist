@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\CommentService;
 use App\Services\WatchlistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                         ->value('role_id'),
                     'votes_count' => fn() => app(WatchlistService::class)->getTotalVoteCount($request->user()->id),
                     'joined_at' => $request->user()->created_at ? $request->user()->created_at->format('j M Y') : null,
+                    'comments_count' => fn() => app(CommentService::class)->getUserCommentCount($request->user()->id)
                 ] : null,
             ],
             'flash' => [

@@ -16,6 +16,7 @@ const SideMenu = () => {
   const { auth } = usePage().props;
 
   const votesCount = auth?.user?.votes_count ?? 0;
+  const commentCount = auth?.user?.comments_count ?? 0;
   const userName = auth?.user?.name || "Guest User";
   const joinedAt = auth?.user?.joined_at || "Recent";
 
@@ -76,7 +77,7 @@ const SideMenu = () => {
           </div>
           <div>
             <p className="text-text-muted text-xs">Comment Written</p>
-            <p className="text-text text-lg font-semibold">127</p>
+            <p className="text-text text-lg font-semibold">{commentCount}</p>
           </div>
         </div>
       </div>

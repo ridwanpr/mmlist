@@ -15,6 +15,7 @@ const DashMobileNav = () => {
   const { auth } = usePage().props;
 
   const votesCount = auth?.user?.votes_count ?? 0;
+  const commentCount = auth?.user?.comments_count ?? 0;
   const userName = auth?.user?.name || "Guest User";
   const joinedAt = auth?.user?.joined_at || "Recent";
 
@@ -41,15 +42,9 @@ const DashMobileNav = () => {
           </div>
           <div className="flex-1 py-2.5 text-center">
             <p className="text-primary-dark text-base leading-none font-bold">
-              34
+              {commentCount}
             </p>
             <p className="text-text-muted mt-1 text-[10px]">Comments</p>
-          </div>
-          <div className="flex-1 py-2.5 text-center">
-            <p className="text-primary-dark text-base leading-none font-bold">
-              8
-            </p>
-            <p className="text-text-muted mt-1 text-[10px]">Watching</p>
           </div>
         </div>
       </div>
