@@ -9,6 +9,7 @@ import EditModal from "./Partials/EditModal";
 import { useState } from "react";
 import type { EditedComment } from "../AnimeComment/Partials/Discussion";
 import { destroy } from "../../routes/comment";
+import Pagination from "../../Components/UI/Pagination";
 
 type CommentHistoryProps = {
   paginatedComments: App.DTOs.PaginatedCommentData;
@@ -98,7 +99,7 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
 
                 {/* Action buttons row */}
                 {auth.user && (
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="mt-2 flex items-center gap-3">
                     <>
                       <button
                         onClick={() =>
@@ -122,6 +123,8 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
               </div>
             ))}
         </div>
+
+        <Pagination links={paginatedComments.links} />
 
         <EditModal
           closeEditModal={closeEditModal}
