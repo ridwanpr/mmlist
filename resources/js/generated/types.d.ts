@@ -64,6 +64,7 @@ declare namespace App {
       readonly animeData: App.DTOs.AnimeData | null;
       readonly created_at: string | null;
       readonly updated_at: string | null;
+      readonly userData: App.DTOs.UserData | null;
     };
     export type AnimeTriggerStatData = {
       readonly totalReports: number;

@@ -38,7 +38,7 @@ const RecentComment = ({ latestComments }: RecentCommentProps) => {
                           triggerContentSlug: comment.commentable!.slug,
                         })
                   }
-                  className="text-primary cursor-pointer font-serif text-base font-bold transition-colors hover:underline"
+                  className="text-text cursor-pointer text-base font-bold transition-colors hover:underline"
                 >
                   {comment.anime?.title_english || comment.anime?.title}
                   {comment.commentable &&

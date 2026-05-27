@@ -21,6 +21,7 @@ readonly class AnimeTriggerData
         public ?AnimeData $animeData = null,
         public ?string $created_at = null,
         public ?string $updated_at = null,
+        public ?UserData $userData = null,
     ) {}
 
     public static function fromRequest(
@@ -58,6 +59,8 @@ readonly class AnimeTriggerData
                 AnimeData::fromModel($model->anime) : null,
             created_at: $model->created_at ?? null,
             updated_at: $model->updated_at ?? null,
+            userData: $model->relationLoaded('user') ?
+                UserData::fromModel($model->user) : null,
         );
     }
 
