@@ -27,10 +27,7 @@ class AnimeService
 
         $query = Anime::query()
             ->when($user?->show_nsfw !== true, function ($q) {
-                $q->where(function ($subQuery) {
-                    $subQuery->where('animes.rating', '!=', 'Rx - Hentai')
-                        ->orWhereNull('animes.rating');
-                });
+                $q->where('animes.is_not_hentai', 1);
             })->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
                 $rawTerm = trim($filter['query']);
                 $booleanTerm = $this->buildBooleanSearch($rawTerm);
@@ -102,7 +99,8 @@ class AnimeService
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
             $q->orderBy('animes.' . $sort['sort'], $direction);
         }, function ($q) {
-            $q->orderByRaw("animes.type = 'TV' DESC")
+            // FIXED: Swapped out the raw expression for your indexed virtual column
+            $q->orderBy('animes.is_tv_priority', 'desc')
                 ->orderBy('animes.year', 'desc')
                 ->orderBy('animes.airing', 'desc')
                 ->orderBy('animes.score', 'desc');
@@ -117,11 +115,11 @@ class AnimeService
         if ($paginator->isNotEmpty()) {
             $ids = $paginator->pluck('id')->toArray();
 
-            // Fetch the full data and eager load relationships for these 24 IDs
+            // Fetch the full data and eager load relationships for these IDs
             $models = Anime::with(['genres', 'animeTriggers.triggerContent'])
                 ->whereIn('id', $ids)
                 ->get()
-                ->keyBy('id'); // Index by ID for easy lookup
+                ->keyBy('id');
 
             // Replace the bare IDs in the paginator with the fully loaded models, preserving the sorted order
             $sortedModels = collect($ids)->map(fn($id) => $models[$id]);
@@ -238,47 +236,7 @@ class AnimeService
 
         $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
         $stopwords = [
-            'a',
-            'an',
-            'as',
-            'at',
-            'in',
-            'is',
-            'it',
-            'of',
-            'on',
-            'or',
-            'to',
-            'am',
-            'be',
-            'by',
-            'do',
-            'he',
-            'if',
-            'me',
-            'my',
-            'no',
-            'so',
-            'up',
-            'us',
-            'we',
-            'i',
-            'and',
-            'the',
-            'for',
-            'with',
-            'about',
-            'are',
-            'from',
-            'how',
-            'that',
-            'this',
-            'was',
-            'what',
-            'when',
-            'where',
-            'who',
-            'will',
+            'a', 'an', 'as', 'at', 'in', 'is', 'it', 'of', 'on', 'or', 'to', 'am', 'be', 'by', 'do', 'he', 'if', 'me', 'my', 'no', 'so', 'up', 'us', 'we', 'i', 'and', 'the', 'for', 'with', 'about', 'are', 'from', 'how', 'that', 'this', 'was', 'what', 'when', 'where', 'who', 'will',
         ];
 
         $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
