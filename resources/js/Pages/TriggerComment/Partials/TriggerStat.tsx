@@ -82,7 +82,7 @@ const TriggerStat = ({ triggerStatData }: TriggerStatProps) => {
       ? [{ term: "Most reported severity", detail: topSeverity.label }]
       : []),
     ...(topFraming
-      ? [{ term: "Most common framing", detail: topFraming.label }]
+      ? [{ term: "Most reported framing", detail: topFraming.label }]
       : []),
   ];
 
