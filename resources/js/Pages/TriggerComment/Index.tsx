@@ -9,8 +9,13 @@ import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCom
 import TriggerStat from "./Partials/TriggerStat";
 import TriggerCommentItem from "./Partials/TriggerCommentItem";
 import { useState } from "react";
-import type { RepliedComment } from "../AnimeComment/Partials/Discussion";
+import type {
+  EditedComment,
+  RepliedComment,
+} from "../AnimeComment/Partials/Discussion";
 import TriggerReplyModal from "./Partials/TriggerReplyModal";
+import EditFormModal from "../AnimeComment/Partials/EditFormModal";
+import { destroy } from "../../actions/App/Http/Controllers/CommentController";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -31,6 +36,12 @@ const TriggerComment = ({
   const isGuest = !auth.user;
 
   const [replyModal, setReplyModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+
+  const [editComment, setEditComment] = useState<EditedComment>({
+    comment_id: null,
+    body: "",
+  });
 
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
@@ -71,6 +82,30 @@ const TriggerComment = ({
     );
   };
 
+  const handleEditComment = (commentId: number, body: string) => {
+    setEditModal(true);
+    setEditComment({
+      comment_id: commentId,
+      body: body,
+    });
+  };
+
+  const closeEditModal = () => {
+    setEditModal(false);
+    setEditComment({
+      comment_id: null,
+      body: "",
+    });
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    if (confirm("Are you sure want to delete this comment?")) {
+      router.delete(destroy.url({ commentId: commentId }), {
+        preserveScroll: true,
+      });
+    }
+  };
+
   return (
     <div>
       <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
@@ -95,16 +130,27 @@ const TriggerComment = ({
                 comment={comment}
                 handleUpvote={() => {}}
                 openReplyModal={openReplyModal}
+                handleDeleteComment={handleDeleteComment}
+                handleEditComment={handleEditComment}
               />
             ))}
           </div>
         </div>
-        <TriggerReplyModal
-          repliedComment={repliedComment}
-          replyModal={replyModal}
-          closeReplyModal={closeReplyModal}
-          triggerContentId={triggerContent.id}
-        />
+        {replyModal && (
+          <TriggerReplyModal
+            repliedComment={repliedComment}
+            replyModal={replyModal}
+            closeReplyModal={closeReplyModal}
+            triggerContentId={triggerContent.id}
+          />
+        )}
+        {editModal && (
+          <EditFormModal
+            editModal={editModal}
+            closeEditModal={closeEditModal}
+            editComment={editComment}
+          />
+        )}
       </div>
     </div>
   );

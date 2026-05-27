@@ -1,4 +1,4 @@
-import { LuHeart, LuReply } from "react-icons/lu";
+import { LuHeart, LuPencil, LuReply, LuTrash2 } from "react-icons/lu";
 import TimeAgo from "../../../Components/TimeAgo";
 import QuoteBlock from "../../../Components/QuoteBlock";
 
@@ -22,6 +22,8 @@ type TriggerCommentItemProps = {
     commentBody: string,
     user: string,
   ) => void;
+  handleEditComment: (commentId: number, body: string) => void;
+  handleDeleteComment: (commentId: number) => void;
 };
 
 const TriggerCommentItem = ({
@@ -29,6 +31,8 @@ const TriggerCommentItem = ({
   handleUpvote,
   auth,
   openReplyModal,
+  handleEditComment,
+  handleDeleteComment,
 }: TriggerCommentItemProps) => {
   return (
     <>
@@ -92,7 +96,7 @@ const TriggerCommentItem = ({
                     openReplyModal(
                       comment.id,
                       comment.bodyHtml,
-                      comment?.user?.name ?? "",
+                      comment.user?.name ?? "",
                     )
                   }
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
@@ -100,6 +104,27 @@ const TriggerCommentItem = ({
                   <LuReply className="size-3" />
                   Reply
                 </button>
+
+                {auth.user.id === comment.userId && (
+                  <>
+                    <button
+                      onClick={() =>
+                        handleEditComment(comment.id, comment.body)
+                      }
+                      className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                    >
+                      <LuPencil className="size-3" />
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(comment.id)}
+                      className="text-text-muted hover:text-accent-red flex items-center gap-1 text-xs hover:cursor-pointer"
+                    >
+                      <LuTrash2 className="size-3" />
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
