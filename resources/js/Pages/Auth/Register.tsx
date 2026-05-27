@@ -155,7 +155,7 @@ const Register = () => {
               <FaGoogle /> Continue with Google
             </button>
 
-            <p className="text-text-muted pt-1 text-center text-sm">
+            <p className="text-text-muted pt-1 mt-2 text-center text-sm">
               Already have an account?{" "}
               <Link
                 href={routes["login"]}

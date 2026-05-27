@@ -1,4 +1,4 @@
-import { LuHeart, LuPencil, LuReply, LuTrash2 } from "react-icons/lu";
+import { LuHeart, LuReply } from "react-icons/lu";
 import TimeAgo from "../../../Components/TimeAgo";
 import QuoteBlock from "../../../Components/QuoteBlock";
 
@@ -67,7 +67,7 @@ const TriggerCommentItem = ({
             {comment.parent && (
               <QuoteBlock
                 authorName={comment.parent.user?.name ?? ""}
-                body={comment.parent.body}
+                body={comment.parent.bodyHtml}
               />
             )}
 
@@ -80,14 +80,23 @@ const TriggerCommentItem = ({
                 }
               }}
               dangerouslySetInnerHTML={{
-                __html: comment.body.trim(),
+                __html: comment.bodyHtml.trim(),
               }}
             />
 
             {/* Action buttons row */}
             {auth.user && (
               <div className="flex items-center gap-3">
-                <button className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer">
+                <button
+                  onClick={() =>
+                    openReplyModal(
+                      comment.id,
+                      comment.bodyHtml,
+                      comment?.user?.name ?? "",
+                    )
+                  }
+                  className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                >
                   <LuReply className="size-3" />
                   Reply
                 </button>

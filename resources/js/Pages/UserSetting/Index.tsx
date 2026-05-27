@@ -1,7 +1,7 @@
 import type React from "react";
 import DashContainer from "../UserDash/Partials/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
-import { Form, usePage } from "@inertiajs/react";
+import { Form } from "@inertiajs/react";
 import { update } from "../../actions/App/Http/Controllers/UserProfileController";
 import ThemeToggle from "../../Components/UI/ThemeToggle";
 
@@ -144,6 +144,15 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                     </div>
                   </div>
                 </div>
+
+                {user.email == null && (
+                  <div className="bg-primary-soft mt-6 rounded-xl px-4 py-2.5">
+                    <p className="text-text text-xs">
+                      To ensure we can help you if any problems arise, please make sure to add
+                      an email address to your account
+                    </p>
+                  </div>
+                )}
 
                 <hr className="border-border my-6" />
 

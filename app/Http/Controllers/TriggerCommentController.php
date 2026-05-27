@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\AnimeData;
+use App\DTOs\CommentData;
+use App\DTOs\PaginatedCommentData;
 use App\DTOs\TriggerContentData;
+use App\Models\Comment;
 use App\Services\AnimeService;
 use App\Services\CommentService;
 use App\Services\TriggerService;
@@ -32,7 +35,11 @@ class TriggerCommentController extends Controller
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $triggerContent = $this->triggerService->findTriggerContentBySlug($triggerContentSlug);
         $triggerStatData = $this->triggerService->getTriggerStat($anime->id, $triggerContent->id);
-        $triggerComments = $this->commentService->getComments('trigger_content', $triggerContent->id, 25, $sortBy);
+        $triggerCommentsData = $this->commentService->getComments('trigger_content', $triggerContent->id, 25, $sortBy);
+
+        $triggerComments = PaginatedCommentData::fromPaginator(
+            $triggerCommentsData->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
+        );
 
         return Inertia::render('TriggerComment/Index', [
             'anime' => AnimeData::fromModel($anime),

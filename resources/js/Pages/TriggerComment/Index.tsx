@@ -10,6 +10,7 @@ import TriggerStat from "./Partials/TriggerStat";
 import TriggerCommentItem from "./Partials/TriggerCommentItem";
 import { useState } from "react";
 import type { RepliedComment } from "../AnimeComment/Partials/Discussion";
+import TriggerReplyModal from "./Partials/TriggerReplyModal";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -48,6 +49,15 @@ const TriggerComment = ({
       parent_comment_user: user,
     });
     setReplyModal(true);
+  };
+
+  const closeReplyModal = () => {
+    setReplyModal(false);
+    setRepliedComment({
+      parent_comment_id: null,
+      parent_comment_body: "",
+      parent_comment_user: "",
+    });
   };
 
   const handleFilter = (filter: string) => {
@@ -89,6 +99,12 @@ const TriggerComment = ({
             ))}
           </div>
         </div>
+        <TriggerReplyModal
+          repliedComment={repliedComment}
+          replyModal={replyModal}
+          closeReplyModal={closeReplyModal}
+          triggerContentId={triggerContent.id}
+        />
       </div>
     </div>
   );

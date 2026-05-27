@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\TriggerCommentController::store
- * @see app/Http/Controllers/TriggerCommentController.php:46
+ * @see app/Http/Controllers/TriggerCommentController.php:53
  * @route '/trigger-comment'
  */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::store
- * @see app/Http/Controllers/TriggerCommentController.php:46
+ * @see app/Http/Controllers/TriggerCommentController.php:53
  * @route '/trigger-comment'
  */
 store.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::store
- * @see app/Http/Controllers/TriggerCommentController.php:46
+ * @see app/Http/Controllers/TriggerCommentController.php:53
  * @route '/trigger-comment'
  */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
