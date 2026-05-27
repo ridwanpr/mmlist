@@ -12,7 +12,6 @@ use App\Services\CommentService;
 use App\Services\TriggerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class TriggerCommentController extends Controller

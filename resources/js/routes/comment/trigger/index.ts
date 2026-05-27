@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TriggerCommentController::index
- * @see app/Http/Controllers/TriggerCommentController.php:26
+ * @see app/Http/Controllers/TriggerCommentController.php:25
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 export const index = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::index
- * @see app/Http/Controllers/TriggerCommentController.php:26
+ * @see app/Http/Controllers/TriggerCommentController.php:25
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 index.url = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions) => {
@@ -42,7 +42,7 @@ index.url = (args: { animeslug: string | number, triggerContentSlug: string | nu
 
 /**
 * @see \App\Http\Controllers\TriggerCommentController::index
- * @see app/Http/Controllers/TriggerCommentController.php:26
+ * @see app/Http/Controllers/TriggerCommentController.php:25
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 index.get = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -51,7 +51,7 @@ index.get = (args: { animeslug: string | number, triggerContentSlug: string | nu
 })
 /**
 * @see \App\Http\Controllers\TriggerCommentController::index
- * @see app/Http/Controllers/TriggerCommentController.php:26
+ * @see app/Http/Controllers/TriggerCommentController.php:25
  * @route '/anime/discussion/{animeslug}/{triggerContentSlug}'
  */
 index.head = (args: { animeslug: string | number, triggerContentSlug: string | number } | [animeslug: string | number, triggerContentSlug: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
