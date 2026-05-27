@@ -32,7 +32,6 @@ const ShowAnime = ({
   user,
   countTriggerComments,
 }: ShowAnimeProps) => {
-  console.log(countTriggerComments);
   const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
 
   if (anime?.is_restricted) {

@@ -20,7 +20,6 @@ const Home = ({
   staffPick,
   latestComments,
 }: HomeProps) => {
-  console.log(latestComments);
   return (
     <>
       <AppHead

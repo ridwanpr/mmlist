@@ -3,7 +3,6 @@ type RecentCommentProps = {
 };
 
 const RecentComment = ({ latestComments }: RecentCommentProps) => {
-  console.log(latestComments);
   return (
     <div>
       <div className="mx-auto max-w-7xl p-4">
