@@ -142,7 +142,7 @@ class CommentService
 
     public function getUserCommentHistory(int $userId, int $paginateLimit = 15)
     {
-        return Comment::with(['user', 'anime', 'commentable', 'parent'])
+        return Comment::with(['user', 'anime', 'commentable', 'parent', 'parent.user'])
             ->where('user_id', $userId)
             ->paginate($paginateLimit);
     }

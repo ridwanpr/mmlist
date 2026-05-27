@@ -7,9 +7,7 @@ type RecentVotesProps = {
 };
 
 const RecentVotes = ({ latestVotes }: RecentVotesProps) => {
-  console.log(latestVotes);
 
-  // Maps severity strings dynamically to Tailwind v4 theme severity color tokens
   const getSeverityClass = (severity: string | null | undefined): string => {
     if (!severity) return "text-severity-unverified";
 

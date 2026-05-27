@@ -20,10 +20,10 @@ class CommentHistoryController extends Controller
 
         $commentFromDb = $this->commentService->getUserCommentHistory($user->id, 15);
         $commentsHistory = $commentFromDb->through(fn(Comment $item) => CommentData::fromModel($item));
-        $paginatedCommentHistory = PaginatedCommentData::fromPaginator($commentsHistory);
+        $paginatedComments = PaginatedCommentData::fromPaginator($commentsHistory);
 
         return Inertia::render("CommentHistory/Index", [
-            'paginatedCommentHistory' => $paginatedCommentHistory
+            'paginatedComments' => $paginatedComments
         ]);
     }
 }

@@ -14,7 +14,7 @@ const QuoteBlock = ({
     </p>
     <div className="text-text-muted line-clamp-2 text-[12px] leading-relaxed">
       <div
-        className="prose prose-sm text-text mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
+        className="prose prose-sm text-text/90 mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
         onClick={(e) => {
           const target = e.target as HTMLElement;
           if (target.classList.contains("spoiler")) {

@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../
 /**
 * @see \App\Http\Controllers\CommentHistoryController::index
  * @see app/Http/Controllers/CommentHistoryController.php:17
- * @route '/my-comment'
+ * @route '/comment-history'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/my-comment',
+    url: '/comment-history',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\CommentHistoryController::index
  * @see app/Http/Controllers/CommentHistoryController.php:17
- * @route '/my-comment'
+ * @route '/comment-history'
  */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\CommentHistoryController::index
  * @see app/Http/Controllers/CommentHistoryController.php:17
- * @route '/my-comment'
+ * @route '/comment-history'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\CommentHistoryController::index
  * @see app/Http/Controllers/CommentHistoryController.php:17
- * @route '/my-comment'
+ * @route '/comment-history'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),

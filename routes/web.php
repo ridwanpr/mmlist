@@ -67,5 +67,5 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::get('settings', [UserDashboardController::class, 'settingIndex'])->name('user-setting.index');
     Route::put('profile/{username}', [UserProfileController::class, 'update'])->name('profile.update');
 
-    Route::get('my-comment', [CommentHistoryController::class, 'index'])->name('comment-history.index');
+    Route::get('comment-history', [CommentHistoryController::class, 'index'])->name('comment-history.index');
 });
