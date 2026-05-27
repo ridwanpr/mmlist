@@ -1,7 +1,7 @@
 import { usePage } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import { toast, Toaster } from "sonner";
-import AntiDevtoolsGuard from "../Components/AntiDevtoolsGuard";
+import AnalyticsWrapper from "../Components/AnalyticsWrapper";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -47,13 +47,13 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         }}
       />
 
-      <AntiDevtoolsGuard>
+      <AnalyticsWrapper>
         <div className="bg-background">
           <div className="mx-auto min-h-dvh max-w-xl p-4 md:flex md:flex-col md:items-center md:justify-center">
             {children}
           </div>
         </div>
-      </AntiDevtoolsGuard>
+      </AnalyticsWrapper>
     </>
   );
 };

@@ -5,7 +5,7 @@ import { toast, Toaster } from "sonner";
 import DekstopNav from "../Components/DekstopNav";
 import Footer from "../Components/Footer";
 import MobileNav from "../Components/MobileNav";
-import AntiDevtoolsGuard from "../Components/AntiDevtoolsGuard";
+import AnalyticsWrapper from "../Components/AnalyticsWrapper";
 
 interface FrontLayoutProps {
   children: React.ReactNode;
@@ -51,7 +51,7 @@ const FrontLayout = ({ children }: FrontLayoutProps) => {
         }}
       />
 
-      <AntiDevtoolsGuard>
+      <AnalyticsWrapper>
         <div className="bg-background relative flex min-h-screen flex-col">
           <div>
             <DekstopNav />
@@ -62,7 +62,7 @@ const FrontLayout = ({ children }: FrontLayoutProps) => {
           </div>
           <Footer />
         </div>
-      </AntiDevtoolsGuard>
+      </AnalyticsWrapper>
     </>
   );
 };
