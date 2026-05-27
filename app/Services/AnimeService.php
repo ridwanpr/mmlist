@@ -223,7 +223,8 @@ class AnimeService
 
     public function getStaffPickAnime(): Collection
     {
-        return Anime::where('staff_pick', true)->get();
+        return Anime::where('staff_pick', true)
+            ->select('slug', 'title', 'title_english')->get();
     }
 
     private function buildBooleanSearch(string $input): ?string
@@ -236,7 +237,47 @@ class AnimeService
 
         $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
         $stopwords = [
-            'a', 'an', 'as', 'at', 'in', 'is', 'it', 'of', 'on', 'or', 'to', 'am', 'be', 'by', 'do', 'he', 'if', 'me', 'my', 'no', 'so', 'up', 'us', 'we', 'i', 'and', 'the', 'for', 'with', 'about', 'are', 'from', 'how', 'that', 'this', 'was', 'what', 'when', 'where', 'who', 'will',
+            'a',
+            'an',
+            'as',
+            'at',
+            'in',
+            'is',
+            'it',
+            'of',
+            'on',
+            'or',
+            'to',
+            'am',
+            'be',
+            'by',
+            'do',
+            'he',
+            'if',
+            'me',
+            'my',
+            'no',
+            'so',
+            'up',
+            'us',
+            'we',
+            'i',
+            'and',
+            'the',
+            'for',
+            'with',
+            'about',
+            'are',
+            'from',
+            'how',
+            'that',
+            'this',
+            'was',
+            'what',
+            'when',
+            'where',
+            'who',
+            'will',
         ];
 
         $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
