@@ -1,16 +1,52 @@
 import type React from "react";
 import DashContainer from "../UserDash/Partials/DashContainer";
 import FrontLayout from "../../Layouts/FrontLayout";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import QuoteBlock from "../../Components/QuoteBlock";
 import TimeAgo from "../../Components/TimeAgo";
+import { LuPencil, LuTrash2 } from "react-icons/lu";
+import EditModal from "./Partials/EditModal";
+import { useState } from "react";
+import type { EditedComment } from "../AnimeComment/Partials/Discussion";
+import { destroy } from "../../routes/comment";
 
 type CommentHistoryProps = {
   paginatedComments: App.DTOs.PaginatedCommentData;
 };
 
 const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
-  console.log(paginatedComments);
+  const { auth } = usePage().props;
+
+  const [editModal, setEditModal] = useState(false);
+  const [editComment, setEditComment] = useState<EditedComment>({
+    comment_id: null,
+    body: "",
+  });
+
+  const closeEditModal = () => {
+    setEditModal(false);
+    setEditComment({
+      comment_id: null,
+      body: "",
+    });
+  };
+
+  const handleEditComment = (commentId: number, body: string) => {
+    setEditModal(true);
+    setEditComment({
+      comment_id: commentId,
+      body: body,
+    });
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    if (confirm("Are you sure want to delete this comment?")) {
+      router.delete(destroy.url({ commentId: commentId }), {
+        preserveScroll: true,
+      });
+    }
+  };
+
   return (
     <DashContainer>
       <div className="mb-6 p-4 lg:p-0">
@@ -33,7 +69,7 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
                 <div className="flex justify-between">
                   <Link
                     href="#"
-                    className="text-primary text-sm hover:underline line-clamp-2"
+                    className="text-primary line-clamp-2 text-sm hover:underline"
                   >
                     {comment.anime?.title_english || comment.anime?.title}
                   </Link>
@@ -59,9 +95,39 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
                     __html: comment.bodyHtml.trim(),
                   }}
                 />
+
+                {/* Action buttons row */}
+                {auth.user && (
+                  <div className="flex items-center gap-3 mt-2">
+                    <>
+                      <button
+                        onClick={() =>
+                          handleEditComment(comment.id, comment.body)
+                        }
+                        className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
+                      >
+                        <LuPencil className="size-3" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-text-muted hover:text-accent-red flex items-center gap-1 text-xs hover:cursor-pointer"
+                      >
+                        <LuTrash2 className="size-3" />
+                        Delete
+                      </button>
+                    </>
+                  </div>
+                )}
               </div>
             ))}
         </div>
+
+        <EditModal
+          closeEditModal={closeEditModal}
+          editComment={editComment}
+          editModal={editModal}
+        />
       </div>
     </DashContainer>
   );

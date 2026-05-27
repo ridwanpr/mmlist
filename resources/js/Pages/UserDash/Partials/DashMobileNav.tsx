@@ -8,6 +8,7 @@ import {
 import { index as userDashIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
 import { index as watchlistIndex } from "../../../actions/App/Http/Controllers/WatchlistController";
 import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
+import { index as commentIndex } from "../../../actions/App/Http/Controllers/CommentHistoryController";
 
 const DashMobileNav = () => {
   const { url } = usePage();
@@ -83,7 +84,7 @@ const DashMobileNav = () => {
         </Link>
 
         <Link
-          href="#"
+          href={commentIndex.url()}
           className="text-text-muted flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
         >
           <LuMessageCircle size={14} strokeWidth={2} />
