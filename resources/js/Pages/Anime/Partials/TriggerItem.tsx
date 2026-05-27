@@ -12,6 +12,7 @@ interface TriggerItemProps {
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
   aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
   isCompact?: boolean;
+  countTriggerComments: Record<number, number>;
 }
 
 export interface VoteProps {
@@ -26,6 +27,7 @@ const TriggerItem = ({
   userTriggerVote,
   aiTriggerContext,
   isCompact = false,
+  countTriggerComments,
 }: TriggerItemProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
@@ -107,7 +109,9 @@ const TriggerItem = ({
                 className="text-primary shrink-0 text-[11px] font-medium hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                Discussion (32)
+                {countTriggerComments[triggerContent.id]
+                  ? `Discussion (${countTriggerComments[triggerContent.id]})`
+                  : "Discussion"}
               </Link>
             </div>
 
@@ -222,7 +226,9 @@ const TriggerItem = ({
                 className="text-primary text-xs font-medium hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                Discussion (32)
+                {countTriggerComments[triggerContent.id]
+                  ? `Discussion (${countTriggerComments[triggerContent.id]})`
+                  : "Discussion"}
               </Link>
             </div>
 

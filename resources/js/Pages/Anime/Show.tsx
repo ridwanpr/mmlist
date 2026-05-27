@@ -6,7 +6,7 @@ import { SideInfo } from "./Partials/SideInfo";
 import TriggerWarning from "./Partials/TriggerWarning";
 import FrontLayout from "../../Layouts/FrontLayout";
 import AppHead from "../../Components/AppHead";
-import { usePage, Link } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { settingIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
 
 interface ShowAnimeProps {
@@ -18,6 +18,7 @@ interface ShowAnimeProps {
   topComments: App.DTOs.CommentData[] | null;
   countComments: number;
   user: App.DTOs.UserData | null;
+  countTriggerComments: Record<number, number>;
 }
 
 const ShowAnime = ({
@@ -29,7 +30,9 @@ const ShowAnime = ({
   topComments,
   countComments,
   user,
+  countTriggerComments,
 }: ShowAnimeProps) => {
+  console.log(countTriggerComments);
   const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
 
   if (anime?.is_restricted) {
@@ -126,6 +129,7 @@ const ShowAnime = ({
             anime={anime}
             userTriggerVote={userTriggerVote}
             aiTriggerContext={aiTriggerContext}
+            countTriggerComments={countTriggerComments}
           />
         </div>
       </div>

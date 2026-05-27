@@ -8,11 +8,13 @@ const TriggerWarning = ({
   anime,
   userTriggerVote,
   aiTriggerContext,
+  countTriggerComments,
 }: {
   triggers: App.DTOs.TriggerData[];
   anime: App.DTOs.AnimeData;
   userTriggerVote: App.DTOs.AnimeTriggerData[] | null;
   aiTriggerContext: App.DTOs.AnimeTriggerContextData[] | null;
+  countTriggerComments: Record<number, number>;
 }) => {
   const [filterTrigger, setFilterTrigger] = useState<string | number>("all");
   const [viewMode, setViewMode] = useState<"comfortable" | "compact">(
@@ -126,6 +128,7 @@ const TriggerWarning = ({
               >
                 {category?.triggerContents.map((triggerContent) => (
                   <TriggerItem
+                    countTriggerComments={countTriggerComments}
                     key={triggerContent.id}
                     triggerContent={triggerContent}
                     animeSlug={anime.slug}

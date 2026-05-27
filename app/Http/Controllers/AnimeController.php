@@ -64,7 +64,8 @@ class AnimeController extends Controller
         $topComments = $this->commentService->getTopComments('anime', $anime->id);
         $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
-
+        $countTriggerComments = $this->commentService->getTriggerCommentsCount($anime->id);
+        
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
@@ -73,7 +74,8 @@ class AnimeController extends Controller
             'aiTriggerContext' => $aiTriggerContext,
             'topComments' => $topCommentsDto,
             'countComments' => $countComments,
-            'user' => $userData
+            'user' => $userData,
+            'countTriggerComments' => $countTriggerComments
         ]);
     }
 }

@@ -127,4 +127,14 @@ class CommentService
             ->where('user_id', $userId)
             ->delete();
     }
+
+    public function getTriggerCommentsCount(int $animeId)
+    {
+        return Comment::where('anime_id', $animeId)
+            ->where('commentable_type', 'trigger_content')
+            ->groupBy('commentable_id')
+            ->selectRaw('commentable_id, count(*) as total')
+            ->pluck('total', 'commentable_id')
+            ->all();
+    }
 }
