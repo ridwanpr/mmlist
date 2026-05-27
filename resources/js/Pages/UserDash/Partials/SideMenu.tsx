@@ -10,6 +10,7 @@ import {
 import SidebarLink from "../../../Components/UI/SidebarLink";
 import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
 import { settingIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
+import { index } from "../../../actions/App/Http/Controllers/CommentHistoryController";
 
 const SideMenu = () => {
   const { auth } = usePage().props;
@@ -41,7 +42,7 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href="#" routeName="#">
+      <SidebarLink href={index.url()} routeName="comment-history.index">
         <span className="flex items-center gap-3">
           <LuMessageCircle size={18} />
           <span>Comments</span>

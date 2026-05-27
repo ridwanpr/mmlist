@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentHistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\TriggerCommentController;
@@ -65,4 +66,6 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
 
     Route::get('settings', [UserDashboardController::class, 'settingIndex'])->name('user-setting.index');
     Route::put('profile/{username}', [UserProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('my-comment', [CommentHistoryController::class, 'index'])->name('comment-history.index');
 });

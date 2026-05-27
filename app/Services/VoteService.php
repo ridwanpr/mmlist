@@ -46,7 +46,7 @@ class VoteService
         return PaginatedAnimeTriggerData::fromPaginator($transformed);
     }
 
-    public function getLatestVotesLimit($limit = 10)
+    public function getLatestVotesLimit($limit = 15)
     {
         return AnimeTrigger::with(['anime', 'triggerContent', 'user'])
             ->orderBy('created_at', 'desc')

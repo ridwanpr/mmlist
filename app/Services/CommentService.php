@@ -139,4 +139,11 @@ class CommentService
             ->pluck('total', 'commentable_id')
             ->all();
     }
+
+    public function getUserCommentHistory(int $userId, int $paginateLimit = 15)
+    {
+        return Comment::with(['user', 'anime', 'commentable', 'parent'])
+            ->where('user_id', $userId)
+            ->paginate($paginateLimit);
+    }
 }
