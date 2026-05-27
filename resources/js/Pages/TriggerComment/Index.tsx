@@ -8,14 +8,17 @@ import Sorting from "../../Components/Sorting";
 import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCommentController";
 import TriggerStat from "./Partials/TriggerStat";
 import TriggerCommentItem from "./Partials/TriggerCommentItem";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   EditedComment,
   RepliedComment,
 } from "../AnimeComment/Partials/Discussion";
 import TriggerReplyModal from "./Partials/TriggerReplyModal";
 import EditFormModal from "../AnimeComment/Partials/EditFormModal";
-import { destroy } from "../../actions/App/Http/Controllers/CommentController";
+import {
+  destroy,
+  upvote,
+} from "../../actions/App/Http/Controllers/CommentController";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -106,6 +109,64 @@ const TriggerComment = ({
     }
   };
 
+  const [comments, setComments] = useState(triggerComments.data);
+  const isUpvoting = useRef(false);
+
+  useEffect(() => {
+    if (!isUpvoting.current) {
+      setComments(triggerComments.data);
+    }
+  }, [triggerComments.data]);
+
+  const handleUpvote = (commentId: number) => {
+    if (isGuest) return;
+
+    const previousComments = comments;
+
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId
+          ? {
+              ...c,
+              upvotes: c.isUpvoted ? c.upvotes - 1 : c.upvotes + 1,
+              isUpvoted: !c.isUpvoted,
+            }
+          : c,
+      ),
+    );
+
+    isUpvoting.current = true;
+
+    router.put(
+      upvote.url({ commentId }),
+      {},
+      {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: (page) => {
+          const serverComments = (
+            page.props as unknown as {
+              triggerComments: App.DTOs.PaginatedCommentData;
+            }
+          ).triggerComments.data;
+
+          setComments((prev) =>
+            prev.map((local) => {
+              const fromServer = serverComments.find((s) => s.id === local.id);
+              return fromServer ?? local;
+            }),
+          );
+        },
+        onError: () => {
+          setComments(previousComments);
+        },
+        onFinish: () => {
+          isUpvoting.current = false;
+        },
+      },
+    );
+  };
+
   return (
     <div>
       <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
@@ -129,7 +190,7 @@ const TriggerComment = ({
                 key={comment.id}
                 auth={auth}
                 comment={comment}
-                handleUpvote={() => {}}
+                handleUpvote={handleUpvote}
                 openReplyModal={openReplyModal}
                 handleDeleteComment={handleDeleteComment}
                 handleEditComment={handleEditComment}
