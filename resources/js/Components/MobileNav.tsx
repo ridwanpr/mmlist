@@ -1,7 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
-import { LuBookmark, LuCog, LuHouse, LuCompass, LuUser } from "react-icons/lu";
+import { LuCog, LuHouse, LuCompass, LuUser } from "react-icons/lu";
 import type { IconType } from "react-icons";
-import { index as watchlistIndex } from "../actions/App/Http/Controllers/WatchlistController";
 import {
   index,
   settingIndex,
@@ -88,7 +87,8 @@ const MobileNav = () => {
             active={
               component.startsWith("UserDash/") ||
               component.startsWith("Watchlist/") ||
-              component.startsWith("Votes/")
+              component.startsWith("Votes/") ||
+              component.startsWith("CommentHistory/")
             }
             icon={LuUser}
             label="Profile"

@@ -85,7 +85,7 @@ const DashMobileNav = () => {
 
         <Link
           href={commentIndex.url()}
-          className="text-text-muted flex shrink-0 items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-xs font-medium transition-colors duration-150"
+          className={`${url.startsWith(commentIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
           <LuMessageCircle size={14} strokeWidth={2} />
           Comments
