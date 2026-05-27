@@ -4,6 +4,7 @@ import Discussion from "./Partials/Discussion";
 import AnimeInfo from "../../Components/AnimeInfo";
 import AnimeCommentBreadcrumb from "./Partials/AnimeCommentBreadcrumb";
 import Pagination from "../../Components/UI/Pagination";
+import AppHead from "../../Components/AppHead";
 
 type AnimeCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -17,20 +18,26 @@ const AnimeComment = ({
   sortBy,
 }: AnimeCommentProps) => {
   return (
-    <div>
-      <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
-        <AnimeCommentBreadcrumb anime={anime} />
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
-          <AnimeInfo anime={anime} />
-          <Discussion
-            anime={anime}
-            paginatedComment={paginatedComment}
-            sortBy={sortBy}
-          />
+    <>
+      <AppHead
+        title={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} Discussion`}
+        meta={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} anim discussion`}
+      />
+      <div>
+        <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
+          <AnimeCommentBreadcrumb anime={anime} />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
+            <AnimeInfo anime={anime} />
+            <Discussion
+              anime={anime}
+              paginatedComment={paginatedComment}
+              sortBy={sortBy}
+            />
+          </div>
+          <Pagination links={paginatedComment.links} />
         </div>
-        <Pagination links={paginatedComment.links} />
       </div>
-    </div>
+    </>
   );
 };
 

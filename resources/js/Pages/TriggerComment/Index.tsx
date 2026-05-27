@@ -19,6 +19,7 @@ import {
   destroy,
   upvote,
 } from "../../actions/App/Http/Controllers/CommentController";
+import AppHead from "../../Components/AppHead";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
@@ -168,54 +169,60 @@ const TriggerComment = ({
   };
 
   return (
-    <div>
-      <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
-        <TriggerCommentbread triggerContent={triggerContent} anime={anime} />
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
-          <AnimeInfo anime={anime} />
-          <div>
-            <TriggerDiscussionTitle
-              anime={anime}
-              triggerContent={triggerContent}
-            />
-            <TriggerStat triggerStatData={triggerStatData} />
-            <TriggerFormComment
-              triggerContent={triggerContent}
-              isGuest={isGuest}
+    <>
+      <AppHead
+        title={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} Trigger Discussion`}
+        meta={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} trigger content warnings discussion`}
+      />
+      <div>
+        <div className="mx-auto mb-8 max-w-7xl px-4 py-6">
+          <TriggerCommentbread triggerContent={triggerContent} anime={anime} />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
+            <AnimeInfo anime={anime} />
+            <div>
+              <TriggerDiscussionTitle
+                anime={anime}
+                triggerContent={triggerContent}
+              />
+              <TriggerStat triggerStatData={triggerStatData} />
+              <TriggerFormComment
+                triggerContent={triggerContent}
+                isGuest={isGuest}
+                slug={anime.slug}
+              />
+              <Sorting sortBy={sortBy} handleFilter={handleFilter} />
+              {triggerComments.data?.map((comment) => (
+                <TriggerCommentItem
+                  key={comment.id}
+                  auth={auth}
+                  comment={comment}
+                  handleUpvote={handleUpvote}
+                  openReplyModal={openReplyModal}
+                  handleDeleteComment={handleDeleteComment}
+                  handleEditComment={handleEditComment}
+                />
+              ))}
+            </div>
+          </div>
+          {replyModal && (
+            <TriggerReplyModal
+              repliedComment={repliedComment}
+              replyModal={replyModal}
+              closeReplyModal={closeReplyModal}
+              triggerContentId={triggerContent.id}
               slug={anime.slug}
             />
-            <Sorting sortBy={sortBy} handleFilter={handleFilter} />
-            {triggerComments.data?.map((comment) => (
-              <TriggerCommentItem
-                key={comment.id}
-                auth={auth}
-                comment={comment}
-                handleUpvote={handleUpvote}
-                openReplyModal={openReplyModal}
-                handleDeleteComment={handleDeleteComment}
-                handleEditComment={handleEditComment}
-              />
-            ))}
-          </div>
+          )}
+          {editModal && (
+            <EditFormModal
+              editModal={editModal}
+              closeEditModal={closeEditModal}
+              editComment={editComment}
+            />
+          )}
         </div>
-        {replyModal && (
-          <TriggerReplyModal
-            repliedComment={repliedComment}
-            replyModal={replyModal}
-            closeReplyModal={closeReplyModal}
-            triggerContentId={triggerContent.id}
-            slug={anime.slug}
-          />
-        )}
-        {editModal && (
-          <EditFormModal
-            editModal={editModal}
-            closeEditModal={closeEditModal}
-            editComment={editComment}
-          />
-        )}
       </div>
-    </div>
+    </>
   );
 };
 

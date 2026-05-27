@@ -1,12 +1,18 @@
 import type React from "react";
 import FrontLayout from "../../Layouts/FrontLayout";
 import DashContainer from "./Partials/DashContainer";
+import AppHead from "../../Components/AppHead";
 
 const UserDash = () => {
   return (
-    <DashContainer>
-      <h1>Dashboard</h1>
-    </DashContainer>
+    <>
+      <AppHead
+        title="Overview"
+      />
+      <DashContainer>
+        <h1>Dashboard</h1>
+      </DashContainer>
+    </>
   );
 };
 

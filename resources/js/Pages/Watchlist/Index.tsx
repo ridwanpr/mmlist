@@ -11,6 +11,7 @@ import AnimeList from "./Partials/AnimeList";
 import Pagination from "../../Components/UI/Pagination";
 import { update as watchlistUpdate } from "../../actions/App/Http/Controllers/WatchlistController";
 import { destroy as watchlistDelete } from "../../actions/App/Http/Controllers/WatchlistController";
+import AppHead from "../../Components/AppHead";
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -93,56 +94,59 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   };
 
   return (
-    <DashContainer>
-      <div className="p-4 lg:p-0 mb-6">
-        <div className="mb-4">
-          <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
-            Watchlist
-          </h1>
-          <p className="text-text-muted text-sm">
-            {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
-          </p>
-        </div>
+    <>
+      <AppHead title="Watchlist" />
+      <DashContainer>
+        <div className="mb-6 p-4 lg:p-0">
+          <div className="mb-4">
+            <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
+              Watchlist
+            </h1>
+            <p className="text-text-muted text-sm">
+              {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
+            </p>
+          </div>
 
-        <WatchlistTab
-          activeTab={activeTab}
-          handleChangeTab={handleChangeTab}
-          tabCounts={tabCounts}
-        />
-
-        <div className="mt-4">
-          <p className="text-text-muted mb-4 text-xs">
-            {watchlists?.total} Titles
-          </p>
-
-          {/*Anime List*/}
-          <AnimeList
-            watchlists={watchlists}
-            setSelectedWatchlist={setSelectedWatchlist}
-            handleEditWatchlist={handleEditWatchlist}
-            handleDeleteWatchlist={handleDeleteWatchlist}
+          <WatchlistTab
+            activeTab={activeTab}
+            handleChangeTab={handleChangeTab}
+            tabCounts={tabCounts}
           />
 
-          {/* Pagination */}
-          <Pagination links={watchlists.links} />
+          <div className="mt-4">
+            <p className="text-text-muted mb-4 text-xs">
+              {watchlists?.total} Titles
+            </p>
+
+            {/*Anime List*/}
+            <AnimeList
+              watchlists={watchlists}
+              setSelectedWatchlist={setSelectedWatchlist}
+              handleEditWatchlist={handleEditWatchlist}
+              handleDeleteWatchlist={handleDeleteWatchlist}
+            />
+
+            {/* Pagination */}
+            <Pagination links={watchlists.links} />
+          </div>
         </div>
-      </div>
 
-      {/* View Watchlist */}
-      <DetailModal
-        selectedWatchlist={selectedWatchlist}
-        setSelectedWatchlist={setSelectedWatchlist}
-      />
+        {/* View Watchlist */}
+        <DetailModal
+          selectedWatchlist={selectedWatchlist}
+          setSelectedWatchlist={setSelectedWatchlist}
+        />
 
-      <EditModal
-        editWatchlist={editWatchlist}
-        handleEditWatchlist={handleEditWatchlist}
-        data={data}
-        setData={setData}
-        incrementProgress={incrementProgress}
-        handleSubmitEditWatchlist={handleSubmitEditWatchlist}
-      />
-    </DashContainer>
+        <EditModal
+          editWatchlist={editWatchlist}
+          handleEditWatchlist={handleEditWatchlist}
+          data={data}
+          setData={setData}
+          incrementProgress={incrementProgress}
+          handleSubmitEditWatchlist={handleSubmitEditWatchlist}
+        />
+      </DashContainer>
+    </>
   );
 };
 

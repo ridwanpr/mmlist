@@ -49,7 +49,7 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
-      <SidebarLink href={voteIndex.url()} routeName="#">
+      <SidebarLink href={voteIndex.url()} routeName="votes.index">
         <span className="flex items-center gap-3">
           <LuCheck size={18} />
           <span>My Votes</span>
