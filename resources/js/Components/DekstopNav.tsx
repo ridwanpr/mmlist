@@ -21,7 +21,7 @@ const DesktopNav = () => {
         {/* Logo */}
         <Link
           href={homeIndex.url()}
-          prefetch
+          prefetch={"click"}
           className="text-primary font-serif text-2xl font-bold transition-opacity hover:opacity-90"
         >
           Mamorulist
@@ -33,7 +33,7 @@ const DesktopNav = () => {
             <li className="relative flex h-full items-center">
               <Link
                 href={homeIndex.url()}
-                prefetch
+                prefetch={"click"}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isHomeActive
                     ? "text-primary"
