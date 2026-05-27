@@ -114,17 +114,17 @@ const TriggerItem = ({
             {/* Column 2: Total Community Voting Metrics */}
             <div className="hidden items-center gap-4 sm:col-span-3 sm:flex md:col-span-3 lg:col-span-2">
               <span className="text-text-muted shrink-0 text-[10px] font-bold tracking-wider uppercase">
-                Votes:
+                Votes
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-success flex items-center gap-1 text-xs font-semibold">
-                  <LuCheck className="text-xs" />
+                <span className="text-success flex items-center gap-1 font-semibold">
+                  <LuCheck />
                   <span className="tabular-nums">
                     {triggerContent.stats?.appear_true}
                   </span>
                 </span>
-                <span className="text-accent-red flex items-center gap-1 text-xs font-semibold">
-                  <LuX className="text-xs" />
+                <span className="text-accent-red flex items-center gap-1 font-semibold">
+                  <LuX />
                   <span className="tabular-nums">
                     {triggerContent.stats?.appear_false}
                   </span>
@@ -293,16 +293,16 @@ const TriggerItem = ({
                 </span>
                 <div className="flex gap-3">
                   <div className="flex w-10 flex-col items-center gap-0.5">
-                    <strong className="text-success text-sm font-semibold tabular-nums">
+                    <strong className="text-success font-semibold tabular-nums">
                       {triggerContent.stats?.appear_true}
                     </strong>
-                    <LuCheck className="text-success text-base" />
+                    <LuCheck className="text-success" />
                   </div>
                   <div className="flex w-10 flex-col items-center gap-0.5">
-                    <strong className="text-accent-red text-sm font-semibold tabular-nums">
+                    <strong className="text-accent-red font-semibold tabular-nums">
                       {triggerContent.stats?.appear_false}
                     </strong>
-                    <LuX className="text-accent-red text-base" />
+                    <LuX className="text-accent-red" />
                   </div>
                 </div>
               </div>
