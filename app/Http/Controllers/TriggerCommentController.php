@@ -53,18 +53,23 @@ class TriggerCommentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'commentable_type' => ['required', Rule::in(['trigger_content'])],
             'commentable_id' => ['required'],
-            'body' => ['required']
+            'body' => ['required'],
+            'parent_comment_id' => 'nullable|exists:comments,id',
         ]);
 
         $user = Auth::user();
 
+        $parentId = $validated['parent_comment_id']
+            ? $this->commentService->findCommentFirst($validated['parent_comment_id'])->id
+            : null;
+
         $this->commentService->storeComment(
             userId: $user->id,
-            commentableType: $validated['commentable_type'],
+            commentableType: "trigger_content",
             commentableId: $validated['commentable_id'],
-            data: $validated
+            data: $validated,
+            parentCommentId: $parentId
         );
 
         Inertia::flash('success', 'Comment submitted');

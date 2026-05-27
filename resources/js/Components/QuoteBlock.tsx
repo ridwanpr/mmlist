@@ -12,7 +12,7 @@ const QuoteBlock = ({
       <LuReply className="size-2.75" />
       {authorName}
     </p>
-    <p className="text-text-muted line-clamp-2 text-[12px] leading-relaxed">
+    <div className="text-text-muted line-clamp-2 text-[12px] leading-relaxed">
       <div
         className="prose prose-sm text-text mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
         onClick={(e) => {
@@ -25,7 +25,7 @@ const QuoteBlock = ({
           __html: body.trim(),
         }}
       />
-    </p>
+    </div>
   </div>
 );
 

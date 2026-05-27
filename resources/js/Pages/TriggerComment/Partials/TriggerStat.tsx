@@ -92,7 +92,7 @@ const TriggerStat = ({ triggerStatData }: TriggerStatProps) => {
       className="border-border mb-8 border-b"
     >
       <dl className="grid grid-cols-2 gap-x-6 gap-y-6 py-5 sm:flex sm:flex-nowrap sm:gap-0">
-        {stats.map((stat, i) => (
+        {stats.map((stat) => (
           <div
             key={stat.term}
             className="sm:border-border flex flex-col sm:border-r sm:px-8 sm:first:pl-0 sm:last:border-r-0 sm:last:pr-0"

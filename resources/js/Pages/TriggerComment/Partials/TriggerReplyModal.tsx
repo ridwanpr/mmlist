@@ -12,9 +12,9 @@ import {
   LuEyeOff,
 } from "react-icons/lu";
 import { Form } from "@inertiajs/react";
-import { store } from "../../../actions/App/Http/Controllers/CommentController";
 import { useRef } from "react";
 import type { RepliedComment } from "../../AnimeComment/Partials/Discussion";
+import { store } from "../../../actions/App/Http/Controllers/TriggerCommentController";
 
 type TriggerReplyModalProps = {
   replyModal: boolean;
@@ -132,7 +132,11 @@ const TriggerReplyModal = ({
                 name="parent_comment_id"
                 value={repliedComment.parent_comment_id ?? ""}
               />
-              <input type="hidden" name="slug" value={triggerContentId ?? ""} />
+              <input
+                type="hidden"
+                name="commentable_id"
+                value={triggerContentId ?? ""}
+              />
               <textarea
                 ref={textareaRef}
                 name="body"
