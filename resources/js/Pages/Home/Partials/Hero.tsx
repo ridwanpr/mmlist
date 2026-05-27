@@ -26,7 +26,7 @@ const Hero = ({ staffPick }: HeroProps) => {
   return (
     <section className="border-border bg-surface border-b">
       <div className="mx-auto max-w-7xl px-4 py-10 lg:py-14">
-        <div className="grid gap-6 lg:grid-cols-[1fr_460px] lg:items-center lg:gap-12">
+        <div className="grid gap-6 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-12">
           <div className="max-w-xl">
             <h1 className="text-text font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
               Anime <span className="text-primary">trigger</span>
