@@ -8,7 +8,7 @@ import {
 } from "../../../actions/App/Http/Controllers/CommentController";
 import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
-import QuoteBlock from "./QuoteBlock";
+import QuoteBlock from "../../../Components/QuoteBlock";
 import FormComment from "./FormComment";
 import Sorting from "../../../Components/Sorting";
 import ReplyFormModal from "./ReplyFormModal";
@@ -215,7 +215,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 {comment.parent && (
                   <QuoteBlock
                     authorName={comment.parent.user?.name ?? ""}
-                    body={comment.parent.body}
+                    body={comment.parent.bodyHtml}
                   />
                 )}
 

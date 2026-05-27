@@ -32,12 +32,14 @@ class TriggerCommentController extends Controller
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $triggerContent = $this->triggerService->findTriggerContentBySlug($triggerContentSlug);
         $triggerStatData = $this->triggerService->getTriggerStat($anime->id, $triggerContent->id);
-        
+        $triggerComments = $this->commentService->getComments('trigger_content', $triggerContent->id, 25, $sortBy);
+
         return Inertia::render('TriggerComment/Index', [
             'anime' => AnimeData::fromModel($anime),
             'triggerContent' => TriggerContentData::fromModel($triggerContent),
             'sortBy' => $sortBy,
-            'triggerStatData' => $triggerStatData
+            'triggerStatData' => $triggerStatData,
+            'triggerComments' => $triggerComments
         ]);
     }
 

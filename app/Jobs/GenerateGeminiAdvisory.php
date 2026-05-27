@@ -61,9 +61,9 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 '(SELECT COUNT(*) FROM anime_trigger_contexts WHERE anime_trigger_contexts.anime_id = animes.id) < ?',
                 [$totalTriggerCount]
             )
+            ->orderBy('animes.score', 'desc')
             ->orderBy('animes.year', 'desc')
             ->orderBy('animes.airing', 'desc')
-            ->orderBy('animes.score', 'desc')
             ->limit($phase1Cap)
             ->get();
 
@@ -123,9 +123,9 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->where('source', '!=', 'Original')
             ->where('rating', '!=', 'Rx - Hentai')
             ->where('animes.year', '<=', $currentYear)
+            ->orderBy('animes.score', 'desc')
             ->orderBy('animes.year', 'desc')
             ->orderBy('animes.airing', 'desc')
-            ->orderBy('animes.score', 'desc')
             ->limit($remainingSlots)
             ->get();
 

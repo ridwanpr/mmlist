@@ -7,12 +7,16 @@ import TriggerFormComment from "./Partials/TriggerFormComment";
 import Sorting from "../../Components/Sorting";
 import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCommentController";
 import TriggerStat from "./Partials/TriggerStat";
+import TriggerCommentItem from "./Partials/TriggerCommentItem";
+import { useState } from "react";
+import type { RepliedComment } from "../AnimeComment/Partials/Discussion";
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
   triggerContent: App.DTOs.TriggerContentData;
   triggerStatData: App.DTOs.AnimeTriggerStatData;
   sortBy: "latest" | "most-loved" | "oldest";
+  triggerComments: App.DTOs.PaginatedCommentData;
 };
 
 const TriggerComment = ({
@@ -20,9 +24,31 @@ const TriggerComment = ({
   triggerContent,
   sortBy,
   triggerStatData,
+  triggerComments,
 }: TriggerCommentProps) => {
   const { auth } = usePage().props;
   const isGuest = !auth.user;
+
+  const [replyModal, setReplyModal] = useState(false);
+
+  const [repliedComment, setRepliedComment] = useState<RepliedComment>({
+    parent_comment_id: null,
+    parent_comment_body: "",
+    parent_comment_user: "",
+  });
+
+  const openReplyModal = (
+    commentId: number,
+    commentBody: string,
+    user: string,
+  ) => {
+    setRepliedComment({
+      parent_comment_id: commentId,
+      parent_comment_body: commentBody,
+      parent_comment_user: user,
+    });
+    setReplyModal(true);
+  };
 
   const handleFilter = (filter: string) => {
     router.get(
@@ -52,6 +78,15 @@ const TriggerComment = ({
               isGuest={isGuest}
             />
             <Sorting sortBy={sortBy} handleFilter={handleFilter} />
+            {triggerComments.data?.map((comment) => (
+              <TriggerCommentItem
+                key={comment.id}
+                auth={auth}
+                comment={comment}
+                handleUpvote={() => {}}
+                openReplyModal={openReplyModal}
+              />
+            ))}
           </div>
         </div>
       </div>
