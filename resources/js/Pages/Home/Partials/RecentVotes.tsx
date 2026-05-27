@@ -1,4 +1,6 @@
+import { Link } from "@inertiajs/react";
 import TimeAgo from "../../../Components/TimeAgo";
+import { show } from "../../../actions/App/Http/Controllers/AnimeController";
 
 type RecentVotesProps = {
   latestVotes: App.DTOs.AnimeTriggerData[];
@@ -53,9 +55,12 @@ const RecentVotes = ({ latestVotes }: RecentVotesProps) => {
                   key={votes.id}
                   className="grid grid-cols-1 items-center gap-2 p-5 text-sm md:grid-cols-[2.5fr_1.5fr_0.7fr_1fr_1.2fr_1fr_0.8fr] md:gap-4 md:px-6 md:py-4"
                 >
-                  <div className="text-text font-serif text-base font-bold md:font-sans md:text-sm md:font-semibold">
+                  <Link
+                    href={show.url({ slug: votes.animeData!.slug })}
+                    className="text-primary font-serif text-base font-bold hover:underline md:font-sans md:text-sm md:font-semibold"
+                  >
                     {votes.animeData?.title_english || votes.animeData?.title}
-                  </div>
+                  </Link>
                   <div className="text-text-muted md:text-text">
                     <span className="text-text-muted mr-1 font-medium md:hidden">
                       Category:
