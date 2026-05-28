@@ -63,8 +63,9 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
               Review the history of your comments
             </p>
           </div>
+
           <div className="flex flex-col gap-3">
-            {paginatedComments.data &&
+            {paginatedComments.data && paginatedComments.data.length > 0 ? (
               paginatedComments.data.map((comment) => (
                 <div
                   key={comment.id}
@@ -124,7 +125,12 @@ const CommentHistory = ({ paginatedComments }: CommentHistoryProps) => {
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="text-text-muted py-2 text-sm">
+                You haven&apos;t written any comments yet.
+              </p>
+            )}
           </div>
 
           <Pagination links={paginatedComments.links} />
