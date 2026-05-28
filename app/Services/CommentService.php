@@ -31,11 +31,13 @@ class CommentService
     public function getComments(
         string $commentableType,
         int $commentableId,
+        int $animeId,
         int $paginateLimit = 25,
         string $sortBy = 'latest'
     ) {
         return Comment::where('commentable_type', $commentableType)
             ->where('commentable_id', $commentableId)
+            ->where('anime_id', $animeId)
             ->with(['user', 'parent', 'parent.user'])
             ->withExists(['votes' => fn($q) => $q->where('user_id', Auth::id())])
             ->when($sortBy === 'latest', fn($q) => $q->latest())

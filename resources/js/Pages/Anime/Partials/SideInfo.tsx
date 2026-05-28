@@ -105,7 +105,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Unflagged / Safe
+              Unflagged
             </span>
             <span className="text-text text-xs font-bold">
               {stats.absentTriggers}

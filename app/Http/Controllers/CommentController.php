@@ -55,7 +55,7 @@ class CommentController extends Controller
 
         $anime = $this->animeService->getAnimeInfo($animeSlug);
 
-        $comments = $this->commentService->getComments('anime', $anime->id, 25, $sortBy);
+        $comments = $this->commentService->getComments('anime', $anime->id, $anime->id, 25, $sortBy);
 
         $paginatedComment = PaginatedCommentData::fromPaginator(
             $comments->through(fn(Comment $item): CommentData => CommentData::fromModel($item))

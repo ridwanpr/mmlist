@@ -34,7 +34,13 @@ class TriggerCommentController extends Controller
         $anime = $this->animeService->getAnimeInfo($animeSlug);
         $triggerContent = $this->triggerService->findTriggerContentBySlug($triggerContentSlug);
         $triggerStatData = $this->triggerService->getTriggerStat($anime->id, $triggerContent->id);
-        $triggerCommentsData = $this->commentService->getComments('trigger_content', $triggerContent->id, 25, $sortBy);
+        $triggerCommentsData = $this->commentService->getComments(
+            'trigger_content',
+            $triggerContent->id,
+            $anime->id,
+            25,
+            $sortBy
+        );
 
         $triggerComments = PaginatedCommentData::fromPaginator(
             $triggerCommentsData->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
