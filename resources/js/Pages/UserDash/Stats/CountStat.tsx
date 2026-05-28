@@ -7,7 +7,15 @@ import {
   LuTv,
 } from "react-icons/lu";
 
-const CountStat = () => {
+type CountStatProps = {
+  countStat: App.DTOs.CountStatData;
+};
+
+const formatNumber = (num: number): string => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+const CountStat = ({ countStat }: CountStatProps) => {
   return (
     <div className="grid grid-cols-2 gap-3 p-3 lg:grid-cols-3 lg:gap-5 lg:p-0">
       {/* Total Anime */}
@@ -17,7 +25,7 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            900
+            {formatNumber(countStat.totalAnime)}
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Total Anime
@@ -32,7 +40,7 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            1,222
+            {formatNumber(countStat.episodesWatched)}
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Episodes Watched
@@ -47,7 +55,7 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            9
+            {formatNumber(countStat.currentlyWatching)}
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Currently Watching
@@ -62,7 +70,7 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            92%
+            {countStat.completionRate}%
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Completion Rate
@@ -77,7 +85,7 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            4%
+            {countStat.dropRate}%
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Drop Rate
@@ -92,7 +100,9 @@ const CountStat = () => {
         </div>
         <div className="min-w-0">
           <p className="text-text text-lg leading-tight font-extrabold tracking-tight sm:text-xl">
-            8.5
+            {countStat.averageScore > 0
+              ? countStat.averageScore.toFixed(1)
+              : "0.0"}
           </p>
           <p className="text-text-muted mt-0.5 truncate text-[11px] font-medium sm:text-xs">
             Average Score

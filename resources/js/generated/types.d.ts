@@ -100,6 +100,14 @@ declare namespace App {
         | null;
       readonly anime: App.DTOs.AnimeData | null;
     };
+    export type CountStatData = {
+      readonly totalAnime: number;
+      readonly episodesWatched: number;
+      readonly currentlyWatching: number;
+      readonly completionRate: number;
+      readonly dropRate: number;
+      readonly averageScore: number;
+    };
     export type GenreData = {
       readonly id: number;
       readonly mal_id: number;
