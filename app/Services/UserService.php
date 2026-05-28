@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTOs\PaginatedUserData;
+use App\DTOs\UserData;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,5 +30,21 @@ class UserService
     public function findUserByUsername(string $username)
     {
         return User::where('username', $username)->firstOrFail();
+    }
+
+    public function getUserPaginate(int $paginateLimit = 15)
+    {
+        $users = User::with('roles')
+            ->whereHas('roles', function ($query) {
+                $query->where('role_id', 'user');
+            })
+            ->latest()
+            ->paginate($paginateLimit)
+            ->onEachSide(1)
+            ->withQueryString();
+
+        $userDto = $users->through(fn(User $item) => UserData::fromModel($item));
+
+        return PaginatedUserData::fromPaginator($userDto);
     }
 }

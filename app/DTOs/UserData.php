@@ -29,7 +29,7 @@ readonly class UserData
             email: $model->email ?? null,
             createdAt: $model->created_at ?? null,
             updatedAt: $model->updated_at ?? null,
-            birth_date: $model->birth_date ?? null,
+            birth_date: $model->birth_date?->format('Y-m-d') ?? null,
             is_banned: $model->is_banned ?? null,
             show_nsfw: $model->show_nsfw ?? null,
         );

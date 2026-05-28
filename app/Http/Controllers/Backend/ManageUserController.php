@@ -13,6 +13,10 @@ class ManageUserController extends Controller
 
     public function index()
     {
-        return Inertia::render('Backend/User/Index');
+        $users = $this->userService->getUserPaginate(15);
+
+        return Inertia::render('Backend/User/Index', [
+            'users' => $users
+        ]);
     }
 }
