@@ -43,7 +43,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'disposable_email' => 'Please use valid known email address provider',
-            'show_nsfw.declined' => 'You must provide a birth date to enable NSFW content.',
+            'show_nsfw.declined' => 'You must set your birth date to enable NSFW content.',
         ];
     }
 }
