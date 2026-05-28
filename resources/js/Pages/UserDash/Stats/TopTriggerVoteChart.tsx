@@ -73,7 +73,7 @@ const TopTriggerVoteChart = ({
               Contribution Activity
             </h3>
             <p className="text-text-muted font-sans text-xs">
-              Trigger tracking and voting history
+              Trigger vote history
             </p>
           </div>
           <span className="text-text-muted bg-surface-alt rounded px-2 py-1 font-sans text-xs font-medium">
