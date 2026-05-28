@@ -39,6 +39,7 @@ class ManageUserController extends Controller
             'birth_date' => ['nullable'],
             'is_banned' => ['nullable']
         ]);
+        
         $user = $this->userService->findUserById($userId);
         $this->userService->adminUpdateUser($validated, $user->id);
 

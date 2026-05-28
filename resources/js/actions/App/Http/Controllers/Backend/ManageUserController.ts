@@ -159,7 +159,7 @@ update.put = (args: { userId: string | number } | [userId: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::triggerReset
- * @see app/Http/Controllers/Backend/ManageUserController.php:49
+ * @see app/Http/Controllers/Backend/ManageUserController.php:50
  * @route '/admin/user/{userId}'
  */
 export const triggerReset = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -174,7 +174,7 @@ triggerReset.definition = {
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::triggerReset
- * @see app/Http/Controllers/Backend/ManageUserController.php:49
+ * @see app/Http/Controllers/Backend/ManageUserController.php:50
  * @route '/admin/user/{userId}'
  */
 triggerReset.url = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -202,7 +202,7 @@ triggerReset.url = (args: { userId: string | number } | [userId: string | number
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::triggerReset
- * @see app/Http/Controllers/Backend/ManageUserController.php:49
+ * @see app/Http/Controllers/Backend/ManageUserController.php:50
  * @route '/admin/user/{userId}'
  */
 triggerReset.post = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
