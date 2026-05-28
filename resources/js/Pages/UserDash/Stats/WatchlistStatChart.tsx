@@ -15,7 +15,7 @@ const WatchlistStatChart = ({ watchlistStat }: WatchlistStatChartProps) => {
     {
       name: "Planned",
       count: watchlistStat.planned,
-      fill: "var(--color-accent-gold)",
+      fill: "var(--color-primary)",
     },
     {
       name: "Watching",
@@ -25,17 +25,17 @@ const WatchlistStatChart = ({ watchlistStat }: WatchlistStatChartProps) => {
     {
       name: "Completed",
       count: watchlistStat.completed,
-      fill: "var(--color-success)",
+      fill: "var(--color-primary)",
     },
     {
       name: "On Hold",
       count: watchlistStat.on_hold,
-      fill: "var(--color-severity-mild)",
+      fill: "var(--color-primary)",
     },
     {
       name: "Dropped",
       count: watchlistStat.dropped,
-      fill: "var(--color-accent-red)",
+      fill: "var(--color-primary)",
     },
   ];
 
@@ -85,6 +85,7 @@ const WatchlistStatChart = ({ watchlistStat }: WatchlistStatChartProps) => {
         />
         <RechartsDevtools />
       </BarChart>
+      <p className="text-xs text-text-muted text-center mt-1">Watchlist Stats</p>
     </div>
   );
 };
