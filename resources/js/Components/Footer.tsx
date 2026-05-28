@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 
 const Footer = () => {
   return (
-    <footer className="bg-surface border-primary/10 border-t pb-20 lg:pb-0">
+    <footer className="bg-surface border-primary/10 border-t mt-6 pb-20 lg:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-1">

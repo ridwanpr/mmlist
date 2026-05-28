@@ -118,7 +118,7 @@ const TriggerItem = ({
             {/* Column 2: Total Community Voting Metrics */}
             <div className="hidden items-center gap-4 sm:col-span-3 sm:flex md:col-span-3 lg:col-span-2">
               <span className="text-text-muted shrink-0 text-[10px] font-bold tracking-wider uppercase">
-                Votes
+                Appears?
               </span>
               <div className="flex items-center gap-3">
                 <span className="text-success flex items-center gap-1 font-semibold">
