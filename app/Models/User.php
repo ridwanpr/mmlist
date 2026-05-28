@@ -53,7 +53,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'username', 'email', 'password', 'show_nsfw', 'birth_date'])]
+#[Fillable(['name', 'username', 'email', 'password', 'show_nsfw', 'birth_date', 'is_banned'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {

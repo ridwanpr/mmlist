@@ -65,8 +65,6 @@ const columns: ColumnDef<App.DTOs.UserData>[] = [
 ];
 
 const ManageUser = ({ users }: ManageUserProps) => {
-  console.log(users);
-
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: users.data,

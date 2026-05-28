@@ -52,4 +52,15 @@ class UserService
     {
         return User::where('id', $id)->firstOrFail();
     }
+
+    public function adminUpdateUser(array $data, int $userId)
+    {
+        return User::where('id', $userId)->update([
+            'name' => $data['name'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'birth_date' => $data['birth_date'],
+            'is_banned' => $data['is_banned'] == 1 ? true : false
+        ]);
+    }
 }

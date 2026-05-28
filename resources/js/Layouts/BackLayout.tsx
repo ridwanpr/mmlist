@@ -1,36 +1,44 @@
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { Link, usePage } from "@inertiajs/react";
-import React, { useEffect, useState } from "react";
-import { LuMenu } from "react-icons/lu";
-import { toast, Toaster } from "sonner";
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
+import { Link, usePage } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react';
+import { LuMenu } from 'react-icons/lu';
+import { toast, Toaster } from 'sonner';
 
-import AdminSidebar from "../Components/AdminSidebar";
-import ThemeToggle from "../Components/UI/ThemeToggle";
+import AdminSidebar from '../Components/AdminSidebar';
+import ThemeToggle from '../Components/UI/ThemeToggle';
 
 interface BackLayoutProps {
   children: React.ReactNode;
 }
 
+interface FlashMessages {
+  success?: string;
+  error?: string;
+  warning?: string;
+  info?: string;
+}
+
 const BackLayout = ({ children }: BackLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       return window.innerWidth >= 1024;
     }
     return true;
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { flash } = usePage().props as any;
+  const { flash } = usePage() as unknown as { flash: FlashMessages };
 
   useEffect(() => {
-    if (flash?.success) toast.success(flash.success);
-    if (flash?.error) toast.error(flash.error);
-    if (flash?.warning) toast.warning(flash.warning);
-    if (flash?.info) toast.info(flash.info);
+    if (!flash) return;
+
+    if (flash.success) toast.success(flash.success);
+    if (flash.error) toast.error(flash.error);
+    if (flash.warning) toast.warning(flash.warning);
+    if (flash.info) toast.info(flash.info);
   }, [flash]);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
+    setIsSidebarOpen(prev => !prev);
   };
 
   const closeSidebar = () => {
@@ -44,32 +52,27 @@ const BackLayout = ({ children }: BackLayoutProps) => {
         closeButton
         toastOptions={{
           className:
-            "font-sans !bg-surface !text-text border !border-border shadow-xl rounded-xl p-4 !w-fit !min-w-[240px] !max-w-md",
+            'font-sans !bg-surface !text-text border !border-border shadow-xl rounded-xl p-4 !w-fit !min-w-[240px] !max-w-md',
           classNames: {
-            success: "!border-l-4 !border-l-success [&_svg]:!text-success",
-            error: "!border-l-4 !border-l-accent-red [&_svg]:!text-accent-red",
-            warning:
-              "!border-l-4 !border-l-accent-gold [&_svg]:!text-accent-gold",
-            info: "!border-l-4 !border-l-primary [&_svg]:!text-primary",
-            description: "text-text-muted",
-            closeButton:
-              "!bg-surface !text-text-muted !border-border hover:!text-text",
+            success: '!border-l-4 !border-l-success [&_svg]:!text-success',
+            error: '!border-l-4 !border-l-accent-red [&_svg]:!text-accent-red',
+            warning: '!border-l-4 !border-l-accent-gold [&_svg]:!text-accent-gold',
+            info: '!border-l-4 !border-l-primary [&_svg]:!text-primary',
+            description: 'text-text-muted',
+            closeButton: '!bg-surface !text-text-muted !border-border hover:!text-text',
           },
         }}
       />
 
       {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={closeSidebar}
-        />
+        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={closeSidebar} />
       )}
 
       <AdminSidebar isOpen={isSidebarOpen} />
 
       <div
         className={`flex min-w-0 flex-1 flex-col transition-[padding] duration-300 ${
-          isSidebarOpen ? "lg:pl-67.5" : "lg:pl-0"
+          isSidebarOpen ? 'lg:pl-67.5' : 'lg:pl-0'
         }`}
       >
         <header className="bg-surface border-border flex shrink-0 items-center justify-between border-b p-4">

@@ -37,6 +37,7 @@ Route::middleware('guest')->group(function () {
     });
 });
 
+// ADMIN ROUTE
 Route::prefix('admin')
     ->middleware(['auth', 'role:admin', EncryptHistory::class])
     ->group(function () {
@@ -45,6 +46,8 @@ Route::prefix('admin')
 
         Route::get('user', [ManageUserController::class, 'index'])->name('manage-user.index');
         Route::get('user/{userId}', [ManageUserController::class, 'edit'])->name('manage-user.edit');
+        Route::put('user/{userId}', [ManageUserController::class, 'update'])->name('manage-user.update');
+        Route::post('user/{userId}', [ManageUserController::class, 'triggerReset'])->name('manage-user.reset');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {
