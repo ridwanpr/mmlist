@@ -87,7 +87,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
         <div className="flex flex-col gap-2.5">
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Total triggers
+              Tracked Categories
             </span>
             <span className="text-text text-xs font-bold">
               {stats.totalTriggers}
@@ -96,7 +96,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Triggers present
+              Confirmed Warnings
             </span>
             <span className="text-text text-xs font-bold">
               {stats.presentTriggers}
@@ -105,7 +105,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Triggers absent
+              Unflagged / Safe
             </span>
             <span className="text-text text-xs font-bold">
               {stats.absentTriggers}
@@ -114,7 +114,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Total reports
+              Community Votes
             </span>
             <span className="text-text text-xs font-bold">
               {stats.totalReports}
