@@ -1,5 +1,4 @@
 import type React from "react";
-
 import Breadcrumb from "./Partials/Breadcrumb";
 import MainInfo from "./Partials/MainInfo";
 import { SideInfo } from "./Partials/SideInfo";
@@ -8,6 +7,8 @@ import FrontLayout from "../../Layouts/FrontLayout";
 import AppHead from "../../Components/AppHead";
 import { Link } from "@inertiajs/react";
 import { settingIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
+import { useState } from "react";
+import TriggerConsent from "./Partials/TriggerConsent";
 
 interface ShowAnimeProps {
   anime: App.DTOs.AnimeData & { is_restricted?: boolean };
@@ -33,6 +34,8 @@ const ShowAnime = ({
   countTriggerComments,
 }: ShowAnimeProps) => {
   const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
+
+  const [isTriggerConsent, setIsTriggerConsent] = useState(false);
 
   if (anime?.is_restricted) {
     return (
@@ -123,13 +126,22 @@ const ShowAnime = ({
         </div>
 
         <div className="border-border mt-6 border-t pt-6">
-          <TriggerWarning
-            triggers={triggers}
-            anime={anime}
-            userTriggerVote={userTriggerVote}
-            aiTriggerContext={aiTriggerContext}
-            countTriggerComments={countTriggerComments}
-          />
+          <div className="w-full">
+            {!isTriggerConsent && (
+              <TriggerConsent
+                handleRevealTrigger={() => setIsTriggerConsent(true)}
+              />
+            )}
+            <div className={!isTriggerConsent ? "hidden" : ""}>
+              <TriggerWarning
+                triggers={triggers}
+                anime={anime}
+                userTriggerVote={userTriggerVote}
+                aiTriggerContext={aiTriggerContext}
+                countTriggerComments={countTriggerComments}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>
