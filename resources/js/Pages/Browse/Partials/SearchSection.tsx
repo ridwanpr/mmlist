@@ -179,7 +179,7 @@ const SearchSection = ({
     selectedTypes.length;
 
   return (
-    <div className="bg-surface">
+    <div className="bg-surface border-border border-b">
       <div className="mx-auto max-w-7xl p-4 lg:pt-4 lg:pb-6">
         <h1 className="text-text mb-2 font-serif text-2xl font-bold">
           Browse Anime
