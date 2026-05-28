@@ -44,7 +44,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:29
+ * @see app/Http/Controllers/UserDashboardController.php:31
  * @route '/settings'
  */
 export const settingIndex = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ settingIndex.definition = {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:29
+ * @see app/Http/Controllers/UserDashboardController.php:31
  * @route '/settings'
  */
 settingIndex.url = (options?: RouteQueryOptions) => {
@@ -68,7 +68,7 @@ settingIndex.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:29
+ * @see app/Http/Controllers/UserDashboardController.php:31
  * @route '/settings'
  */
 settingIndex.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -77,7 +77,7 @@ settingIndex.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\UserDashboardController::settingIndex
- * @see app/Http/Controllers/UserDashboardController.php:29
+ * @see app/Http/Controllers/UserDashboardController.php:31
  * @route '/settings'
  */
 settingIndex.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\DTOs\TriggerFramingStatData;
 use App\DTOs\WatchlistStatData;
+use App\Models\AnimeTrigger;
 use App\Models\Watchlist;
 
 class StatService
@@ -27,5 +29,25 @@ class StatService
         $finalStats = array_merge($defaultStats, $counts);
 
         return WatchlistStatData::fromArray($finalStats);
+    }
+
+    public function getTriggerFramingStat(int $userId)
+    {
+        $defaultStats = [
+            'Serious' => 0,
+            'Neutral' => 0,
+            'Romanticized' => 0,
+            'Comedic' => 0,
+        ];
+
+        $counts = AnimeTrigger::where('user_id', $userId)
+            ->selectRaw('framing, count(*) as total')
+            ->groupBy('framing')
+            ->pluck('total', 'framing')
+            ->toArray();
+
+        $finalStats = array_merge($defaultStats, $counts);
+
+        return TriggerFramingStatData::fromArray($finalStats);
     }
 }

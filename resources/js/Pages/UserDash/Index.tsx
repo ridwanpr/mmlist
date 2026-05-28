@@ -4,12 +4,14 @@ import DashContainer from "./Partials/DashContainer";
 import AppHead from "../../Components/AppHead";
 import CountStat from "./Stats/CountStat";
 import WatchlisStatChart from "./Stats/WatchlistStatChart";
+import TriggerProfileChart from "./Stats/TriggelProfileChart";
 
 type UserDashProps = {
   watchlistStat: App.DTOs.WatchlistStatData;
+  triggerFramingStat: App.DTOs.TriggerFramingStatData;
 };
 
-const UserDash = ({ watchlistStat }: UserDashProps) => {
+const UserDash = ({ watchlistStat, triggerFramingStat }: UserDashProps) => {
   return (
     <>
       <AppHead title="Overview" />
@@ -18,6 +20,7 @@ const UserDash = ({ watchlistStat }: UserDashProps) => {
           <CountStat />
           <div className="grid grid-cols-1 gap-3 px-3 lg:mt-5 lg:grid-cols-2 lg:gap-5 lg:p-0">
             <WatchlisStatChart watchlistStat={watchlistStat} />
+            <TriggerProfileChart triggerFramingStat={triggerFramingStat} />
           </div>
         </div>
       </DashContainer>

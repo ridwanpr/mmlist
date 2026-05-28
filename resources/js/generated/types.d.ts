@@ -201,6 +201,12 @@ declare namespace App {
       readonly updated_at: string | null;
       readonly triggerContents: App.DTOs.TriggerContentData[];
     };
+    export type TriggerFramingStatData = {
+      readonly serious: number;
+      readonly neutral: number;
+      readonly romanticized: number;
+      readonly comedic: number;
+    };
     export type TriggerStatsData = {
       readonly appear_true: number;
       readonly appear_false: number;
