@@ -87,7 +87,7 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
         <div className="flex flex-col gap-2.5">
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
             <span className="text-text/90 text-sm font-medium">
-              Tracked Categories
+              Tracked Triggers
             </span>
             <span className="text-text text-xs font-bold">
               {stats.totalTriggers}
