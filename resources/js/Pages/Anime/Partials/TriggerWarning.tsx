@@ -71,7 +71,6 @@ const TriggerWarning = ({
 
         {/* Trigger Content List */}
         <section className="flex-1">
-          {/* Header Controls Layout */}
           <div className="border-border mb-4 flex items-center justify-between border-b pb-3">
             <h2 className="text-text font-semibold">
               {filterTrigger === "all"
@@ -79,7 +78,6 @@ const TriggerWarning = ({
                 : "Filtered Content"}
             </h2>
 
-            {/* Toggle Switch Container */}
             <div className="bg-surface-alt border-border flex items-center gap-1 rounded-md border p-1">
               <button
                 type="button"
@@ -107,7 +105,7 @@ const TriggerWarning = ({
           </div>
 
           {filteredTriggers?.map((category) => (
-            <div key={category.id} className="mb-6">
+            <section key={category.id} className="mb-6">
               <div className="border-primary my-3 border-l-2 px-2">
                 <h3 className="text-text text-sm font-semibold">
                   {category.name}
@@ -119,7 +117,7 @@ const TriggerWarning = ({
                 )}
               </div>
 
-              <div
+              <ul
                 className={
                   viewMode === "compact"
                     ? "flex flex-col gap-2"
@@ -137,8 +135,8 @@ const TriggerWarning = ({
                     isCompact={viewMode === "compact"}
                   />
                 ))}
-              </div>
-            </div>
+              </ul>
+            </section>
           ))}
         </section>
       </div>

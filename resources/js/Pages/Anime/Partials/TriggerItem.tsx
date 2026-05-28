@@ -73,7 +73,7 @@ const TriggerItem = ({
   const toggleTrigger = () => setIsOpen((prev) => !prev);
 
   return (
-    <div
+    <li
       className={`overflow-hidden rounded-lg border ${
         isCompact ? "border-l-2" : "border-l-4"
       } ${
@@ -419,6 +419,7 @@ const TriggerItem = ({
                               className="h-3.5 w-3.5 animate-spin"
                               viewBox="0 0 24 24"
                               fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
                               <circle
                                 className="opacity-25"
@@ -451,7 +452,7 @@ const TriggerItem = ({
           </div>
         </div>
       )}
-    </div>
+    </li>
   );
 };
 
