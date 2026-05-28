@@ -7,6 +7,7 @@ use App\DTOs\PaginatedAnimeData;
 use App\DTOs\TriggerData;
 use App\Models\Anime;
 use App\Models\MasterTrigger;
+use Cache;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -211,20 +212,28 @@ class AnimeService
     }
 
     /**
-     * @return Collection<int, int>
+     * @return array<int, int>
      */
-    public function getAnimeYear(): Collection
+    public function getAnimeYear(): array
     {
-        return Anime::whereNotNull('year')
-            ->orderBy('year', 'desc')
-            ->distinct()
-            ->pluck('year');
+        return Cache::remember('year', now()->plus(days: 14), function () {
+            return Anime::whereNotNull('year')
+                ->orderBy('year', 'desc')
+                ->distinct()
+                ->pluck('year')
+                ->toArray();
+        });
     }
 
-    public function getStaffPickAnime(): Collection
+    public function getStaffPickAnime()
     {
-        return Anime::where('staff_pick', true)
-            ->select('slug', 'title', 'title_english')->get();
+        return Cache::tags(['anime', 'staff_picks'])
+            ->remember('staff_pick_anime', now()->plus(days: 3), function () {
+                return Anime::where('staff_pick', true)
+                    ->select('slug', 'title', 'title_english')
+                    ->get()
+                    ->toArray();
+            });
     }
 
     private function buildBooleanSearch(string $input): ?string
