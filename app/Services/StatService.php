@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTOs\CountStatData;
 use App\DTOs\TriggerFramingStatData;
+use App\DTOs\TriggerVoteActivityData;
 use App\DTOs\WatchlistStatData;
 use App\Models\AnimeTrigger;
 use App\Models\Watchlist;
@@ -83,5 +84,32 @@ class StatService
         ];
 
         return CountStatData::fromArray($finalStats);
+    }
+
+    public function getUserVoteActivity(int $userId): TriggerVoteActivityData
+    {
+        $rawStat = AnimeTrigger::where('user_id', $userId)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+            ->where('created_at', '>=', now()->subYear())
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->pluck('total', 'date');
+
+        // Build a continuous date timeline range
+        $startDate = now()->subYear()->startOfDay();
+        $endDate = now()->endOfDay();
+        $period = \Carbon\CarbonPeriod::create($startDate, '1 day', $endDate);
+
+        // Map out the timeline ensuring missing calendar entries default to 0
+        $formattedDays = [];
+        foreach ($period as $date) {
+            $formattedDate = $date->format('Y-m-d');
+            $formattedDays[] = [
+                'date' => $formattedDate,
+                'count' => (int) ($rawStat->get($formattedDate, 0)),
+            ];
+        }
+
+        return TriggerVoteActivityData::fromArray($formattedDays);
     }
 }

@@ -22,11 +22,13 @@ class UserDashboardController extends Controller
         $watchlistStat = $this->statService->getWatchlistStat($user->id);
         $triggerFramingStat = $this->statService->getTriggerFramingStat($user->id);
         $countStat = $this->statService->getCountStat($user->id);
+        $triggerVoteActivity = $this->statService->getUserVoteActivity($user->id);
 
         return Inertia::render('UserDash/Index', [
             'watchlistStat' => $watchlistStat,
             'triggerFramingStat' => $triggerFramingStat,
-            'countStat' => $countStat
+            'countStat' => $countStat,
+            'triggerVoteActivity' => $triggerVoteActivity
         ]);
     }
 

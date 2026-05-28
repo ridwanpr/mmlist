@@ -231,6 +231,12 @@ declare namespace App {
         Comedic: number;
       };
     };
+    export type TriggerVoteActivityData = {
+      readonly days: {
+        date: string;
+        count: number;
+      }[];
+    };
     export type UserData = {
       readonly id: number;
       readonly name: string;
