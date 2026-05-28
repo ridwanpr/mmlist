@@ -31,6 +31,7 @@
     "@headlessui/react": "^2.2.10",
     "@inertiajs/react": "^3.0.3",
     "@inertiajs/vite": "^3.0.3",
+    "@recharts/devtools": "^0.0.14",
     "@tanstack/react-table": "^8.21.3",
     "@vitejs/plugin-react": "^6.0.1",
     "disable-devtool": "^0.3.9",

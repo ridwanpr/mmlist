@@ -247,6 +247,13 @@ declare namespace App {
       readonly images: Record<string, any>;
       readonly slug: string | null;
     };
+    export type WatchlistStatData = {
+      readonly planned: number;
+      readonly watching: number;
+      readonly completed: number;
+      readonly on_hold: number;
+      readonly dropped: number;
+    };
   }
 }
 declare namespace Illuminate {

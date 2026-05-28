@@ -9,7 +9,7 @@ import {
 
 const CountStat = () => {
   return (
-    <div className="mb-6 grid grid-cols-2 gap-3 p-3 lg:grid-cols-3 lg:gap-5 lg:p-0">
+    <div className="grid grid-cols-2 gap-3 p-3 lg:grid-cols-3 lg:gap-5 lg:p-0">
       {/* Total Anime */}
       <div className="bg-surface border-border hover:border-text-muted/30 flex items-center gap-2.5 rounded-lg border p-3 transition-all">
         <div className="bg-surface-alt text-text shrink-0 rounded-lg p-2">

@@ -17,7 +17,13 @@ class UserDashboardController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('UserDash/Index');
+        $user = Auth::user();
+
+        $watchlistStat = $this->statService->getWatchlistStat($user->id);
+
+        return Inertia::render('UserDash/Index', [
+            'watchlistStat' => $watchlistStat
+        ]);
     }
 
     public function settingIndex(): Response
