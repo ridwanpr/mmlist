@@ -4,6 +4,7 @@ use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
+use App\Http\Controllers\Backend\ManageUserController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentHistoryController;
@@ -41,6 +42,8 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('anime', [ManageAnimeController::class, 'index'])->name('manage-anime.index');
+
+        Route::get('user', [ManageUserController::class, 'index'])->name('manage-user.index');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {

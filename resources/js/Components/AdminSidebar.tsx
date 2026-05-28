@@ -12,6 +12,7 @@ import {
   LuUsers,
   LuVote,
 } from "react-icons/lu";
+import { index as userIndex } from "../actions/App/Http/Controllers/Backend/ManageUserController";
 
 import SidebarLink from "./UI/SidebarLink";
 
@@ -57,7 +58,7 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
 
           <p className="my-2 px-3 text-sm">Community</p>
 
-          <SidebarLink href="#" routeName="users.index">
+          <SidebarLink href={userIndex.url()} routeName="manage-user.index">
             <LuUsers size={18} /> Users
           </SidebarLink>
 

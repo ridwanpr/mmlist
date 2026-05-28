@@ -1,3 +1,5 @@
+import BackLayout from "../../../Layouts/BackLayout";
+
 const ManageUser = () => {
   return (
     <div>
@@ -12,5 +14,7 @@ const ManageUser = () => {
     </div>
   );
 };
+
+ManageUser.layout = (page: React.ReactNode) => <BackLayout>{page}</BackLayout>;
 
 export default ManageUser;
