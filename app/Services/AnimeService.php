@@ -137,25 +137,30 @@ class AnimeService
      */
     public function fetchTopAnime(int $limit = 12): array
     {
-        $topIds = Anime::query()
-            ->where('rating', '!=', 'Rx - Hentai')
-            ->orderByRaw("animes.type = 'TV' DESC")
-            ->orderBy('animes.score', 'desc')
-            ->orderBy('animes.year', 'desc')
-            ->orderBy('animes.airing', 'desc')
-            ->limit($limit)
-            ->pluck('id');
+        return Cache::tags(['anime', 'top_anime'])
+            ->remember("top_anime_{$limit}", now()->plus(days: 3), function () use ($limit) {
+                $topIds = Anime::query()
+                    ->where('rating', '!=', 'Rx - Hentai')
+                    ->orderByRaw("animes.type = 'TV' DESC")
+                    ->orderBy('animes.score', 'desc')
+                    ->orderBy('animes.year', 'desc')
+                    ->orderBy('animes.airing', 'desc')
+                    ->limit($limit)
+                    ->pluck('id');
 
-        if ($topIds->isEmpty()) {
-            return [];
-        }
+                if ($topIds->isEmpty()) {
+                    return [];
+                }
 
-        $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
-            ->whereIn('id', $topIds)
-            ->get()
-            ->keyBy('id');
+                $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
+                    ->whereIn('id', $topIds)
+                    ->get()
+                    ->keyBy('id');
 
-        return $topIds->map(fn($id) => AnimeData::fromModel($animes[$id]))->values()->all();
+                return $topIds->map(fn($id) => AnimeData::fromModel($animes[$id]))
+                    ->values()
+                    ->all();
+            });
     }
 
     /**
