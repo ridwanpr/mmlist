@@ -19,4 +19,13 @@ class ManageUserController extends Controller
             'users' => $users
         ]);
     }
+
+    public function edit(int $userId)
+    {
+        $user = $this->userService->findUserById($userId);
+
+        return Inertia::render('Backend/User/Edit', [
+            'user' => $user
+        ]);
+    }
 }

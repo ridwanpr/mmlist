@@ -6,6 +6,9 @@ import {
 } from "@tanstack/react-table";
 import BackLayout from "../../../Layouts/BackLayout";
 import Pagination from "../../../Components/UI/Pagination";
+import { Link } from "@inertiajs/react";
+import { LuPencil } from "react-icons/lu";
+import { edit } from "../../../actions/App/Http/Controllers/Backend/ManageUserController";
 
 type ManageUserProps = {
   users: App.DTOs.PaginatedUserData;
@@ -42,6 +45,21 @@ const columns: ColumnDef<App.DTOs.UserData>[] = [
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return <span className="text-text font-medium">{value || "-"}</span>;
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <Link
+          href={edit.url({ userId: user.id })}
+          className="border-border bg-surface text-text-muted hover:border-primary hover:bg-primary-soft hover:text-primary inline-flex items-center justify-center rounded-md border p-1.5 transition-colors"
+        >
+          <LuPencil size={14} />
+        </Link>
+      );
     },
   },
 ];

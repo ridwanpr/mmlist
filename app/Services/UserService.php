@@ -47,4 +47,9 @@ class UserService
 
         return PaginatedUserData::fromPaginator($userDto);
     }
+
+    public function findUserById(int $id)
+    {
+        return User::where('id', $id)->firstOrFail();
+    }
 }

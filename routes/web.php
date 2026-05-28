@@ -44,6 +44,7 @@ Route::prefix('admin')
         Route::get('anime', [ManageAnimeController::class, 'index'])->name('manage-anime.index');
 
         Route::get('user', [ManageUserController::class, 'index'])->name('manage-user.index');
+        Route::get('user/{userId}', [ManageUserController::class, 'edit'])->name('manage-user.edit');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {
