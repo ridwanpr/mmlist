@@ -5,6 +5,7 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 import BackLayout from "../../../Layouts/BackLayout";
+import Pagination from "../../../Components/UI/Pagination";
 
 type ManageUserProps = {
   users: App.DTOs.PaginatedUserData;
@@ -110,6 +111,18 @@ const ManageUser = ({ users }: ManageUserProps) => {
             ))}
           </tbody>
         </table>
+
+        <div className="border-border bg-surface-alt/50 flex flex-col gap-3 border-t px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-text-muted text-center text-xs sm:text-left">
+            Page {users.current_page} of {users.last_page}
+          </span>
+
+          <div className="flex max-w-full justify-center overflow-x-auto pb-1 sm:justify-end sm:pb-0">
+            <div className="flex shrink-0 gap-1">
+              <Pagination links={users.links} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
