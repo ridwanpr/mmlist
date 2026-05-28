@@ -9,7 +9,7 @@ class UserService
 {
     public function updateUser(int $userId, array $data): bool
     {
-        // 1. Handle Checkbox, If 'show_nsfw' isn't sent in the request payload, set it to false
+        // Handle Checkbox, If 'show_nsfw' isn't sent in the request payload, set it to false
         $data['show_nsfw'] = isset($data['show_nsfw']) && ($data['show_nsfw'] === 'on' || $data['show_nsfw'] == true);
 
         //  Hash it if password provided otherwise, strip it from the array to preserve current password

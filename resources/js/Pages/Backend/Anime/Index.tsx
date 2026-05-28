@@ -6,8 +6,9 @@ import {
   type ColumnDef,
   flexRender,
 } from "@tanstack/react-table";
-import { router, Link } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import { LuPencil } from "react-icons/lu";
+import Pagination from "../../../Components/UI/Pagination";
 
 type ManageAnimeProps = {
   animes: App.DTOs.PaginatedAnimeData;
@@ -74,6 +75,7 @@ const columns: ColumnDef<App.DTOs.AnimeData>[] = [
 ];
 
 const ManageAnime = ({ animes }: ManageAnimeProps) => {
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: animes.data,
     columns,
@@ -82,11 +84,6 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
     pageCount: animes.last_page,
     rowCount: animes.total,
   });
-
-  const handlePagination = (url: string | null) => {
-    if (!url) return;
-    router.get(url, {}, { preserveState: true });
-  };
 
   return (
     <div>
@@ -101,7 +98,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
         </div>
       </div>
 
-      <div className="bg-surface border-border w-full overflow-hidden rounded-xl border">
+      <div className="bg-surface border-border w-full overflow-x-auto rounded-xl border">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-surface-alt">
@@ -109,7 +106,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
                 hg.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider uppercase"
+                    className="text-text-muted px-4 py-3 text-left text-xs font-semibold tracking-wider whitespace-nowrap uppercase"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -131,7 +128,7 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="border-border border-t px-4 py-3"
+                    className="border-border border-t px-4 py-3 whitespace-nowrap"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -152,24 +149,15 @@ const ManageAnime = ({ animes }: ManageAnimeProps) => {
           </tbody>
         </table>
 
-        <div className="border-border bg-surface-alt/50 flex items-center justify-between border-t px-4 py-3">
-          <span className="text-text-muted text-xs">
+        <div className="border-border bg-surface-alt/50 flex flex-col gap-3 border-t px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-text-muted text-center text-xs sm:text-left">
             Page {animes.current_page} of {animes.last_page}
           </span>
-          <div className="flex gap-1">
-            {animes.links.map((link, idx) => (
-              <button
-                key={idx}
-                disabled={!link.url}
-                onClick={() => handlePagination(link.url)}
-                className={`min-w-8 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors hover:cursor-pointer ${
-                  link.active
-                    ? "border-primary bg-primary text-surface"
-                    : "border-border bg-surface text-text-muted hover:bg-surface-alt hover:text-text"
-                } disabled:cursor-not-allowed disabled:opacity-40`}
-                dangerouslySetInnerHTML={{ __html: link.label }}
-              />
-            ))}
+
+          <div className="flex max-w-full justify-center overflow-x-auto pb-1 sm:justify-end sm:pb-0">
+            <div className="flex shrink-0 gap-1">
+              <Pagination links={animes.links} />
+            </div>
           </div>
         </div>
       </div>
