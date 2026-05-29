@@ -27,9 +27,10 @@ use Illuminate\Support\Str;
  * @property-read Comment|null $parent
  * @property-read Collection<int, Comment> $replies
  * @property-read int|null $replies_count
- * @property-read \App\Models\User $user
- * @property-read Collection<int, \App\Models\CommentVote> $votes
+ * @property-read User $user
+ * @property-read Collection<int, CommentVote> $votes
  * @property-read int|null $votes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
@@ -44,6 +45,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Comment extends Model

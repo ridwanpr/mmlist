@@ -28,15 +28,15 @@ class HomeController extends Controller
         $latestCommentsData = $this->commentService->getLatestCommentLimit(10);
         $latestVotesData = $this->voteService->getLatestVotesLimit(10);
 
-        $latestComments = $latestCommentsData->map(fn(Comment $item) => CommentData::fromModel($item));
-        $latestVotes = $latestVotesData->map(fn(AnimeTrigger $item) => AnimeTriggerData::fromModel($item));
+        $latestComments = $latestCommentsData->map(fn (Comment $item) => CommentData::fromModel($item));
+        $latestVotes = $latestVotesData->map(fn (AnimeTrigger $item) => AnimeTriggerData::fromModel($item));
 
         return Inertia::render('Home/Index', [
             'nowAiring' => $nowAiring,
             'topAnime' => $topAnime,
             'staffPick' => $staffPick,
             'latestComments' => $latestComments,
-            'latestVotes' => $latestVotes
+            'latestVotes' => $latestVotes,
         ]);
     }
 }

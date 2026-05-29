@@ -43,7 +43,7 @@ class TriggerCommentController extends Controller
         );
 
         $triggerComments = PaginatedCommentData::fromPaginator(
-            $triggerCommentsData->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
+            $triggerCommentsData->through(fn (Comment $item): CommentData => CommentData::fromModel($item))
         );
 
         return Inertia::render('TriggerComment/Index', [
@@ -51,7 +51,7 @@ class TriggerCommentController extends Controller
             'triggerContent' => TriggerContentData::fromModel($triggerContent),
             'sortBy' => $sortBy,
             'triggerStatData' => $triggerStatData,
-            'triggerComments' => $triggerComments
+            'triggerComments' => $triggerComments,
         ]);
     }
 
@@ -61,7 +61,7 @@ class TriggerCommentController extends Controller
             'commentable_id' => ['required'],
             'body' => ['required'],
             'parent_comment_id' => 'nullable|exists:comments,id',
-            'slug' => ['required']
+            'slug' => ['required'],
         ]);
 
         $user = Auth::user();
@@ -79,13 +79,14 @@ class TriggerCommentController extends Controller
 
         $this->commentService->storeComment(
             userId: $user->id,
-            commentableType: "trigger_content",
+            commentableType: 'trigger_content',
             commentableId: $validated['commentable_id'],
             data: $validated,
             parentCommentId: $parentId
         );
 
         Inertia::flash('success', 'Comment submitted');
+
         return back();
     }
 }

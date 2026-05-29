@@ -159,7 +159,7 @@ update.put = (args: { userId: string | number } | [userId: string | number ] | s
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::reset
- * @see app/Http/Controllers/Backend/ManageUserController.php:50
+ * @see app/Http/Controllers/Backend/ManageUserController.php:51
  * @route '/admin/user/{userId}'
  */
 export const reset = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -174,7 +174,7 @@ reset.definition = {
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::reset
- * @see app/Http/Controllers/Backend/ManageUserController.php:50
+ * @see app/Http/Controllers/Backend/ManageUserController.php:51
  * @route '/admin/user/{userId}'
  */
 reset.url = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -202,7 +202,7 @@ reset.url = (args: { userId: string | number } | [userId: string | number ] | st
 
 /**
 * @see \App\Http\Controllers\Backend\ManageUserController::reset
- * @see app/Http/Controllers/Backend/ManageUserController.php:50
+ * @see app/Http/Controllers/Backend/ManageUserController.php:51
  * @route '/admin/user/{userId}'
  */
 reset.post = (args: { userId: string | number } | [userId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({

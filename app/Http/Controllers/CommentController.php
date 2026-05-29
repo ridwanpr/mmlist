@@ -37,7 +37,6 @@ class CommentController extends Controller
             $parentId = null;
         }
 
-
         $validated['anime_id'] = $anime->id;
 
         $this->commentService->storeComment($user->id, 'anime', $anime->id, $validated, $parentId);
@@ -58,7 +57,7 @@ class CommentController extends Controller
         $comments = $this->commentService->getComments('anime', $anime->id, $anime->id, 25, $sortBy);
 
         $paginatedComment = PaginatedCommentData::fromPaginator(
-            $comments->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
+            $comments->through(fn (Comment $item): CommentData => CommentData::fromModel($item))
         );
 
         return Inertia::render('AnimeComment/Index', [

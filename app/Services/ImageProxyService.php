@@ -101,6 +101,7 @@ class ImageProxyService
                     while (! $remoteBody->eof()) {
                         echo $remoteBody->read(8192);
                     }
+
                     return;
                 }
 
@@ -145,7 +146,7 @@ class ImageProxyService
         return [
             'Content-Type' => $contentType,
             'Cache-Control' => 'public, max-age=31536000, immutable',
-            'Expires' => gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT',
+            'Expires' => gmdate('D, d M Y H:i:s', time() + 31536000).' GMT',
             'CDN-Cache-Control' => 'public, max-age=31536000',
             'X-Content-Type-Options' => 'nosniff',
         ];

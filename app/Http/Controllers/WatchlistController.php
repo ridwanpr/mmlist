@@ -43,6 +43,7 @@ class WatchlistController extends Controller
         }
 
         $status = $request->query('status', 'watching');
+        $search = $request->query('search');
 
         $sortInput = $request->query('sort');
         $allowedSorts = ['latest', 'score', 'oldest'];
@@ -52,7 +53,8 @@ class WatchlistController extends Controller
             paginateLimit: 21,
             userId: $user->id,
             status: $status,
-            sort: $sortBy
+            sort: $sortBy,
+            search: $search
         );
 
         $tabCounts = $this->watchlistService->getTabCounts($user->id);
@@ -63,7 +65,8 @@ class WatchlistController extends Controller
                 'watchlists' => $watchlists,
                 'status' => $status,
                 'tabCounts' => $tabCounts,
-                'sortBy' => $sortBy
+                'sortBy' => $sortBy,
+                'search' => $search,
             ]
         );
     }

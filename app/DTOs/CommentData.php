@@ -2,8 +2,8 @@
 
 namespace App\DTOs;
 
-use App\Models\Comment;
 use App\Models\Anime;
+use App\Models\Comment;
 use App\Models\TriggerContent;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 

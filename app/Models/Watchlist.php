@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $completed_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist query()
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Watchlist whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['user_id', 'anime_id', 'status', 'progress', 'score', 'note', 'started_at', 'completed_at'])]

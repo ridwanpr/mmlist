@@ -13,8 +13,9 @@ use Illuminate\Support\Carbon;
  * @property string $type
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Comment $comment
- * @property-read \App\Models\User $user
+ * @property-read Comment $comment
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote query()
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CommentVote whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class CommentVote extends Model

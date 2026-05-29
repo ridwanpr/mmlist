@@ -26,16 +26,16 @@ readonly class AnimeTriggerStatData
     public static function fromArray(array $data): self
     {
         return new self(
-            totalReports: (int)($data['total_reports'] ?? 0),
-            appearYesCount: (int)($data['appear_yes_count'] ?? 0),
-            appearNoCount: (int)($data['appear_no_count'] ?? 0),
-            severityMild: (int)($data['severity_mild'] ?? 0),
-            severityModerate: (int)($data['severity_moderate'] ?? 0),
-            severitySevere: (int)($data['severity_severe'] ?? 0),
-            framingSerious: (int)($data['framing_serious'] ?? 0),
-            framingNeutral: (int)($data['framing_neutral'] ?? 0),
-            framingRomanticized: (int)($data['framing_romanticized'] ?? 0),
-            framingComedic: (int)($data['framing_comedic'] ?? 0),
+            totalReports: (int) ($data['total_reports'] ?? 0),
+            appearYesCount: (int) ($data['appear_yes_count'] ?? 0),
+            appearNoCount: (int) ($data['appear_no_count'] ?? 0),
+            severityMild: (int) ($data['severity_mild'] ?? 0),
+            severityModerate: (int) ($data['severity_moderate'] ?? 0),
+            severitySevere: (int) ($data['severity_severe'] ?? 0),
+            framingSerious: (int) ($data['framing_serious'] ?? 0),
+            framingNeutral: (int) ($data['framing_neutral'] ?? 0),
+            framingRomanticized: (int) ($data['framing_romanticized'] ?? 0),
+            framingComedic: (int) ($data['framing_comedic'] ?? 0),
         );
     }
 }

@@ -15,7 +15,7 @@ readonly class TriggerFramingStatData
     ) {}
 
     /**
-     * @param array<string, int> $data
+     * @param  array<string, int>  $data
      */
     public static function fromArray(array $data): self
     {

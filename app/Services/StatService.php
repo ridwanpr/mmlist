@@ -8,17 +8,18 @@ use App\DTOs\TriggerVoteActivityData;
 use App\DTOs\WatchlistStatData;
 use App\Models\AnimeTrigger;
 use App\Models\Watchlist;
+use Carbon\CarbonPeriod;
 
 class StatService
 {
     public function getWatchlistStat(int $userId): WatchlistStatData
     {
         $defaultStats = [
-            'planned'   => 0,
-            'watching'  => 0,
+            'planned' => 0,
+            'watching' => 0,
             'completed' => 0,
-            'on_hold'   => 0,
-            'dropped'   => 0,
+            'on_hold' => 0,
+            'dropped' => 0,
         ];
 
         $counts = Watchlist::where('user_id', $userId)
@@ -98,7 +99,7 @@ class StatService
         // Build a continuous date timeline range
         $startDate = now()->subYear()->startOfDay();
         $endDate = now()->endOfDay();
-        $period = \Carbon\CarbonPeriod::create($startDate, '1 day', $endDate);
+        $period = CarbonPeriod::create($startDate, '1 day', $endDate);
 
         // Map out the timeline ensuring missing calendar entries default to 0
         $formattedDays = [];

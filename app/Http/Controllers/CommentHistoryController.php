@@ -6,7 +6,6 @@ use App\DTOs\CommentData;
 use App\DTOs\PaginatedCommentData;
 use App\Models\Comment;
 use App\Services\CommentService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -19,11 +18,11 @@ class CommentHistoryController extends Controller
         $user = Auth::user();
 
         $commentFromDb = $this->commentService->getUserCommentHistory($user->id, 15);
-        $commentsHistory = $commentFromDb->through(fn(Comment $item) => CommentData::fromModel($item));
+        $commentsHistory = $commentFromDb->through(fn (Comment $item) => CommentData::fromModel($item));
         $paginatedComments = PaginatedCommentData::fromPaginator($commentsHistory);
 
-        return Inertia::render("CommentHistory/Index", [
-            'paginatedComments' => $paginatedComments
+        return Inertia::render('CommentHistory/Index', [
+            'paginatedComments' => $paginatedComments,
         ]);
     }
 }

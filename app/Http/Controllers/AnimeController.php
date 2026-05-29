@@ -32,7 +32,7 @@ class AnimeController extends Controller
         $userData = $user ? UserData::fromModel($user) : null;
 
         // Check if the anime is NSFW and if the viewer is restricted
-        $isRestrictedNsfw = ($anime->rating === 'Rx - Hentai') && (!$user || !$user->show_nsfw);
+        $isRestrictedNsfw = ($anime->rating === 'Rx - Hentai') && (! $user || ! $user->show_nsfw);
 
         if ($isRestrictedNsfw) {
             return Inertia::render('Anime/Show', [
@@ -48,7 +48,7 @@ class AnimeController extends Controller
                 'aiTriggerContext' => null,
                 'topComments' => null,
                 'countComments' => 0,
-                'user' => $userData
+                'user' => $userData,
             ]);
         }
 
@@ -58,14 +58,14 @@ class AnimeController extends Controller
         $watchlist = $user ? $this->watchlistService->findUserWatchlist($user->id, $anime->id) : null;
 
         $aiTriggerContext = $anime->triggerContexts->map(
-            fn($item) => AnimeTriggerContextData::fromModel($item)
+            fn ($item) => AnimeTriggerContextData::fromModel($item)
         );
 
         $topComments = $this->commentService->getTopComments('anime', $anime->id);
-        $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
+        $topCommentsDto = $topComments->map(fn (Comment $item) => CommentData::fromModel($item));
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
         $countTriggerComments = $this->commentService->getTriggerCommentsCount($anime->id);
-        
+
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
@@ -75,7 +75,7 @@ class AnimeController extends Controller
             'topComments' => $topCommentsDto,
             'countComments' => $countComments,
             'user' => $userData,
-            'countTriggerComments' => $countTriggerComments
+            'countTriggerComments' => $countTriggerComments,
         ]);
     }
 }

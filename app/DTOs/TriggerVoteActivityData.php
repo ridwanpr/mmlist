@@ -8,14 +8,14 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 readonly class TriggerVoteActivityData
 {
     /**
-     * @param array<int, array{date: string, count: int}> $days
+     * @param  array<int, array{date: string, count: int}>  $days
      */
     public function __construct(
         public array $days
     ) {}
 
     /**
-     * @param array<int, array{date: string, count: int}> $days
+     * @param  array<int, array{date: string, count: int}>  $days
      */
     public static function fromArray(array $days): self
     {

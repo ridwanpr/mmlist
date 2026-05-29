@@ -48,7 +48,7 @@ class BrowseController extends Controller
         $type = $this->masterService->getType();
         $season = $this->masterService->getSeason();
         $rating = $this->masterService->getRating();
-        
+
         return Inertia::render('Browse/Index', [
             'animes' => $animes,
             'genres' => $genres,

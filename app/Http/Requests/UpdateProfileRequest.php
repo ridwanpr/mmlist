@@ -32,7 +32,7 @@ class UpdateProfileRequest extends FormRequest
             'birth_date' => ['nullable', 'date'],
             'show_nsfw' => [
                 'boolean',
-                $this->filled('birth_date') ? 'nullable' : 'declined'
+                $this->filled('birth_date') ? 'nullable' : 'declined',
             ],
             'current_password' => ['nullable', 'required_with:password', 'current_password'],
             'password' => ['nullable', 'string', 'min:6', 'max:255', 'confirmed'],

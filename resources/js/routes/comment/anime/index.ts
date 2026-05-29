@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CommentController::index
- * @see app/Http/Controllers/CommentController.php:50
+ * @see app/Http/Controllers/CommentController.php:49
  * @route '/anime/discussion/{animeSlug}'
  */
 export const index = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\CommentController::index
- * @see app/Http/Controllers/CommentController.php:50
+ * @see app/Http/Controllers/CommentController.php:49
  * @route '/anime/discussion/{animeSlug}'
  */
 index.url = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -44,7 +44,7 @@ index.url = (args: { animeSlug: string | number } | [animeSlug: string | number 
 
 /**
 * @see \App\Http\Controllers\CommentController::index
- * @see app/Http/Controllers/CommentController.php:50
+ * @see app/Http/Controllers/CommentController.php:49
  * @route '/anime/discussion/{animeSlug}'
  */
 index.get = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ index.get = (args: { animeSlug: string | number } | [animeSlug: string | number 
 })
 /**
 * @see \App\Http\Controllers\CommentController::index
- * @see app/Http/Controllers/CommentController.php:50
+ * @see app/Http/Controllers/CommentController.php:49
  * @route '/anime/discussion/{animeSlug}'
  */
 index.head = (args: { animeSlug: string | number } | [animeSlug: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({

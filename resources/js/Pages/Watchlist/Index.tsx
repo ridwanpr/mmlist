@@ -1,9 +1,9 @@
+import { useState, useEffect } from 'react';
 import type React from 'react';
 import { router, useForm } from '@inertiajs/react';
 import FrontLayout from '../../Layouts/FrontLayout';
 import WatchlistTab from './Partials/WatchlistTab';
 import { index as watchlistIndex } from '../../actions/App/Http/Controllers/WatchlistController';
-import { useState } from 'react';
 import DetailModal from './Partials/DetailModal';
 import DashContainer from '../UserDash/Partials/DashContainer';
 import EditModal from './Partials/EditModal';
@@ -25,6 +25,7 @@ type WatchlistPropsType = {
     dropped: number;
   };
   sortBy: 'latest' | 'score' | 'oldest';
+  search: string | null;
 };
 
 export type EditWatchlistForm = {
@@ -36,18 +37,43 @@ export type EditWatchlistForm = {
   completed_at: string | null;
 };
 
-const Watchlist = ({ watchlists, status, tabCounts, sortBy }: WatchlistPropsType) => {
+const Watchlist = ({ watchlists, status, tabCounts, sortBy, search }: WatchlistPropsType) => {
   const activeTab = status || 'watching';
 
-  const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
+  const [searchQuery, setSearchQuery] = useState(search || '');
 
+  const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
   const [editWatchlist, setEditWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if ((search || '') === searchQuery) return;
+
+      router.get(
+        watchlistIndex.url(),
+        {
+          status: status,
+          sort: sortBy,
+          search: searchQuery || undefined,
+        },
+        {
+          preserveState: true,
+          preserveScroll: true,
+          replace: true,
+        },
+      );
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleChangeTab = (tab: string) => {
     router.get(
       watchlistIndex.url({
         query: {
           status: tab,
+          sort: sortBy,
+          search: searchQuery || undefined,
         },
       }),
     );
@@ -78,10 +104,7 @@ const Watchlist = ({ watchlists, status, tabCounts, sortBy }: WatchlistPropsType
     }));
   };
 
-  const handleSubmitEditWatchlist = (
-    e: React.SubmitEvent<HTMLFormElement>,
-    watchlistId: number,
-  ) => {
+  const handleSubmitEditWatchlist = (e: React.FormEvent<HTMLFormElement>, watchlistId: number) => {
     e.preventDefault();
     put(watchlistUpdate.url(watchlistId));
     setEditWatchlist(null);
@@ -99,6 +122,7 @@ const Watchlist = ({ watchlists, status, tabCounts, sortBy }: WatchlistPropsType
       {
         status: status,
         sort: filter,
+        search: searchQuery || undefined,
       },
       { preserveScroll: true },
     );
@@ -120,6 +144,8 @@ const Watchlist = ({ watchlists, status, tabCounts, sortBy }: WatchlistPropsType
             </div>
             <div>
               <input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
                 type="text"
                 className="border-primary/50 bg-surface rounded-lg border p-2.5 text-xs"
                 placeholder="Search anime title..."

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * @property int $demographic_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic query()
@@ -20,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereDemographicId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeDemographic whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['anime_id', 'demographic_id'])]

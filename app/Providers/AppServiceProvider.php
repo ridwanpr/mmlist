@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Anime;
+use App\Models\TriggerContent;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -28,8 +30,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Relation::enforceMorphMap([
-            'anime' => \App\Models\Anime::class,
-            'trigger_content' => \App\Models\TriggerContent::class,
+            'anime' => Anime::class,
+            'trigger_content' => TriggerContent::class,
         ]);
     }
 }

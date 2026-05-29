@@ -19,6 +19,7 @@ class UserProfileController extends Controller
         );
 
         Inertia::flash('success', 'Profile updated successfully.');
+
         return redirect()->back();
     }
 }

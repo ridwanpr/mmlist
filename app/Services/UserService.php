@@ -15,7 +15,7 @@ class UserService
         $data['show_nsfw'] = isset($data['show_nsfw']) && ($data['show_nsfw'] === 'on' || $data['show_nsfw'] == true);
 
         //  Hash it if password provided otherwise, strip it from the array to preserve current password
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
@@ -43,7 +43,7 @@ class UserService
             ->onEachSide(1)
             ->withQueryString();
 
-        $userDto = $users->through(fn(User $item) => UserData::fromModel($item));
+        $userDto = $users->through(fn (User $item) => UserData::fromModel($item));
 
         return PaginatedUserData::fromPaginator($userDto);
     }
@@ -60,7 +60,7 @@ class UserService
             'username' => $data['username'],
             'email' => $data['email'],
             'birth_date' => $data['birth_date'],
-            'is_banned' => $data['is_banned'] == 1 ? true : false
+            'is_banned' => $data['is_banned'] == 1 ? true : false,
         ]);
     }
 }

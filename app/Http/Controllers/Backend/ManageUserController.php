@@ -17,7 +17,7 @@ class ManageUserController extends Controller
         $users = $this->userService->getUserPaginate(15);
 
         return Inertia::render('Backend/User/Index', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -26,7 +26,7 @@ class ManageUserController extends Controller
         $user = $this->userService->findUserById($userId);
 
         return Inertia::render('Backend/User/Edit', [
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -37,13 +37,14 @@ class ManageUserController extends Controller
             'name' => ['required'],
             'email' => ['nullable', 'email'],
             'birth_date' => ['nullable'],
-            'is_banned' => ['nullable']
+            'is_banned' => ['nullable'],
         ]);
-        
+
         $user = $this->userService->findUserById($userId);
         $this->userService->adminUpdateUser($validated, $user->id);
 
         Inertia::flash('success', 'Update success');
+
         return back();
     }
 

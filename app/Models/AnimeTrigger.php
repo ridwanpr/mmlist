@@ -17,9 +17,10 @@ use Illuminate\Support\Carbon;
  * @property string|null $framing
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Anime $anime
- * @property-read \App\Models\TriggerContent $triggerContent
- * @property-read \App\Models\User $user
+ * @property-read Anime $anime
+ * @property-read TriggerContent $triggerContent
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger query()
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger whereTriggerContentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTrigger whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 #[Fillable(['trigger_content_id', 'anime_id', 'user_id', 'is_appear', 'severity', 'framing'])]

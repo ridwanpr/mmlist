@@ -47,10 +47,10 @@ class AnimeService
                         ->orderByDesc('relevance');
                 } else {
                     $q->where(function ($subQuery) use ($rawTerm) {
-                        $subQuery->where('title', 'like', '%' . $rawTerm . '%')
-                            ->orWhere('title_english', 'like', '%' . $rawTerm . '%')
-                            ->orWhere('title_japanese', 'like', '%' . $rawTerm . '%')
-                            ->orWhere('title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                        $subQuery->where('title', 'like', '%'.$rawTerm.'%')
+                            ->orWhere('title_english', 'like', '%'.$rawTerm.'%')
+                            ->orWhere('title_japanese', 'like', '%'.$rawTerm.'%')
+                            ->orWhere('title_synonyms_text', 'like', '%'.$rawTerm.'%');
                     });
                 }
             });
@@ -98,9 +98,8 @@ class AnimeService
 
         $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-            $q->orderBy('animes.' . $sort['sort'], $direction);
+            $q->orderBy('animes.'.$sort['sort'], $direction);
         }, function ($q) {
-            // FIXED: Swapped out the raw expression for your indexed virtual column
             $q->orderBy('animes.is_tv_priority', 'desc')
                 ->orderBy('animes.year', 'desc')
                 ->orderBy('animes.airing', 'desc')
@@ -123,11 +122,11 @@ class AnimeService
                 ->keyBy('id');
 
             // Replace the bare IDs in the paginator with the fully loaded models, preserving the sorted order
-            $sortedModels = collect($ids)->map(fn($id) => $models[$id]);
+            $sortedModels = collect($ids)->map(fn ($id) => $models[$id]);
             $paginator->setCollection($sortedModels);
         }
 
-        $transformed = $paginator->through(fn(Anime $item): AnimeData => AnimeData::fromModel($item));
+        $transformed = $paginator->through(fn (Anime $item): AnimeData => AnimeData::fromModel($item));
 
         return PaginatedAnimeData::fromPaginator($transformed);
     }
@@ -157,7 +156,7 @@ class AnimeService
                     ->get()
                     ->keyBy('id');
 
-                return $topIds->map(fn($id) => AnimeData::fromModel($animes[$id]))
+                return $topIds->map(fn ($id) => AnimeData::fromModel($animes[$id]))
                     ->values()
                     ->all();
             });
@@ -189,7 +188,7 @@ class AnimeService
             ->get()
             ->keyBy('id');
 
-        return $animes->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+        return $animes->map(fn ($item) => AnimeData::fromModel($item))->values()->all();
     }
 
     public function getAnimeInfo(string $slug): Anime
@@ -213,7 +212,7 @@ class AnimeService
         ])
             ->orderBy('importance', 'desc')->get();
 
-        return $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
+        return $triggersFromDb->map(fn (MasterTrigger $trigger) => TriggerData::fromModel($trigger));
     }
 
     /**
@@ -302,6 +301,6 @@ class AnimeService
             return null;
         }
 
-        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
+        return implode(' ', array_map(static fn ($token) => '+'.$token.'*', $tokens));
     }
 }

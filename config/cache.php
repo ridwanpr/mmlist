@@ -1,5 +1,9 @@
 <?php
 
+use App\DTOs\AnimeData;
+use App\DTOs\AnimeMetaData;
+use App\DTOs\AnimeTitleData;
+use App\DTOs\AnimeTriggerData;
 use Illuminate\Support\Str;
 
 return [
@@ -112,7 +116,7 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-cache-'),
+    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-cache-'),
 
     /*
     |--------------------------------------------------------------------------
@@ -126,10 +130,10 @@ return [
     */
 
     'serializable_classes' => [
-        App\DTOs\AnimeData::class,
-        App\DTOs\AnimeTitleData::class,
-        App\DTOs\AnimeMetaData::class,
-        App\DTOs\AnimeTriggerData::class,
+        AnimeData::class,
+        AnimeTitleData::class,
+        AnimeMetaData::class,
+        AnimeTriggerData::class,
     ],
 
 ];

@@ -20,6 +20,7 @@ class CheckBannedUser
 
             Inertia::clearHistory();
             Inertia::flash('error', 'Your account has been suspended. Contact admin for more information');
+
             return redirect()->route('login');
         }
 

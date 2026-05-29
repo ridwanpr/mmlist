@@ -12,7 +12,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $ai_summary
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\TriggerContent $triggerContent
+ * @property-read TriggerContent $triggerContent
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext query()
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext whereTriggerContentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeTriggerContext whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class AnimeTriggerContext extends Model

@@ -28,7 +28,7 @@ class UserDashboardController extends Controller
             'watchlistStat' => $watchlistStat,
             'triggerFramingStat' => $triggerFramingStat,
             'countStat' => $countStat,
-            'triggerVoteActivity' => $triggerVoteActivity
+            'triggerVoteActivity' => $triggerVoteActivity,
         ]);
     }
 
@@ -36,8 +36,8 @@ class UserDashboardController extends Controller
     {
         $user = $this->userService->findUserByUsername(Auth::user()->username);
 
-        return Inertia::render("UserSetting/Index", [
-            'user' => $user
+        return Inertia::render('UserSetting/Index', [
+            'user' => $user,
         ]);
     }
 }

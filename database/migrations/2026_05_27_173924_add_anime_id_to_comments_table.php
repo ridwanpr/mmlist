@@ -20,7 +20,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-{
+    {
         Schema::table('comments', function (Blueprint $table) {
             $table->dropColumn('anime_id');
         });
