@@ -193,40 +193,6 @@ const EditUser = ({ user }: Props) => {
           )}
         </Form>
       </div>
-
-      {/* Separate Context Block: Instant Actions & Security Operations */}
-      <div className="bg-surface border-border rounded-xl border p-6">
-        <div className="flex flex-col gap-4">
-          <div>
-            <h2 className="text-text font-serif text-base font-medium">Security & Utilities</h2>
-            <p className="text-text-muted text-xs">
-              Execute immediate single action system triggers directly on this user record.
-            </p>
-          </div>
-
-          <div className="bg-primary-soft border-primary/20 flex flex-col gap-4 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-col gap-0.5">
-              <h3 className="text-text font-serif text-sm font-medium">
-                Force Access Credential Update
-              </h3>
-              <p className="text-text-muted text-xs">
-                Dispatches a secure password reset link email directly to the user's recorded inbox.
-              </p>
-            </div>
-            {user.email !== null ? (
-              <button
-                type="button"
-                onClick={handleTriggerReset}
-                className="bg-primary hover:bg-primary-dark text-surface cursor-pointer self-start rounded-xl px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors sm:self-auto"
-              >
-                Trigger System Reset
-              </button>
-            ) : (
-              <span className="text-text text-sm font-medium">User not set their email</span>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
