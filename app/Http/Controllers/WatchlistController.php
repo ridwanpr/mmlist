@@ -45,7 +45,7 @@ class WatchlistController extends Controller
         $status = $request->query('status', 'watching');
 
         $watchlists = $this->watchlistService->getUserWatchlist(
-            paginateLimit: 15,
+            paginateLimit: 21,
             userId: $user->id,
             status: $status
         );
