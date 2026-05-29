@@ -33,5 +33,12 @@ class AppServiceProvider extends ServiceProvider
             'anime' => Anime::class,
             'trigger_content' => TriggerContent::class,
         ]);
+
+        RateLimiter::for('jikan', function (object $job) {
+            return [
+                Limit::perMinute(60),
+                Limit::perSecond(3),
+            ];
+        });
     }
 }

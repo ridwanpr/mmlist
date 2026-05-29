@@ -18,7 +18,6 @@ interface Props {
 }
 
 const EditUser = ({ user }: Props) => {
-  console.log(user);
   const handleTriggerReset = () => {
     if (confirm(`Are you sure you want to send a password reset link to ${user.email}?`)) {
       router.post(

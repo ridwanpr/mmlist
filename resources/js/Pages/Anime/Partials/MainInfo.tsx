@@ -304,7 +304,7 @@ const MainInfo = ({
                 onClick={() => setActiveTab('relation')}
                 className={`${activeTab === 'relation' ? 'text-primary bg-surface' : 'text-text-muted'} rounded-md px-4 py-1.5 text-xs font-bold shadow-xs transition-all hover:cursor-pointer`}
               >
-                Related Anime
+                Related Entries
               </button>
             </div>
 
