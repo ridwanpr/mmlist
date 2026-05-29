@@ -10,6 +10,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentHistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\TriggerCommentController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UserProfileController;
@@ -26,6 +27,8 @@ Route::get('/asset/image/{hash}', [ImageProxyController::class, 'show'])->name('
 Route::get('anime/discussion/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
 Route::get('anime/discussion/{animeslug}/{triggerContentSlug}', [TriggerCommentController::class, 'getTriggerComment'])
     ->name('comment.trigger.index');
+
+Route::get('privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy.index');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');

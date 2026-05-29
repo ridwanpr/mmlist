@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { privacyPolicy } from '../actions/App/Http/Controllers/LegalController';
 
 const Footer = () => {
   return (
@@ -52,7 +53,8 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/privacy"
+                  href={privacyPolicy.url()}
+                  prefetch={'click'}
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   Privacy
