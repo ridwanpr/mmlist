@@ -1,17 +1,18 @@
-import type React from "react";
-import { router, useForm } from "@inertiajs/react";
-import FrontLayout from "../../Layouts/FrontLayout";
-import WatchlistTab from "./Partials/WatchlistTab";
-import { index as watchlistIndex } from "../../actions/App/Http/Controllers/WatchlistController";
-import { useState } from "react";
-import DetailModal from "./Partials/DetailModal";
-import DashContainer from "../UserDash/Partials/DashContainer";
-import EditModal from "./Partials/EditModal";
-import AnimeList from "./Partials/AnimeList";
-import Pagination from "../../Components/UI/Pagination";
-import { update as watchlistUpdate } from "../../actions/App/Http/Controllers/WatchlistController";
-import { destroy as watchlistDelete } from "../../actions/App/Http/Controllers/WatchlistController";
-import AppHead from "../../Components/AppHead";
+import type React from 'react';
+import { router, useForm } from '@inertiajs/react';
+import FrontLayout from '../../Layouts/FrontLayout';
+import WatchlistTab from './Partials/WatchlistTab';
+import { index as watchlistIndex } from '../../actions/App/Http/Controllers/WatchlistController';
+import { useState } from 'react';
+import DetailModal from './Partials/DetailModal';
+import DashContainer from '../UserDash/Partials/DashContainer';
+import EditModal from './Partials/EditModal';
+import AnimeList from './Partials/AnimeList';
+import Pagination from '../../Components/UI/Pagination';
+import { update as watchlistUpdate } from '../../actions/App/Http/Controllers/WatchlistController';
+import { destroy as watchlistDelete } from '../../actions/App/Http/Controllers/WatchlistController';
+import AppHead from '../../Components/AppHead';
+import SortWatchlist from './Partials/SortWatchlist';
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -35,13 +36,11 @@ export type EditWatchlistForm = {
 };
 
 const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
-  const activeTab = status || "watching";
+  const activeTab = status || 'watching';
 
-  const [selectedWatchlist, setSelectedWatchlist] =
-    useState<App.DTOs.WatchlistData | null>(null);
+  const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
 
-  const [editWatchlist, setEditWatchlist] =
-    useState<App.DTOs.WatchlistData | null>(null);
+  const [editWatchlist, setEditWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
 
   const handleChangeTab = (tab: string) => {
     router.get(
@@ -54,12 +53,12 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   };
 
   const { data, setData, put } = useForm<EditWatchlistForm>({
-    status: "",
+    status: '',
     progress: 0,
     score: null,
-    note: "",
-    started_at: "",
-    completed_at: "",
+    note: '',
+    started_at: '',
+    completed_at: '',
   });
 
   const handleEditWatchlist = (watchlist: App.DTOs.WatchlistData | null) => {
@@ -72,7 +71,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   };
 
   const incrementProgress = () => {
-    setData((prev) => ({
+    setData(prev => ({
       ...prev,
       progress: prev.progress + 1,
     }));
@@ -88,7 +87,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
   };
 
   const handleDeleteWatchlist = (watchlistId: number) => {
-    if (confirm("Are you sure you want to remove this watchlist item?")) {
+    if (confirm('Are you sure you want to remove this watchlist item?')) {
       router.delete(watchlistDelete.url(watchlistId));
     }
   };
@@ -114,9 +113,10 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
           />
 
           <div className="mt-4">
-            <p className="text-text-muted mb-4 text-xs">
-              {watchlists?.total} Titles
-            </p>
+            <div className="flex w-full items-center justify-between mb-4">
+              <p className="text-text-muted text-xs">{watchlists?.total} Titles</p>
+              <SortWatchlist sortBy="latest" handleFilter={() => {}} />
+            </div>
 
             {/*Anime List*/}
             <AnimeList
