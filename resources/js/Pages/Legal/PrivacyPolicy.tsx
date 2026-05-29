@@ -42,7 +42,9 @@ const PrivacyPolicy = () => {
               <li>
                 <strong className="text-text">Account Credentials:</strong> To register an account,
                 manage a personal watchlist, vote on warning metrics, or submit comments, you must
-                provide a unique username. Providing an email address is completely optional.
+                provide a unique username. Providing an email address is optional and used solely
+                for account recovery. Providing your birth date is optional and used solely to grant
+                access to age-restricted content.
               </li>
               <li>
                 <strong className="text-text">User Content:</strong> Any votes, safety flags, and
@@ -60,9 +62,9 @@ const PrivacyPolicy = () => {
             <ul className="list-disc space-y-2 pl-6">
               <li>
                 <strong className="text-text">Diagnostics and Error Logging:</strong> We use Sentry
-                to capture runtime software errors and performance metrics. When an exception
-                occurs, this service collects technical logs, network IP addresses, request headers,
-                stack traces, and your associated account identifiers to assist with debugging.
+                to capture runtime software errors and performance metrics. This service collects
+                technical logs, network IP addresses, request headers, stack traces, and account
+                identifiers to assist with debugging and error resolution.
               </li>
               <li>
                 <strong className="text-text">Web Analytics:</strong> We use Google Analytics to
@@ -88,6 +90,10 @@ const PrivacyPolicy = () => {
                 To manage user accounts, authenticate secure sessions, and facilitate account
                 recovery or password resets for users who choose to provide an optional email
                 address.
+              </li>
+              <li>
+                To verify age eligibility for restricted media content using your optionally
+                provided birth date.
               </li>
               <li>
                 To compile and display aggregate crowdsourced trigger warning statistics for the
@@ -137,7 +143,29 @@ const PrivacyPolicy = () => {
 
           <section className="space-y-3">
             <h2 className="text-text font-serif text-2xl font-semibold">
-              5. Changes to This Privacy Policy
+              5. Data Retention and Deletion
+            </h2>
+            <p>
+              All collected data and user-provided information are stored indefinitely. We retain
+              this information permanently unless you explicitly request its removal. If you wish to
+              delete your account or any associated data records, please visit our contact page to
+              submit a request.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-text font-serif text-2xl font-semibold">
+              6. Inquiries and Support
+            </h2>
+            <p>
+              For any questions, data deletion requests, or general inquiries regarding your data
+              privacy on our platform, please visit our contact page.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-text font-serif text-2xl font-semibold">
+              7. Changes to This Privacy Policy
             </h2>
             <p>
               We reserve the right to update or modify this Privacy Policy at any time. Any changes
