@@ -40,6 +40,15 @@ declare namespace App {
       readonly name: string;
       readonly url: string;
     };
+    export type AnimeRelationData = {
+      readonly id: number;
+      readonly anime_id: number;
+      readonly related_anime_id: number;
+      readonly relation_type: string;
+      readonly created_at: string;
+      readonly updated_at: string | null;
+      readonly anime: App.DTOs.AnimeData | null;
+    };
     export type AnimeTitleData = {
       readonly type: string;
       readonly title: string;
@@ -94,10 +103,7 @@ declare namespace App {
       readonly parentCommentId: number | null;
       readonly user: App.DTOs.UserData | null;
       readonly parent: App.DTOs.CommentData | null;
-      readonly commentable:
-        | App.DTOs.AnimeData
-        | App.DTOs.TriggerContentData
-        | null;
+      readonly commentable: App.DTOs.AnimeData | App.DTOs.TriggerContentData | null;
       readonly anime: App.DTOs.AnimeData | null;
     };
     export type CountStatData = {
@@ -307,8 +313,7 @@ declare namespace Illuminate {
       prev_page_url: string | null;
     };
   };
-  export type CursorPaginatorInterface<TKey, TValue> =
-    Illuminate.CursorPaginator<TKey, TValue>;
+  export type CursorPaginatorInterface<TKey, TValue> = Illuminate.CursorPaginator<TKey, TValue>;
   export type LengthAwarePaginator<TKey, TValue> = {
     data: TKey extends string ? Record<TKey, TValue> : TValue[];
     links: {
@@ -330,6 +335,8 @@ declare namespace Illuminate {
       to: number | null;
     };
   };
-  export type LengthAwarePaginatorInterface<TKey, TValue> =
-    Illuminate.LengthAwarePaginator<TKey, TValue>;
+  export type LengthAwarePaginatorInterface<TKey, TValue> = Illuminate.LengthAwarePaginator<
+    TKey,
+    TValue
+  >;
 }

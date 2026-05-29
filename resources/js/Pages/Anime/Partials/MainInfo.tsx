@@ -1,40 +1,41 @@
-import { useImageProxy } from "../../../utils/image-proxy";
-import Comment from "./Comment";
-import { MetaInfo } from "../../../Components/MetaInfo";
-import React, { useState } from "react";
-import { router, usePage, Link } from "@inertiajs/react";
-import { AddToWatchlist } from "./AddToWatchlist";
-import type { WatchlistFormData } from "./AddToWatchlist";
-import { LuBookmarkX } from "react-icons/lu";
+import { useImageProxy } from '../../../utils/image-proxy';
+import Comment from './Comment';
+import { MetaInfo } from '../../../Components/MetaInfo';
+import React, { useState } from 'react';
+import { router, usePage, Link } from '@inertiajs/react';
+import { AddToWatchlist } from './AddToWatchlist';
+import type { WatchlistFormData } from './AddToWatchlist';
+import { LuBookmarkX } from 'react-icons/lu';
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
   userWatchlist: App.DTOs.WatchlistData | null;
   topComments: App.DTOs.CommentData[] | null;
   countComments: number;
+  animeRelation: App.DTOs.AnimeRelationData[];
 }
+
+type ActiveTab = 'synopsis' | 'relation';
 
 const MainInfo = ({
   anime,
   userWatchlist,
   topComments,
   countComments,
+  animeRelation,
 }: MainInfoProps) => {
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('synopsis');
 
   const { proxyImage } = useImageProxy();
-  const coverImage = proxyImage(
-    anime.images?.webp?.image_url || anime.images?.jpg?.image_url,
-  );
+  const coverImage = proxyImage(anime.images?.webp?.image_url || anime.images?.jpg?.image_url);
 
   const displayTitle =
-    anime.titles?.find((t) => t.type === "English")?.title ||
-    anime.titles?.[0]?.title;
+    anime.titles?.find(t => t.type === 'English')?.title || anime.titles?.[0]?.title;
 
   const originalTitle =
-    anime.titles?.find((t) => t.type === "Default")?.title ||
-    anime.titles?.[0]?.title;
+    anime.titles?.find(t => t.type === 'Default')?.title || anime.titles?.[0]?.title;
 
   const airedSeason =
     anime.season && anime.year
@@ -59,38 +60,38 @@ const MainInfo = ({
 
   const statusSelectItem = [
     {
-      value: "planned",
-      label: "Planned",
+      value: 'planned',
+      label: 'Planned',
     },
     {
-      value: "watching",
-      label: "Watching",
+      value: 'watching',
+      label: 'Watching',
     },
     {
-      value: "completed",
-      label: "Completed",
+      value: 'completed',
+      label: 'Completed',
     },
     {
-      value: "on_hold",
-      label: "On hold",
+      value: 'on_hold',
+      label: 'On hold',
     },
     {
-      value: "dropped",
-      label: "Dropped",
+      value: 'dropped',
+      label: 'Dropped',
     },
   ];
 
   const labels: Record<string, string> = {
-    10: "Masterpiece",
-    9: "Great",
-    8: "Very Good",
-    7: "Good",
-    6: "Fine",
-    5: "Average",
-    4: "Bad",
-    3: "Very Bad",
-    2: "Horrible",
-    1: "Appalling",
+    10: 'Masterpiece',
+    9: 'Great',
+    8: 'Very Good',
+    7: 'Good',
+    6: 'Fine',
+    5: 'Average',
+    4: 'Bad',
+    3: 'Very Bad',
+    2: 'Horrible',
+    1: 'Appalling',
   };
 
   const scoreSelectItem = Array.from({ length: 10 }, (_, i) => {
@@ -101,36 +102,33 @@ const MainInfo = ({
     };
   });
 
-  const [watchlistFormData, setWatchlistFormData] = useState<WatchlistFormData>(
-    {
-      animeId: anime.mal_id,
-      userId: auth.user?.id || "",
-      status: "planned",
-      progress: "",
-      score: "",
-      note: "",
-      started_at: "",
-      completed_at: "",
-    },
-  );
+  const [watchlistFormData, setWatchlistFormData] = useState<WatchlistFormData>({
+    animeId: anime.mal_id,
+    userId: auth.user?.id || '',
+    status: 'planned',
+    progress: '',
+    score: '',
+    note: '',
+    started_at: '',
+    completed_at: '',
+  });
 
   const incrementProgress = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setWatchlistFormData((prev: WatchlistFormData) => {
-      const current = prev.progress === "" ? 0 : Number(prev.progress);
+      const current = prev.progress === '' ? 0 : Number(prev.progress);
       const next = current + 1;
 
       return {
         ...prev,
-        progress:
-          anime.episodes != null ? Math.min(next, anime.episodes) : next,
+        progress: anime.episodes != null ? Math.min(next, anime.episodes) : next,
       };
     });
   };
 
   const onSubmitWatchlist = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.post(routes["watchlist.store"], watchlistFormData, {
+    router.post(routes['watchlist.store'], watchlistFormData, {
       preserveScroll: true,
       onSuccess: () => {
         setIsOpen(false);
@@ -139,18 +137,16 @@ const MainInfo = ({
   };
 
   const handleWatchlistFormChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const field = e.currentTarget.id;
     const rawValue = e.currentTarget.value;
 
-    if (field === "progress" || field === "score") {
-      if (rawValue === "") {
+    if (field === 'progress' || field === 'score') {
+      if (rawValue === '') {
         setWatchlistFormData((prev: WatchlistFormData) => ({
           ...prev,
-          [field]: "",
+          [field]: '',
         }));
         return;
       }
@@ -163,7 +159,7 @@ const MainInfo = ({
         numValue = anime.episodes;
       }
 
-      setWatchlistFormData((prev) => ({
+      setWatchlistFormData(prev => ({
         ...prev,
         [field]: numValue,
       }));
@@ -171,20 +167,22 @@ const MainInfo = ({
       return;
     }
 
-    setWatchlistFormData((prev) => ({
+    setWatchlistFormData(prev => ({
       ...prev,
       [field]: rawValue,
     }));
   };
 
   const removeAnimeFromWatchlist = (watchlistId: number) => {
-    const confirmed = window.confirm("Remove this anime from watchlist?");
+    const confirmed = window.confirm('Remove this anime from watchlist?');
     if (confirmed) {
       router.delete(`/watchlist/${watchlistId}`, {
         preserveScroll: true,
       });
     }
   };
+
+  console.log(animeRelation);
 
   return (
     <div className="min-w-0 lg:col-span-3">
@@ -215,9 +213,7 @@ const MainInfo = ({
             {displayTitle}
           </h1>
 
-          <p className="text-primary mb-3 text-sm font-semibold lg:text-lg">
-            {originalTitle}
-          </p>
+          <p className="text-primary mb-3 text-sm font-semibold lg:text-lg">{originalTitle}</p>
 
           {/* BADGES */}
           <div className="mb-5 flex flex-wrap items-center gap-1.5">
@@ -280,45 +276,69 @@ const MainInfo = ({
             /* Call to Action Box for Guest Users to manage watchlist */
             <div className="border-border bg-surface/40 mb-6 rounded-lg border border-dashed p-4 text-center sm:text-left md:w-fit">
               <p className="text-text-muted text-sm">
-                Want to track this anime?{" "}
-                <Link
-                  href="/login"
-                  className="text-primary font-semibold hover:underline"
-                >
+                Want to track this anime?{' '}
+                <Link href="/login" className="text-primary font-semibold hover:underline">
                   Log in
-                </Link>{" "}
-                or{" "}
-                <Link
-                  href="/register"
-                  className="text-primary font-semibold hover:underline"
-                >
+                </Link>{' '}
+                or{' '}
+                <Link href="/register" className="text-primary font-semibold hover:underline">
                   Register
-                </Link>{" "}
+                </Link>{' '}
                 to manage your watchlist.
               </p>
             </div>
           )}
 
-          {/* SYNOPSIS */}
-          <section>
-            <h2 className="text-text mb-2 text-lg font-bold">Synopsis</h2>
+          {/* SYNOPSIS / RELATED ANIME SECTION */}
+          <section className="space-y-4">
+            {/* Segmented Switcher Container */}
+            <div className="bg-surface-alt border-border inline-flex rounded-lg border p-1">
+              <button
+                onClick={() => setActiveTab('synopsis')}
+                className={`${activeTab === 'synopsis' ? 'text-primary bg-surface' : 'text-text-muted'} rounded-md px-4 py-1.5 text-xs font-bold shadow-xs transition-all hover:cursor-pointer`}
+              >
+                Synopsis
+              </button>
+              <button
+                onClick={() => setActiveTab('relation')}
+                className={`${activeTab === 'relation' ? 'text-primary bg-surface' : 'text-text-muted'} rounded-md px-4 py-1.5 text-xs font-bold shadow-xs transition-all hover:cursor-pointer`}
+              >
+                Related Anime
+              </button>
+            </div>
 
-            <p className="text-text/90 text-sm leading-relaxed md:text-sm">
-              {anime.synopsis}
-            </p>
+            {/* Tab Content Display Area */}
+            <div>
+              {activeTab === 'synopsis' ? (
+                <p className="text-text/90 font-sans text-sm leading-relaxed">{anime.synopsis}</p>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-text-muted mb-2 block text-xs font-bold tracking-wider uppercase">
+                      Prequel
+                    </span>
+                    <div className="border-border divide-border divide-y overflow-hidden rounded-lg border">
+                      <div className="bg-surface-alt/30 hover:bg-surface-alt/60 flex items-center justify-between p-3 text-sm transition-colors">
+                        <a
+                          href="#"
+                          className="text-primary hover:text-primary-dark max-w-[70%] truncate font-semibold"
+                        >
+                          Rascal Does Not Dream of a Dreaming Girl
+                        </a>
+                        <span className="text-text-muted text-xs">Movie • 2019</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </section>
 
           {/* MOBILE METADATA */}
-          <div className="border-border mt-8 border-t md:hidden">
-            {metadata}
-          </div>
+          <div className="border-border mt-8 border-t md:hidden">{metadata}</div>
 
           {/* COMMENTS */}
-          <Comment
-            countComments={countComments}
-            anime={anime}
-            topComments={topComments}
-          />
+          <Comment countComments={countComments} anime={anime} topComments={topComments} />
         </main>
       </div>
     </div>

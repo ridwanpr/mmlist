@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\AnimeRelationData;
 use App\DTOs\AnimeTriggerContextData;
 use App\DTOs\CommentData;
 use App\DTOs\UserData;
+use App\Models\AnimeRelation;
 use App\Models\Comment;
 use App\Services\AnimeService;
 use App\Services\CommentService;
@@ -26,6 +28,8 @@ class AnimeController extends Controller
     public function show(string $slug): Response
     {
         $anime = $this->animeService->getAnimeInfo($slug);
+        // dd($anime->animeRelations);
+        $animeRelation = $anime->animeRelations->map(fn(AnimeRelation $item) => AnimeRelationData::fromModel($item));
         $user = Auth::user();
 
         // Convert user model to DTO to match your TypeScript interface
@@ -49,6 +53,7 @@ class AnimeController extends Controller
                 'topComments' => null,
                 'countComments' => 0,
                 'user' => $userData,
+                'animeRelation' => $animeRelation
             ]);
         }
 
@@ -76,6 +81,7 @@ class AnimeController extends Controller
             'countComments' => $countComments,
             'user' => $userData,
             'countTriggerComments' => $countTriggerComments,
+            'animeRelation' => $animeRelation
         ]);
     }
 }

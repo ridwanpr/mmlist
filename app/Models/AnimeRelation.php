@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -27,4 +28,9 @@ class AnimeRelation extends Pivot
 {
     protected $table = 'anime_relations';
     protected $fillable = ['anime_id', 'related_anime_id', 'relation_type', 'created_at', 'updated_at'];
+
+    public function anime(): BelongsTo
+    {
+        return $this->belongsTo(Anime::class, 'related_anime_id');
+    }
 }

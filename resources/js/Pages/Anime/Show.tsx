@@ -1,14 +1,14 @@
-import type React from "react";
-import Breadcrumb from "./Partials/Breadcrumb";
-import MainInfo from "./Partials/MainInfo";
-import { SideInfo } from "./Partials/SideInfo";
-import TriggerWarning from "./Partials/TriggerWarning";
-import FrontLayout from "../../Layouts/FrontLayout";
-import AppHead from "../../Components/AppHead";
-import { Link } from "@inertiajs/react";
-import { settingIndex } from "../../actions/App/Http/Controllers/UserDashboardController";
-import { useState } from "react";
-import TriggerConsent from "./Partials/TriggerConsent";
+import type React from 'react';
+import Breadcrumb from './Partials/Breadcrumb';
+import MainInfo from './Partials/MainInfo';
+import { SideInfo } from './Partials/SideInfo';
+import TriggerWarning from './Partials/TriggerWarning';
+import FrontLayout from '../../Layouts/FrontLayout';
+import AppHead from '../../Components/AppHead';
+import { Link } from '@inertiajs/react';
+import { settingIndex } from '../../actions/App/Http/Controllers/UserDashboardController';
+import { useState } from 'react';
+import TriggerConsent from './Partials/TriggerConsent';
 
 interface ShowAnimeProps {
   anime: App.DTOs.AnimeData & { is_restricted?: boolean };
@@ -20,6 +20,7 @@ interface ShowAnimeProps {
   countComments: number;
   user: App.DTOs.UserData | null;
   countTriggerComments: Record<number, number>;
+  animeRelation: App.DTOs.AnimeRelationData[];
 }
 
 const ShowAnime = ({
@@ -32,8 +33,9 @@ const ShowAnime = ({
   countComments,
   user,
   countTriggerComments,
+  animeRelation,
 }: ShowAnimeProps) => {
-  const animeTitle = anime?.title_english ?? anime?.title ?? "Anime Details";
+  const animeTitle = anime?.title_english ?? anime?.title ?? 'Anime Details';
 
   const [isTriggerConsent, setIsTriggerConsent] = useState(false);
 
@@ -54,15 +56,14 @@ const ShowAnime = ({
             <p className="text-text-muted mb-8 text-sm leading-relaxed">
               {user ? (
                 <>
-                  {animeTitle} is rated Rx (Hentai). This content is hidden
-                  based on your current viewing preferences. You can change your
-                  preferences in settings.
+                  {animeTitle} is rated Rx (Hentai). This content is hidden based on your current
+                  viewing preferences. You can change your preferences in settings.
                 </>
               ) : (
                 <>
-                  {animeTitle} is rated Rx (Hentai). This content is filtered by
-                  default for anonymous visitors. You can adjust your viewing
-                  preferences by logging in or creating an account.
+                  {animeTitle} is rated Rx (Hentai). This content is filtered by default for
+                  anonymous visitors. You can adjust your viewing preferences by logging in or
+                  creating an account.
                 </>
               )}
             </p>
@@ -98,8 +99,7 @@ const ShowAnime = ({
     );
   }
 
-  const shortTitle =
-    animeTitle.length > 60 ? `${animeTitle.slice(0, 60)}...` : animeTitle;
+  const shortTitle = animeTitle.length > 60 ? `${animeTitle.slice(0, 60)}...` : animeTitle;
   const metaDescription = `View community-voted trigger warnings, severity ratings, and framing metrics for ${shortTitle} on Mamorulist.`;
 
   return (
@@ -117,6 +117,7 @@ const ShowAnime = ({
               userWatchlist={userWatchlist}
               topComments={topComments}
               countComments={countComments}
+              animeRelation={animeRelation}
             />
           </div>
 
@@ -128,11 +129,9 @@ const ShowAnime = ({
         <div className="border-border mt-6 border-t pt-6">
           <div className="w-full">
             {!isTriggerConsent && (
-              <TriggerConsent
-                handleRevealTrigger={() => setIsTriggerConsent(true)}
-              />
+              <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
             )}
-            <div className={!isTriggerConsent ? "hidden" : ""}>
+            <div className={!isTriggerConsent ? 'hidden' : ''}>
               <TriggerWarning
                 triggers={triggers}
                 anime={anime}
