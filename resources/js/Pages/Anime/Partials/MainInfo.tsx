@@ -6,6 +6,7 @@ import { router, usePage, Link } from '@inertiajs/react';
 import { AddToWatchlist } from './AddToWatchlist';
 import type { WatchlistFormData } from './AddToWatchlist';
 import { LuBookmarkX } from 'react-icons/lu';
+import RelatedAnimeList from './RelatedAnimeList';
 
 interface MainInfoProps {
   anime: App.DTOs.AnimeData;
@@ -312,24 +313,7 @@ const MainInfo = ({
               {activeTab === 'synopsis' ? (
                 <p className="text-text/90 font-sans text-sm leading-relaxed">{anime.synopsis}</p>
               ) : (
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-text-muted mb-2 block text-xs font-bold tracking-wider uppercase">
-                      Prequel
-                    </span>
-                    <div className="border-border divide-border divide-y overflow-hidden rounded-lg border">
-                      <div className="bg-surface-alt/30 hover:bg-surface-alt/60 flex items-center justify-between p-3 text-sm transition-colors">
-                        <a
-                          href="#"
-                          className="text-primary hover:text-primary-dark max-w-[70%] truncate font-semibold"
-                        >
-                          Rascal Does Not Dream of a Dreaming Girl
-                        </a>
-                        <span className="text-text-muted text-xs">Movie • 2019</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <RelatedAnimeList animeRelations={animeRelation} />
               )}
             </div>
           </section>
