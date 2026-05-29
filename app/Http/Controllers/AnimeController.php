@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\DTOs\AnimeTriggerContextData;
 use App\DTOs\CommentData;
-use App\DTOs\UserData; // Import your UserData DTO
+use App\DTOs\UserData;
 use App\Models\Comment;
 use App\Services\AnimeService;
-use App\Services\AnimeSyncService;
 use App\Services\CommentService;
 use App\Services\VoteService;
 use App\Services\WatchlistService;
@@ -22,14 +21,11 @@ class AnimeController extends Controller
         private VoteService $voteService,
         private WatchlistService $watchlistService,
         private CommentService $commentService,
-        private AnimeSyncService $animeSyncService
     ) {}
 
     public function show(string $slug): Response
     {
         $anime = $this->animeService->getAnimeInfo($slug);
-        $animeRelation = $this->animeSyncService->syncAnimeRelations($anime->mal_id, $anime->id);
-        dd($animeRelation);
         $user = Auth::user();
 
         // Convert user model to DTO to match your TypeScript interface
