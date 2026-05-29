@@ -1,31 +1,25 @@
-import { router, usePage } from "@inertiajs/react";
-import AnimeInfo from "../../Components/AnimeInfo";
-import FrontLayout from "../../Layouts/FrontLayout";
-import TriggerCommentbread from "./Partials/TriggerCommentBread";
-import TriggerDiscussionTitle from "./Partials/TriggerDiscussionTitle";
-import TriggerFormComment from "./Partials/TriggerFormComment";
-import Sorting from "../../Components/Sorting";
-import { getTriggerComment } from "../../actions/App/Http/Controllers/TriggerCommentController";
-import TriggerStat from "./Partials/TriggerStat";
-import TriggerCommentItem from "./Partials/TriggerCommentItem";
-import { useEffect, useRef, useState } from "react";
-import type {
-  EditedComment,
-  RepliedComment,
-} from "../AnimeComment/Partials/Discussion";
-import TriggerReplyModal from "./Partials/TriggerReplyModal";
-import EditFormModal from "../AnimeComment/Partials/EditFormModal";
-import {
-  destroy,
-  upvote,
-} from "../../actions/App/Http/Controllers/CommentController";
-import AppHead from "../../Components/AppHead";
+import { router, usePage } from '@inertiajs/react';
+import AnimeInfo from '../../Components/AnimeInfo';
+import FrontLayout from '../../Layouts/FrontLayout';
+import TriggerCommentbread from './Partials/TriggerCommentBread';
+import TriggerDiscussionTitle from './Partials/TriggerDiscussionTitle';
+import TriggerFormComment from './Partials/TriggerFormComment';
+import Sorting from '../../Components/Sorting';
+import { getTriggerComment } from '../../actions/App/Http/Controllers/TriggerCommentController';
+import TriggerStat from './Partials/TriggerStat';
+import TriggerCommentItem from './Partials/TriggerCommentItem';
+import { useEffect, useRef, useState } from 'react';
+import type { EditedComment, RepliedComment } from '../AnimeComment/Partials/Discussion';
+import TriggerReplyModal from './Partials/TriggerReplyModal';
+import EditFormModal from '../AnimeComment/Partials/EditFormModal';
+import { destroy, upvote } from '../../actions/App/Http/Controllers/CommentController';
+import AppHead from '../../Components/AppHead';
 
 type TriggerCommentProps = {
   anime: App.DTOs.AnimeData;
   triggerContent: App.DTOs.TriggerContentData;
   triggerStatData: App.DTOs.AnimeTriggerStatData;
-  sortBy: "latest" | "most-loved" | "oldest";
+  sortBy: 'latest' | 'most-loved' | 'oldest';
   triggerComments: App.DTOs.PaginatedCommentData;
 };
 
@@ -44,20 +38,16 @@ const TriggerComment = ({
 
   const [editComment, setEditComment] = useState<EditedComment>({
     comment_id: null,
-    body: "",
+    body: '',
   });
 
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
-    parent_comment_body: "",
-    parent_comment_user: "",
+    parent_comment_body: '',
+    parent_comment_user: '',
   });
 
-  const openReplyModal = (
-    commentId: number,
-    commentBody: string,
-    user: string,
-  ) => {
+  const openReplyModal = (commentId: number, commentBody: string, user: string) => {
     setRepliedComment({
       parent_comment_id: commentId,
       parent_comment_body: commentBody,
@@ -70,8 +60,8 @@ const TriggerComment = ({
     setReplyModal(false);
     setRepliedComment({
       parent_comment_id: null,
-      parent_comment_body: "",
-      parent_comment_user: "",
+      parent_comment_body: '',
+      parent_comment_user: '',
     });
   };
 
@@ -98,12 +88,12 @@ const TriggerComment = ({
     setEditModal(false);
     setEditComment({
       comment_id: null,
-      body: "",
+      body: '',
     });
   };
 
   const handleDeleteComment = (commentId: number) => {
-    if (confirm("Are you sure want to delete this comment?")) {
+    if (confirm('Are you sure want to delete this comment?')) {
       router.delete(destroy.url({ commentId: commentId }), {
         preserveScroll: true,
       });
@@ -124,8 +114,8 @@ const TriggerComment = ({
 
     const previousComments = comments;
 
-    setComments((prev) =>
-      prev.map((c) =>
+    setComments(prev =>
+      prev.map(c =>
         c.id === commentId
           ? {
               ...c,
@@ -144,16 +134,17 @@ const TriggerComment = ({
       {
         preserveScroll: true,
         preserveState: true,
-        onSuccess: (page) => {
+        showProgress: false,
+        onSuccess: page => {
           const serverComments = (
             page.props as unknown as {
               triggerComments: App.DTOs.PaginatedCommentData;
             }
           ).triggerComments.data;
 
-          setComments((prev) =>
-            prev.map((local) => {
-              const fromServer = serverComments.find((s) => s.id === local.id);
+          setComments(prev =>
+            prev.map(local => {
+              const fromServer = serverComments.find(s => s.id === local.id);
               return fromServer ?? local;
             }),
           );
@@ -180,10 +171,7 @@ const TriggerComment = ({
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[250px_1fr]">
             <AnimeInfo anime={anime} />
             <div>
-              <TriggerDiscussionTitle
-                anime={anime}
-                triggerContent={triggerContent}
-              />
+              <TriggerDiscussionTitle anime={anime} triggerContent={triggerContent} />
               <TriggerStat triggerStatData={triggerStatData} />
               <TriggerFormComment
                 triggerContent={triggerContent}
@@ -191,7 +179,7 @@ const TriggerComment = ({
                 slug={anime.slug}
               />
               <Sorting sortBy={sortBy} handleFilter={handleFilter} />
-              {triggerComments.data?.map((comment) => (
+              {triggerComments.data?.map(comment => (
                 <TriggerCommentItem
                   key={comment.id}
                   auth={auth}
@@ -226,8 +214,6 @@ const TriggerComment = ({
   );
 };
 
-TriggerComment.layout = (page: React.ReactNode) => (
-  <FrontLayout>{page}</FrontLayout>
-);
+TriggerComment.layout = (page: React.ReactNode) => <FrontLayout>{page}</FrontLayout>;
 
 export default TriggerComment;

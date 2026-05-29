@@ -1,24 +1,24 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, router, usePage } from "@inertiajs/react";
-import { LuHeart, LuReply, LuPencil, LuTrash2 } from "react-icons/lu";
+import { useEffect, useRef, useState } from 'react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { LuHeart, LuReply, LuPencil, LuTrash2 } from 'react-icons/lu';
 import {
   destroy,
   getAnimeComment,
   upvote,
-} from "../../../actions/App/Http/Controllers/CommentController";
-import { show } from "../../../actions/App/Http/Controllers/AnimeController";
+} from '../../../actions/App/Http/Controllers/CommentController';
+import { show } from '../../../actions/App/Http/Controllers/AnimeController';
 
-import QuoteBlock from "../../../Components/QuoteBlock";
-import FormComment from "./FormComment";
-import Sorting from "../../../Components/Sorting";
-import ReplyFormModal from "./ReplyFormModal";
-import TimeAgo from "../../../Components/TimeAgo";
-import EditFormModal from "./EditFormModal";
+import QuoteBlock from '../../../Components/QuoteBlock';
+import FormComment from './FormComment';
+import Sorting from '../../../Components/Sorting';
+import ReplyFormModal from './ReplyFormModal';
+import TimeAgo from '../../../Components/TimeAgo';
+import EditFormModal from './EditFormModal';
 
 type DiscussionProps = {
   anime: App.DTOs.AnimeData;
   paginatedComment: App.DTOs.PaginatedCommentData;
-  sortBy: "latest" | "most-loved" | "oldest";
+  sortBy: 'latest' | 'most-loved' | 'oldest';
 };
 
 export type RepliedComment = {
@@ -41,13 +41,13 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
   const [repliedComment, setRepliedComment] = useState<RepliedComment>({
     parent_comment_id: null,
-    parent_comment_body: "",
-    parent_comment_user: "",
+    parent_comment_body: '',
+    parent_comment_user: '',
   });
 
   const [editComment, setEditComment] = useState<EditedComment>({
     comment_id: null,
-    body: "",
+    body: '',
   });
 
   const [comments, setComments] = useState(paginatedComment.data);
@@ -60,11 +60,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   }, [paginatedComment.data]);
 
   const handleFilter = (filter: string) => {
-    router.get(
-      getAnimeComment.url(anime.slug),
-      { sort: filter },
-      { preserveScroll: true },
-    );
+    router.get(getAnimeComment.url(anime.slug), { sort: filter }, { preserveScroll: true });
   };
 
   const handleUpvote = (commentId: number) => {
@@ -72,8 +68,8 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
     const previousComments = comments;
 
-    setComments((prev) =>
-      prev.map((c) =>
+    setComments(prev =>
+      prev.map(c =>
         c.id === commentId
           ? {
               ...c,
@@ -92,16 +88,17 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
       {
         preserveScroll: true,
         preserveState: true,
-        onSuccess: (page) => {
+        showProgress: false,
+        onSuccess: page => {
           const serverComments = (
             page.props as unknown as {
               paginatedComment: App.DTOs.PaginatedCommentData;
             }
           ).paginatedComment.data;
 
-          setComments((prev) =>
-            prev.map((local) => {
-              const fromServer = serverComments.find((s) => s.id === local.id);
+          setComments(prev =>
+            prev.map(local => {
+              const fromServer = serverComments.find(s => s.id === local.id);
               return fromServer ?? local;
             }),
           );
@@ -116,11 +113,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     );
   };
 
-  const openReplyModal = (
-    commentId: number,
-    commentBody: string,
-    user: string,
-  ) => {
+  const openReplyModal = (commentId: number, commentBody: string, user: string) => {
     setRepliedComment({
       parent_comment_id: commentId,
       parent_comment_body: commentBody,
@@ -133,8 +126,8 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     setReplyModal(false);
     setRepliedComment({
       parent_comment_id: null,
-      parent_comment_body: "",
-      parent_comment_user: "",
+      parent_comment_body: '',
+      parent_comment_user: '',
     });
   };
 
@@ -142,7 +135,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
     setEditModal(false);
     setEditComment({
       comment_id: null,
-      body: "",
+      body: '',
     });
   };
 
@@ -155,7 +148,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   };
 
   const handleDeleteComment = (commentId: number) => {
-    if (confirm("Are you sure want to delete this comment?")) {
+    if (confirm('Are you sure want to delete this comment?')) {
       router.delete(destroy.url({ commentId: commentId }), {
         preserveScroll: true,
       });
@@ -165,46 +158,34 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
   return (
     <>
       <section id="discussion">
-        <Link
-          href={show.url(anime.slug)}
-          className="text-primary text-lg font-semibold"
-        >
+        <Link href={show.url(anime.slug)} className="text-primary text-lg font-semibold">
           {anime.title_english || anime.title} - Discussion
         </Link>
 
         <FormComment isGuest={isGuest} anime={anime} />
         <Sorting sortBy={sortBy} handleFilter={handleFilter} />
 
-        {comments?.map((comment) => (
-          <div
-            key={comment.id}
-            className="border-border bg-surface mt-3 divide-y rounded border"
-          >
+        {comments?.map(comment => (
+          <div key={comment.id} className="border-border bg-surface mt-3 divide-y rounded border">
             <div className="flex gap-4 px-4 py-3">
               <div className="flex shrink-0 flex-col items-center pt-0.5">
                 <button
                   onClick={() => handleUpvote(comment.id)}
                   className={`-m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer ${
                     comment.isUpvoted
-                      ? "text-accent-red hover:text-accent-red/80"
-                      : "text-text-muted hover:text-accent-red"
+                      ? 'text-accent-red hover:text-accent-red/80'
+                      : 'text-text-muted hover:text-accent-red'
                   }`}
                 >
-                  <LuHeart
-                    className={`size-4 ${
-                      comment.isUpvoted ? "fill-current" : ""
-                    }`}
-                  />
-                  <span className="text-xs leading-none">
-                    {comment.upvotes}
-                  </span>
+                  <LuHeart className={`size-4 ${comment.isUpvoted ? 'fill-current' : ''}`} />
+                  <span className="text-xs leading-none">{comment.upvotes}</span>
                 </button>
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="text-primary text-sm font-semibold">
-                    {comment.user?.name ?? ""}
+                    {comment.user?.name ?? ''}
                   </span>
 
                   <span className="text-text-muted text-xs">
@@ -214,17 +195,17 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
 
                 {comment.parent && (
                   <QuoteBlock
-                    authorName={comment.parent.user?.name ?? ""}
+                    authorName={comment.parent.user?.name ?? ''}
                     body={comment.parent.bodyHtml}
                   />
                 )}
 
                 <div
                   className="prose prose-sm text-text mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
-                  onClick={(e) => {
+                  onClick={e => {
                     const target = e.target as HTMLElement;
-                    if (target.classList.contains("spoiler")) {
-                      target.classList.add("revealed");
+                    if (target.classList.contains('spoiler')) {
+                      target.classList.add('revealed');
                     }
                   }}
                   dangerouslySetInnerHTML={{
@@ -237,11 +218,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() =>
-                        openReplyModal(
-                          comment.id,
-                          comment.bodyHtml,
-                          comment.user?.name ?? "",
-                        )
+                        openReplyModal(comment.id, comment.bodyHtml, comment.user?.name ?? '')
                       }
                       className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                     >
@@ -252,9 +229,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                     {auth.user.id === comment.userId && (
                       <>
                         <button
-                          onClick={() =>
-                            handleEditComment(comment.id, comment.body)
-                          }
+                          onClick={() => handleEditComment(comment.id, comment.body)}
                           className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                         >
                           <LuPencil className="size-3" />
