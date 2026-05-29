@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\PaginatedWatchlistData;
 use App\DTOs\WatchlistData;
 use App\Models\Anime;
+use App\Models\AnimeTrigger;
 use App\Models\Watchlist;
 use Illuminate\Support\Facades\DB;
 
@@ -85,7 +86,7 @@ class WatchlistService
 
         $paginator = $query->paginate($paginateLimit)->onEachSide(1)->withQueryString();
 
-        $paginator->through(fn ($item) => WatchlistData::fromModel($item));
+        $paginator->through(fn($item) => WatchlistData::fromModel($item));
 
         return PaginatedWatchlistData::fromPaginator($paginator);
     }
@@ -109,7 +110,7 @@ class WatchlistService
 
     public function getTotalVoteCount(int $userId): int
     {
-        return Watchlist::where('user_id', $userId)->count();
+        return AnimeTrigger::where('user_id', $userId)->count();
     }
 
     public function updateWatchlist(int $userId, int $watchlistId, array $data): void
