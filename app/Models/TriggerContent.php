@@ -19,10 +19,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $slug
- * @property-read Collection<int, AnimeTrigger> $animeTriggers
+ * @property-read Collection<int, \App\Models\AnimeTrigger> $animeTriggers
  * @property-read int|null $anime_triggers_count
- * @property-read MasterTrigger $masterTrigger
- *
+ * @property-read Collection<int, \App\Models\Comment> $comments
+ * @property-read int|null $comments_count
+ * @property-read \App\Models\MasterTrigger $masterTrigger
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent query()
@@ -34,7 +35,6 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent whereTriggerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TriggerContent whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'description', 'trigger_id', 'importance', 'slug'])]

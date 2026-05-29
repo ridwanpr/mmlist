@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property string $commentable_type
  * @property int $commentable_id
+ * @property int|null $anime_id
  * @property int $user_id
  * @property int|null $episode_number
  * @property string $body
@@ -22,18 +23,19 @@ use Illuminate\Support\Str;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $parent_comment_id
+ * @property-read \App\Models\Anime|null $anime
  * @property-read Model|\Eloquent $commentable
  * @property-read string $body_html
  * @property-read Comment|null $parent
  * @property-read Collection<int, Comment> $replies
  * @property-read int|null $replies_count
- * @property-read User $user
- * @property-read Collection<int, CommentVote> $votes
+ * @property-read \App\Models\User $user
+ * @property-read Collection<int, \App\Models\CommentVote> $votes
  * @property-read int|null $votes_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereAnimeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereBody($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereCommentableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereCommentableType($value)
@@ -45,7 +47,6 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUpvotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment whereUserId($value)
- *
  * @mixin \Eloquent
  */
 class Comment extends Model

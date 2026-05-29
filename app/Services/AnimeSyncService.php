@@ -7,6 +7,7 @@ use App\Models\Anime;
 use App\Models\AnimeDemographic;
 use App\Models\AnimeGenre;
 use App\Models\AnimeProducer;
+use App\Models\AnimeRelation;
 use App\Models\AnimeStudio;
 use App\Models\AnimeTheme;
 use App\Models\Demographic;
@@ -29,7 +30,7 @@ class AnimeSyncService
     {
         $response = Http::withQueryParameters([
             'page' => $page,
-        ])->get(config('app.jikan_url').'/seasons/now');
+        ])->get(config('app.jikan_url') . '/seasons/now');
 
         if ($response->failed()) {
             Log::warning("Jikan API failed for syncing airing anime page {$page}. Status: {$response->status()}");
@@ -58,7 +59,7 @@ class AnimeSyncService
         Log::info('sync anime');
         $response = Http::timeout(15)->withQueryParameters([
             'page' => $page,
-        ])->get(config('app.jikan_url').'/top/anime');
+        ])->get(config('app.jikan_url') . '/top/anime');
 
         if ($response->failed()) {
             Log::warning("Jikan API failed for syncing catalog page {$page}. Status: {$response->status()}");
@@ -163,6 +164,62 @@ class AnimeSyncService
         });
     }
 
+    public function syncAnimeRelations(int $malId, int $animeId): void
+    {
+        if (AnimeRelation::where('anime_id', $animeId)->exists()) {
+            return;
+        }
+
+        $response = Http::get(config('app.jikan_url') . "/anime/{$malId}/relations");
+
+        if ($response->failed()) {
+            Log::warning("Jikan API failed for anime relation. Status: {$response->status()}");
+            $response->throw();
+        }
+
+        $jsonPayload = $response->json();
+
+        $relationMalIds = [];
+        foreach ($jsonPayload['data'] as $relationGroup) {
+            foreach ($relationGroup['entry'] as $entry) {
+                if ($entry['type'] === 'anime') {
+                    $relationMalIds[] = $entry['mal_id'];
+                }
+            }
+        }
+
+        $relatedAnimeInDB = Anime::whereIn('mal_id', $relationMalIds)->get()->keyBy('mal_id');
+
+        $syncRelationData = [];
+        foreach ($jsonPayload['data'] as $relationGroup) {
+            $relationType = $relationGroup['relation'];
+
+            foreach ($relationGroup['entry'] as $entry) {
+                if ($entry['type'] !== 'anime') {
+                    continue;
+                }
+
+                $relatedMalId = $entry['mal_id'];
+
+                if (!isset($relatedAnimeInDB[$relatedMalId])) {
+                    continue;
+                }
+
+                $syncRelationData[] = [
+                    'anime_id' => $animeId,
+                    'related_anime_id' => $relatedAnimeInDB[$relatedMalId]->id,
+                    'relation_type' => $relationType,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        if (!empty($syncRelationData)) {
+            AnimeRelation::insertOrIgnore($syncRelationData);
+        }
+    }
+
     /**
      * @param  array<int, AnimeData>  $animeApiData
      * @return array{animeRecords: array<int, array<string, mixed>>, animeMalIds: array<int, int>}
@@ -223,7 +280,7 @@ class AnimeSyncService
 
         return collect($apiPayload['data'])
             ->unique('mal_id')
-            ->map(fn (array $item) => AnimeData::fromArray($item))
+            ->map(fn(array $item) => AnimeData::fromArray($item))
             ->values()
             ->all();
     }

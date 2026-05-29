@@ -7,6 +7,7 @@ use App\DTOs\CommentData;
 use App\DTOs\UserData; // Import your UserData DTO
 use App\Models\Comment;
 use App\Services\AnimeService;
+use App\Services\AnimeSyncService;
 use App\Services\CommentService;
 use App\Services\VoteService;
 use App\Services\WatchlistService;
@@ -21,11 +22,14 @@ class AnimeController extends Controller
         private VoteService $voteService,
         private WatchlistService $watchlistService,
         private CommentService $commentService,
+        private AnimeSyncService $animeSyncService
     ) {}
 
     public function show(string $slug): Response
     {
         $anime = $this->animeService->getAnimeInfo($slug);
+        $animeRelation = $this->animeSyncService->syncAnimeRelations($anime->mal_id, $anime->id);
+        dd($animeRelation);
         $user = Auth::user();
 
         // Convert user model to DTO to match your TypeScript interface
@@ -58,11 +62,11 @@ class AnimeController extends Controller
         $watchlist = $user ? $this->watchlistService->findUserWatchlist($user->id, $anime->id) : null;
 
         $aiTriggerContext = $anime->triggerContexts->map(
-            fn ($item) => AnimeTriggerContextData::fromModel($item)
+            fn($item) => AnimeTriggerContextData::fromModel($item)
         );
 
         $topComments = $this->commentService->getTopComments('anime', $anime->id);
-        $topCommentsDto = $topComments->map(fn (Comment $item) => CommentData::fromModel($item));
+        $topCommentsDto = $topComments->map(fn(Comment $item) => CommentData::fromModel($item));
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
         $countTriggerComments = $this->commentService->getTriggerCommentsCount($anime->id);
 
