@@ -46,7 +46,7 @@ class WatchlistController extends Controller
 
         $sortInput = $request->query('sort');
         $allowedSorts = ['latest', 'score', 'oldest'];
-        $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'score';
+        $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'latest';
 
         $watchlists = $this->watchlistService->getUserWatchlist(
             paginateLimit: 21,
