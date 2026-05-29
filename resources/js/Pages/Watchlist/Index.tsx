@@ -97,13 +97,22 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
       <AppHead title="Watchlist" />
       <DashContainer>
         <div className="mb-6 p-4 lg:p-0">
-          <div className="mb-4">
-            <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
-              Watchlist
-            </h1>
-            <p className="text-text-muted text-sm">
-              {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
-            </p>
+          <div className="flex justify-between items-center">
+            <div className="mb-4">
+              <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
+                Watchlist
+              </h1>
+              <p className="text-text-muted text-sm">
+                {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
+              </p>
+            </div>
+            <div>
+              <input
+                type="text"
+                className="border-primary/50 bg-surface rounded-lg border p-2.5 text-xs"
+                placeholder="Search anime title..."
+              />
+            </div>
           </div>
 
           <WatchlistTab
@@ -113,7 +122,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
           />
 
           <div className="mt-4">
-            <div className="flex w-full items-center justify-between mb-4">
+            <div className="mb-4 flex w-full items-center justify-between">
               <p className="text-text-muted text-xs">{watchlists?.total} Titles</p>
               <SortWatchlist sortBy="latest" handleFilter={() => {}} />
             </div>
