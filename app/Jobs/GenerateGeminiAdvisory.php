@@ -19,14 +19,14 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
     public function handle(GeminiService $geminiService): void
     {
-        $cacheKey = 'gemini_daily_requests_'.date('Y-m-d');
+        $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
         $remainingQuota = 800 - $dailyRequests;
 
-        Log::info("GenerateGeminiAdvisory: Job started. Daily requests tracked: {$dailyRequests}. Remaining quota: {$remainingQuota}.");
+        Log::channel('gemini')->info("GenerateGeminiAdvisory: Job started. Daily requests tracked: {$dailyRequests}. Remaining quota: {$remainingQuota}.");
 
         if ($remainingQuota <= 0) {
-            Log::warning('GenerateGeminiAdvisory: Aborting job execution. Daily quota limit reached.');
+            Log::channel('gemini')->warning('GenerateGeminiAdvisory: Aborting job execution. Daily quota limit reached.');
 
             return;
         }
@@ -45,7 +45,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $availableTriggerNames = array_keys($dbTriggerContents);
         $totalTriggerCount = count($dbTriggerContents);
 
-        Log::info("GenerateGeminiAdvisory: Reference data loaded. Total target triggers in DB: {$totalTriggerCount}. Total Max Batch: {$maxBatch}. Phase 1 Cap: {$phase1Cap}. Target max year: {$currentYear}");
+        Log::channel('gemini')->info("GenerateGeminiAdvisory: Reference data loaded. Total target triggers in DB: {$totalTriggerCount}. Total Max Batch: {$maxBatch}. Phase 1 Cap: {$phase1Cap}. Target max year: {$currentYear}");
 
         $processedCount = 0;
 
@@ -67,11 +67,11 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->limit($phase1Cap)
             ->get();
 
-        Log::info('GenerateGeminiAdvisory: Phase 1 (Gap-fill) found '.$gapAnimes->count().' candidates matching discrepancy criteria.');
+        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 1 (Gap-fill) found ' . $gapAnimes->count() . ' candidates matching discrepancy criteria.');
 
         foreach ($gapAnimes as $anime) {
             if ($processedCount >= $phase1Cap) {
-                Log::info("GenerateGeminiAdvisory: Allocated Phase 1 limit of {$phase1Cap} reached.");
+                Log::channel('gemini')->info("GenerateGeminiAdvisory: Allocated Phase 1 limit of {$phase1Cap} reached.");
                 break;
             }
 
@@ -81,13 +81,13 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 ->all();
 
             $missingTriggerNames = array_keys(
-                array_filter($dbTriggerContents, fn ($id) => ! isset($existingTriggerIds[$id]))
+                array_filter($dbTriggerContents, fn($id) => ! isset($existingTriggerIds[$id]))
             );
 
-            Log::info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Current Context Count: ".count($existingTriggerIds)." / {$totalTriggerCount} | Missing Triggers Count: ".count($missingTriggerNames));
+            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Current Context Count: " . count($existingTriggerIds) . " / {$totalTriggerCount} | Missing Triggers Count: " . count($missingTriggerNames));
 
             if (empty($missingTriggerNames)) {
-                Log::info("GenerateGeminiAdvisory: Skipping Anime ID {$anime->id}. Discrepancy resolved dynamically via concurrent process.");
+                Log::channel('gemini')->info("GenerateGeminiAdvisory: Skipping Anime ID {$anime->id}. Discrepancy resolved dynamically via concurrent process.");
 
                 continue;
             }
@@ -102,7 +102,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                Log::error("GenerateGeminiAdvisory: Phase 1 gap-fill failed for Anime ID {$anime->id}: ".$e->getMessage());
+                Log::channel('gemini')->error("GenerateGeminiAdvisory: Phase 1 gap-fill failed for Anime ID {$anime->id}: " . $e->getMessage());
             }
         }
 
@@ -110,11 +110,11 @@ class GenerateGeminiAdvisory implements ShouldQueue
         // Phase 2: Fresh anime (Guaranteed to have remaining slots from the total batch)
         // -------------------------------------------------------------------------
         $remainingSlots = $maxBatch - $processedCount;
-        Log::info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
+        Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
 
         if ($remainingSlots <= 0) {
             Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
-            Log::info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2 fresh anime processing.');
+            Log::channel('gemini')->info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2 fresh anime processing.');
 
             return;
         }
@@ -129,15 +129,15 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->limit($remainingSlots)
             ->get();
 
-        Log::info('GenerateGeminiAdvisory: Phase 2 (Fresh) found '.$newAnimes->count().' eligible candidates.');
+        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 2 (Fresh) found ' . $newAnimes->count() . ' eligible candidates.');
 
         foreach ($newAnimes as $anime) {
             if ($processedCount >= $maxBatch) {
-                Log::info("GenerateGeminiAdvisory: Total batch limit of {$maxBatch} reached during Phase 2.");
+                Log::channel('gemini')->info("GenerateGeminiAdvisory: Total batch limit of {$maxBatch} reached during Phase 2.");
                 break;
             }
 
-            Log::info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Airing: {$anime->airing} | Score: {$anime->score}");
+            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Airing: {$anime->airing} | Score: {$anime->score}");
 
             try {
                 $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
@@ -151,13 +151,13 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                Log::error("GenerateGeminiAdvisory: Phase 2 failed for Anime ID {$anime->id}: ".$e->getMessage());
+                Log::channel('gemini')->error("GenerateGeminiAdvisory: Phase 2 failed for Anime ID {$anime->id}: " . $e->getMessage());
                 $anime->update(['ai_advisory' => GeminiService::FALLBACK_ADVISORY]);
             }
         }
 
         Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
-        Log::info("GenerateGeminiAdvisory: Job processing window finalized. Total items handled in this run: {$processedCount}.");
+        Log::channel('gemini')->info("GenerateGeminiAdvisory: Job processing window finalized. Total items handled in this run: {$processedCount}.");
     }
 
     private function syncTriggerContexts(int $animeId, array $matchedTriggers, array $dbTriggerContents, array $evaluatedTriggerNames): void
@@ -187,6 +187,6 @@ class GenerateGeminiAdvisory implements ShouldQueue
             }
         }
 
-        Log::info("GenerateGeminiAdvisory: Synced trigger contexts for Anime ID {$animeId}. Populated {$insertedCount} total context rows.");
+        Log::channel('gemini')->info("GenerateGeminiAdvisory: Synced trigger contexts for Anime ID {$animeId}. Populated {$insertedCount} total context rows.");
     }
 }

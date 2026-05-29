@@ -36,8 +36,6 @@ class FetchAiringAnime implements ShouldQueue
 
         while ($hasNextPage) {
             try {
-                Log::info("Fetching airing anime page: {$page}");
-
                 $result = $animeSyncService->syncAiringAnimePage($page);
 
                 $hasNextPage = $result['has_next_page'];
@@ -60,7 +58,6 @@ class FetchAiringAnime implements ShouldQueue
         // of anime that are no longer in the current season's payload.
         if (! empty($allSyncedMalIds)) {
             $animeSyncService->cleanupStaleAiringAnime($allSyncedMalIds);
-            Log::info('Cleaned up stale airing statuses.');
         }
 
         Log::info('Finished fetching all airing anime. Total items synced: '.count($allSyncedMalIds));

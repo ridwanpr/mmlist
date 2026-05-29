@@ -72,22 +72,22 @@ class GeminiService
             ? " Official Age Rating: {$rating}."
             : " Official Age Rating: Unknown — calibrate tone based on the anime's known content and target demographic.";
 
-        $triggerListStr = implode(', ', array_map(fn ($t) => "'{$t}'", $availableTriggers));
+        $triggerListStr = implode(', ', array_map(fn($t) => "'{$t}'", $availableTriggers));
 
-        $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n".
-            "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n".
+        $prompt = "Provide the content advisory and itemized trigger breakdowns for the anime: {$title}.{$ratingContext}\n\n" .
+            "CRITICAL: Evaluate the anime ONLY against these specific trigger names. If a trigger is present, add it to the matched_triggers array with context. If it isn't present, omit it from the array.\n" .
             "Allowed Trigger Names: [{$triggerListStr}]";
 
         $response = null;
         $key1CircuitOpen = Cache::get('gemini_key1_circuit_open', false);
 
         if ($key1CircuitOpen) {
-            Log::info("Gemini key 1 circuit open — skipping directly to secondary key for {$title}.");
+            Log::channel('gemini')->info("Gemini key 1 circuit open — skipping directly to secondary key for {$title}.");
         } else {
             try {
                 $response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25);
             } catch (ConnectionException $e) {
-                Log::warning("Gemini main call timed out for {$title}. Opening key 1 circuit for 60 seconds.");
+                Log::channel('gemini')->warning("Gemini main call timed out for {$title}. Opening key 1 circuit for 60 seconds.");
                 Cache::put('gemini_key1_circuit_open', true, now()->addSeconds(60));
             }
 
@@ -97,14 +97,14 @@ class GeminiService
 
             if ($response && ($response->status() === 429 || $response->serverError())) {
                 $until = $response->status() === 429 ? now()->endOfDay() : now()->addSeconds(60);
-                Log::warning("Gemini key 1 failed (Status: {$response->status()}) for {$title}. Opening circuit until {$until}.");
+                Log::channel('gemini')->warning("Gemini key 1 failed (Status: {$response->status()}) for {$title}. Opening circuit until {$until}.");
                 Cache::put('gemini_key1_circuit_open', true, $until);
             }
         }
 
         if ($key1CircuitOpen || ! $response || $response->status() === 429 || $response->serverError()) {
             $status = $response ? $response->status() : ($key1CircuitOpen ? 'Circuit Open' : 'Timeout');
-            Log::warning("Gemini API unavailable (Status: {$status}) for {$title}. Retrying with secondary API key.");
+            Log::channel('gemini')->warning("Gemini API unavailable (Status: {$status}) for {$title}. Retrying with secondary API key.");
 
             try {
                 $key2Response = $this->callApi('gemini-3.1-flash-lite', $prompt, timeout: 25, apiKey: $this->apiKey2);
@@ -113,9 +113,9 @@ class GeminiService
                     return $this->parseJsonOutput($this->extractText($key2Response->json()));
                 }
 
-                Log::warning("Gemini secondary key also failed (Status: {$key2Response->status()}) for {$title}. Falling back to Gemma 4 31B.");
+                Log::channel('gemini')->warning("Gemini secondary key also failed (Status: {$key2Response->status()}) for {$title}. Falling back to Gemma 4 31B.");
             } catch (ConnectionException $e) {
-                Log::warning("Gemini secondary key timed out for {$title}. Falling back to Gemma 4 31B.");
+                Log::channel('gemini')->warning("Gemini secondary key timed out for {$title}. Falling back to Gemma 4 31B.");
             }
 
             try {
@@ -124,12 +124,12 @@ class GeminiService
                 if ($fallbackResponse->successful()) {
                     return $this->parseJsonOutput($this->extractText($fallbackResponse->json()));
                 }
-                Log::error("Gemma fallback failed for {$title}: ".$fallbackResponse->body());
+                Log::channel('gemini')->error("Gemma fallback failed for {$title}: " . $fallbackResponse->body());
             } catch (ConnectionException $e) {
-                Log::error("Gemma fallback also timed out for {$title}.");
+                Log::channel('gemini')->error("Gemma fallback also timed out for {$title}.");
             }
         } else {
-            Log::error("Gemini API failed for {$title}: ".$response->body());
+            Log::channel('gemini')->error("Gemini API failed for {$title}: " . $response->body());
         }
 
         throw new Exception('Failed to generate advisory after fallback.');
@@ -229,7 +229,7 @@ class GeminiService
         $decoded = json_decode(trim($cleaned), true);
 
         if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
-            Log::error('Failed to decode valid JSON content structural layout. Raw Output: '.$rawText);
+            Log::channel('gemini')->error('Failed to decode valid JSON content structural layout. Raw Output: ' . $rawText);
 
             return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
