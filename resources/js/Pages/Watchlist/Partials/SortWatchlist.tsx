@@ -1,6 +1,6 @@
 type SortWatchlistProps = {
   sortBy: 'latest' | 'score' | 'oldest';
-  handleFilter: (filter: string) => void;
+  handleFilter: (filter: 'latest' | 'score' | 'oldest') => void;
 };
 
 const SortWatchlist = ({ sortBy, handleFilter }: SortWatchlistProps) => {

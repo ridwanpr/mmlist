@@ -24,6 +24,7 @@ type WatchlistPropsType = {
     on_hold: number;
     dropped: number;
   };
+  sortBy: 'latest' | 'score' | 'oldest';
 };
 
 export type EditWatchlistForm = {
@@ -35,7 +36,7 @@ export type EditWatchlistForm = {
   completed_at: string | null;
 };
 
-const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
+const Watchlist = ({ watchlists, status, tabCounts, sortBy }: WatchlistPropsType) => {
   const activeTab = status || 'watching';
 
   const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
@@ -92,12 +93,23 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
     }
   };
 
+  const handleFilter = (filter: 'latest' | 'score' | 'oldest') => {
+    router.get(
+      watchlistIndex.url(),
+      {
+        status: status,
+        sort: filter,
+      },
+      { preserveScroll: true },
+    );
+  };
+
   return (
     <>
       <AppHead title="Watchlist" />
       <DashContainer>
         <div className="mb-6 p-4 lg:p-0">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="mb-4">
               <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
                 Watchlist
@@ -124,7 +136,7 @@ const Watchlist = ({ watchlists, status, tabCounts }: WatchlistPropsType) => {
           <div className="mt-4">
             <div className="mb-4 flex w-full items-center justify-between">
               <p className="text-text-muted text-xs">{watchlists?.total} Titles</p>
-              <SortWatchlist sortBy="latest" handleFilter={() => {}} />
+              <SortWatchlist sortBy={sortBy} handleFilter={handleFilter} />
             </div>
 
             {/*Anime List*/}

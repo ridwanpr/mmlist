@@ -45,10 +45,14 @@ class WatchlistService
         Watchlist::where('id', $watchlistId)->delete();
     }
 
-    public function getUserWatchlist(int $paginateLimit, int $userId, ?string $status = null): PaginatedWatchlistData
-    {
+    public function getUserWatchlist(
+        int $paginateLimit,
+        int $userId,
+        ?string $status = null,
+        ?string $sort = 'latest'
+    ): PaginatedWatchlistData {
         $query = Watchlist::where('user_id', $userId)
-            ->join('animes', 'animes.id', 'watchlists.anime_id', 'animes.slug')
+            ->join('animes', 'animes.id', '=', 'watchlists.anime_id')
             ->select(
                 'watchlists.*',
                 'animes.title',
@@ -63,9 +67,17 @@ class WatchlistService
             $query->where('watchlists.status', $status);
         }
 
-        $paginator = $query->paginate($paginateLimit)->withQueryString();
+        if ($sort === "latest") {
+            $query->orderBy('watchlists.created_at', 'desc');
+        } elseif ($sort === "score") {
+            $query->orderBy('watchlists.score', 'desc');
+        } else if ($sort === "oldest") {
+            $query->orderBy('watchlists.created_at', 'asc');
+        }
 
-        $paginator->through(fn ($item) => WatchlistData::fromModel($item));
+        $paginator = $query->paginate($paginateLimit)->onEachSide(1)->withQueryString();
+
+        $paginator->through(fn($item) => WatchlistData::fromModel($item));
 
         return PaginatedWatchlistData::fromPaginator($paginator);
     }
