@@ -70,20 +70,6 @@ const Watchlist = ({
       const currentParams = Object.fromEntries(
         new URLSearchParams(window.location.search).entries(),
       );
-      router.get(
-        watchlistIndex.url(),
-        {
-          ...currentParams,
-          status: activeTab,
-          sort: sortBy,
-          search: searchQuery || undefined,
-        },
-        {
-          preserveState: true,
-          preserveScroll: true,
-          replace: true,
-        },
-      );
     }, 500);
 
     return () => clearTimeout(timer);
