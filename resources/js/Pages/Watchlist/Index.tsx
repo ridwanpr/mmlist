@@ -27,6 +27,14 @@ type WatchlistPropsType = {
   };
   sortBy: 'latest' | 'score' | 'oldest';
   search: string | null;
+  masterFilter: {
+    genres: App.DTOs.GenreData[];
+    themes: App.DTOs.ThemeData[];
+    year: number[];
+    type: string[];
+    season: string[];
+    rating: string[];
+  };
 };
 
 export type EditWatchlistForm = {
@@ -38,7 +46,14 @@ export type EditWatchlistForm = {
   completed_at: string | null;
 };
 
-const Watchlist = ({ watchlists, status, tabCounts, sortBy, search }: WatchlistPropsType) => {
+const Watchlist = ({
+  watchlists,
+  status,
+  tabCounts,
+  sortBy,
+  search,
+  masterFilter,
+}: WatchlistPropsType) => {
   const activeTab = status || 'watching';
 
   const [searchQuery, setSearchQuery] = useState(search || '');
@@ -146,7 +161,11 @@ const Watchlist = ({ watchlists, status, tabCounts, sortBy, search }: WatchlistP
           </div>
 
           {/*Advanced Filter*/}
-          <AdvanceFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <AdvanceFilter
+            masterFilter={masterFilter}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
 
           <WatchlistTab
             activeTab={activeTab}

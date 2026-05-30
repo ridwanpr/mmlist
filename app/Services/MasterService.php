@@ -21,7 +21,7 @@ class MasterService
             return Genre::whereNotIn('name', ['Hentai', 'Erotica'])
                 ->orderBy('name', 'asc')
                 ->get()
-                ->map(fn (Genre $item) => [
+                ->map(fn(Genre $item) => [
                     'id' => $item->id,
                     'mal_id' => $item->mal_id,
                     'type' => $item->type,
@@ -31,7 +31,7 @@ class MasterService
                 ->all();
         });
 
-        return collect($raw)->map(fn (array $data) => GenreData::fromArray($data));
+        return collect($raw)->map(fn(array $data) => GenreData::fromArray($data));
     }
 
     /**
@@ -42,7 +42,7 @@ class MasterService
         $raw = Cache::remember('themes', now()->addDays(30), function () {
             return Theme::orderBy('name', 'asc')
                 ->get()
-                ->map(fn (Theme $item) => [
+                ->map(fn(Theme $item) => [
                     'id' => $item->id,
                     'mal_id' => $item->mal_id,
                     'type' => $item->type,
@@ -52,7 +52,7 @@ class MasterService
                 ->all();
         });
 
-        return collect($raw)->map(fn (array $data) => ThemeData::fromArray($data));
+        return collect($raw)->map(fn(array $data) => ThemeData::fromArray($data));
     }
 
     /**
@@ -101,6 +101,20 @@ class MasterService
         });
 
         return collect($raw);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    public function getAnimeYear(): array
+    {
+        return Cache::remember('year', now()->plus(days: 14), function () {
+            return Anime::whereNotNull('year')
+                ->orderBy('year', 'desc')
+                ->distinct()
+                ->pluck('year')
+                ->toArray();
+        });
     }
 
     public function clearCache(): void

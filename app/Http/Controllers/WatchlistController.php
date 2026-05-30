@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\WatchlistData;
 use App\Http\Requests\StoreWatchlistRequest;
 use App\Http\Requests\UpdateWatchlistRequest;
+use App\Services\MasterService;
 use App\Services\WatchlistService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ use Inertia\Response;
 class WatchlistController extends Controller
 {
     public function __construct(
-        protected WatchlistService $watchlistService
+        private WatchlistService $watchlistService,
+        private MasterService $masterService
     ) {}
 
     public function store(StoreWatchlistRequest $request): RedirectResponse
@@ -58,7 +60,14 @@ class WatchlistController extends Controller
         );
 
         $tabCounts = $this->watchlistService->getTabCounts($user->id, $search);
-        
+
+        $genres = $this->masterService->getGenres();
+        $themes = $this->masterService->getThemes();
+        $year = $this->masterService->getAnimeYear();
+        $type = $this->masterService->getType();
+        $season = $this->masterService->getSeason();
+        $rating = $this->masterService->getRating();
+
         return Inertia::render(
             'Watchlist/Index',
             [
@@ -67,6 +76,15 @@ class WatchlistController extends Controller
                 'tabCounts' => $tabCounts,
                 'sortBy' => $sortBy,
                 'search' => $search,
+                // Filter Master Data
+                'masterFilter' => [
+                    'genres' => $genres,
+                    'themes' => $themes,
+                    'year' => $year,
+                    'type' => $type,
+                    'season' => $season,
+                    'rating' => $rating,
+                ]
             ]
         );
     }
