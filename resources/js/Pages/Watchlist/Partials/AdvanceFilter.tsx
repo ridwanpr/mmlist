@@ -25,8 +25,22 @@ type AdvanceFilterProps = {
   };
 };
 
+type FilterStatus = 'include' | 'exclude';
+
+const getBadgeStyles = (status?: FilterStatus) => {
+  if (status === 'include') {
+    return 'border-emerald-500 bg-emerald-500/10 text-emerald-400';
+  }
+  if (status === 'exclude') {
+    return 'border-rose-500 bg-rose-500/10 text-rose-400';
+  }
+  return 'border-border bg-surface-alt text-text-muted hover:text-text';
+};
+
 const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFilterProps) => {
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
+  const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>({});
+  const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>({});
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,6 +49,27 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
 
   const handleClearAllFilters = () => {
     setSearchQuery('');
+    setGenreStates({});
+    setThemeStates({});
+  };
+
+  const handleToggleFilter = (id: number, field: 'genres' | 'themes') => {
+    const setTarget = field === 'genres' ? setGenreStates : setThemeStates;
+
+    setTarget(prev => {
+      const next = { ...prev };
+      const currentStatus = next[id];
+
+      if (!currentStatus) {
+        next[id] = 'include';
+      } else if (currentStatus === 'include') {
+        next[id] = 'exclude';
+      } else {
+        delete next[id];
+      }
+
+      return next;
+    });
   };
 
   return (
@@ -83,7 +118,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
       <div
         className={`border-border bg-surface mt-4 overflow-hidden rounded-lg border shadow-xs transition-all duration-300 ${
           showAdvanceFilter
-            ? 'max-h-[2000px] p-4 opacity-100'
+            ? 'max-h-500 p-4 opacity-100'
             : 'pointer-events-none max-h-0 border-transparent opacity-0'
         }`}
       >
@@ -203,15 +238,21 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
             <div className="border-border bg-surface-alt/40 max-h-36 overflow-y-auto rounded-xl border p-3">
               <div className="flex flex-wrap gap-2">
-                {masterFilter.genres.map(genre => (
-                  <button
-                    key={genre.id}
-                    type="button"
-                    className="border-border bg-surface-alt text-text-muted hover:text-text cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors"
-                  >
-                    {genre.name}
-                  </button>
-                ))}
+                {masterFilter.genres.map(genre => {
+                  const status = genreStates[genre.id];
+                  return (
+                    <button
+                      key={genre.id}
+                      type="button"
+                      onClick={() => handleToggleFilter(genre.id, 'genres')}
+                      className={`cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${getBadgeStyles(status)}`}
+                    >
+                      {status === 'include' && '+ '}
+                      {status === 'exclude' && '- '}
+                      {genre.name}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -229,15 +270,21 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
             <div className="border-border bg-surface-alt/40 max-h-48 overflow-y-auto rounded-xl border p-3">
               <div className="flex flex-wrap gap-2">
-                {masterFilter.themes.map(theme => (
-                  <button
-                    key={theme.id}
-                    type="button"
-                    className="border-border bg-surface-alt text-text-muted hover:text-text cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors"
-                  >
-                    {theme.name}
-                  </button>
-                ))}
+                {masterFilter.themes.map(theme => {
+                  const status = themeStates[theme.id];
+                  return (
+                    <button
+                      key={theme.id}
+                      type="button"
+                      onClick={() => handleToggleFilter(theme.id, 'themes')}
+                      className={`cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${getBadgeStyles(status)}`}
+                    >
+                      {status === 'include' && '+ '}
+                      {status === 'exclude' && '- '}
+                      {theme.name}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
