@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { privacyPolicy } from '../actions/App/Http/Controllers/LegalController';
+import { privacyPolicy, terms } from '../actions/App/Http/Controllers/LegalController';
 
 const Footer = () => {
   return (
@@ -7,7 +7,11 @@ const Footer = () => {
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-1">
-            <Link href="/" className="text-primary text-xl font-bold tracking-tight">
+            <Link
+              href="/"
+              prefetch={'click'}
+              className="text-primary text-xl font-bold tracking-tight"
+            >
               Mamorulist
             </Link>
             <p className="text-primary-dark max-w-sm text-xs">
@@ -19,15 +23,7 @@ const Footer = () => {
             <ul className="flex gap-4">
               <li>
                 <Link
-                  href="/faq"
-                  className="text-primary-dark hover:text-primary text-sm transition-colors"
-                >
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
+                  href="#"
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   About
@@ -35,7 +31,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="#"
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   Contact
@@ -45,7 +41,8 @@ const Footer = () => {
             <ul className="border-border flex gap-4 lg:border-l-2 lg:pl-8">
               <li>
                 <Link
-                  href="/tos"
+                  href={terms.url()}
+                  prefetch={'click'}
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   Terms

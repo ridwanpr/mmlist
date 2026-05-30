@@ -14,7 +14,7 @@ const PrivacyPolicy = () => {
       <div className="selection:bg-primary-soft selection:text-primary mx-auto max-w-3xl px-4 py-12 font-sans">
         <header className="border-border mb-12 border-b pb-6">
           <h1 className="text-text mb-2 font-serif text-4xl font-bold">Privacy Policy</h1>
-          <p className="text-text-muted text-sm">Last Updated: May 2026</p>
+          <p className="text-text-muted text-sm">Last Updated: 30 May 2026</p>
         </header>
 
         <div className="text-text space-y-8 leading-relaxed">

@@ -41,6 +41,49 @@ privacyPolicy.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
     url: privacyPolicy.url(options),
     method: 'head',
 })
-const LegalController = { privacyPolicy }
+
+/**
+* @see \App\Http\Controllers\LegalController::terms
+ * @see app/Http/Controllers/LegalController.php:15
+ * @route '/terms'
+ */
+export const terms = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: terms.url(options),
+    method: 'get',
+})
+
+terms.definition = {
+    methods: ["get","head"],
+    url: '/terms',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\LegalController::terms
+ * @see app/Http/Controllers/LegalController.php:15
+ * @route '/terms'
+ */
+terms.url = (options?: RouteQueryOptions) => {
+    return terms.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LegalController::terms
+ * @see app/Http/Controllers/LegalController.php:15
+ * @route '/terms'
+ */
+terms.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: terms.url(options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\LegalController::terms
+ * @see app/Http/Controllers/LegalController.php:15
+ * @route '/terms'
+ */
+terms.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: terms.url(options),
+    method: 'head',
+})
+const LegalController = { privacyPolicy, terms }
 
 export default LegalController
