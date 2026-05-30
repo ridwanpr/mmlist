@@ -72,15 +72,6 @@ const About = () => {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-text font-serif text-2xl font-semibold">The Project</h2>
-            <p>
-              Mamorulist is an independent, indie-developed community tool. The project does not run
-              third-party ads, sell user data, or gate information behind premium paywalls. It is
-              built purely to provide an accessible archive for community safety metrics.
-            </p>
-          </section>
-
-          <section className="space-y-3">
             <h2 className="text-text font-serif text-2xl font-semibold">Get in Touch</h2>
             <p>
               If you notice database inaccuracies, want to suggest new warning categories, or have
