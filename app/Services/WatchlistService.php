@@ -66,7 +66,7 @@ class WatchlistService
                 'animes.slug'
             );
 
-        if ($status) {
+        if ($status && $status !== 'all') {
             $query->where('watchlists.status', $status);
         }
 

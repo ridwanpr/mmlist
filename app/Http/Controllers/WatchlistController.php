@@ -41,7 +41,7 @@ class WatchlistController extends Controller
     {
         $user = Auth::user();
 
-        $status = $request->query('status', 'watching');
+        $status = $request->query('status', 'all');
         $search = $request->query('search');
 
         $sortInput = $request->query('sort');
@@ -62,7 +62,7 @@ class WatchlistController extends Controller
         ]);
 
         $watchlists = $this->watchlistService->getUserWatchlist(
-            paginateLimit: 21,
+            paginateLimit: 30,
             userId: $user->id,
             status: $status,
             sort: $sortBy,

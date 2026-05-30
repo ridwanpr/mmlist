@@ -10,23 +10,35 @@ type WatchlistTabProps = {
   };
 };
 
-const WatchlistTab = ({
-  activeTab,
-  handleChangeTab,
-  tabCounts,
-}: WatchlistTabProps) => {
+const WatchlistTab = ({ activeTab, handleChangeTab, tabCounts }: WatchlistTabProps) => {
+  const totalCount = Object.values(tabCounts).reduce((a, b) => a + b, 0);
+
   return (
     <div
       id="watchlist-tab"
       className="border-border flex gap-4 overflow-x-scroll border-b pb-2 lg:overflow-hidden"
     >
+      {/* All Status Tab */}
       <div
-        id="watching"
-        onClick={() => handleChangeTab("watching")}
-        className={`${activeTab === "watching" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+        id="all"
+        onClick={() => handleChangeTab('all')}
+        className={`${activeTab === 'all' ? 'border-primary border-b' : ''} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
       >
         <p
-          className={`${activeTab === "watching" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          className={`${activeTab === 'all' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
+        >
+          All
+        </p>
+        <span className="text-text-muted text-xs">{totalCount}</span>
+      </div>
+
+      <div
+        id="watching"
+        onClick={() => handleChangeTab('watching')}
+        className={`${activeTab === 'watching' ? 'border-primary border-b' : ''} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+      >
+        <p
+          className={`${activeTab === 'watching' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
         >
           Watching
         </p>
@@ -35,11 +47,11 @@ const WatchlistTab = ({
 
       <div
         id="completed"
-        onClick={() => handleChangeTab("completed")}
-        className={`${activeTab === "completed" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+        onClick={() => handleChangeTab('completed')}
+        className={`${activeTab === 'completed' ? 'border-primary border-b' : ''} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
       >
         <p
-          className={`${activeTab === "completed" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          className={`${activeTab === 'completed' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
         >
           Completed
         </p>
@@ -48,11 +60,11 @@ const WatchlistTab = ({
 
       <div
         id="planned"
-        onClick={() => handleChangeTab("planned")}
-        className={`${activeTab === "planned" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+        onClick={() => handleChangeTab('planned')}
+        className={`${activeTab === 'planned' ? 'border-primary border-b' : ''} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
       >
         <p
-          className={`${activeTab === "planned" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          className={`${activeTab === 'planned' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
         >
           Plan to Watch
         </p>
@@ -61,11 +73,11 @@ const WatchlistTab = ({
 
       <div
         id="on_hold"
-        onClick={() => handleChangeTab("on_hold")}
-        className={`${activeTab === "on_hold" ? "border-primary border-b" : ""} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+        onClick={() => handleChangeTab('on_hold')}
+        className={`${activeTab === 'on_hold' ? 'border-primary border-b' : ''} -mb-2 flex shrink-0 items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
       >
         <p
-          className={`${activeTab === "on_hold" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          className={`${activeTab === 'on_hold' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
         >
           On Hold
         </p>
@@ -74,11 +86,11 @@ const WatchlistTab = ({
 
       <div
         id="dropped"
-        onClick={() => handleChangeTab("dropped")}
-        className={`${activeTab === "dropped" ? "border-primary border-b" : ""} -mb-2 flex items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
+        onClick={() => handleChangeTab('dropped')}
+        className={`${activeTab === 'dropped' ? 'border-primary border-b' : ''} -mb-2 flex items-center gap-1 px-1 pb-2.5 hover:cursor-pointer`}
       >
         <p
-          className={`${activeTab === "dropped" ? "text-text" : "text-text-muted"} text-sm leading-relaxed tracking-wide`}
+          className={`${activeTab === 'dropped' ? 'text-text' : 'text-text-muted'} text-sm leading-relaxed tracking-wide`}
         >
           Dropped
         </p>

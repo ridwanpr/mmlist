@@ -54,10 +54,10 @@ const Watchlist = ({
   search,
   masterFilter,
 }: WatchlistPropsType) => {
-  const activeTab = status || 'watching';
+  // Default fallback shifted to 'all' for broader discovery paths
+  const activeTab = status || 'all';
 
   const [searchQuery, setSearchQuery] = useState(search || '');
-
   const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
   const [editWatchlist, setEditWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
 
@@ -72,7 +72,7 @@ const Watchlist = ({
         watchlistIndex.url(),
         {
           ...currentParams,
-          status: status,
+          status: activeTab,
           sort: sortBy,
           search: searchQuery || undefined,
         },
@@ -160,7 +160,6 @@ const Watchlist = ({
             </div>
           </div>
 
-          {/*Advanced Filter*/}
           <AdvanceFilter
             masterFilter={masterFilter}
             searchQuery={searchQuery}
@@ -179,7 +178,6 @@ const Watchlist = ({
               <SortWatchlist sortBy={sortBy} handleFilter={handleFilter} />
             </div>
 
-            {/*Anime List*/}
             <AnimeList
               watchlists={watchlists}
               setSelectedWatchlist={setSelectedWatchlist}
@@ -187,12 +185,10 @@ const Watchlist = ({
               handleDeleteWatchlist={handleDeleteWatchlist}
             />
 
-            {/* Pagination */}
             <Pagination links={watchlists.links} />
           </div>
         </div>
 
-        {/* View Watchlist */}
         <DetailModal
           selectedWatchlist={selectedWatchlist}
           setSelectedWatchlist={setSelectedWatchlist}
