@@ -55,11 +55,15 @@ class WatchlistController extends Controller
             'to_airing',
             'season',
             'type',
+            'from_score',
+            'to_score',
             'genres_include',
             'genres_exclude',
             'themes_include',
             'themes_exclude'
         ]);
+
+        $averageScore = $this->watchlistService->getAverageScore($user->id, $status, $search, $filters);
 
         $watchlists = $this->watchlistService->getUserWatchlist(
             paginateLimit: 30,
@@ -87,6 +91,7 @@ class WatchlistController extends Controller
                 'tabCounts' => $tabCounts,
                 'sortBy' => $sortBy,
                 'search' => $search,
+                'averageScore' => $averageScore,
                 'masterFilter' => [
                     'genres' => $genres,
                     'themes' => $themes,

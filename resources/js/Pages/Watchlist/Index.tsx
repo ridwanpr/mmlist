@@ -25,6 +25,7 @@ type WatchlistPropsType = {
     on_hold: number;
     dropped: number;
   };
+  averageScore: number | null;
   sortBy: 'latest' | 'score' | 'oldest';
   search: string | null;
   masterFilter: {
@@ -53,8 +54,9 @@ const Watchlist = ({
   sortBy,
   search,
   masterFilter,
+  averageScore,
 }: WatchlistPropsType) => {
-  // Default fallback shifted to 'all' for broader discovery paths
+  console.log(averageScore);
   const activeTab = status || 'all';
 
   const [searchQuery, setSearchQuery] = useState(search || '');
@@ -154,9 +156,6 @@ const Watchlist = ({
               <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
                 Watchlist
               </h1>
-              <p className="text-text-muted text-sm">
-                {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
-              </p>
             </div>
           </div>
 
@@ -174,7 +173,9 @@ const Watchlist = ({
 
           <div className="mt-4">
             <div className="mb-4 flex w-full items-center justify-between">
-              <p className="text-text-muted text-xs">{watchlists?.total} Titles</p>
+              <p className="text-text-muted text-xs font-medium">
+                {watchlists?.total} Titles {averageScore !== null && `(Avg Score: ${averageScore})`}
+              </p>
               <SortWatchlist sortBy={sortBy} handleFilter={handleFilter} />
             </div>
 

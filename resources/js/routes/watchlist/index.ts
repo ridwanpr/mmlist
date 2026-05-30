@@ -131,7 +131,7 @@ destroy.delete = (args: { watchlistId: string | number } | [watchlistId: string 
 
 /**
 * @see \App\Http\Controllers\WatchlistController::update
- * @see app/Http/Controllers/WatchlistController.php:102
+ * @see app/Http/Controllers/WatchlistController.php:107
  * @route '/watchlist/{watchlistId}'
  */
 export const update = (args: { watchlistId: string | number } | [watchlistId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -146,7 +146,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\WatchlistController::update
- * @see app/Http/Controllers/WatchlistController.php:102
+ * @see app/Http/Controllers/WatchlistController.php:107
  * @route '/watchlist/{watchlistId}'
  */
 update.url = (args: { watchlistId: string | number } | [watchlistId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -174,7 +174,7 @@ update.url = (args: { watchlistId: string | number } | [watchlistId: string | nu
 
 /**
 * @see \App\Http\Controllers\WatchlistController::update
- * @see app/Http/Controllers/WatchlistController.php:102
+ * @see app/Http/Controllers/WatchlistController.php:107
  * @route '/watchlist/{watchlistId}'
  */
 update.put = (args: { watchlistId: string | number } | [watchlistId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({

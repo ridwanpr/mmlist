@@ -182,10 +182,49 @@ class WatchlistService
     }
 
     /**
+     * Calculate the average score of the current filtered subset
+     */
+    public function getAverageScore(int $userId, ?string $status = null, ?string $search = null, array $filters = []): ?float
+    {
+        $query = Watchlist::where('watchlists.user_id', $userId)
+            ->join('animes', 'animes.id', '=', 'watchlists.anime_id');
+
+        if ($status && $status !== 'all') {
+            $query->where('watchlists.status', $status);
+        }
+
+        if (filled($search)) {
+            $rawTerm = trim($search);
+            $booleanTerm = $this->buildBooleanSearch($rawTerm);
+
+            if ($booleanTerm !== null) {
+                $query->whereRaw(
+                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
+                    [$booleanTerm]
+                );
+            } else {
+                $query->where(function ($subQuery) use ($rawTerm) {
+                    $subQuery->where('animes.title', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_english', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_japanese', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                });
+            }
+        }
+
+        $query = $this->applyAdvancedFilters($query, $filters);
+
+        $avg = $query->whereNotNull('watchlists.score')->avg('watchlists.score');
+
+        return $avg ? round($avg, 2) : null;
+    }
+
+    /**
      * Handle advanced dynamic parameter mapping aligned with database types
      */
     private function applyAdvancedFilters($query, array $filters)
     {
+        // 1. Watched Date Range Matrix Bound Checks
         if (! empty($filters['from_watched'])) {
             $query->where(function ($q) use ($filters) {
                 $q->whereDate('watchlists.started_at', '>=', $filters['from_watched'])
@@ -199,6 +238,7 @@ class WatchlistService
             });
         }
 
+        // 2. Clean Anime Airing Year Range Bound Checks
         if (! empty($filters['from_airing'])) {
             $query->where('animes.year', '>=', (int) $filters['from_airing']);
         }
@@ -206,6 +246,7 @@ class WatchlistService
             $query->where('animes.year', '<=', (int) $filters['to_airing']);
         }
 
+        // 3. Season & Production Type Check
         if (! empty($filters['season'])) {
             $query->where('animes.season', $filters['season']);
         }
@@ -213,6 +254,15 @@ class WatchlistService
             $query->where('animes.type', $filters['type']);
         }
 
+        // 4. Personal Score Range Checks (unsignedTinyInteger)
+        if (! empty($filters['from_score'])) {
+            $query->where('watchlists.score', '>=', (int) $filters['from_score']);
+        }
+        if (! empty($filters['to_score'])) {
+            $query->where('watchlists.score', '<=', (int) $filters['to_score']);
+        }
+
+        // 5. Genres 3-State Logic Filtering
         if (! empty($filters['genres_include'])) {
             $includeIds = explode(',', $filters['genres_include']);
             foreach ($includeIds as $id) {
@@ -221,7 +271,6 @@ class WatchlistService
                 })->select('id'));
             }
         }
-
         if (! empty($filters['genres_exclude'])) {
             $excludeIds = explode(',', $filters['genres_exclude']);
             $query->whereNotIn('watchlists.anime_id', Anime::whereHas('genres', function ($q) use ($excludeIds) {
@@ -229,6 +278,7 @@ class WatchlistService
             })->select('id'));
         }
 
+        // 6. Themes 3-State Logic Filtering
         if (! empty($filters['themes_include'])) {
             $includeIds = explode(',', $filters['themes_include']);
             foreach ($includeIds as $id) {
@@ -237,7 +287,6 @@ class WatchlistService
                 })->select('id'));
             }
         }
-
         if (! empty($filters['themes_exclude'])) {
             $excludeIds = explode(',', $filters['themes_exclude']);
             $query->whereNotIn('watchlists.anime_id', Anime::whereHas('themes', function ($q) use ($excludeIds) {

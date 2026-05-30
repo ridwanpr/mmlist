@@ -9,6 +9,7 @@ import {
   LuSparkles,
   LuClapperboard,
   LuDatabase,
+  LuStar,
 } from 'react-icons/lu';
 
 type AdvanceFilterProps = {
@@ -26,13 +27,11 @@ type AdvanceFilterProps = {
 
 type FilterStatus = 'include' | 'exclude';
 
+const SCORE_LABELS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
 const getBadgeStyles = (status?: FilterStatus) => {
-  if (status === 'include') {
-    return 'border-emerald-500 bg-emerald-500/10 text-emerald-400';
-  }
-  if (status === 'exclude') {
-    return 'border-rose-500 bg-rose-500/10 text-rose-400';
-  }
+  if (status === 'include') return 'border-emerald-500 bg-emerald-500/10 text-emerald-400';
+  if (status === 'exclude') return 'border-rose-500 bg-rose-500/10 text-rose-400';
   return 'border-border bg-surface-alt text-text-muted hover:text-text';
 };
 
@@ -45,6 +44,9 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
   const [toAiring, setToAiring] = useState('');
   const [season, setSeason] = useState('');
   const [type, setType] = useState('');
+  const [fromScore, setFromScore] = useState('');
+  const [toScore, setToScore] = useState('');
+
   const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>({});
   const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>({});
 
@@ -57,6 +59,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     setToAiring(params.get('to_airing') || '');
     setSeason(params.get('season') || '');
     setType(params.get('type') || '');
+    setFromScore(params.get('from_score') || '');
+    setToScore(params.get('to_score') || '');
 
     const parseArrayParam = (key: string) => {
       const val = params.get(key);
@@ -79,21 +83,15 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     setTarget(prev => {
       const next = { ...prev };
       const currentStatus = next[id];
-
-      if (!currentStatus) {
-        next[id] = 'include';
-      } else if (currentStatus === 'include') {
-        next[id] = 'exclude';
-      } else {
-        delete next[id];
-      }
+      if (!currentStatus) next[id] = 'include';
+      else if (currentStatus === 'include') next[id] = 'exclude';
+      else delete next[id];
       return next;
     });
   };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const currentParams = new URLSearchParams(window.location.search);
 
     const params: Record<string, any> = {
@@ -106,6 +104,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
       to_airing: toAiring || undefined,
       season: season || undefined,
       type: type || undefined,
+      from_score: fromScore || undefined,
+      to_score: toScore || undefined,
     };
 
     const genresInclude = Object.keys(genreStates).filter(
@@ -127,11 +127,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     if (themesExclude.length) params.themes_exclude = themesExclude.join(',');
 
     setShowAdvanceFilter(false);
-
-    router.get(window.location.pathname, params, {
-      preserveState: true,
-      preserveScroll: true,
-    });
+    router.get(window.location.pathname, params, { preserveState: true, preserveScroll: true });
   };
 
   const handleClearAllFilters = () => {
@@ -144,6 +140,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     setToAiring('');
     setSeason('');
     setType('');
+    setFromScore('');
+    setToScore('');
 
     const currentParams = new URLSearchParams(window.location.search);
     router.get(
@@ -152,16 +150,12 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
         status: currentParams.get('status') || undefined,
         sort: currentParams.get('sort') || undefined,
       },
-      {
-        preserveState: true,
-        preserveScroll: true,
-      },
+      { preserveState: true, preserveScroll: true },
     );
   };
 
   return (
     <form onSubmit={handleFormSubmit} className="mb-6 font-sans">
-      {/* Primary Controls */}
       <div className="generic-search-wrapper flex items-center justify-between gap-2">
         <div className="relative flex-1">
           <div className="text-text-muted/70 pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
@@ -191,27 +185,19 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
           <span className="hidden sm:inline">Filters</span>
         </button>
 
-        {/* Hidden on mobile */}
         <button
           type="submit"
-          className={`bg-primary hover:bg-primary-dark text-surface cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide whitespace-nowrap shadow-xs transition-colors active:scale-[0.98] ${
-            showAdvanceFilter ? 'hidden md:inline-block' : 'inline-block'
-          }`}
+          className={`bg-primary hover:bg-primary-dark text-surface cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide whitespace-nowrap shadow-xs transition-colors active:scale-[0.98] ${showAdvanceFilter ? 'hidden md:inline-block' : 'inline-block'}`}
         >
           Search
         </button>
       </div>
 
-      {/* Inline Configuration Panel */}
       <div
-        className={`border-border bg-surface mt-4 overflow-hidden rounded-lg border shadow-xs transition-all duration-300 ${
-          showAdvanceFilter
-            ? 'max-h-250 p-4 opacity-100'
-            : 'pointer-events-none max-h-0 border-transparent opacity-0'
-        }`}
+        className={`bg-surface overflow-hidden rounded-lg shadow-xs transition-all duration-150 ${showAdvanceFilter ? 'border-border mt-4 max-h-250 border p-4 opacity-100' : 'pointer-events-none mt-0 max-h-0 border-0 p-0 opacity-0'}`}
       >
         <div className="space-y-4">
-          {/* Watched Date Range */}
+          {/* Watched Date Range Row */}
           <div>
             <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
               <LuCalendar className="text-primary size-4" />
@@ -239,21 +225,33 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
           </div>
 
-          {/* Airing Year */}
-          <div>
-            <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
-              <LuClapperboard className="text-primary size-4" />
-              <span>Anime Year</span>
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-text-muted text-xs font-medium">From</span>
+          {/* Grid for Year and Personal Score parameters */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {/* Airing Year */}
+            <div>
+              <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
+                <LuClapperboard className="text-primary size-4" />
+                <span>Anime Year</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
                 <select
                   value={fromAiring}
                   onChange={e => setFromAiring(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
-                  <option value="">Any</option>
+                  <option value="">From (Any)</option>
+                  {masterFilter.year.map(year => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={toAiring}
+                  onChange={e => setToAiring(e.target.value)}
+                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+                >
+                  <option value="">To (Any)</option>
                   {masterFilter.year.map(year => (
                     <option key={year} value={year}>
                       {year}
@@ -261,17 +259,36 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
                   ))}
                 </select>
               </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-text-muted text-xs font-medium">To</span>
+            </div>
+
+            {/* Personal Score Filtration Inputs */}
+            <div>
+              <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
+                <LuStar className="text-primary size-4 animate-pulse" />
+                <span>Personal Score Range</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
                 <select
-                  value={toAiring}
-                  onChange={e => setToAiring(e.target.value)}
+                  value={fromScore}
+                  onChange={e => setFromScore(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
-                  <option value="">Any</option>
-                  {masterFilter.year.map(year => (
-                    <option key={year} value={year}>
-                      {year}
+                  <option value="">Min Score (Any)</option>
+                  {SCORE_LABELS.map(score => (
+                    <option key={score} value={score}>
+                      {score}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={toScore}
+                  onChange={e => setToScore(e.target.value)}
+                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+                >
+                  <option value="">Max Score (Any)</option>
+                  {SCORE_LABELS.map(score => (
+                    <option key={score} value={score}>
+                      {score}
                     </option>
                   ))}
                 </select>
@@ -286,40 +303,34 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <span>Season & Type</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <span className="text-text-muted text-xs font-medium">Season</span>
-                <select
-                  value={season}
-                  onChange={e => setSeason(e.target.value)}
-                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
-                >
-                  <option value="">All Seasons</option>
-                  {masterFilter.season.map(s => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-text-muted text-xs font-medium">Type</span>
-                <select
-                  value={type}
-                  onChange={e => setType(e.target.value)}
-                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
-                >
-                  <option value="">All Types</option>
-                  {masterFilter.type.map(t => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <select
+                value={season}
+                onChange={e => setSeason(e.target.value)}
+                className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
+              >
+                <option value="">All Seasons</option>
+                {masterFilter.season.map(s => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={type}
+                onChange={e => setType(e.target.value)}
+                className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+              >
+                <option value="">All Types</option>
+                {masterFilter.type.map(t => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Genres */}
+          {/* Genres Badge Grid */}
           <div>
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
@@ -351,7 +362,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
           </div>
 
-          {/* Themes */}
+          {/* Themes Badge Grid */}
           <div>
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
@@ -383,7 +394,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
           </div>
 
-          {/* Footer Panel Layout Change */}
+          {/* Footer Panel Controls */}
           <div className="border-border/60 flex items-center justify-end gap-2 border-t pt-3">
             <button
               onClick={handleClearAllFilters}
@@ -392,8 +403,6 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             >
               Reset Form Fields
             </button>
-
-            {/* Added Bottom Panel Primary Submit Trigger */}
             <button
               type="submit"
               className="bg-primary hover:bg-primary-dark text-surface inline-flex cursor-pointer items-center justify-center rounded-xl px-5 py-2 text-xs font-medium tracking-wide shadow-xs transition-colors active:scale-[0.98]"
