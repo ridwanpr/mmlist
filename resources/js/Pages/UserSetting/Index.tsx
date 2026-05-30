@@ -1,12 +1,29 @@
-import type React from "react";
-import DashContainer from "../UserDash/Partials/DashContainer";
-import FrontLayout from "../../Layouts/FrontLayout";
-import { Form } from "@inertiajs/react";
-import { update } from "../../actions/App/Http/Controllers/UserProfileController";
-import ThemeToggle from "../../Components/UI/ThemeToggle";
-import AppHead from "../../Components/AppHead";
+import type React from 'react';
+import DashContainer from '../UserDash/Partials/DashContainer';
+import FrontLayout from '../../Layouts/FrontLayout';
+import { Form, useForm } from '@inertiajs/react';
+import { update } from '../../actions/App/Http/Controllers/UserProfileController';
+import ThemeToggle from '../../Components/UI/ThemeToggle';
+import AppHead from '../../Components/AppHead';
 
 const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
+  const { data, setData, post, processing, errors, progress } = useForm({
+    xml_file: null as File | null,
+  });
+
+  const handleImportSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!data.xml_file) return;
+
+    post('/watchlist/import', {
+      forceFormData: true,
+      onSuccess: () => {
+        alert('Your watchlist import has been queued and is processing in the background.');
+        setData('xml_file', null);
+      },
+    });
+  };
+
   return (
     <>
       <AppHead title="Settings" />
@@ -17,20 +34,14 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
             <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
               Setting
             </h1>
-            <p className="text-text-muted text-xs">
-              Change site config and your information
-            </p>
+            <p className="text-text-muted text-xs">Change site config and your information</p>
           </div>
 
           {/* Mobile-Only Theme Toggle Section */}
           <div className="bg-surface border-border mb-6 flex items-center justify-between rounded-lg border p-4 lg:hidden">
             <div className="flex flex-col gap-0.5">
-              <h2 className="text-text font-serif text-sm font-medium">
-                Interface Theme
-              </h2>
-              <p className="text-text-muted text-xs">
-                Toggle between light and dark theme.
-              </p>
+              <h2 className="text-text font-serif text-sm font-medium">Interface Theme</h2>
+              <p className="text-text-muted text-xs">Toggle between light and dark theme.</p>
             </div>
             <ThemeToggle />
           </div>
@@ -44,7 +55,6 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                 preserveScroll: true,
               }}
             >
-              {/* Destructured errors directly from the template context */}
               {({ errors }) => (
                 <>
                   {/* Profile Information */}
@@ -53,17 +63,12 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                       <h2 className="text-text font-serif text-base font-medium">
                         Profile Information
                       </h2>
-                      <p className="text-text-muted text-xs">
-                        Update your account information.
-                      </p>
+                      <p className="text-text-muted text-xs">Update your account information.</p>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label
-                          htmlFor="name"
-                          className="text-text text-sm font-medium"
-                        >
+                        <label htmlFor="name" className="text-text text-sm font-medium">
                           Display Name
                         </label>
                         <input
@@ -75,17 +80,12 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                           placeholder="Your display name"
                         />
                         {errors.name && (
-                          <span className="text-accent-red mt-1 block text-xs">
-                            {errors.name}
-                          </span>
+                          <span className="text-accent-red mt-1 block text-xs">{errors.name}</span>
                         )}
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label
-                          htmlFor="username"
-                          className="text-text text-sm font-medium"
-                        >
+                        <label htmlFor="username" className="text-text text-sm font-medium">
                           Username
                         </label>
                         <input
@@ -104,39 +104,31 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label
-                          htmlFor="email"
-                          className="text-text text-sm font-medium"
-                        >
+                        <label htmlFor="email" className="text-text text-sm font-medium">
                           Email Address
                         </label>
                         <input
-                          type="email"
+                          type="type"
                           id="email"
                           name="email"
-                          defaultValue={user.email ?? ""}
+                          defaultValue={user.email ?? ''}
                           className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                           placeholder="Your active email address"
                         />
                         {errors.email && (
-                          <span className="text-accent-red mt-1 block text-xs">
-                            {errors.email}
-                          </span>
+                          <span className="text-accent-red mt-1 block text-xs">{errors.email}</span>
                         )}
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label
-                          htmlFor="birth_date"
-                          className="text-text text-sm font-medium"
-                        >
+                        <label htmlFor="birth_date" className="text-text text-sm font-medium">
                           Birth Date
                         </label>
                         <input
                           type="date"
                           id="birth_date"
                           name="birth_date"
-                          defaultValue={user.birth_date ?? ""}
+                          defaultValue={user.birth_date ?? ''}
                           className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                         />
                         {errors.birth_date && (
@@ -151,14 +143,15 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                   {user.email == null && (
                     <div className="bg-primary-soft mt-6 rounded-xl px-4 py-2.5">
                       <p className="text-text text-xs">
-                        To ensure we can help you if any problems arise, please
-                        make sure to add an email address to your account
+                        To ensure we can help you if any problems arise, please make sure to add an
+                        email address to your account
                       </p>
                     </div>
                   )}
 
                   <hr className="border-border my-6" />
 
+                  {/* Content Preferences */}
                   <div className="flex flex-col gap-4">
                     <div>
                       <h2 className="text-text font-serif text-base font-medium">
@@ -170,7 +163,6 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                       <div className="flex items-start gap-3">
                         <div className="flex h-5 items-center">
                           <input type="hidden" name="show_nsfw" value="0" />
-
                           <input
                             type="checkbox"
                             id="show_nsfw"
@@ -188,8 +180,8 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                             Show NSFW / Adult Content
                           </label>
                           <p className="text-text-muted text-xs select-none">
-                            Checking this option uncovers adult themes and
-                            age-restricted anime titles.
+                            Checking this option uncovers adult themes and age-restricted anime
+                            titles.
                           </p>
                         </div>
                       </div>
@@ -216,10 +208,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
 
                     <div className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1.5">
-                        <label
-                          htmlFor="current_password"
-                          className="text-text text-sm font-medium"
-                        >
+                        <label htmlFor="current_password" className="text-text text-sm font-medium">
                           Previous Password
                         </label>
                         <input
@@ -238,10 +227,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
 
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="flex flex-col gap-1.5">
-                          <label
-                            htmlFor="password"
-                            className="text-text text-sm font-medium"
-                          >
+                          <label htmlFor="password" className="text-text text-sm font-medium">
                             New Password
                           </label>
                           <input
@@ -291,12 +277,54 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
             </Form>
           </div>
 
+          {/* New Watchlist XML Import Card */}
+          <div className="bg-surface border-border mt-6 flex flex-col gap-4 rounded-lg border p-6">
+            <div>
+              <h2 className="text-text font-serif text-base font-medium">Import Watchlist</h2>
+              <p className="text-text-muted text-xs">
+                Upload your MyAnimeList XML data backup here
+              </p>
+            </div>
+
+            <form onSubmit={handleImportSubmit} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <input
+                  type="file"
+                  id="xml_file"
+                  accept=".xml"
+                  onChange={e => setData('xml_file', e.target.files?.[0] ?? null)}
+                  className="border-border bg-surface-alt text-text focus:border-accent-gold file:bg-primary file:text-surface w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors file:mr-4 file:rounded-md file:border-0 file:px-3 file:py-1 file:text-xs file:font-semibold hover:file:opacity-90"
+                />
+                {errors.xml_file && (
+                  <span className="text-accent-red mt-1 block text-xs">{errors.xml_file}</span>
+                )}
+              </div>
+
+              {progress && (
+                <div className="bg-surface-alt h-1.5 w-full overflow-hidden rounded-full">
+                  <div
+                    className="bg-accent-gold h-full transition-all duration-150"
+                    style={{ width: `${progress.percentage}%` }}
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={processing || !data.xml_file}
+                  className="bg-primary hover:bg-primary-dark text-surface disabled:bg-text-muted cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide shadow-xs transition-colors disabled:cursor-not-allowed"
+                >
+                  {processing ? 'Uploading...' : 'Start Import'}
+                </button>
+              </div>
+            </form>
+          </div>
+
           {/* Mobile-Only Logout Section */}
           <div className="bg-surface border-border mt-6 flex items-center justify-between rounded-lg border p-4 lg:hidden">
             <div className="flex flex-col gap-0.5">
-              <h2 className="text-text font-serif text-sm font-medium">
-                Account Session
-              </h2>
+              <h2 className="text-text font-serif text-sm font-medium">Account Session</h2>
               <p className="text-text-muted text-xs">
                 Sign out of your active session on this device.
               </p>
@@ -304,7 +332,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
             <Form action="/logout" method="post">
               <button
                 type="submit"
-                className="text-accent-red hover:bg-accent-red/10 border-border bg-surface-alt inline-flex items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium tracking-wide transition-colors hover:cursor-pointer"
+                className="text-accent-red hover:bg-accent-red/10 border-border bg-primary inline-flex items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium tracking-wide transition-colors hover:cursor-pointer"
               >
                 Log Out
               </button>
@@ -316,8 +344,6 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
   );
 };
 
-UserSetting.layout = (page: React.ReactNode) => (
-  <FrontLayout>{page}</FrontLayout>
-);
+UserSetting.layout = (page: React.ReactNode) => <FrontLayout>{page}</FrontLayout>;
 
 export default UserSetting;

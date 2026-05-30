@@ -12,6 +12,7 @@ import VoteController from './VoteController'
 import WatchlistController from './WatchlistController'
 import UserProfileController from './UserProfileController'
 import CommentHistoryController from './CommentHistoryController'
+import WatchlistImportController from './WatchlistImportController'
 const Controllers = {
     HomeController: Object.assign(HomeController, HomeController),
 BrowseController: Object.assign(BrowseController, BrowseController),
@@ -27,6 +28,7 @@ VoteController: Object.assign(VoteController, VoteController),
 WatchlistController: Object.assign(WatchlistController, WatchlistController),
 UserProfileController: Object.assign(UserProfileController, UserProfileController),
 CommentHistoryController: Object.assign(CommentHistoryController, CommentHistoryController),
+WatchlistImportController: Object.assign(WatchlistImportController, WatchlistImportController),
 }
 
 export default Controllers

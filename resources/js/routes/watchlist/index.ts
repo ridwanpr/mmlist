@@ -181,11 +181,46 @@ update.put = (args: { watchlistId: string | number } | [watchlistId: string | nu
     url: update.url(args, options),
     method: 'put',
 })
+
+/**
+* @see \App\Http\Controllers\WatchlistImportController::importMethod
+ * @see app/Http/Controllers/WatchlistImportController.php:12
+ * @route '/watchlist/import'
+ */
+export const importMethod = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: importMethod.url(options),
+    method: 'post',
+})
+
+importMethod.definition = {
+    methods: ["post"],
+    url: '/watchlist/import',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\WatchlistImportController::importMethod
+ * @see app/Http/Controllers/WatchlistImportController.php:12
+ * @route '/watchlist/import'
+ */
+importMethod.url = (options?: RouteQueryOptions) => {
+    return importMethod.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\WatchlistImportController::importMethod
+ * @see app/Http/Controllers/WatchlistImportController.php:12
+ * @route '/watchlist/import'
+ */
+importMethod.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: importMethod.url(options),
+    method: 'post',
+})
 const watchlist = {
     index: Object.assign(index, index),
 store: Object.assign(store, store),
 destroy: Object.assign(destroy, destroy),
 update: Object.assign(update, update),
+import: Object.assign(importMethod, importMethod),
 }
 
 export default watchlist

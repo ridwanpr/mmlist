@@ -16,6 +16,7 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WatchlistController;
+use App\Http\Controllers\WatchlistImportController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Middleware\EncryptHistory;
 
@@ -80,4 +81,8 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
     Route::put('profile/{username}', [UserProfileController::class, 'update'])->name('profile.update');
 
     Route::get('comment-history', [CommentHistoryController::class, 'index'])->name('comment-history.index');
+
+    Route::post('/watchlist/import', [WatchlistImportController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('watchlist.import');
 });
