@@ -225,7 +225,7 @@ const SearchSection = ({
             aria-hidden="true"
           />
 
-          <div className="flex w-full snap-x gap-2 overflow-x-auto px-4 pb-2 whitespace-nowrap [scrollbar-width:none] sm:gap-4 sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="flex w-full snap-x gap-2 overflow-x-auto px-4 pb-2 whitespace-nowrap scrollbar-none sm:gap-4 sm:px-0 [&::-webkit-scrollbar]:hidden">
             {QUICK_ACTIONS.map((action) => (
               <button
                 key={action.id}
