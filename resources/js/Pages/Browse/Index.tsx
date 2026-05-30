@@ -9,6 +9,7 @@ interface BrowseProps {
   animes: App.DTOs.PaginatedAnimeData;
   genres: App.DTOs.GenreData[];
   themes: App.DTOs.ThemeData[];
+  triggerContents: { id: number; name: string }[];
   year: number[];
   type: string[];
   season: string[];
@@ -24,10 +25,22 @@ interface BrowseProps {
     genres_exclude: string;
     themes_include: string;
     themes_exclude: string;
+    triggers_include: string;
+    triggers_exclude: string;
   };
 }
 
-const Browse = ({ animes, genres, themes, year, type, season, rating, filters }: BrowseProps) => {
+const Browse = ({
+  animes,
+  genres,
+  themes,
+  triggerContents,
+  year,
+  type,
+  season,
+  rating,
+  filters,
+}: BrowseProps) => {
   return (
     <>
       <AppHead
@@ -38,6 +51,7 @@ const Browse = ({ animes, genres, themes, year, type, season, rating, filters }:
         <SearchSection
           genres={genres}
           themes={themes}
+          triggerContents={triggerContents}
           year={year}
           type={type}
           season={season}

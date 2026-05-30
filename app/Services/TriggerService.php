@@ -40,4 +40,12 @@ class TriggerService
 
         return AnimeTriggerStatData::fromArray($stats ? $stats->toArray() : []);
     }
+
+    public function getTriggerList(): array
+    {
+        return TriggerContent::select('id', 'name')
+            ->orderBy('name', 'asc')
+            ->get()
+            ->toArray();
+    }
 }

@@ -84,6 +84,36 @@ class AnimeService
             $query->where('animes.rating', $filter['rating']);
         }
 
+        $flagString = 'No significant content found for this trigger.';
+
+        if (! empty($filter['triggers_include'])) {
+            $includeIds = is_array($filter['triggers_include']) ? $filter['triggers_include'] : explode(',', $filter['triggers_include']);
+            foreach ($includeIds as $id) {
+                $query->whereIn('animes.id', function ($q) use ($id, $flagString) {
+                    $q->select('anime_id')
+                        ->from('anime_trigger_contexts')
+                        ->where('trigger_content_id', $id)
+                        ->where(function ($sub) use ($flagString) {
+                            $sub->whereNull('ai_summary')
+                                ->orWhere('ai_summary', '!=', $flagString);
+                        });
+                });
+            }
+        }
+
+        if (! empty($filter['triggers_exclude'])) {
+            $excludeIds = is_array($filter['triggers_exclude']) ? $filter['triggers_exclude'] : explode(',', $filter['triggers_exclude']);
+            $query->whereNotIn('animes.id', function ($q) use ($excludeIds, $flagString) {
+                $q->select('anime_id')
+                    ->from('anime_trigger_contexts')
+                    ->whereIn('trigger_content_id', $excludeIds)
+                    ->where(function ($sub) use ($flagString) {
+                        $sub->whereNull('ai_summary')
+                            ->orWhere('ai_summary', '!=', $flagString);
+                    });
+            });
+        }
+
         if (! empty($filter['genres_include'])) {
             $includeIds = is_array($filter['genres_include']) ? $filter['genres_include'] : explode(',', $filter['genres_include']);
             foreach ($includeIds as $id) {
