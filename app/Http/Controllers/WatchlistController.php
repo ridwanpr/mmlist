@@ -40,9 +40,6 @@ class WatchlistController extends Controller
     public function index(Request $request): Response
     {
         $user = Auth::user();
-        if (! $user) {
-            abort(401);
-        }
 
         $status = $request->query('status', 'watching');
         $search = $request->query('search');
@@ -51,7 +48,6 @@ class WatchlistController extends Controller
         $allowedSorts = ['latest', 'score', 'oldest'];
         $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'latest';
 
-        // Capture advanced filter parameters
         $filters = $request->only([
             'from_watched',
             'to_watched',
@@ -74,7 +70,6 @@ class WatchlistController extends Controller
             filters: $filters
         );
 
-        // Pass filters down here as well so count matches the applied filter view dataset
         $tabCounts = $this->watchlistService->getTabCounts($user->id, $search, $filters);
 
         $genres = $this->masterService->getGenres();

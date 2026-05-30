@@ -126,6 +126,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     if (themesInclude.length) params.themes_include = themesInclude.join(',');
     if (themesExclude.length) params.themes_exclude = themesExclude.join(',');
 
+    setShowAdvanceFilter(false);
+
     router.get(window.location.pathname, params, {
       preserveState: true,
       preserveScroll: true,
@@ -189,7 +191,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
           <span className="hidden sm:inline">Filters</span>
         </button>
 
-        {/* Top Search Button: Hidden on mobile screens when panel is open to save vertical space */}
+        {/* Hidden on mobile */}
         <button
           type="submit"
           className={`bg-primary hover:bg-primary-dark text-surface cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide whitespace-nowrap shadow-xs transition-colors active:scale-[0.98] ${
