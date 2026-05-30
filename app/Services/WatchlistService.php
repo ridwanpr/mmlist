@@ -70,16 +70,38 @@ class WatchlistService
             $query->where('watchlists.status', $status);
         }
 
-        if (! empty($search)) {
-            $query->whereFullText(
-                ['animes.title', 'animes.title_english', 'animes.title_japanese', 'animes.title_synonyms_text'],
-                $search
-            );
+        // Smart search logic implementation
+        $booleanTerm = null;
+        if (filled($search)) {
+            $rawTerm = trim($search);
+            $booleanTerm = $this->buildBooleanSearch($rawTerm);
+
+            if ($booleanTerm !== null) {
+                $query->whereRaw(
+                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
+                    [$booleanTerm]
+                );
+
+                $query->selectRaw(
+                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE) AS relevance',
+                    [$booleanTerm]
+                );
+            } else {
+                $query->where(function ($subQuery) use ($rawTerm) {
+                    $subQuery->where('animes.title', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_english', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_japanese', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                });
+            }
         }
 
         $query = $this->applyAdvancedFilters($query, $filters);
 
-        if ($sort === 'latest') {
+        // Sorting priority: Handle text relevance for default queries
+        if (filled($search) && $booleanTerm !== null && $sort === 'latest') {
+            $query->orderByDesc('relevance');
+        } elseif ($sort === 'latest') {
             $query->orderBy('watchlists.created_at', 'desc');
         } elseif ($sort === 'score') {
             $query->orderBy('watchlists.score', 'desc');
@@ -101,11 +123,24 @@ class WatchlistService
             $query->join('animes', 'animes.id', '=', 'watchlists.anime_id');
         }
 
-        if (! empty($search)) {
-            $query->whereFullText(
-                ['animes.title', 'animes.title_english', 'animes.title_japanese', 'animes.title_synonyms_text'],
-                $search
-            );
+        // Replicating smart search filtering for accurate tab counters
+        if (filled($search)) {
+            $rawTerm = trim($search);
+            $booleanTerm = $this->buildBooleanSearch($rawTerm);
+
+            if ($booleanTerm !== null) {
+                $query->whereRaw(
+                    'MATCH(title, title_english, title_japanese, title_synonyms_text) AGAINST (? IN BOOLEAN MODE)',
+                    [$booleanTerm]
+                );
+            } else {
+                $query->where(function ($subQuery) use ($rawTerm) {
+                    $subQuery->where('animes.title', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_english', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_japanese', 'like', '%' . $rawTerm . '%')
+                        ->orWhere('animes.title_synonyms_text', 'like', '%' . $rawTerm . '%');
+                });
+            }
         }
 
         $query = $this->applyAdvancedFilters($query, $filters);
@@ -211,5 +246,72 @@ class WatchlistService
         }
 
         return $query;
+    }
+
+    /**
+     * Build standard boolean full-text search string with stopword exclusion
+     */
+    private function buildBooleanSearch(string $input): ?string
+    {
+        $input = trim(mb_strtolower($input));
+
+        if ($input === '') {
+            return null;
+        }
+
+        $tokens = preg_split('/[^\p{L}\p{N}]+/u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $stopwords = [
+            'a',
+            'an',
+            'as',
+            'at',
+            'in',
+            'is',
+            'it',
+            'of',
+            'on',
+            'or',
+            'to',
+            'am',
+            'be',
+            'by',
+            'do',
+            'he',
+            'if',
+            'me',
+            'my',
+            'no',
+            'so',
+            'up',
+            'us',
+            'we',
+            'i',
+            'and',
+            'the',
+            'for',
+            'with',
+            'about',
+            'are',
+            'from',
+            'how',
+            'that',
+            'this',
+            'was',
+            'what',
+            'when',
+            'where',
+            'who',
+            'will',
+        ];
+
+        $tokens = array_values(array_filter($tokens, static function ($token) use ($stopwords) {
+            return ! in_array($token, $stopwords, true);
+        }));
+
+        if ($tokens === []) {
+            return null;
+        }
+
+        return implode(' ', array_map(static fn($token) => '+' . $token . '*', $tokens));
     }
 }

@@ -11,7 +11,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
     xml_file: null as File | null,
   });
 
-  const handleImportSubmit = (e: React.FormEvent) => {
+  const handleImportSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!data.xml_file) return;
 
