@@ -38,4 +38,6 @@ use Illuminate\Support\Carbon;
 class Watchlist extends Pivot
 {
     protected $table = 'watchlists';
+
+    
 }

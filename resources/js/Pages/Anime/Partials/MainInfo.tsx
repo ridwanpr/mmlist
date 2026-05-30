@@ -183,8 +183,6 @@ const MainInfo = ({
     }
   };
 
-  console.log(animeRelation);
-
   return (
     <div className="min-w-0 lg:col-span-3">
       {/* MOBILE COVER */}

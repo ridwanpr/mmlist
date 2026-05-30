@@ -1,14 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { SetStateAction } from 'react';
 import type React from 'react';
+import { router } from '@inertiajs/react';
 import {
   LuSearch,
   LuSlidersHorizontal,
   LuCalendar,
   LuSparkles,
   LuClapperboard,
-  LuBuilding,
-  LuTv,
   LuDatabase,
 } from 'react-icons/lu';
 
@@ -39,23 +38,44 @@ const getBadgeStyles = (status?: FilterStatus) => {
 
 const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFilterProps) => {
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
+
+  const [fromWatched, setFromWatched] = useState('');
+  const [toWatched, setToWatched] = useState('');
+  const [fromAiring, setFromAiring] = useState('');
+  const [toAiring, setToAiring] = useState('');
+  const [season, setSeason] = useState('');
+  const [type, setType] = useState('');
   const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>({});
   const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>({});
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('Submitting form pipeline.');
-  };
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
 
-  const handleClearAllFilters = () => {
-    setSearchQuery('');
-    setGenreStates({});
-    setThemeStates({});
-  };
+    setFromWatched(params.get('from_watched') || '');
+    setToWatched(params.get('to_watched') || '');
+    setFromAiring(params.get('from_airing') || '');
+    setToAiring(params.get('to_airing') || '');
+    setSeason(params.get('season') || '');
+    setType(params.get('type') || '');
+
+    const parseArrayParam = (key: string) => {
+      const val = params.get(key);
+      return val ? val.split(',') : [];
+    };
+
+    const initialGenres: Record<number, FilterStatus> = {};
+    parseArrayParam('genres_include').forEach(id => (initialGenres[Number(id)] = 'include'));
+    parseArrayParam('genres_exclude').forEach(id => (initialGenres[Number(id)] = 'exclude'));
+    setGenreStates(initialGenres);
+
+    const initialThemes: Record<number, FilterStatus> = {};
+    parseArrayParam('themes_include').forEach(id => (initialThemes[Number(id)] = 'include'));
+    parseArrayParam('themes_exclude').forEach(id => (initialThemes[Number(id)] = 'exclude'));
+    setThemeStates(initialThemes);
+  }, []);
 
   const handleToggleFilter = (id: number, field: 'genres' | 'themes') => {
     const setTarget = field === 'genres' ? setGenreStates : setThemeStates;
-
     setTarget(prev => {
       const next = { ...prev };
       const currentStatus = next[id];
@@ -67,16 +87,80 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
       } else {
         delete next[id];
       }
-
       return next;
     });
   };
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const currentParams = new URLSearchParams(window.location.search);
+
+    const params: Record<string, any> = {
+      search: searchQuery || undefined,
+      status: currentParams.get('status') || undefined,
+      sort: currentParams.get('sort') || undefined,
+      from_watched: fromWatched || undefined,
+      to_watched: toWatched || undefined,
+      from_airing: fromAiring || undefined,
+      to_airing: toAiring || undefined,
+      season: season || undefined,
+      type: type || undefined,
+    };
+
+    const genresInclude = Object.keys(genreStates).filter(
+      id => genreStates[Number(id)] === 'include',
+    );
+    const genresExclude = Object.keys(genreStates).filter(
+      id => genreStates[Number(id)] === 'exclude',
+    );
+    const themesInclude = Object.keys(themeStates).filter(
+      id => themeStates[Number(id)] === 'include',
+    );
+    const themesExclude = Object.keys(themeStates).filter(
+      id => themeStates[Number(id)] === 'exclude',
+    );
+
+    if (genresInclude.length) params.genres_include = genresInclude.join(',');
+    if (genresExclude.length) params.genres_exclude = genresExclude.join(',');
+    if (themesInclude.length) params.themes_include = themesInclude.join(',');
+    if (themesExclude.length) params.themes_exclude = themesExclude.join(',');
+
+    router.get(window.location.pathname, params, {
+      preserveState: true,
+      preserveScroll: true,
+    });
+  };
+
+  const handleClearAllFilters = () => {
+    setSearchQuery('');
+    setGenreStates({});
+    setThemeStates({});
+    setFromWatched('');
+    setToWatched('');
+    setFromAiring('');
+    setToAiring('');
+    setSeason('');
+    setType('');
+
+    const currentParams = new URLSearchParams(window.location.search);
+    router.get(
+      window.location.pathname,
+      {
+        status: currentParams.get('status') || undefined,
+        sort: currentParams.get('sort') || undefined,
+      },
+      {
+        preserveState: true,
+        preserveScroll: true,
+      },
+    );
+  };
+
   return (
     <form onSubmit={handleFormSubmit} className="mb-6 font-sans">
-      {/* Top Bar: Primary Controls */}
+      {/* Primary Controls */}
       <div className="generic-search-wrapper flex items-center justify-between gap-2">
-        {/* Search Input Group */}
         <div className="relative flex-1">
           <div className="text-text-muted/70 pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
             <LuSearch className="h-4 w-4" />
@@ -105,10 +189,12 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
           <span className="hidden sm:inline">Filters</span>
         </button>
 
-        {/* Main Action Button */}
+        {/* Top Search Button: Hidden on mobile screens when panel is open to save vertical space */}
         <button
           type="submit"
-          className="bg-primary hover:bg-primary-dark text-surface cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide whitespace-nowrap shadow-xs transition-colors active:scale-[0.98]"
+          className={`bg-primary hover:bg-primary-dark text-surface cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide whitespace-nowrap shadow-xs transition-colors active:scale-[0.98] ${
+            showAdvanceFilter ? 'hidden md:inline-block' : 'inline-block'
+          }`}
         >
           Search
         </button>
@@ -118,7 +204,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
       <div
         className={`border-border bg-surface mt-4 overflow-hidden rounded-lg border shadow-xs transition-all duration-300 ${
           showAdvanceFilter
-            ? 'max-h-500 p-4 opacity-100'
+            ? 'max-h-250 p-4 opacity-100'
             : 'pointer-events-none max-h-0 border-transparent opacity-0'
         }`}
       >
@@ -134,7 +220,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
                 <span className="text-text-muted text-xs font-medium">From</span>
                 <input
                   type="date"
-                  name="from_watched"
+                  value={fromWatched}
+                  onChange={e => setFromWatched(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 />
               </div>
@@ -142,7 +229,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
                 <span className="text-text-muted text-xs font-medium">To</span>
                 <input
                   type="date"
-                  name="to_watched"
+                  value={toWatched}
+                  onChange={e => setToWatched(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 />
               </div>
@@ -159,10 +247,11 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <div className="flex flex-col gap-1.5">
                 <span className="text-text-muted text-xs font-medium">From</span>
                 <select
-                  name="from_airing"
-                  id="from_airing"
+                  value={fromAiring}
+                  onChange={e => setFromAiring(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
+                  <option value="">Any</option>
                   {masterFilter.year.map(year => (
                     <option key={year} value={year}>
                       {year}
@@ -173,10 +262,11 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <div className="flex flex-col gap-1.5">
                 <span className="text-text-muted text-xs font-medium">To</span>
                 <select
-                  name="to_airing"
-                  id="to_airing"
+                  value={toAiring}
+                  onChange={e => setToAiring(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
+                  <option value="">Any</option>
                   {masterFilter.year.map(year => (
                     <option key={year} value={year}>
                       {year}
@@ -197,13 +287,14 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <div className="flex flex-col gap-1.5">
                 <span className="text-text-muted text-xs font-medium">Season</span>
                 <select
-                  name="season"
-                  id="season"
+                  value={season}
+                  onChange={e => setSeason(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
                 >
-                  {masterFilter.season.map(season => (
-                    <option key={season} value={season}>
-                      {season}
+                  <option value="">All Seasons</option>
+                  {masterFilter.season.map(s => (
+                    <option key={s} value={s}>
+                      {s}
                     </option>
                   ))}
                 </select>
@@ -211,13 +302,14 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <div className="flex flex-col gap-1.5">
                 <span className="text-text-muted text-xs font-medium">Type</span>
                 <select
-                  name="type"
-                  id="type"
+                  value={type}
+                  onChange={e => setType(e.target.value)}
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
-                  {masterFilter.type.map(type => (
-                    <option key={type} value={type}>
-                      {type}
+                  <option value="">All Types</option>
+                  {masterFilter.type.map(t => (
+                    <option key={t} value={t}>
+                      {t}
                     </option>
                   ))}
                 </select>
@@ -289,35 +381,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </div>
           </div>
 
-          {/* Studios */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
-              <LuBuilding className="text-primary size-4" />
-              <span>Studios</span>
-            </label>
-            <input
-              type="text"
-              name="studio"
-              className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/50 w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
-              placeholder="Search studios..."
-            />
-          </div>
-
-          {/* Producers */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
-              <LuTv className="text-primary size-4" />
-              <span>Producers</span>
-            </label>
-            <input
-              type="text"
-              name="producer"
-              className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/50 w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
-              placeholder="Search producers..."
-            />
-          </div>
-
-          {/* Footer */}
+          {/* Footer Panel Layout Change */}
           <div className="border-border/60 flex items-center justify-end gap-2 border-t pt-3">
             <button
               onClick={handleClearAllFilters}
@@ -326,11 +390,13 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             >
               Reset Form Fields
             </button>
+
+            {/* Added Bottom Panel Primary Submit Trigger */}
             <button
-              type="button"
-              className="bg-primary hover:bg-primary-dark text-surface inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-medium tracking-wide shadow-xs transition-colors hover:cursor-pointer"
+              type="submit"
+              className="bg-primary hover:bg-primary-dark text-surface inline-flex cursor-pointer items-center justify-center rounded-xl px-5 py-2 text-xs font-medium tracking-wide shadow-xs transition-colors active:scale-[0.98]"
             >
-              Save to Custom List
+              Apply Filters & Search
             </button>
           </div>
         </div>

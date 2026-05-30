@@ -51,15 +51,31 @@ class WatchlistController extends Controller
         $allowedSorts = ['latest', 'score', 'oldest'];
         $sortBy = in_array($sortInput, $allowedSorts) ? $sortInput : 'latest';
 
+        // Capture advanced filter parameters
+        $filters = $request->only([
+            'from_watched',
+            'to_watched',
+            'from_airing',
+            'to_airing',
+            'season',
+            'type',
+            'genres_include',
+            'genres_exclude',
+            'themes_include',
+            'themes_exclude'
+        ]);
+
         $watchlists = $this->watchlistService->getUserWatchlist(
             paginateLimit: 21,
             userId: $user->id,
             status: $status,
             sort: $sortBy,
-            search: $search
+            search: $search,
+            filters: $filters
         );
 
-        $tabCounts = $this->watchlistService->getTabCounts($user->id, $search);
+        // Pass filters down here as well so count matches the applied filter view dataset
+        $tabCounts = $this->watchlistService->getTabCounts($user->id, $search, $filters);
 
         $genres = $this->masterService->getGenres();
         $themes = $this->masterService->getThemes();
@@ -76,7 +92,6 @@ class WatchlistController extends Controller
                 'tabCounts' => $tabCounts,
                 'sortBy' => $sortBy,
                 'search' => $search,
-                // Filter Master Data
                 'masterFilter' => [
                     'genres' => $genres,
                     'themes' => $themes,

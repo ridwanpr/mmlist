@@ -65,9 +65,13 @@ const Watchlist = ({
     const timer = setTimeout(() => {
       if ((search || '') === searchQuery) return;
 
+      const currentParams = Object.fromEntries(
+        new URLSearchParams(window.location.search).entries(),
+      );
       router.get(
         watchlistIndex.url(),
         {
+          ...currentParams,
           status: status,
           sort: sortBy,
           search: searchQuery || undefined,
@@ -84,15 +88,11 @@ const Watchlist = ({
   }, [searchQuery]);
 
   const handleChangeTab = (tab: string) => {
-    router.get(
-      watchlistIndex.url({
-        query: {
-          status: tab,
-          sort: sortBy,
-          search: searchQuery || undefined,
-        },
-      }),
-    );
+    const currentParams = Object.fromEntries(new URLSearchParams(window.location.search).entries());
+    router.get(watchlistIndex.url(), {
+      ...currentParams,
+      status: tab,
+    });
   };
 
   const { data, setData, put } = useForm<EditWatchlistForm>({
@@ -133,12 +133,12 @@ const Watchlist = ({
   };
 
   const handleFilter = (filter: 'latest' | 'score' | 'oldest') => {
+    const currentParams = Object.fromEntries(new URLSearchParams(window.location.search).entries());
     router.get(
       watchlistIndex.url(),
       {
-        status: status,
+        ...currentParams,
         sort: filter,
-        search: searchQuery || undefined,
       },
       { preserveScroll: true },
     );
