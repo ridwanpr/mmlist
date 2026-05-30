@@ -50,13 +50,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
 
           {/* Main Settings Form Container */}
           <div className="bg-surface border-border flex flex-col gap-8 rounded-lg border p-6">
-            <Form
-              action={update.url({ username: user.username })}
-              method="put"
-              options={{
-                preserveScroll: true,
-              }}
-            >
+            <Form action={update.url({ username: user.username })} method="put">
               {({ errors }) => (
                 <>
                   {/* Profile Information */}
@@ -166,6 +160,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                         <div className="flex h-5 items-center">
                           <input type="hidden" name="show_nsfw" value="0" />
                           <input
+                            key={errors.show_nsfw ? 'nsfw-error' : 'nsfw-stable'}
                             type="checkbox"
                             id="show_nsfw"
                             name="show_nsfw"
