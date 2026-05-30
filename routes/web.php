@@ -30,6 +30,7 @@ Route::get('anime/discussion/{animeslug}/{triggerContentSlug}', [TriggerCommentC
 
 Route::get('privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy.index');
 Route::get('terms', [LegalController::class, 'terms'])->name('terms.index');
+Route::get('about', [LegalController::class, 'about'])->name('about.index');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');

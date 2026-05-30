@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { privacyPolicy, terms } from '../actions/App/Http/Controllers/LegalController';
+import { about, privacyPolicy, terms } from '../actions/App/Http/Controllers/LegalController';
 
 const Footer = () => {
   return (
@@ -23,7 +23,8 @@ const Footer = () => {
             <ul className="flex gap-4">
               <li>
                 <Link
-                  href="#"
+                  href={about.url()}
+                  prefetch={'click'}
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   About

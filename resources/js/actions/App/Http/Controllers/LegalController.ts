@@ -84,6 +84,49 @@ terms.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: terms.url(options),
     method: 'head',
 })
-const LegalController = { privacyPolicy, terms }
+
+/**
+* @see \App\Http\Controllers\LegalController::about
+ * @see app/Http/Controllers/LegalController.php:20
+ * @route '/about'
+ */
+export const about = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: about.url(options),
+    method: 'get',
+})
+
+about.definition = {
+    methods: ["get","head"],
+    url: '/about',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\LegalController::about
+ * @see app/Http/Controllers/LegalController.php:20
+ * @route '/about'
+ */
+about.url = (options?: RouteQueryOptions) => {
+    return about.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LegalController::about
+ * @see app/Http/Controllers/LegalController.php:20
+ * @route '/about'
+ */
+about.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: about.url(options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\LegalController::about
+ * @see app/Http/Controllers/LegalController.php:20
+ * @route '/about'
+ */
+about.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: about.url(options),
+    method: 'head',
+})
+const LegalController = { privacyPolicy, terms, about }
 
 export default LegalController
