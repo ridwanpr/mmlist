@@ -18,7 +18,9 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
     post('/watchlist/import', {
       forceFormData: true,
       onSuccess: () => {
-        alert('Your watchlist import has been queued and is processing in the background.');
+        alert(
+          'Your import is being processed. Your watchlist will be updated automatically upon completion.',
+        );
         setData('xml_file', null);
       },
     });
