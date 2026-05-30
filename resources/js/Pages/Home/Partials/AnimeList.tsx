@@ -1,8 +1,8 @@
-import { LuAward, LuFilm } from "react-icons/lu";
-import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
+import { LuAward, LuFilm } from 'react-icons/lu';
+import { index as browseIndex } from '../../../actions/App/Http/Controllers/BrowseController';
 
-import AnimeCard from "../../../Components/AnimeCard";
-import SectionHeader from "./SectionHeader";
+import AnimeCard from '../../../Components/AnimeCard';
+import SectionHeader from './SectionHeader';
 
 interface AnimeListProps {
   nowAiring: App.DTOs.AnimeData[];
@@ -13,7 +13,7 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
   return (
     <div className="mx-auto max-w-7xl p-4 lg:py-8">
       <SectionHeader
-        href={browseIndex.url({ query: { airing: "true" } })}
+        href={browseIndex.url({ query: { airing: 'true' } })}
         title="Now Airing"
         icon={<LuFilm size="22px" />}
       />
@@ -28,8 +28,8 @@ const AnimeList = ({ nowAiring, topAnime }: AnimeListProps) => {
       </section>
 
       <SectionHeader
-        href={browseIndex.url({ query: { sort: "score", order: "desc" } })}
-        title="Top Anime"
+        href={browseIndex.url({ query: { sort: 'score', order: 'desc' } })}
+        title="Popular Anime"
         icon={<LuAward size="22px" />}
       />
 

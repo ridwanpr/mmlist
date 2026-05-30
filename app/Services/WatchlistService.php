@@ -91,12 +91,21 @@ class WatchlistService
         return PaginatedWatchlistData::fromPaginator($paginator);
     }
 
-    public function getTabCounts(int $userId): array
+    public function getTabCounts(int $userId, ?string $search = null): array
     {
-        $counts = Watchlist::where('user_id', $userId)
-            ->select('status', DB::raw('count(*) as total'))
-            ->groupBy('status')
-            ->pluck('total', 'status')
+        $query = Watchlist::where('watchlists.user_id', $userId);
+
+        if (! empty($search)) {
+            $query->join('animes', 'animes.id', '=', 'watchlists.anime_id')
+                ->whereFullText(
+                    ['animes.title', 'animes.title_english', 'animes.title_japanese', 'animes.title_synonyms_text'],
+                    $search
+                );
+        }
+
+        $counts = $query->select('watchlists.status', DB::raw('count(*) as total'))
+            ->groupBy('watchlists.status')
+            ->pluck('total', 'watchlists.status')
             ->toArray();
 
         return [

@@ -1,10 +1,10 @@
-import { Link, router, usePage } from "@inertiajs/react";
-import React, { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
+import { Link, router, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { FaGoogle } from 'react-icons/fa';
 
-import InputField from "../../Components/UI/InputField";
-import AuthLayout from "../../Layouts/AuthLayout";
-import AppHead from "../../Components/AppHead";
+import InputField from '../../Components/UI/InputField';
+import AuthLayout from '../../Layouts/AuthLayout';
+import AppHead from '../../Components/AppHead';
 
 const Register = () => {
   const { routes, errors } = usePage().props;
@@ -18,7 +18,7 @@ const Register = () => {
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setValues((values) => ({
+    setValues(values => ({
       ...values,
       [e.target.id]: e.target.value,
     }));
@@ -26,7 +26,7 @@ const Register = () => {
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.post("/register", values, { preserveState: true });
+    router.post('/register', values, { preserveState: true });
   };
 
   return (
@@ -38,17 +38,15 @@ const Register = () => {
       <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="bg-surface border-border w-full max-w-md rounded-xl border p-5 shadow-sm">
           <div className="mb-5">
-            <h1 className="text-text font-serif text-2xl font-bold">
-              Create your account
-            </h1>
+            <h1 className="text-text font-serif text-2xl font-bold">Create your account</h1>
             <p className="text-text-muted mt-2 text-sm leading-6">
-              Join{" "}
+              Join{' '}
               <Link
-                href={routes["home.index"]}
+                href={routes['home.index']}
                 className="text-primary hover:text-primary-dark font-serif font-semibold transition-colors"
               >
                 mamorulist
-              </Link>{" "}
+              </Link>{' '}
               and be part of a safer anime community.
             </p>
           </div>
@@ -63,9 +61,7 @@ const Register = () => {
                 handleChange={handleChange}
               />
               {errors.name && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.name}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.name}</span>
               )}
             </div>
 
@@ -78,9 +74,7 @@ const Register = () => {
                 handleChange={handleChange}
               />
               {errors.username && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.username}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.username}</span>
               )}
             </div>
 
@@ -89,17 +83,14 @@ const Register = () => {
                 label="Email"
                 name="email"
                 type="text"
-                placeholder="Optional, but required for recovery"
+                placeholder="Optional (needed for account recovery)"
                 handleChange={handleChange}
               />
               {errors.email && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.email}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.email}</span>
               )}
-              <span className="text-text-muted text-xs tracking-tight italic">
-                We need your email to verify account ownership in case
-                of any issue
+              <span className="text-text-muted mt-1 block text-xs tracking-tight italic">
+                Entirely your choice.
               </span>
             </div>
 
@@ -112,9 +103,7 @@ const Register = () => {
                 handleChange={handleChange}
               />
               {errors.password && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.password}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.password}</span>
               )}
             </div>
 
@@ -155,10 +144,10 @@ const Register = () => {
               <FaGoogle /> Continue with Google
             </button>
 
-            <p className="text-text-muted pt-1 mt-2 text-center text-sm">
-              Already have an account?{" "}
+            <p className="text-text-muted mt-2 pt-1 text-center text-sm">
+              Already have an account?{' '}
               <Link
-                href={routes["login"]}
+                href={routes['login']}
                 className="text-primary hover:text-primary-dark font-semibold transition-colors"
               >
                 Log in

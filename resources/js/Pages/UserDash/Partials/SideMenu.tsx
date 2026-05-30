@@ -1,24 +1,26 @@
-import { usePage } from "@inertiajs/react";
+import { usePage } from '@inertiajs/react';
 import {
   LuBookmark,
+  LuBookmarkCheck,
   LuCheck,
   LuCog,
   LuLayoutDashboard,
+  LuList,
   LuLogOut,
   LuMessageCircle,
-} from "react-icons/lu";
-import SidebarLink from "../../../Components/UI/SidebarLink";
-import { index as voteIndex } from "../../../actions/App/Http/Controllers/VoteController";
-import { settingIndex } from "../../../actions/App/Http/Controllers/UserDashboardController";
-import { index as commentIndex } from "../../../actions/App/Http/Controllers/CommentHistoryController";
+} from 'react-icons/lu';
+import SidebarLink from '../../../Components/UI/SidebarLink';
+import { index as voteIndex } from '../../../actions/App/Http/Controllers/VoteController';
+import { settingIndex } from '../../../actions/App/Http/Controllers/UserDashboardController';
+import { index as commentIndex } from '../../../actions/App/Http/Controllers/CommentHistoryController';
 
 const SideMenu = () => {
   const { auth } = usePage().props;
 
   const votesCount = auth?.user?.votes_count ?? 0;
   const commentCount = auth?.user?.comments_count ?? 0;
-  const userName = auth?.user?.name || "Guest User";
-  const joinedAt = auth?.user?.joined_at || "Recent";
+  const userName = auth?.user?.name || 'Guest User';
+  const joinedAt = auth?.user?.joined_at || 'Recent';
 
   return (
     <aside className="bg-surface border-border hidden w-72 flex-col self-start rounded-xl border p-5 md:flex">
@@ -43,6 +45,13 @@ const SideMenu = () => {
         </span>
       </SidebarLink>
 
+      <SidebarLink href="/watchlist" routeName="watchlist-bookmark.index">
+        <span className="flex items-center gap-3">
+          <LuList size={18} />
+          <span>Custom List</span>
+        </span>
+      </SidebarLink>
+
       <SidebarLink href={commentIndex.url()} routeName="comment-history.index">
         <span className="flex items-center gap-3">
           <LuMessageCircle size={18} />
@@ -53,7 +62,7 @@ const SideMenu = () => {
       <SidebarLink href={voteIndex.url()} routeName="votes.index">
         <span className="flex items-center gap-3">
           <LuCheck size={18} />
-          <span>My Votes</span>
+          <span>Votes</span>
         </span>
       </SidebarLink>
 

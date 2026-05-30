@@ -13,6 +13,7 @@ import { update as watchlistUpdate } from '../../actions/App/Http/Controllers/Wa
 import { destroy as watchlistDelete } from '../../actions/App/Http/Controllers/WatchlistController';
 import AppHead from '../../Components/AppHead';
 import SortWatchlist from './Partials/SortWatchlist';
+import AdvanceFilter from './Partials/AdvanceFilter';
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -142,16 +143,10 @@ const Watchlist = ({ watchlists, status, tabCounts, sortBy, search }: WatchlistP
                 {Object.values(tabCounts).reduce((a, b) => a + b, 0)} titles
               </p>
             </div>
-            <div>
-              <input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                type="text"
-                className="border-primary/50 bg-surface rounded-lg border p-2.5 text-xs"
-                placeholder="Search anime title..."
-              />
-            </div>
           </div>
+
+          {/*Advanced Filter*/}
+          <AdvanceFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
           <WatchlistTab
             activeTab={activeTab}

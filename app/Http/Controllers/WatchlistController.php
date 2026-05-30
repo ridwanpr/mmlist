@@ -57,8 +57,8 @@ class WatchlistController extends Controller
             search: $search
         );
 
-        $tabCounts = $this->watchlistService->getTabCounts($user->id);
-
+        $tabCounts = $this->watchlistService->getTabCounts($user->id, $search);
+        
         return Inertia::render(
             'Watchlist/Index',
             [
