@@ -26,7 +26,6 @@ type AdvanceFilterProps = {
 };
 
 const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFilterProps) => {
-  console.log(masterFilter);
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,7 +83,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
       <div
         className={`border-border bg-surface mt-4 overflow-hidden rounded-lg border shadow-xs transition-all duration-300 ${
           showAdvanceFilter
-            ? 'max-h-500 p-4 opacity-100'
+            ? 'max-h-[2000px] p-4 opacity-100'
             : 'pointer-events-none max-h-0 border-transparent opacity-0'
         }`}
       >
@@ -96,16 +95,16 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <span>Watched Date Range</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">From</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">From</span>
                 <input
                   type="date"
                   name="from_watched"
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">To</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">To</span>
                 <input
                   type="date"
                   name="to_watched"
@@ -122,27 +121,31 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <span>Anime Year</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">From</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">From</span>
                 <select
                   name="from_airing"
                   id="from_airing"
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
                   {masterFilter.year.map(year => (
-                    <option key={year}>{year}</option>
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
                   ))}
                 </select>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">To</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">To</span>
                 <select
                   name="to_airing"
                   id="to_airing"
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
                   {masterFilter.year.map(year => (
-                    <option key={year}>{year}</option>
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -156,72 +159,112 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
               <span>Season & Type</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">Season</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">Season</span>
                 <select
-                  name="from_airing"
-                  id="from_airing"
-                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors uppercase"
+                  name="season"
+                  id="season"
+                  className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
                 >
                   {masterFilter.season.map(season => (
-                    <option key={season}>{season}</option>
+                    <option key={season} value={season}>
+                      {season}
+                    </option>
                   ))}
                 </select>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-text-muted text-xs whitespace-nowrap">Type</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-text-muted text-xs font-medium">Type</span>
                 <select
-                  name="to_airing"
-                  id="to_airing"
+                  name="type"
+                  id="type"
                   className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                 >
                   {masterFilter.type.map(type => (
-                      <option key={type}>{type}</option>
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Flat Genres & Themes List */}
+          {/* Genres */}
           <div>
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
                 <LuSparkles className="text-primary size-4" />
-                <span>Genres & Themes</span>
+                <span>Genres</span>
               </label>
               <span className="text-text-muted text-[11px]">
                 Click once to include (+), twice to exclude (-)
               </span>
             </div>
-            <div className="border-border/40 bg-surface-alt/40 flex flex-wrap gap-2 rounded-xl border p-3">
-              <div className="text-text-muted text-xs italic select-none">
-                Loading genres and themes...
+            <div className="border-border bg-surface-alt/40 max-h-36 overflow-y-auto rounded-xl border p-3">
+              <div className="flex flex-wrap gap-2">
+                {masterFilter.genres.map(genre => (
+                  <button
+                    key={genre.id}
+                    type="button"
+                    className="border-border bg-surface-alt text-text-muted hover:text-text cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors"
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Themes */}
+          <div>
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
+                <LuSparkles className="text-primary size-4" />
+                <span>Themes</span>
+              </label>
+              <span className="text-text-muted text-[11px]">
+                Click once to include (+), twice to exclude (-)
+              </span>
+            </div>
+            <div className="border-border bg-surface-alt/40 max-h-48 overflow-y-auto rounded-xl border p-3">
+              <div className="flex flex-wrap gap-2">
+                {masterFilter.themes.map(theme => (
+                  <button
+                    key={theme.id}
+                    type="button"
+                    className="border-border bg-surface-alt text-text-muted hover:text-text cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors"
+                  >
+                    {theme.name}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
 
           {/* Studios */}
-          <div>
-            <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
               <LuBuilding className="text-primary size-4" />
               <span>Studios</span>
             </label>
             <input
               type="text"
+              name="studio"
               className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/50 w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
               placeholder="Search studios..."
             />
           </div>
 
           {/* Producers */}
-          <div>
-            <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
               <LuTv className="text-primary size-4" />
               <span>Producers</span>
             </label>
             <input
               type="text"
+              name="producer"
               className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/50 w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
               placeholder="Search producers..."
             />
@@ -238,7 +281,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
             </button>
             <button
               type="button"
-              className="border-border bg-primary text-surface inline-flex items-center justify-center rounded-xl border px-4 py-2 text-xs font-medium tracking-wide hover:cursor-pointer"
+              className="bg-primary hover:bg-primary-dark text-surface inline-flex items-center justify-center rounded-xl px-4 py-2 text-xs font-medium tracking-wide shadow-xs transition-colors hover:cursor-pointer"
             >
               Save to Custom List
             </button>
