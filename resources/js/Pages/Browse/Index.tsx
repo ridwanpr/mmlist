@@ -1,9 +1,9 @@
-import type React from "react";
+import type React from 'react';
 
-import FrontLayout from "../../Layouts/FrontLayout";
-import SearchSection from "./Partials/SearchSection";
-import AnimeList from "./Partials/AnimeList";
-import AppHead from "../../Components/AppHead";
+import FrontLayout from '../../Layouts/FrontLayout';
+import SearchSection from './Partials/SearchSection';
+import AnimeList from './Partials/AnimeList';
+import AppHead from '../../Components/AppHead';
 
 interface BrowseProps {
   animes: App.DTOs.PaginatedAnimeData;
@@ -15,25 +15,19 @@ interface BrowseProps {
   rating: string[];
   filters: {
     query: string;
-    genres: number[];
-    themes: number[];
-    years: number[];
-    seasons: string[];
-    types: string[];
-    rating: string[];
+    from_airing: string;
+    to_airing: string;
+    season: string;
+    type: string;
+    rating: string;
+    genres_include: string;
+    genres_exclude: string;
+    themes_include: string;
+    themes_exclude: string;
   };
 }
 
-const Browse = ({
-  animes,
-  genres,
-  themes,
-  year,
-  type,
-  season,
-  rating,
-  filters,
-}: BrowseProps) => {
+const Browse = ({ animes, genres, themes, year, type, season, rating, filters }: BrowseProps) => {
   return (
     <>
       <AppHead

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\BrowseController::index
- * @see app/Http/Controllers/BrowseController.php:18
+ * @see app/Http/Controllers/BrowseController.php:19
  * @route '/browse'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\BrowseController::index
- * @see app/Http/Controllers/BrowseController.php:18
+ * @see app/Http/Controllers/BrowseController.php:19
  * @route '/browse'
  */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\BrowseController::index
- * @see app/Http/Controllers/BrowseController.php:18
+ * @see app/Http/Controllers/BrowseController.php:19
  * @route '/browse'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\BrowseController::index
- * @see app/Http/Controllers/BrowseController.php:18
+ * @see app/Http/Controllers/BrowseController.php:19
  * @route '/browse'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

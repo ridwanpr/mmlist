@@ -55,46 +55,64 @@ class AnimeService
                 }
             });
 
-        // Force the base query to only select IDs if the search didn't already
         if (empty($filter['query']) || $this->buildBooleanSearch(trim($filter['query'])) === null) {
             $query->select('animes.id');
         }
 
         $query->when(array_key_exists('airing', $filter) && ! is_null($filter['airing']), function ($q) use ($filter) {
-            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', now()->year);
+            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', 2026);
         });
 
         $query->when(array_key_exists('upcoming', $filter) && ! is_null($filter['upcoming']), function ($q) {
-            $q->where('animes.year', '>', now()->year);
+            $q->where('animes.year', '>', 2026);
         });
 
-        $query->when(! empty($filter['genres']), function ($q) use ($filter) {
-            $q->whereHas('genres', function ($q) use ($filter) {
-                $q->whereIn('genres.id', (array) $filter['genres']);
-            });
-        });
+        if (! empty($filter['from_airing'])) {
+            $query->where('animes.year', '>=', (int) $filter['from_airing']);
+        }
+        if (! empty($filter['to_airing'])) {
+            $query->where('animes.year', '<=', (int) $filter['to_airing']);
+        }
 
-        $query->when(! empty($filter['themes']), function ($q) use ($filter) {
-            $q->whereHas('themes', function ($q) use ($filter) {
-                $q->whereIn('themes.id', (array) $filter['themes']);
-            });
-        });
+        if (! empty($filter['season'])) {
+            $query->where('animes.season', $filter['season']);
+        }
+        if (! empty($filter['type'])) {
+            $query->where('animes.type', $filter['type']);
+        }
+        if (! empty($filter['rating'])) {
+            $query->where('animes.rating', $filter['rating']);
+        }
 
-        $query->when(! empty($filter['years']), function ($q) use ($filter) {
-            $q->whereIn('animes.year', (array) $filter['years']);
-        });
+        if (! empty($filter['genres_include'])) {
+            $includeIds = is_array($filter['genres_include']) ? $filter['genres_include'] : explode(',', $filter['genres_include']);
+            foreach ($includeIds as $id) {
+                $query->whereIn('animes.id', Anime::whereHas('genres', function ($q) use ($id) {
+                    $q->where('genres.id', $id);
+                })->select('id'));
+            }
+        }
+        if (! empty($filter['genres_exclude'])) {
+            $excludeIds = is_array($filter['genres_exclude']) ? $filter['genres_exclude'] : explode(',', $filter['genres_exclude']);
+            $query->whereNotIn('animes.id', Anime::whereHas('genres', function ($q) use ($excludeIds) {
+                $q->whereIn('genres.id', $excludeIds);
+            })->select('id'));
+        }
 
-        $query->when(! empty($filter['seasons']), function ($q) use ($filter) {
-            $q->whereIn('animes.season', (array) $filter['seasons']);
-        });
-
-        $query->when(! empty($filter['types']), function ($q) use ($filter) {
-            $q->whereIn('animes.type', (array) $filter['types']);
-        });
-
-        $query->when(! empty($filter['rating']), function ($q) use ($filter) {
-            $q->whereIn('animes.rating', (array) $filter['rating']);
-        });
+        if (! empty($filter['themes_include'])) {
+            $includeIds = is_array($filter['themes_include']) ? $filter['themes_include'] : explode(',', $filter['themes_include']);
+            foreach ($includeIds as $id) {
+                $query->whereIn('animes.id', Anime::whereHas('themes', function ($q) use ($id) {
+                    $q->where('themes.id', $id);
+                })->select('id'));
+            }
+        }
+        if (! empty($filter['themes_exclude'])) {
+            $excludeIds = is_array($filter['themes_exclude']) ? $filter['themes_exclude'] : explode(',', $filter['themes_exclude']);
+            $query->whereNotIn('animes.id', Anime::whereHas('themes', function ($q) use ($excludeIds) {
+                $q->whereIn('themes.id', $excludeIds);
+            })->select('id'));
+        }
 
         $query->when(! empty($sort['sort']), function ($q) use ($sort) {
             $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
@@ -106,22 +124,15 @@ class AnimeService
                 ->orderBy('animes.score', 'desc');
         });
 
-        $paginator = $query
-            ->paginate($paginateLimit)
-            ->onEachSide(1)
-            ->withQueryString();
+        $paginator = $query->paginate($paginateLimit)->onEachSide(1)->withQueryString();
 
-        // Deferred Join: Hydrate the heavy models only for the current page
         if ($paginator->isNotEmpty()) {
             $ids = $paginator->pluck('id')->toArray();
-
-            // Fetch the full data and eager load relationships for these IDs
             $models = Anime::with(['genres', 'animeTriggers.triggerContent'])
                 ->whereIn('id', $ids)
                 ->get()
                 ->keyBy('id');
 
-            // Replace the bare IDs in the paginator with the fully loaded models, preserving the sorted order
             $sortedModels = collect($ids)->map(fn($id) => $models[$id]);
             $paginator->setCollection($sortedModels);
         }
