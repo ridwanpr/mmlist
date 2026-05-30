@@ -274,7 +274,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
             </Form>
           </div>
 
-          {/* New Watchlist XML Import Card */}
+          {/* Watchlist XML Import Card */}
           <div className="bg-surface border-border mt-6 flex flex-col gap-4 rounded-lg border p-6">
             <div>
               <h2 className="text-text font-serif text-base font-medium">Import Watchlist</h2>
