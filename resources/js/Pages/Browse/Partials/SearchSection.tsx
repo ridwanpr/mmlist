@@ -118,7 +118,6 @@ const SearchSection = ({
     });
   };
 
-  // Restored function definition block
   const handleQuickAction = (actionId: string) => {
     if (actionId === 'ongoing') {
       router.get('/browse?airing=true');
@@ -190,7 +189,7 @@ const SearchSection = ({
 
   return (
     <div className="bg-surface border-border border-b font-sans">
-      <div className="mx-auto max-w-7xl p-4 lg:pt-4 lg:pb-6">
+      <div className="mx-auto max-w-7xl p-4 lg:pt-4">
         <h1 className="text-text mb-2 font-serif text-2xl font-bold">Browse Anime</h1>
         <p className="text-text-muted mb-4">
           Find anime and view trigger warnings to make informed choices.
@@ -230,7 +229,7 @@ const SearchSection = ({
             </button>
           </div>
 
-          <div className="relative mb-2">
+          <div className="relative">
             <div className="flex w-full snap-x scrollbar-none gap-2 overflow-x-auto pb-2 whitespace-nowrap sm:gap-4 sm:px-0">
               {QUICK_ACTIONS.map(action => (
                 <button
@@ -404,7 +403,7 @@ const SearchSection = ({
                       <span>Trigger Content Flags</span>
                     </label>
                     <span className="text-text-muted text-[11px]">
-                      AI flags used while community data grows.
+                      AI flags are used while community data grows and may be inaccurate.
                     </span>
                   </div>
 
