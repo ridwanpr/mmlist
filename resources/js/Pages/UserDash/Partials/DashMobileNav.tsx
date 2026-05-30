@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import {
-  LuBookmark,
   LuLayoutDashboard,
+  LuList,
   LuMessageCircle,
   LuThumbsUp,
 } from "react-icons/lu";
@@ -50,7 +50,7 @@ const DashMobileNav = () => {
       </div>
 
       {/* Scrollable tab strip */}
-      <div className="border-border flex overflow-x-auto border-t [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="border-border flex overflow-x-auto border-t scrollbar-none [&::-webkit-scrollbar]:hidden">
         <Link
           href={userDashIndex.url()}
           prefetch={"click"}
@@ -65,7 +65,7 @@ const DashMobileNav = () => {
           prefetch={"click"}
           className={`${url.startsWith(watchlistIndex.url()) ? "border-primary text-primary-dark border-b-2" : "text-text-muted"} flex shrink-0 items-center gap-1.5 px-4 py-3 text-xs font-medium transition-colors duration-150`}
         >
-          <LuBookmark size={14} strokeWidth={2} />
+          <LuList size={14} strokeWidth={2} />
           Watchlist
         </Link>
 

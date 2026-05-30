@@ -1,7 +1,5 @@
 import { usePage } from '@inertiajs/react';
 import {
-  LuBookmark,
-  LuBookmarkCheck,
   LuCheck,
   LuCog,
   LuLayoutDashboard,
@@ -40,15 +38,8 @@ const SideMenu = () => {
 
       <SidebarLink href="/watchlist" routeName="watchlist.index">
         <span className="flex items-center gap-3">
-          <LuBookmark size={18} />
-          <span>Watchlist</span>
-        </span>
-      </SidebarLink>
-
-      <SidebarLink href="/watchlist" routeName="watchlist-bookmark.index">
-        <span className="flex items-center gap-3">
           <LuList size={18} />
-          <span>Custom List</span>
+          <span>Watchlist</span>
         </span>
       </SidebarLink>
 
