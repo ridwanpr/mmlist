@@ -166,7 +166,7 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
         <Sorting sortBy={sortBy} handleFilter={handleFilter} />
 
         {comments?.map(comment => (
-          <div key={comment.id} className="border-border bg-surface mt-3 divide-y rounded-xl border">
+          <div key={comment.id} className="border-border bg-surface mt-3 divide-y rounded-lg border">
             <div className="flex gap-4 px-4 py-3">
               <div className="flex shrink-0 flex-col items-center pt-0.5">
                 <button

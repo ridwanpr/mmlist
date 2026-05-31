@@ -1,6 +1,6 @@
-import { LuHeart, LuPencil, LuReply, LuTrash2 } from "react-icons/lu";
-import TimeAgo from "../../../Components/TimeAgo";
-import QuoteBlock from "../../../Components/QuoteBlock";
+import { LuHeart, LuPencil, LuReply, LuTrash2 } from 'react-icons/lu';
+import TimeAgo from '../../../Components/TimeAgo';
+import QuoteBlock from '../../../Components/QuoteBlock';
 
 type TriggerCommentItemProps = {
   comment: App.DTOs.CommentData;
@@ -17,11 +17,7 @@ type TriggerCommentItemProps = {
       show_nsfw: boolean;
     } | null;
   };
-  openReplyModal: (
-    commentId: number,
-    commentBody: string,
-    user: string,
-  ) => void;
+  openReplyModal: (commentId: number, commentBody: string, user: string) => void;
   handleEditComment: (commentId: number, body: string) => void;
   handleDeleteComment: (commentId: number) => void;
 };
@@ -36,32 +32,25 @@ const TriggerCommentItem = ({
 }: TriggerCommentItemProps) => {
   return (
     <>
-      <div
-        key={comment.id}
-        className="border-border bg-surface mt-3 divide-y rounded-xl border"
-      >
+      <div key={comment.id} className="border-border bg-surface mt-3 divide-y rounded-lg border">
         <div className="flex gap-4 px-4 py-3">
           <div className="flex shrink-0 flex-col items-center pt-0.5">
             <button
               onClick={() => handleUpvote(comment.id)}
               className={`-m-2 flex flex-col items-center gap-1 rounded-xl p-2 transition-colors hover:cursor-pointer ${
                 comment.isUpvoted
-                  ? "text-accent-red hover:text-accent-red/80"
-                  : "text-text-muted hover:text-accent-red"
+                  ? 'text-accent-red hover:text-accent-red/80'
+                  : 'text-text-muted hover:text-accent-red'
               }`}
             >
-              <LuHeart
-                className={`size-4 ${comment.isUpvoted ? "fill-current" : ""}`}
-              />
+              <LuHeart className={`size-4 ${comment.isUpvoted ? 'fill-current' : ''}`} />
               <span className="text-xs leading-none">{comment.upvotes}</span>
             </button>
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline gap-2">
-              <span className="text-primary text-sm font-semibold">
-                {comment.user?.name ?? ""}
-              </span>
+              <span className="text-primary text-sm font-semibold">{comment.user?.name ?? ''}</span>
 
               <span className="text-text-muted text-xs">
                 <TimeAgo dateString={comment.createdAt} />
@@ -70,17 +59,17 @@ const TriggerCommentItem = ({
 
             {comment.parent && (
               <QuoteBlock
-                authorName={comment.parent.user?.name ?? ""}
+                authorName={comment.parent.user?.name ?? ''}
                 body={comment.parent.bodyHtml}
               />
             )}
 
             <div
               className="prose prose-sm text-text mt-1 mb-2 max-w-none text-xs whitespace-pre-wrap md:text-sm"
-              onClick={(e) => {
+              onClick={e => {
                 const target = e.target as HTMLElement;
-                if (target.classList.contains("spoiler")) {
-                  target.classList.add("revealed");
+                if (target.classList.contains('spoiler')) {
+                  target.classList.add('revealed');
                 }
               }}
               dangerouslySetInnerHTML={{
@@ -93,11 +82,7 @@ const TriggerCommentItem = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={() =>
-                    openReplyModal(
-                      comment.id,
-                      comment.bodyHtml,
-                      comment.user?.name ?? "",
-                    )
+                    openReplyModal(comment.id, comment.bodyHtml, comment.user?.name ?? '')
                   }
                   className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                 >
@@ -108,9 +93,7 @@ const TriggerCommentItem = ({
                 {auth.user.id === comment.userId && (
                   <>
                     <button
-                      onClick={() =>
-                        handleEditComment(comment.id, comment.body)
-                      }
+                      onClick={() => handleEditComment(comment.id, comment.body)}
                       className="text-text-muted hover:text-text flex items-center gap-1 text-xs hover:cursor-pointer"
                     >
                       <LuPencil className="size-3" />
