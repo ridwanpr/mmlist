@@ -14,6 +14,7 @@ import { destroy as watchlistDelete } from '../../actions/App/Http/Controllers/W
 import AppHead from '../../Components/AppHead';
 import SortWatchlist from './Partials/SortWatchlist';
 import AdvanceFilter from './Partials/AdvanceFilter';
+import { LuList, LuLayoutGrid } from 'react-icons/lu';
 
 type WatchlistPropsType = {
   watchlists: App.DTOs.PaginatedWatchlistData;
@@ -62,6 +63,10 @@ const Watchlist = ({
   const [searchQuery, setSearchQuery] = useState(search || '');
   const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
   const [editWatchlist, setEditWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>(() => {
+    const savedView = localStorage.getItem('watchlist_view_mode');
+    return savedView === 'grid' ? 'grid' : 'list';
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,6 +79,10 @@ const Watchlist = ({
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  useEffect(() => {
+    localStorage.setItem('watchlist_view_mode', viewMode);
+  }, [viewMode]);
 
   const handleChangeTab = (tab: string) => {
     const currentParams = Object.fromEntries(new URLSearchParams(window.location.search).entries());
@@ -158,15 +167,45 @@ const Watchlist = ({
           />
 
           <div className="mt-4">
-            <div className="mb-4 flex w-full items-center justify-between">
+            {/* Control bar */}
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
               <p className="text-text-muted text-xs font-medium">
                 {watchlists?.total} Titles {averageScore !== null && `(Avg Score: ${averageScore})`}
               </p>
-              <SortWatchlist sortBy={sortBy} handleFilter={handleFilter} />
+
+              <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+                <SortWatchlist sortBy={sortBy} handleFilter={handleFilter} />
+
+                <div className="border-border bg-surface flex items-center rounded-lg border p-0.5 shadow-xs">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    title="List View"
+                    className={`cursor-pointer rounded-md p-1.5 transition-colors ${
+                      viewMode === 'list'
+                        ? 'bg-primary text-surface-alt'
+                        : 'text-text-muted hover:text-text'
+                    }`}
+                  >
+                    <LuList size={16} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    title="Grid Cover View"
+                    className={`cursor-pointer rounded-md p-1.5 transition-colors ${
+                      viewMode === 'grid'
+                        ? 'bg-primary text-surface-alt'
+                        : 'text-text-muted hover:text-text'
+                    }`}
+                  >
+                    <LuLayoutGrid size={16} />
+                  </button>
+                </div>
+              </div>
             </div>
 
             <AnimeList
               watchlists={watchlists}
+              viewMode={viewMode}
               setSelectedWatchlist={setSelectedWatchlist}
               handleEditWatchlist={handleEditWatchlist}
               handleDeleteWatchlist={handleDeleteWatchlist}

@@ -143,6 +143,8 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     setFromScore('');
     setToScore('');
 
+    setShowAdvanceFilter(false);
+
     const currentParams = new URLSearchParams(window.location.search);
     router.get(
       window.location.pathname,
