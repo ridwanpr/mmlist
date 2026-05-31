@@ -57,7 +57,6 @@ const Watchlist = ({
   masterFilter,
   averageScore,
 }: WatchlistPropsType) => {
-  console.log(averageScore);
   const activeTab = status || 'all';
 
   const [searchQuery, setSearchQuery] = useState(search || '');

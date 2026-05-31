@@ -28,7 +28,7 @@ const AnimeList = ({
         {watchlists?.data.map(watchlist => (
           <div
             key={watchlist.id}
-            className="border-border bg-surface-alt relative aspect-3/4 w-full overflow-hidden rounded-xl border shadow-xs"
+            className="border-border bg-surface-alt relative aspect-2/3 w-full overflow-hidden rounded-xl border shadow-xs"
           >
             {/* Background Poster Image */}
             <img
