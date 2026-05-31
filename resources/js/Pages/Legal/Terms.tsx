@@ -2,6 +2,8 @@ import React from 'react';
 
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppHead from '../../Components/AppHead';
+import { Link } from '@inertiajs/react';
+import { index } from '../../actions/App/Http/Controllers/ContactController';
 
 const TermsOfService = () => {
   return (
@@ -122,7 +124,10 @@ const TermsOfService = () => {
             </h2>
             <p>
               For any questions regarding these terms, or to report platform abuse or request manual
-              data removal, please visit our contact page.
+              data removal, please visit our contact page{' '}
+              <Link href={index.url()} className="text-primary font-bold">
+                here
+              </Link>
             </p>
           </section>
         </div>

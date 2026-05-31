@@ -2,6 +2,8 @@ import React from 'react';
 
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppHead from '../../Components/AppHead';
+import { Link } from '@inertiajs/react';
+import { index } from '../../actions/App/Http/Controllers/ContactController';
 
 const About = () => {
   return (
@@ -75,8 +77,11 @@ const About = () => {
             <h2 className="text-text font-serif text-2xl font-semibold">Get in Touch</h2>
             <p>
               If you notice database inaccuracies, want to suggest new warning categories, or have
-              general feedback, please visit our contact page to drop a
-              line.
+              general feedback, please visit our contact page{' '}
+              <Link href={index.url()} className="text-primary font-bold">
+                here
+              </Link>{' '}
+              to drop a line.
             </p>
           </section>
         </div>

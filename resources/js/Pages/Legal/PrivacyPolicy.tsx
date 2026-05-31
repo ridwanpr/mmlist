@@ -2,6 +2,8 @@ import React from 'react';
 
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppHead from '../../Components/AppHead';
+import { Link } from '@inertiajs/react';
+import { index } from '../../actions/App/Http/Controllers/ContactController';
 
 const PrivacyPolicy = () => {
   return (
@@ -159,7 +161,10 @@ const PrivacyPolicy = () => {
             </h2>
             <p>
               For any questions, data deletion requests, or general inquiries regarding your data
-              privacy on our platform, please visit our contact page.
+              privacy on our platform, please visit our contact page{' '}
+              <Link href={index.url()} className="text-primary font-bold">
+                here
+              </Link>
             </p>
           </section>
 
