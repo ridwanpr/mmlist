@@ -39,10 +39,10 @@ class CommentService
             ->where('commentable_id', $commentableId)
             ->where('anime_id', $animeId)
             ->with(['user', 'parent', 'parent.user'])
-            ->withExists(['votes' => fn ($q) => $q->where('user_id', Auth::id())])
-            ->when($sortBy === 'latest', fn ($q) => $q->latest())
-            ->when($sortBy === 'most-loved', fn ($q) => $q->orderBy('upvotes', 'desc'))
-            ->when($sortBy === 'oldest', fn ($q) => $q->orderBy('created_at', 'asc'))
+            ->withExists(['votes' => fn($q) => $q->where('user_id', Auth::id())])
+            ->when($sortBy === 'latest', fn($q) => $q->latest())
+            ->when($sortBy === 'most-loved', fn($q) => $q->orderBy('upvotes', 'desc'))
+            ->when($sortBy === 'oldest', fn($q) => $q->orderBy('created_at', 'asc'))
             ->paginate($paginateLimit)
             ->onEachSide(1)
             ->withQueryString();
@@ -65,6 +65,17 @@ class CommentService
     {
         $comments = Comment::with(['user', 'commentable', 'anime'])
             ->limit($limit)->orderBy('created_at', 'desc')->get();
+
+        return $comments;
+    }
+
+    public function getLatestCommentPaginate(int $paginateLimit = 20)
+    {
+        $comments = Comment::with(['user', 'commentable', 'anime', 'parent'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($paginateLimit)
+            ->onEachSide(1)
+            ->withQueryString();
 
         return $comments;
     }

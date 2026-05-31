@@ -21,7 +21,7 @@ const AnimeList = ({
 }: AnimeListProps) => {
   const { proxyImage } = useImageProxy();
 
-  // Locked-Aspect Grid Layout (All info contained inside poster boundaries)
+  // Grid layout
   if (viewMode === 'grid') {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -34,7 +34,7 @@ const AnimeList = ({
             <img
               src={proxyImage(watchlist.images?.jpg.image_url)}
               alt={`${watchlist.title} cover`}
-              className="h-full w-full object-cover select-none"
+              className="absolute inset-0 h-full w-full object-cover select-none"
               loading="lazy"
             />
 
@@ -46,14 +46,14 @@ const AnimeList = ({
               </span>
 
               {watchlist.score && (
-                <span className="bg-primary rounded px-1.5 py-0.5 text-[10px] font-bold text-surface-alt shadow-xs">
+                <span className="bg-primary text-surface-alt rounded px-1.5 py-0.5 text-[10px] font-bold shadow-xs">
                   ★ {watchlist.score}
                 </span>
               )}
             </div>
 
             {/* Bottom Info Overlay Block */}
-            <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end bg-linear-to-t from-black/95 via-black/80 to-transparent p-3 pt-14 text-white">
+            <div className="absolute -inset-x-px -bottom-px flex flex-col justify-end bg-linear-to-t from-black/95 via-black/80 to-transparent p-3 pt-14 text-white">
               {/* Title */}
               <Link
                 href={show.url({ slug: watchlist.slug! })}
