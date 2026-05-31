@@ -1,24 +1,16 @@
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
-import { LuPlus, LuX } from "react-icons/lu";
-import type { EditWatchlistForm } from "../Index";
-import type { InertiaFormProps } from "@inertiajs/react";
-import type React from "react";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { LuPlus, LuX } from 'react-icons/lu';
+import type { EditWatchlistForm } from '../Index';
+import type { InertiaFormProps } from '@inertiajs/react';
+import type React from 'react';
 
 type EditModalProps = {
   data: EditWatchlistForm;
-  setData: InertiaFormProps<EditWatchlistForm>["setData"];
+  setData: InertiaFormProps<EditWatchlistForm>['setData'];
   editWatchlist: App.DTOs.WatchlistData | null;
   handleEditWatchlist: (watchlist: App.DTOs.WatchlistData | null) => void;
   incrementProgress: () => void;
-  handleSubmitEditWatchlist: (
-    e: React.SubmitEvent<HTMLFormElement>,
-    watchlistId: number,
-  ) => void;
+  handleSubmitEditWatchlist: (e: React.FormEvent<HTMLFormElement>, watchlistId: number) => void;
 };
 
 const EditModal = ({
@@ -30,24 +22,24 @@ const EditModal = ({
   handleSubmitEditWatchlist,
 }: EditModalProps) => {
   const statusSelectItem = [
-    { value: "planned", label: "Planned" },
-    { value: "watching", label: "Watching" },
-    { value: "completed", label: "Completed" },
-    { value: "on_hold", label: "On hold" },
-    { value: "dropped", label: "Dropped" },
+    { value: 'planned', label: 'Planned' },
+    { value: 'watching', label: 'Watching' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'on_hold', label: 'On hold' },
+    { value: 'dropped', label: 'Dropped' },
   ];
 
   const labels: Record<string, string> = {
-    10: "Masterpiece",
-    9: "Great",
-    8: "Very Good",
-    7: "Good",
-    6: "Fine",
-    5: "Average",
-    4: "Bad",
-    3: "Very Bad",
-    2: "Horrible",
-    1: "Appalling",
+    10: 'Masterpiece',
+    9: 'Great',
+    8: 'Very Good',
+    7: 'Good',
+    6: 'Fine',
+    5: 'Average',
+    4: 'Bad',
+    3: 'Very Bad',
+    2: 'Horrible',
+    1: 'Appalling',
   };
 
   const scoreSelectItem = Array.from({ length: 10 }, (_, i) => {
@@ -89,10 +81,7 @@ const EditModal = ({
           </div>
 
           <form
-            onSubmit={(e) =>
-              editWatchlist?.id &&
-              handleSubmitEditWatchlist(e, editWatchlist.id)
-            }
+            onSubmit={e => editWatchlist?.id && handleSubmitEditWatchlist(e, editWatchlist.id)}
             className="flex min-h-0 flex-1 flex-col"
           >
             <div className="flex-1 overflow-y-auto p-5">
@@ -104,12 +93,12 @@ const EditModal = ({
                   </label>
                   <select
                     value={data.status}
-                    onChange={(e) => setData("status", e.target.value)}
+                    onChange={e => setData('status', e.target.value)}
                     name="status"
                     id="status"
                     className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   >
-                    {statusSelectItem.map((item) => (
+                    {statusSelectItem.map(item => (
                       <option key={item.value} value={item.value}>
                         {item.label}
                       </option>
@@ -128,17 +117,23 @@ const EditModal = ({
                       name="progress"
                       id="progress"
                       min={0}
+                      max={editWatchlist?.episodes ? Number(editWatchlist.episodes) : undefined}
                       value={data.progress}
-                      onChange={(e) =>
-                        setData("progress", Number(e.target.value))
-                      }
+                      onChange={e => {
+                        const value = Number(e.target.value);
+                        const max = editWatchlist?.episodes;
+
+                        if (max && value > Number(max)) {
+                          setData('progress', Number(max));
+                        } else {
+                          setData('progress', value);
+                        }
+                      }}
                       className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 pr-28 text-sm outline-hidden transition-colors"
                     />
                     <div className="absolute right-3 flex items-center gap-2">
                       {editWatchlist?.episodes && (
-                        <p className="text-text-muted text-sm">
-                          / {editWatchlist.episodes}
-                        </p>
+                        <p className="text-text-muted text-sm">/ {editWatchlist.episodes}</p>
                       )}
                       <button
                         type="button"
@@ -157,14 +152,14 @@ const EditModal = ({
                     Score
                   </label>
                   <select
-                    value={data.score?.toString() ?? ""}
-                    onChange={(e) => setData("score", Number(e.target.value))}
+                    value={data.score?.toString() ?? ''}
+                    onChange={e => setData('score', Number(e.target.value))}
                     name="score"
                     id="score"
                     className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   >
                     <option value="">Select</option>
-                    {scoreSelectItem.map((item) => (
+                    {scoreSelectItem.map(item => (
                       <option key={item.value} value={item.value}>
                         {item.label}
                       </option>
@@ -182,19 +177,14 @@ const EditModal = ({
                       type="date"
                       id="started_at"
                       value={
-                        data.started_at
-                          ? new Date(data.started_at).toISOString().slice(0, 10)
-                          : ""
+                        data.started_at ? new Date(data.started_at).toISOString().slice(0, 10) : ''
                       }
-                      onChange={(e) => setData("started_at", e.target.value)}
+                      onChange={e => setData('started_at', e.target.value)}
                       className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor="completed_at"
-                      className="text-sm font-medium"
-                    >
+                    <label htmlFor="completed_at" className="text-sm font-medium">
                       Finish date
                     </label>
                     <input
@@ -202,12 +192,10 @@ const EditModal = ({
                       id="completed_at"
                       value={
                         data.completed_at
-                          ? new Date(data.completed_at)
-                              .toISOString()
-                              .slice(0, 10)
-                          : ""
+                          ? new Date(data.completed_at).toISOString().slice(0, 10)
+                          : ''
                       }
-                      onChange={(e) => setData("completed_at", e.target.value)}
+                      onChange={e => setData('completed_at', e.target.value)}
                       className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                     />
                   </div>
@@ -220,9 +208,9 @@ const EditModal = ({
                   </label>
                   <textarea
                     rows={3}
-                    value={data.note ?? ""}
+                    value={data.note ?? ''}
                     id="note"
-                    onChange={(e) => setData("note", e.target.value)}
+                    onChange={e => setData('note', e.target.value)}
                     className="border-border bg-surface-alt text-text focus:border-accent-gold w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
                   />
                 </div>

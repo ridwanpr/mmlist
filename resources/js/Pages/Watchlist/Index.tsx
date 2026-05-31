@@ -111,10 +111,16 @@ const Watchlist = ({
   };
 
   const incrementProgress = () => {
-    setData(prev => ({
-      ...prev,
-      progress: prev.progress + 1,
-    }));
+    setData(prev => {
+      const maxEpisodes = editWatchlist?.episodes;
+      if (maxEpisodes && Number(prev.progress) >= Number(maxEpisodes)) {
+        return prev;
+      }
+      return {
+        ...prev,
+        progress: Number(prev.progress) + 1,
+      };
+    });
   };
 
   const handleSubmitEditWatchlist = (e: React.FormEvent<HTMLFormElement>, watchlistId: number) => {
