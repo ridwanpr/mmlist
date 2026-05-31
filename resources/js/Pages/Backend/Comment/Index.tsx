@@ -51,7 +51,7 @@ const Comment = ({ paginatedComments }: CommentProps) => {
                   <td className="px-6 py-4 font-mono text-xs">{comment.id}</td>
                   <td className="max-w-xl px-6 py-4">
                     <div
-                      className="prose text-text line-clamp-3 text-sm"
+                      className="prose text-text wrap-break-word text-sm"
                       dangerouslySetInnerHTML={{ __html: comment.bodyHtml }}
                     />
                   </td>

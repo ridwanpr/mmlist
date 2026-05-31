@@ -32,17 +32,26 @@ const ContactMessage = ({ paginatedContacts }: ContactMessageProps) => {
           <tbody className="divide-border text-text divide-y text-sm">
             {paginatedContacts.data.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-text-muted px-6 py-10 text-center">
-                  No comments discovered in the database.
+                <td colSpan={5} className="text-text-muted px-6 py-10 text-center">
+                  No contact messages discovered in the database.
                 </td>
               </tr>
             ) : (
               paginatedContacts.data.map(contact => (
-                <tr key={contact.id} className="hover:bg-surface-alt/50 transition-colors">
+                <tr
+                  key={contact.id}
+                  className="hover:bg-surface-alt/50 items-start transition-colors"
+                >
                   <td className="px-6 py-4 font-mono text-xs">{contact.id}</td>
-                  <th className="px-6 py-3">{contact.name}</th>
-                  <th className="px-6 py-3">{contact.email ?? '-'}</th>
-                  <th className="px-6 py-3 whitespace-nowrap">{contact.content}</th>
+                  <td className="px-6 py-3 whitespace-nowrap">{contact.name}</td>
+                  <td className="px-6 py-3 whitespace-nowrap">{contact.email ?? '-'}</td>
+
+                  <td className="max-w-xl px-6 py-3">
+                    <div className="text-text leading-relaxed wrap-break-word whitespace-normal">
+                      {contact.content}
+                    </div>
+                  </td>
+
                   <td className="text-text-muted px-6 py-4 whitespace-nowrap">
                     <TimeAgo dateString={contact.createdAt} />
                   </td>
