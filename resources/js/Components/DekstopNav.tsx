@@ -6,7 +6,7 @@ import { login } from '../actions/App/Http/Controllers/AuthController';
 import { register } from '../actions/App/Http/Controllers/AuthController';
 import { index as dashIndex } from '../actions/App/Http/Controllers/UserDashboardController';
 import { index as adminDashIndex } from '../actions/App/Http/Controllers/Backend/DashboardController';
-import { index as discussionindex } from '../actions/App/Http/Controllers/DiscussionListController';
+import { index as communityIndex } from '../actions/App/Http/Controllers/CommunityController';
 
 const DesktopNav = () => {
   const { auth } = usePage().props;
@@ -14,8 +14,8 @@ const DesktopNav = () => {
 
   const isHomeActive = component === 'Home/Index';
   const isBrowseActive = component.startsWith('Browse/') || component.startsWith('Anime/');
-  const isDiscussionActive =
-    component.startsWith('DiscussionList/') || component.startsWith('DiscussionList/');
+  const isCommunityActive =
+    component.startsWith('Community/') || component.startsWith('Community/');
 
   return (
     <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
@@ -62,15 +62,15 @@ const DesktopNav = () => {
             </li>
             <li className="relative flex h-full items-center">
               <Link
-                href={discussionindex.url()}
+                href={communityIndex.url()}
                 prefetch
                 className={`text-sm font-medium transition-colors duration-200 ${
-                  isDiscussionActive ? 'text-primary' : 'text-text-muted hover:text-text'
+                  isCommunityActive ? 'text-primary' : 'text-text-muted hover:text-text'
                 }`}
               >
-                Discussion
+                Community
               </Link>
-              {isDiscussionActive && (
+              {isCommunityActive && (
                 <span className="bg-primary absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
               )}
             </li>

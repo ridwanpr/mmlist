@@ -4,7 +4,7 @@ import AnimeController from './AnimeController'
 import ImageProxyController from './ImageProxyController'
 import CommentController from './CommentController'
 import TriggerCommentController from './TriggerCommentController'
-import DiscussionListController from './DiscussionListController'
+import CommunityController from './CommunityController'
 import LegalController from './LegalController'
 import AuthController from './AuthController'
 import Backend from './Backend'
@@ -21,7 +21,7 @@ AnimeController: Object.assign(AnimeController, AnimeController),
 ImageProxyController: Object.assign(ImageProxyController, ImageProxyController),
 CommentController: Object.assign(CommentController, CommentController),
 TriggerCommentController: Object.assign(TriggerCommentController, TriggerCommentController),
-DiscussionListController: Object.assign(DiscussionListController, DiscussionListController),
+CommunityController: Object.assign(CommunityController, CommunityController),
 LegalController: Object.assign(LegalController, LegalController),
 AuthController: Object.assign(AuthController, AuthController),
 Backend: Object.assign(Backend, Backend),
