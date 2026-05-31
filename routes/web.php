@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\ManageUserController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentHistoryController;
+use App\Http\Controllers\DiscussionListController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\LegalController;
@@ -28,6 +29,8 @@ Route::get('/asset/image/{hash}', [ImageProxyController::class, 'show'])->name('
 Route::get('anime/discussion/{animeSlug}', [CommentController::class, 'getAnimeComment'])->name('comment.anime.index');
 Route::get('anime/discussion/{animeslug}/{triggerContentSlug}', [TriggerCommentController::class, 'getTriggerComment'])
     ->name('comment.trigger.index');
+
+Route::get('discussion', [DiscussionListController::class, 'index'])->name('discussion-list.index');
 
 Route::get('privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy.index');
 Route::get('terms', [LegalController::class, 'terms'])->name('terms.index');

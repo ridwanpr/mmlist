@@ -1,19 +1,21 @@
-import { Link, usePage } from "@inertiajs/react";
-import ThemeToggle from "./UI/ThemeToggle";
-import { index as homeIndex } from "../actions/App/Http/Controllers/HomeController";
-import { index as browseIndex } from "../actions/App/Http/Controllers/BrowseController";
-import { login } from "../actions/App/Http/Controllers/AuthController";
-import { register } from "../actions/App/Http/Controllers/AuthController";
-import { index as dashIndex } from "../actions/App/Http/Controllers/UserDashboardController";
-import { index as adminDashIndex } from "../actions/App/Http/Controllers/Backend/DashboardController";
+import { Link, usePage } from '@inertiajs/react';
+import ThemeToggle from './UI/ThemeToggle';
+import { index as homeIndex } from '../actions/App/Http/Controllers/HomeController';
+import { index as browseIndex } from '../actions/App/Http/Controllers/BrowseController';
+import { login } from '../actions/App/Http/Controllers/AuthController';
+import { register } from '../actions/App/Http/Controllers/AuthController';
+import { index as dashIndex } from '../actions/App/Http/Controllers/UserDashboardController';
+import { index as adminDashIndex } from '../actions/App/Http/Controllers/Backend/DashboardController';
+import { index as discussionindex } from '../actions/App/Http/Controllers/DiscussionListController';
 
 const DesktopNav = () => {
   const { auth } = usePage().props;
   const { component } = usePage();
 
-  const isHomeActive = component === "Home/Index";
-  const isBrowseActive =
-    component.startsWith("Browse/") || component.startsWith("Anime/");
+  const isHomeActive = component === 'Home/Index';
+  const isBrowseActive = component.startsWith('Browse/') || component.startsWith('Anime/');
+  const isDiscussionActive =
+    component.startsWith('DiscussionList/') || component.startsWith('DiscussionList/');
 
   return (
     <header className="bg-surface border-border sticky top-0 z-50 hidden w-full border-b transition-colors duration-200 lg:block">
@@ -21,7 +23,7 @@ const DesktopNav = () => {
         {/* Logo */}
         <Link
           href={homeIndex.url()}
-          prefetch={"click"}
+          prefetch={'click'}
           className="text-primary font-serif text-2xl font-bold transition-opacity hover:opacity-90"
         >
           Mamorulist
@@ -33,11 +35,9 @@ const DesktopNav = () => {
             <li className="relative flex h-full items-center">
               <Link
                 href={homeIndex.url()}
-                prefetch={"click"}
+                prefetch={'click'}
                 className={`text-sm font-medium transition-colors duration-200 ${
-                  isHomeActive
-                    ? "text-primary"
-                    : "text-text-muted hover:text-text"
+                  isHomeActive ? 'text-primary' : 'text-text-muted hover:text-text'
                 }`}
               >
                 Home
@@ -51,14 +51,26 @@ const DesktopNav = () => {
                 href={browseIndex.url()}
                 prefetch
                 className={`text-sm font-medium transition-colors duration-200 ${
-                  isBrowseActive
-                    ? "text-primary"
-                    : "text-text-muted hover:text-text"
+                  isBrowseActive ? 'text-primary' : 'text-text-muted hover:text-text'
                 }`}
               >
                 Browse Anime
               </Link>
               {isBrowseActive && (
+                <span className="bg-primary absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
+              )}
+            </li>
+            <li className="relative flex h-full items-center">
+              <Link
+                href={discussionindex.url()}
+                prefetch
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  isDiscussionActive ? 'text-primary' : 'text-text-muted hover:text-text'
+                }`}
+              >
+                Discussion
+              </Link>
+              {isDiscussionActive && (
                 <span className="bg-primary absolute bottom-0 left-0 h-0.5 w-full rounded-full" />
               )}
             </li>
@@ -87,11 +99,7 @@ const DesktopNav = () => {
               </>
             ) : (
               <Link
-                href={
-                  auth.user.role_id === "user"
-                    ? dashIndex.url()
-                    : adminDashIndex.url()
-                }
+                href={auth.user.role_id === 'user' ? dashIndex.url() : adminDashIndex.url()}
                 prefetch
                 className="bg-primary text-surface hover:bg-primary-dark rounded-md px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200"
               >
