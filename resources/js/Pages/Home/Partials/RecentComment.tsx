@@ -86,7 +86,7 @@ const RecentComment = ({ latestComments }: RecentCommentProps) => {
                     {comment.parent && (
                       <QuoteBlock
                         authorName={comment.parent.user?.name || ''}
-                        body={comment.parent.bodyHtml}
+                        body={comment.parent.bodyHtml.trim()}
                       />
                     )}
 
@@ -99,7 +99,7 @@ const RecentComment = ({ latestComments }: RecentCommentProps) => {
                     />
 
                     {/* View Thread Footer Action */}
-                    <div className="mt-2 pt-2">
+                    <div className="mt-1 pt-1">
                       <Link
                         href={href}
                         className="text-text-muted hover:text-primary inline-flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase transition-colors md:text-xs"

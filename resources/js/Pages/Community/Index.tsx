@@ -111,7 +111,7 @@ const DiscussionList = ({ paginatedComments }: DiscussionListProps) => {
                         }}
                       />
 
-                      <div className="mt-2 pt-2">
+                      <div className="mt-1 pt-1">
                         <Link
                           href={href}
                           className="text-text-muted hover:text-primary inline-flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase transition-colors md:text-xs"
