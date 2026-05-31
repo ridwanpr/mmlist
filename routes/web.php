@@ -4,6 +4,7 @@ use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
+use App\Http\Controllers\Backend\ManageCommentController;
 use App\Http\Controllers\Backend\ManageUserController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CommentController;
@@ -61,6 +62,9 @@ Route::prefix('admin')
         Route::get('user/{userId}', [ManageUserController::class, 'edit'])->name('manage-user.edit');
         Route::put('user/{userId}', [ManageUserController::class, 'update'])->name('manage-user.update');
         Route::post('user/{userId}', [ManageUserController::class, 'triggerReset'])->name('manage-user.reset');
+
+        Route::get('comment', [ManageCommentController::class, 'index'])->name('manage-comment.index');
+        Route::delete('comment/{id}', [ManageCommentController::class, 'destroy'])->name('manage-comment.delete');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {

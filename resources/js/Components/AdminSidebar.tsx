@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
 import {
   LuBook,
   LuBookA,
@@ -11,10 +11,11 @@ import {
   LuTag,
   LuUsers,
   LuVote,
-} from "react-icons/lu";
-import { index as userIndex } from "../actions/App/Http/Controllers/Backend/ManageUserController";
+} from 'react-icons/lu';
+import { index as userIndex } from '../actions/App/Http/Controllers/Backend/ManageUserController';
+import { index as commentIndex } from '../actions/App/Http/Controllers/Backend/ManageCommentController';
 
-import SidebarLink from "./UI/SidebarLink";
+import SidebarLink from './UI/SidebarLink';
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ interface AdminSidebarProps {
 const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
   return (
     <aside
-      className={`bg-surface border-border fixed inset-y-0 left-0 z-50 w-67.5 shrink-0 overflow-y-auto border-r p-4 transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+      className={`bg-surface border-border fixed inset-y-0 left-0 z-50 w-67.5 shrink-0 overflow-y-auto border-r p-4 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
     >
       <div className="flex flex-col gap-4">
         <Link
@@ -66,11 +67,7 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
             <LuVote size={18} /> Votes
           </SidebarLink>
 
-          <SidebarLink href="#" routeName="reviews.index">
-            <LuMessageSquareDiff size={18} /> Reviews
-          </SidebarLink>
-
-          <SidebarLink href="#" routeName="comments.index">
+          <SidebarLink href={commentIndex.url()} routeName="manage-comment.index">
             <LuMessageCircle size={18} /> Comments
           </SidebarLink>
 
