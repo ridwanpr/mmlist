@@ -15,7 +15,10 @@ class GenerateGeminiAdvisory implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct() {}
+    public function __construct()
+    {
+        $this->queue = 'gemini';
+    }
 
     public function handle(GeminiService $geminiService): void
     {

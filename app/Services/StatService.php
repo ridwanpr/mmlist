@@ -9,6 +9,7 @@ use App\DTOs\WatchlistStatData;
 use App\Models\AnimeTrigger;
 use App\Models\Watchlist;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\DB;
 
 class StatService
 {
@@ -112,5 +113,30 @@ class StatService
         }
 
         return TriggerVoteActivityData::fromArray($formattedDays);
+    }
+
+    /**
+     * Retrieve the top 6 most frequent genres in a user's watchlist.
+     *
+     * @param int $userId
+     * @param int $limit
+     * @return array
+     */
+    public function getTopGenresStat(int $userId, int $limit = 6): array
+    {
+        return DB::table('anime_genres')
+            ->join('watchlists', 'anime_genres.anime_id', '=', 'watchlists.anime_id')
+            ->join('genres', 'anime_genres.genre_id', '=', 'genres.id')
+            ->where('watchlists.user_id', $userId)
+            ->selectRaw('genres.name, COUNT(*) as total')
+            ->groupBy('genres.id', 'genres.name')
+            ->orderByDesc('total')
+            ->limit($limit)
+            ->get()
+            ->map(fn($item) => [
+                'name' => $item->name,
+                'count' => (int) $item->total,
+            ])
+            ->toArray();
     }
 }

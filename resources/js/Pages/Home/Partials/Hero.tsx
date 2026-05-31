@@ -1,16 +1,16 @@
-import { Link, router } from "@inertiajs/react";
-import { FiSearch } from "react-icons/fi";
-import { index as browseIndex } from "../../../actions/App/Http/Controllers/BrowseController";
-import { show as showAnime } from "../../../actions/App/Http/Controllers/AnimeController";
-import type React from "react";
-import { useState } from "react";
+import { Link, router } from '@inertiajs/react';
+import { FiSearch } from 'react-icons/fi';
+import { index as browseIndex } from '../../../actions/App/Http/Controllers/BrowseController';
+import { show as showAnime } from '../../../actions/App/Http/Controllers/AnimeController';
+import type React from 'react';
+import { useState } from 'react';
 
 type HeroProps = {
   staffPick: App.DTOs.AnimeData[];
 };
 
 const Hero = ({ staffPick }: HeroProps) => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const handleSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,8 +35,7 @@ const Hero = ({ staffPick }: HeroProps) => {
             </h1>
 
             <p className="text-text mt-3 text-sm leading-7 sm:text-[15px]">
-              Check crowdsourced content warnings before watching and track your
-              personal library.
+              Check crowdsourced content warnings before watching and track your personal library.
             </p>
           </div>
 
@@ -48,8 +47,8 @@ const Hero = ({ staffPick }: HeroProps) => {
                 <input
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search anime title..."
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search anime... e.g., Your Name / Kimi no Na wa / 君の名は"
                   className="text-text placeholder:text-text-muted/60 h-full w-full bg-transparent pr-28 pl-12 text-[15px] outline-none"
                 />
 
@@ -69,11 +68,11 @@ const Hero = ({ staffPick }: HeroProps) => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {staffPick.map((item) => (
+                  {staffPick.map(item => (
                     <Link
                       key={item.slug}
                       href={showAnime.url(item.slug)}
-                      prefetch={["click", "hover"]}
+                      prefetch={['click', 'hover']}
                       className="border-border bg-surface-alt/40 text-text hover:border-primary/20 hover:bg-primary-soft/30 hover:text-primary-dark rounded-lg border px-2.5 py-1 text-xs font-medium transition"
                     >
                       {item.title_english || item.title}

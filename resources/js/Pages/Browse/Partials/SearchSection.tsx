@@ -206,7 +206,7 @@ const SearchSection = ({
                 onChange={e => setSearchQuery(e.target.value)}
                 type="text"
                 className="border-border bg-surface-alt text-text focus:border-primary placeholder:text-text-muted/50 w-full rounded-xl border-2 py-2.5 pr-4 pl-10 text-sm outline-hidden transition-colors"
-                placeholder="Search anime title..."
+                placeholder="Search anime... e.g., Your Name / Kimi no Na wa / 君の名は"
               />
             </div>
 
@@ -403,7 +403,7 @@ const SearchSection = ({
                       <span>Trigger Content Flags</span>
                     </label>
                     <span className="text-text-muted text-[11px]">
-                      AI flags are used while community data grows and may be inaccurate.
+                      AI flags are used until community data grows. Accuracy may vary.
                     </span>
                   </div>
 

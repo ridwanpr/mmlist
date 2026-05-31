@@ -219,7 +219,7 @@ const EditModal = ({
                     Note
                   </label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={data.note ?? ""}
                     id="note"
                     onChange={(e) => setData("note", e.target.value)}
