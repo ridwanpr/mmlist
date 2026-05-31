@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { LuCog, LuHouse, LuCompass, LuUser, LuMessageCircle } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 import { index, settingIndex } from '../actions/App/Http/Controllers/UserDashboardController';
+import { index as communityIndex } from '../actions/App/Http/Controllers/CommunityController';
 
 interface NavItemProps {
   href: string;
@@ -70,25 +71,19 @@ const MobileNav = () => {
           />
           <NavItem
             href={routes['browse.index']}
-            active={
-              component.startsWith('Browse/') ||
-              component.startsWith('Anime/') ||
-              component.startsWith('AnimeComment/') ||
-              component.startsWith('TriggerComment/')
-            }
+            active={component.startsWith('Browse/') || component.startsWith('Anime/')}
             icon={LuCompass}
             label="Browse"
           />
           <NavItem
-            href={routes['browse.index']}
+            href={communityIndex.url()}
             active={
-              component.startsWith('Browse/') ||
-              component.startsWith('Anime/') ||
+              component.startsWith('Community/') ||
               component.startsWith('AnimeComment/') ||
               component.startsWith('TriggerComment/')
             }
             icon={LuMessageCircle}
-            label="Discussion"
+            label="Community"
           />
           <NavItem
             href={index.url()}

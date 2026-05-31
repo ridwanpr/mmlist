@@ -71,7 +71,7 @@ class CommentService
 
     public function getLatestCommentPaginate(int $paginateLimit = 20)
     {
-        $comments = Comment::with(['user', 'commentable', 'anime', 'parent'])
+        $comments = Comment::with(['user', 'commentable', 'anime', 'parent', 'parent.user'])
             ->orderBy('created_at', 'desc')
             ->paginate($paginateLimit)
             ->onEachSide(1)

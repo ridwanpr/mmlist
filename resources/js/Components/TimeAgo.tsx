@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const formatRelativeTime = (dateString: string): string => {
-  if (!dateString) return "";
+  if (!dateString) return '';
 
   // Convert space to 'T' for clean ISO format parsing
-  let formattedString = dateString.replace(" ", "T");
+  let formattedString = dateString.replace(' ', 'T');
 
   // Only skip appending 'Z' if it ends with 'Z' or a valid timezone offset (e.g., +07:00 or -05:00)
   const hasTimezoneOffset = /[+-]\d{2}:\d{2}$/.test(formattedString);
 
-  if (!formattedString.endsWith("Z") && !hasTimezoneOffset) {
-    formattedString += "Z";
+  if (!formattedString.endsWith('Z') && !hasTimezoneOffset) {
+    formattedString += 'Z';
   }
 
   const date = new Date(formattedString);
@@ -18,18 +18,18 @@ const formatRelativeTime = (dateString: string): string => {
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (Number.isNaN(diffInSeconds) || diffInSeconds < 0) {
-    return "just now";
+    return 'just now';
   }
 
-  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
 
   const intervals = [
-    { unit: "year" as const, seconds: 31536000 },
-    { unit: "month" as const, seconds: 2592000 },
-    { unit: "week" as const, seconds: 604800 },
-    { unit: "day" as const, seconds: 86400 },
-    { unit: "hour" as const, seconds: 3600 },
-    { unit: "minute" as const, seconds: 60 },
+    { unit: 'year' as const, seconds: 31536000 },
+    { unit: 'month' as const, seconds: 2592000 },
+    { unit: 'week' as const, seconds: 604800 },
+    { unit: 'day' as const, seconds: 86400 },
+    { unit: 'hour' as const, seconds: 3600 },
+    { unit: 'minute' as const, seconds: 60 },
   ];
 
   for (const interval of intervals) {
@@ -39,7 +39,7 @@ const formatRelativeTime = (dateString: string): string => {
     }
   }
 
-  return "just now";
+  return 'just now';
 };
 
 type TimeAgoProps = {
@@ -47,19 +47,25 @@ type TimeAgoProps = {
 };
 
 export const TimeAgo = ({ dateString }: TimeAgoProps) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [, setTick] = useState(0);
 
   useEffect(() => {
+    // Signals that the component is running on the client browser
+    setIsMounted(true);
+
     const interval = setInterval(() => {
-      setTick((t) => t + 1);
+      setTick(t => t + 1);
     }, 60000);
 
     return () => clearInterval(interval);
   }, [dateString]);
 
-  const displayTime = formatRelativeTime(dateString);
+  // Forces server and initial client render to match with a placeholder,
+  // then safely renders the relative time right after mounting.
+  const displayTime = isMounted ? formatRelativeTime(dateString) : '...';
 
-  return <>{displayTime || "..."}</>;
+  return <>{displayTime}</>;
 };
 
 export default TimeAgo;

@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import AnimeList from "./Partials/AnimeList";
-import Hero from "./Partials/Hero";
-import FrontLayout from "../../Layouts/FrontLayout";
-import AppHead from "../../Components/AppHead";
-import RecentVotes from "./Partials/RecentVotes";
-import RecentComment from "./Partials/RecentComment";
+import AnimeList from './Partials/AnimeList';
+import Hero from './Partials/Hero';
+import FrontLayout from '../../Layouts/FrontLayout';
+import AppHead from '../../Components/AppHead';
+import RecentVotes from './Partials/RecentVotes';
+import RecentComment from './Partials/RecentComment';
 
 interface HomeProps {
   nowAiring: App.DTOs.AnimeData[];
@@ -15,13 +15,7 @@ interface HomeProps {
   latestVotes: App.DTOs.AnimeTriggerData[];
 }
 
-const Home = ({
-  nowAiring,
-  topAnime,
-  staffPick,
-  latestComments,
-  latestVotes,
-}: HomeProps) => {
+const Home = ({ nowAiring, topAnime, staffPick, latestComments, latestVotes }: HomeProps) => {
   return (
     <>
       <AppHead
@@ -30,8 +24,8 @@ const Home = ({
       />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
-      <RecentVotes latestVotes={latestVotes} />
       <RecentComment latestComments={latestComments} />
+      <RecentVotes latestVotes={latestVotes} />
     </>
   );
 };
