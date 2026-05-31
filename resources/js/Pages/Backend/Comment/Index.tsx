@@ -18,7 +18,7 @@ const Comment = ({ paginatedComments }: CommentProps) => {
   };
 
   return (
-    <div className="bg-background min-h-screen p-6">
+    <div className="bg-background min-h-screen">
       <div className="mb-6 flex items-end justify-between">
         <div>
           <h1 className="text-text font-serif text-2xl font-semibold">Manage Comments</h1>

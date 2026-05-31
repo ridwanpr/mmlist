@@ -7,13 +7,14 @@ import {
   LuHouse,
   LuMegaphone,
   LuMessageCircle,
-  LuMessageSquareDiff,
+  LuMessageSquareWarning,
   LuTag,
   LuUsers,
   LuVote,
 } from 'react-icons/lu';
 import { index as userIndex } from '../actions/App/Http/Controllers/Backend/ManageUserController';
 import { index as commentIndex } from '../actions/App/Http/Controllers/Backend/ManageCommentController';
+import { index as contactIndex } from '../actions/App/Http/Controllers/Backend/ContactMessageController';
 
 import SidebarLink from './UI/SidebarLink';
 
@@ -72,6 +73,10 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
           </SidebarLink>
 
           <p className="my-2 px-3 text-sm">System</p>
+
+          <SidebarLink href={contactIndex.url()} routeName="contact-message.index">
+            <LuMessageSquareWarning size={18} /> Contact Message
+          </SidebarLink>
 
           <SidebarLink href="#" routeName="announcements.index">
             <LuMegaphone size={18} /> Announcement

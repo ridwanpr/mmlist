@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\ContactMessageController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
 use App\Http\Controllers\Backend\ManageCommentController;
@@ -65,6 +66,8 @@ Route::prefix('admin')
 
         Route::get('comment', [ManageCommentController::class, 'index'])->name('manage-comment.index');
         Route::delete('comment/{id}', [ManageCommentController::class, 'destroy'])->name('manage-comment.delete');
+
+        Route::get('contact-message', [ContactMessageController::class, 'index'])->name('contact-message.index');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {
