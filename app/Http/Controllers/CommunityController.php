@@ -18,7 +18,7 @@ class CommunityController extends Controller
 
     public function index()
     {
-        $comments = $this->commentService->getLatestCommentPaginate(15);
+        $comments = $this->commentService->getLatestCommentPaginate(20);
 
         $paginatedComments = PaginatedCommentData::fromPaginator(
             $comments->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
