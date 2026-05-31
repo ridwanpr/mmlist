@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { about, privacyPolicy, terms } from '../actions/App/Http/Controllers/LegalController';
+import { index as contactIndex } from '../actions/App/Http/Controllers/ContactController';
 
 const Footer = () => {
   return (
@@ -32,7 +33,8 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href={contactIndex.url()}
+                  prefetch={'click'}
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   Contact

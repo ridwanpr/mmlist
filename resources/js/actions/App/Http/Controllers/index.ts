@@ -5,6 +5,7 @@ import ImageProxyController from './ImageProxyController'
 import CommentController from './CommentController'
 import TriggerCommentController from './TriggerCommentController'
 import CommunityController from './CommunityController'
+import ContactController from './ContactController'
 import LegalController from './LegalController'
 import AuthController from './AuthController'
 import Backend from './Backend'
@@ -22,6 +23,7 @@ ImageProxyController: Object.assign(ImageProxyController, ImageProxyController),
 CommentController: Object.assign(CommentController, CommentController),
 TriggerCommentController: Object.assign(TriggerCommentController, TriggerCommentController),
 CommunityController: Object.assign(CommunityController, CommunityController),
+ContactController: Object.assign(ContactController, ContactController),
 LegalController: Object.assign(LegalController, LegalController),
 AuthController: Object.assign(AuthController, AuthController),
 Backend: Object.assign(Backend, Backend),

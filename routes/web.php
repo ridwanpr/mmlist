@@ -9,6 +9,7 @@ use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommentHistoryController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageProxyController;
 use App\Http\Controllers\LegalController;
@@ -31,6 +32,9 @@ Route::get('anime/discussion/{animeslug}/{triggerContentSlug}', [TriggerCommentC
     ->name('comment.trigger.index');
 
 Route::get('community', [CommunityController::class, 'index'])->name('community.index');
+
+Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy.index');
 Route::get('terms', [LegalController::class, 'terms'])->name('terms.index');
