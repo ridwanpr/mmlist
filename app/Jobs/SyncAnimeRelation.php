@@ -29,7 +29,7 @@ class SyncAnimeRelation implements ShouldQueue
             ->orderByDesc('year')
             ->orderByDesc('score')
             ->orderByDesc('id')
-            ->limit(200)
+            ->limit(50)
             ->get(['id', 'mal_id']);
 
         if ($animes->isEmpty()) {

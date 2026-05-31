@@ -1,5 +1,3 @@
-import React from 'react';
-
 type TopGenresStatProps = {
   topGenres: Array<{ name: string; count: number }>;
 };

@@ -75,7 +75,7 @@ const About = () => {
             <h2 className="text-text font-serif text-2xl font-semibold">Get in Touch</h2>
             <p>
               If you notice database inaccuracies, want to suggest new warning categories, or have
-              general feedback about the application layout, please visit our contact page to drop a
+              general feedback, please visit our contact page to drop a
               line.
             </p>
           </section>
