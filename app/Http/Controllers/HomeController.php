@@ -25,7 +25,7 @@ class HomeController extends Controller
         $nowAiring = $this->animeService->getNowAiringFromDatabase();
         $topAnime = $this->animeService->fetchTopAnime();
         $staffPick = $this->animeService->getStaffPickAnime();
-        $latestCommentsData = $this->commentService->getLatestCommentLimit(8);
+        $latestCommentsData = $this->commentService->getLatestCommentLimit(6);
         $latestVotesData = $this->voteService->getLatestVotesLimit(10);
 
         $latestComments = $latestCommentsData->map(fn (Comment $item) => CommentData::fromModel($item));

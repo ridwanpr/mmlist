@@ -38,13 +38,13 @@ const TriggerCommentItem = ({
     <>
       <div
         key={comment.id}
-        className="border-border bg-surface mt-3 divide-y rounded border"
+        className="border-border bg-surface mt-3 divide-y rounded-xl border"
       >
         <div className="flex gap-4 px-4 py-3">
           <div className="flex shrink-0 flex-col items-center pt-0.5">
             <button
               onClick={() => handleUpvote(comment.id)}
-              className={`-m-2 flex flex-col items-center gap-1 rounded-md p-2 transition-colors hover:cursor-pointer ${
+              className={`-m-2 flex flex-col items-center gap-1 rounded-xl p-2 transition-colors hover:cursor-pointer ${
                 comment.isUpvoted
                   ? "text-accent-red hover:text-accent-red/80"
                   : "text-text-muted hover:text-accent-red"

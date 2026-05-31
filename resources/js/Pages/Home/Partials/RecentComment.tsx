@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import TimeAgo from '../../../Components/TimeAgo';
 import { getAnimeComment } from '../../../actions/App/Http/Controllers/CommentController';
 import { getTriggerComment } from '../../../actions/App/Http/Controllers/TriggerCommentController';
+import QuoteBlock from '../../../Components/QuoteBlock';
 
 type RecentCommentProps = {
   latestComments: App.DTOs.CommentData[];
@@ -80,6 +81,14 @@ const RecentComment = ({ latestComments }: RecentCommentProps) => {
                         </>
                       )}
                     </nav>
+
+                    {/* Parent Comment Quote Block */}
+                    {comment.parent && (
+                      <QuoteBlock
+                        authorName={comment.parent.user?.name || ''}
+                        body={comment.parent.bodyHtml}
+                      />
+                    )}
 
                     {/* Comment Body */}
                     <div

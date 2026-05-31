@@ -63,7 +63,7 @@ class CommentService
 
     public function getLatestCommentLimit(int $limit = 10)
     {
-        $comments = Comment::with(['user', 'commentable', 'anime'])
+        $comments = Comment::with(['user', 'commentable', 'anime', 'parent', 'parent.user'])
             ->limit($limit)->orderBy('created_at', 'desc')->get();
 
         return $comments;

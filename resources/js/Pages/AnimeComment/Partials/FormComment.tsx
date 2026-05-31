@@ -65,7 +65,7 @@ const FormComment = ({ isGuest, anime }: FormCommentProps) => {
   };
 
   return (
-    <div className="border-border bg-surface my-3 rounded border p-3 shadow-xs">
+    <div className="border-border bg-surface my-3 rounded-xl border p-3 shadow-xs">
       {isGuest ? (
         <div className="relative">
           <textarea

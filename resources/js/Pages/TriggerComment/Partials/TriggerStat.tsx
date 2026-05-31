@@ -89,7 +89,7 @@ const TriggerStat = ({ triggerStatData }: TriggerStatProps) => {
   return (
     <section
       aria-label="Trigger report summary"
-      className="border-border mb-8 border-b"
+      className="border-border mb-4 border-b"
     >
       <dl className="grid grid-cols-2 gap-x-6 gap-y-6 py-5 sm:flex sm:flex-nowrap sm:gap-0">
         {stats.map((stat) => (

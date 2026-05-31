@@ -6,6 +6,7 @@ import TimeAgo from '../../Components/TimeAgo';
 import { getAnimeComment } from '../../actions/App/Http/Controllers/CommentController';
 import { getTriggerComment } from '../../actions/App/Http/Controllers/TriggerCommentController';
 import Pagination from '../../Components/UI/Pagination';
+import QuoteBlock from '../../Components/QuoteBlock';
 
 type DiscussionListProps = {
   paginatedComments: App.DTOs.PaginatedCommentData;
@@ -94,18 +95,15 @@ const DiscussionList = ({ paginatedComments }: DiscussionListProps) => {
                         )}
                       </nav>
 
+                      {/* Parent Comment Quote Block */}
                       {comment.parent && (
-                        <div className="text-text-muted border-border/60 mb-2 border-l-2 pl-2 text-xs">
-                          <span className="text-text font-semibold">
-                            {comment.parent.user?.name || ''}
-                          </span>
-                          <div
-                            className="mt-0.5 line-clamp-1 italic opacity-80"
-                            dangerouslySetInnerHTML={{ __html: comment.parent.bodyHtml }}
-                          />
-                        </div>
+                        <QuoteBlock
+                          authorName={comment.parent.user?.name || ''}
+                          body={comment.parent.bodyHtml}
+                        />
                       )}
 
+                      {/* Comment Body */}
                       <div
                         className="prose prose-sm text-text max-w-none font-sans text-xs leading-snug whitespace-pre-wrap md:text-sm"
                         dangerouslySetInnerHTML={{

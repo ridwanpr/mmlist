@@ -72,7 +72,7 @@ const TriggerFormComment = ({
   };
 
   return (
-    <div className="border-border bg-surface my-3 rounded border p-3 shadow-xs">
+    <div className="border-border bg-surface mb-3 rounded-xl border p-3 shadow-xs">
       {isGuest ? (
         <div className="relative">
           <textarea
