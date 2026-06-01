@@ -309,16 +309,8 @@ const MainInfo = ({
             </div>
 
             {/* Tab Content Display Area */}
-            <div className="min-h-40">
-              {!anime?.synopsis ? (
-                <div className="animate-pulse space-y-2">
-                  <div className="bg-surface-alt h-4 w-full rounded-sm"></div>
-                  <div className="bg-surface-alt h-4 w-11/12 rounded-sm"></div>
-                  <div className="bg-surface-alt h-4 w-full rounded-sm"></div>
-                  <div className="bg-surface-alt h-4 w-4/5 rounded-sm"></div>
-                </div>
-              ) : /* Once data arrives, render the actual active tab */
-              activeTab === 'synopsis' ? (
+            <div>
+              {activeTab === 'synopsis' ? (
                 <p className="text-text/90 font-sans text-sm leading-relaxed">{anime.synopsis}</p>
               ) : (
                 <RelatedAnimeList animeRelations={animeRelation} />
