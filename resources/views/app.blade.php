@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html theme="dark">
+<html theme="dark" lang="en">
 
 <head>
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
