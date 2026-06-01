@@ -40,6 +40,15 @@ const Footer = () => {
                   Contact
                 </Link>
               </li>
+              <li>
+                <a
+                  href="https://status.mamorulist.com/"
+                  target="__blank"
+                  className="text-primary-dark hover:text-primary text-sm transition-colors"
+                >
+                  Status
+                </a>
+              </li>
             </ul>
             <ul className="border-border flex gap-4 lg:border-l-2 lg:pl-8">
               <li>
