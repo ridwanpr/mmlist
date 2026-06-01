@@ -322,9 +322,6 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
           <div className="bg-surface border-border mt-6 flex items-center justify-between rounded-lg border p-4 lg:hidden">
             <div className="flex flex-col gap-0.5">
               <h2 className="text-text font-serif text-sm font-medium">Account Session</h2>
-              <p className="text-text-muted text-xs">
-                Sign out of your active session on this device.
-              </p>
             </div>
             <Form action="/logout" method="post">
               <button
