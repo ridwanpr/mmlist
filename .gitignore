@@ -27,4 +27,3 @@ Homestead.yaml
 Thumbs.db
 .phpstorm.meta.php
 bootstrap/ssr/
-bootstrap/cache/
