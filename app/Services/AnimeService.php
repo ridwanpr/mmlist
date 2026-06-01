@@ -144,15 +144,20 @@ class AnimeService
             })->select('id'));
         }
 
-        $query->when(! empty($sort['sort']), function ($q) use ($sort) {
-            $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-            $q->orderBy('animes.' . $sort['sort'], $direction);
-        }, function ($q) {
-            $q->orderBy('animes.is_tv_priority', 'desc')
-                ->orderBy('animes.year', 'desc')
-                ->orderBy('animes.airing', 'desc')
-                ->orderBy('animes.score', 'desc');
-        });
+        $allowedSortColumns = ['title', 'year', 'score', 'airing', 'is_tv_priority'];
+        $query->when(
+            ! empty($sort['sort']) && in_array($sort['sort'], $allowedSortColumns, true),
+            function ($q) use ($sort) {
+                $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+                $q->orderBy('animes.' . $sort['sort'], $direction);
+            },
+            function ($q) {
+                $q->orderBy('animes.is_tv_priority', 'desc')
+                    ->orderBy('animes.year', 'desc')
+                    ->orderBy('animes.airing', 'desc')
+                    ->orderBy('animes.score', 'desc');
+            }
+        );
 
         $paginator = $query->paginate($paginateLimit)->onEachSide(1)->withQueryString();
 
