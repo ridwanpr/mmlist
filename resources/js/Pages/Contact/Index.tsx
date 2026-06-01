@@ -135,7 +135,7 @@ const Contact = () => {
             </div>
 
             {turnstileEnabled && (
-              <div className="py-2">
+              <div>
                 <Turnstile
                   siteKey={turnstileSiteKey}
                   onVerify={token => setData('cf-turnstile-response', token)}

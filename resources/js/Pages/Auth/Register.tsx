@@ -151,7 +151,7 @@ const Register = () => {
             </div>
 
             {turnstileEnabled && (
-              <div className="py-2">
+              <div>
                 <Turnstile
                   siteKey={turnstileSiteKey}
                   onVerify={token =>
