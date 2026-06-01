@@ -74,10 +74,19 @@ const Watchlist = ({
       const currentParams = Object.fromEntries(
         new URLSearchParams(window.location.search).entries(),
       );
+
+      router.get(
+        watchlistIndex.url(),
+        {
+          ...currentParams,
+          search: searchQuery || undefined,
+        },
+        { preserveState: true, preserveScroll: true },
+      );
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [searchQuery, search]);
 
   useEffect(() => {
     localStorage.setItem('watchlist_view_mode', viewMode);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { SetStateAction } from 'react';
 import type React from 'react';
 import { router } from '@inertiajs/react';
@@ -38,45 +38,64 @@ const getBadgeStyles = (status?: FilterStatus) => {
 const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFilterProps) => {
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
 
-  const [fromWatched, setFromWatched] = useState('');
-  const [toWatched, setToWatched] = useState('');
-  const [fromAiring, setFromAiring] = useState('');
-  const [toAiring, setToAiring] = useState('');
-  const [season, setSeason] = useState('');
-  const [type, setType] = useState('');
-  const [fromScore, setFromScore] = useState('');
-  const [toScore, setToScore] = useState('');
+  const [fromWatched, setFromWatched] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('from_watched') || '';
+  });
+  const [toWatched, setToWatched] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('to_watched') || '';
+  });
+  const [fromAiring, setFromAiring] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('from_airing') || '';
+  });
+  const [toAiring, setToAiring] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('to_airing') || '';
+  });
+  const [season, setSeason] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('season') || '';
+  });
+  const [type, setType] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('type') || '';
+  });
+  const [fromScore, setFromScore] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('from_score') || '';
+  });
+  const [toScore, setToScore] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('to_score') || '';
+  });
 
-  const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>({});
-  const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>({});
-
-  useEffect(() => {
+  const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>(() => {
+    if (typeof window === 'undefined') return {};
     const params = new URLSearchParams(window.location.search);
-
-    setFromWatched(params.get('from_watched') || '');
-    setToWatched(params.get('to_watched') || '');
-    setFromAiring(params.get('from_airing') || '');
-    setToAiring(params.get('to_airing') || '');
-    setSeason(params.get('season') || '');
-    setType(params.get('type') || '');
-    setFromScore(params.get('from_score') || '');
-    setToScore(params.get('to_score') || '');
-
+    const initialGenres: Record<number, FilterStatus> = {};
     const parseArrayParam = (key: string) => {
       const val = params.get(key);
       return val ? val.split(',') : [];
     };
-
-    const initialGenres: Record<number, FilterStatus> = {};
     parseArrayParam('genres_include').forEach(id => (initialGenres[Number(id)] = 'include'));
     parseArrayParam('genres_exclude').forEach(id => (initialGenres[Number(id)] = 'exclude'));
-    setGenreStates(initialGenres);
+    return initialGenres;
+  });
 
+  const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>(() => {
+    if (typeof window === 'undefined') return {};
+    const params = new URLSearchParams(window.location.search);
     const initialThemes: Record<number, FilterStatus> = {};
+    const parseArrayParam = (key: string) => {
+      const val = params.get(key);
+      return val ? val.split(',') : [];
+    };
     parseArrayParam('themes_include').forEach(id => (initialThemes[Number(id)] = 'include'));
     parseArrayParam('themes_exclude').forEach(id => (initialThemes[Number(id)] = 'exclude'));
-    setThemeStates(initialThemes);
-  }, []);
+    return initialThemes;
+  });
 
   const handleToggleFilter = (id: number, field: 'genres' | 'themes') => {
     const setTarget = field === 'genres' ? setGenreStates : setThemeStates;
@@ -94,7 +113,7 @@ const AdvanceFilter = ({ searchQuery, setSearchQuery, masterFilter }: AdvanceFil
     e.preventDefault();
     const currentParams = new URLSearchParams(window.location.search);
 
-    const params: Record<string, any> = {
+    const params: Record<string, string | undefined> = {
       search: searchQuery || undefined,
       status: currentParams.get('status') || undefined,
       sort: currentParams.get('sort') || undefined,
