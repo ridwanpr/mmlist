@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\Turnstile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ class ContactController extends Controller
             'name'    => 'required|string|max:255',
             'email'   => 'nullable|email:dns|max:255',
             'content' => 'required|string|min:10',
+            'cf-turnstile-response' => app()->environment('local') ? ['nullable'] : ['required', new Turnstile],
         ]);
 
         DB::table('contacts')->insert([

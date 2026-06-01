@@ -1,21 +1,31 @@
-import { Link, router, usePage } from "@inertiajs/react";
-import React, { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
+import { Link, router, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { FaGoogle } from 'react-icons/fa';
 
-import InputField from "../../Components/UI/InputField";
-import AuthLayout from "../../Layouts/AuthLayout";
-import AppHead from "../../Components/AppHead";
+import InputField from '../../Components/UI/InputField';
+import AuthLayout from '../../Layouts/AuthLayout';
+import AppHead from '../../Components/AppHead';
+import Turnstile from '../../Components/Turnstile';
+
+interface PageProps {
+  routes: Record<string, string>;
+  errors: Record<string, string>;
+  turnstileSiteKey: string;
+  turnstileEnabled: boolean;
+  [key: string]: unknown;
+}
 
 const Login = () => {
-  const { routes, errors } = usePage().props;
+  const { routes, errors, turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
 
   const [values, setValues] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
+    'cf-turnstile-response': null as string | null,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setValues((values) => ({
+    setValues(values => ({
       ...values,
       [e.target.name]: e.target.value,
     }));
@@ -23,7 +33,7 @@ const Login = () => {
 
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    router.post("/login", values, { preserveState: true });
+    router.post('/login', values, { preserveState: true });
   }
 
   return (
@@ -33,15 +43,13 @@ const Login = () => {
         meta="Log in to Mamorulist. Create your personalized anime watchlist, rate trigger warnings, and contribute to our community database."
       />
       <div className="bg-background flex min-h-screen items-center justify-center">
-        <div className="bg-surface border-border w-full lg:w-87.5 max-w-md rounded-xl border p-5 shadow-sm">
+        <div className="bg-surface border-border w-full max-w-md rounded-xl border p-5 shadow-sm lg:w-87.5">
           <div className="mb-5">
-            <h1 className="text-text font-serif text-2xl font-bold">
-              Welcome back
-            </h1>
+            <h1 className="text-text font-serif text-2xl font-bold">Welcome back</h1>
             <p className="text-text-muted mt-2 text-sm leading-6">
-              Log in to continue to{" "}
+              Log in to continue to{' '}
               <Link
-                href={routes["home.index"]}
+                href={routes['home.index']}
                 className="text-primary hover:text-primary-dark font-serif font-semibold transition-colors"
               >
                 mamorulist
@@ -59,9 +67,7 @@ const Login = () => {
                 handleChange={handleChange}
               />
               {errors.username && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.username}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.username}</span>
               )}
             </div>
 
@@ -74,9 +80,7 @@ const Login = () => {
                 handleChange={handleChange}
               />
               {errors.password && (
-                <span className="mt-1 block text-xs text-red-500">
-                  {errors.password}
-                </span>
+                <span className="mt-1 block text-xs text-red-500">{errors.password}</span>
               )}
               <div className="mt-1 text-right">
                 <Link
@@ -87,6 +91,23 @@ const Login = () => {
                 </Link>
               </div>
             </div>
+
+            {turnstileEnabled && (
+              <div className="py-2">
+                <Turnstile
+                  siteKey={turnstileSiteKey}
+                  onVerify={token =>
+                    setValues(prev => ({ ...prev, 'cf-turnstile-response': token }))
+                  }
+                  onExpire={() => setValues(prev => ({ ...prev, 'cf-turnstile-response': null }))}
+                />
+                {errors['cf-turnstile-response'] && (
+                  <span className="mt-1 block text-xs text-red-500">
+                    {errors['cf-turnstile-response']}
+                  </span>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"
@@ -103,9 +124,9 @@ const Login = () => {
             </button>
 
             <p className="text-text-muted pt-1 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              Don&apos;t have an account?{' '}
               <Link
-                href={routes["auth.register"]}
+                href={routes['auth.register']}
                 className="text-primary hover:text-primary-dark font-semibold transition-colors"
               >
                 Create one

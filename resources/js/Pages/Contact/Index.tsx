@@ -1,21 +1,31 @@
 import type React from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppHead from '../../Components/AppHead';
+import Turnstile from '../../Components/Turnstile';
 
 interface ContactFormData {
   name: string;
   email: string;
   content: string;
+  'cf-turnstile-response': string | null;
+}
+
+interface PageProps {
+  turnstileSiteKey: string;
+  turnstileEnabled: boolean;
+  [key: string]: unknown;
 }
 
 const Contact = () => {
+  const { turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
   const { data, setData, post, processing, errors, reset, wasSuccessful } =
     useForm<ContactFormData>({
       name: '',
       email: '',
       content: '',
+      'cf-turnstile-response': null,
     });
 
   const handleSubmit = (e: React.SubmitEvent) => {
@@ -29,7 +39,7 @@ const Contact = () => {
     <>
       <AppHead title="Contact - Mamorulist" meta="Contact" />
 
-      <div className="mx-auto my-12 w-full lg:w-3xl px-4 lg:px-0">
+      <div className="mx-auto my-12 w-full px-4 lg:w-3xl lg:px-0">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-text font-serif text-xl font-semibold tracking-wide md:text-2xl">
@@ -123,6 +133,21 @@ const Contact = () => {
                 )}
               </div>
             </div>
+
+            {turnstileEnabled && (
+              <div className="py-2">
+                <Turnstile
+                  siteKey={turnstileSiteKey}
+                  onVerify={token => setData('cf-turnstile-response', token)}
+                  onExpire={() => setData('cf-turnstile-response', null)}
+                />
+                {errors['cf-turnstile-response'] && (
+                  <span className="text-accent-red mt-1 block text-xs">
+                    {errors['cf-turnstile-response']}
+                  </span>
+                )}
+              </div>
+            )}
 
             <hr className="border-border my-2" />
 

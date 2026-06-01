@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Turnstile;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,6 +26,7 @@ class LoginRequest extends FormRequest
         return [
             'username' => 'required|max:255',
             'password' => 'required|max:255',
+            'cf-turnstile-response' => app()->environment('local') ? ['nullable'] : ['required', new Turnstile],
         ];
     }
 }

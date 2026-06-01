@@ -5,16 +5,36 @@ import { FaGoogle } from 'react-icons/fa';
 import InputField from '../../Components/UI/InputField';
 import AuthLayout from '../../Layouts/AuthLayout';
 import AppHead from '../../Components/AppHead';
+import Turnstile from '../../Components/Turnstile';
+
+interface RegisterFormState {
+  username: string | null;
+  email: string | null;
+  name: string | null;
+  password: string | null;
+  password_confirmation: string | null;
+  'cf-turnstile-response': string | null;
+  [key: string]: string | null;
+}
+
+interface PageProps {
+  routes: Record<string, string>;
+  errors: Record<string, string>;
+  turnstileSiteKey: string;
+  turnstileEnabled: boolean;
+  [key: string]: unknown;
+}
 
 const Register = () => {
-  const { routes, errors } = usePage().props;
+  const { routes, errors, turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
 
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<RegisterFormState>({
     username: null,
     email: null,
     name: null,
     password: null,
     password_confirmation: null,
+    'cf-turnstile-response': null,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -129,6 +149,23 @@ const Register = () => {
                 </Link>
               </div>
             </div>
+
+            {turnstileEnabled && (
+              <div className="py-2">
+                <Turnstile
+                  siteKey={turnstileSiteKey}
+                  onVerify={token =>
+                    setValues(prev => ({ ...prev, 'cf-turnstile-response': token }))
+                  }
+                  onExpire={() => setValues(prev => ({ ...prev, 'cf-turnstile-response': null }))}
+                />
+                {errors['cf-turnstile-response'] && (
+                  <span className="mt-1 block text-xs text-red-500">
+                    {errors['cf-turnstile-response']}
+                  </span>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"

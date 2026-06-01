@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Turnstile;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,6 +28,7 @@ class RegisterRequest extends FormRequest
             'username' => 'required|min:3|max:255|alpha_num|unique:users,username',
             'email' => 'nullable|email:dns|min:3|max:255|unique:users,email|disposable_email',
             'password' => 'required|confirmed:password_confirmation|min:5|max:255',
+            'cf-turnstile-response' => app()->environment('local') ? ['nullable'] : ['required', new Turnstile],
         ];
     }
 

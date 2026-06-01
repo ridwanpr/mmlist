@@ -29,6 +29,9 @@ class HandleInertiaRequests extends Middleware
                 'user.dash.index' => route('user.dash.index'),
                 'watchlist.store' => route('watchlist.store'),
             ],
+            'config' => [
+                'turnstile_sitekey' => config('services.turnstile.key'),
+            ],
             'currentRoute' => optional($request->route())->getName(),
             'auth' => [
                 'user' => $request->user() ? [
@@ -40,9 +43,9 @@ class HandleInertiaRequests extends Middleware
                     'role_id' => DB::table('user_roles')
                         ->where('user_id', $request->user()->id)
                         ->value('role_id'),
-                    'votes_count' => fn () => app(WatchlistService::class)->getTotalVoteCount($request->user()->id),
+                    'votes_count' => fn() => app(WatchlistService::class)->getTotalVoteCount($request->user()->id),
                     'joined_at' => $request->user()->created_at ? $request->user()->created_at->format('j M Y') : null,
-                    'comments_count' => fn () => app(CommentService::class)->getUserCommentCount($request->user()->id),
+                    'comments_count' => fn() => app(CommentService::class)->getUserCommentCount($request->user()->id),
                 ] : null,
             ],
             'flash' => [
