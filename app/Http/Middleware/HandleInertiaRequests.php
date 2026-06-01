@@ -29,9 +29,8 @@ class HandleInertiaRequests extends Middleware
                 'user.dash.index' => route('user.dash.index'),
                 'watchlist.store' => route('watchlist.store'),
             ],
-            'config' => [
-                'turnstile_sitekey' => config('services.turnstile.key'),
-            ],
+            'turnstileSiteKey' => config('services.turnstile.key'),
+            'turnstileEnabled' => !app()->environment('local'),
             'currentRoute' => optional($request->route())->getName(),
             'auth' => [
                 'user' => $request->user() ? [
