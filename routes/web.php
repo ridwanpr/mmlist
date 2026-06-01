@@ -104,3 +104,7 @@ Route::middleware(['auth', EncryptHistory::class])->group(function () {
         ->middleware(['auth'])
         ->name('watchlist.import');
 });
+
+Route::get('/speed-test', function () {
+    return response()->json(['status' => 'ok']);
+});
