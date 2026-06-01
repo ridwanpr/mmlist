@@ -310,6 +310,7 @@ class AnimeService
 
                 $query = Anime::query()
                     ->where('animes.id', '!=', $anime->id)
+                    ->where('animes.type', 'TV')
                     ->when(! $showNsfw, function ($q) {
                         $q->where('animes.is_not_hentai', 1);
                     });

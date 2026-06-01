@@ -1,5 +1,4 @@
-import { usePage, Link } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { usePage, Link, router } from '@inertiajs/react';
 import AnimeCard from '../../../Components/AnimeCard';
 import Pagination from '../../../Components/UI/Pagination';
 import { settingIndex } from '../../../actions/App/Http/Controllers/UserDashboardController';
@@ -11,41 +10,39 @@ interface AnimeListProps {
   animes: App.DTOs.PaginatedAnimeData;
 }
 
+interface AuthUser {
+  show_nsfw: boolean;
+  [key: string]: unknown;
+}
+
+interface SharedPageProps extends Record<string, unknown> {
+  auth: {
+    user: AuthUser | null;
+  };
+}
+
 const AnimeList = ({ animes }: AnimeListProps) => {
-  const { auth } = usePage().props as any;
+  const { url, props } = usePage<SharedPageProps>();
+  const { auth } = props;
   const user = auth?.user;
   const { proxyImage } = useImageProxy();
 
-  const [isNsfwRestricted, setIsNsfwRestricted] = useState(false);
+  const searchParams = new URLSearchParams(url.split('?')[1] || '');
 
-  // Initialized to a safe default ('list') to ensure server and client match during hydration
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const viewMode = searchParams.get('view') === 'grid' ? 'grid' : 'list';
 
-  // Read the client's preference strictly after the component mounts
-  useEffect(() => {
-    const savedView = localStorage.getItem('browse_view_mode');
-    if (savedView === 'grid') {
-      setViewMode('grid');
-    }
-  }, []);
+  const hasNsfwParam = searchParams.get('rating') === 'Rx - Hentai';
+  const isNsfwRestricted = hasNsfwParam && (!user || user.show_nsfw !== true);
 
-  // Sync state changes back to localStorage
-  useEffect(() => {
-    localStorage.setItem('browse_view_mode', viewMode);
-  }, [viewMode]);
+  const handleChangeView = (mode: 'list' | 'grid') => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('view', mode);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search);
-      const hasNsfwParam = searchParams.get('rating') === 'Rx - Hentai';
-
-      if (hasNsfwParam && (!user || user.show_nsfw !== true)) {
-        setIsNsfwRestricted(true);
-      } else {
-        setIsNsfwRestricted(false);
-      }
-    }
-  }, [user, animes]);
+    router.get(window.location.pathname, Object.fromEntries(params.entries()), {
+      preserveScroll: true,
+      preserveState: true,
+    });
+  };
 
   return (
     <div className="text-text mx-auto max-w-7xl p-4 font-sans">
@@ -91,7 +88,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
 
             <div className="border-border bg-surface flex w-max items-center rounded-lg border p-0.5 shadow-xs">
               <button
-                onClick={() => setViewMode('list')}
+                onClick={() => handleChangeView('list')}
                 title="Default Card View"
                 className={`cursor-pointer rounded-md p-1.5 transition-colors ${
                   viewMode === 'list'
@@ -102,7 +99,7 @@ const AnimeList = ({ animes }: AnimeListProps) => {
                 <LuList size={16} />
               </button>
               <button
-                onClick={() => setViewMode('grid')}
+                onClick={() => handleChangeView('grid')}
                 title="Grid Poster View"
                 className={`cursor-pointer rounded-md p-1.5 transition-colors ${
                   viewMode === 'grid'
