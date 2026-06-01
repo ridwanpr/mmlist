@@ -64,7 +64,7 @@ const TriggerWarning = ({
         </section>
 
         {/* Trigger Content List */}
-        <section className="flex-1">
+        <section className="min-w-0 flex-1">
           <div className="border-border mb-4 flex items-center justify-between border-b pb-3">
             <h2 className="text-text font-semibold">
               {filterTrigger === 'all' ? 'Showing All Categories' : 'Filtered Content'}

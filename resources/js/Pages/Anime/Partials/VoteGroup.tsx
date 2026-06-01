@@ -16,7 +16,7 @@ const VoteGroup = ({
   handleVoteChange,
 }: VoteGroupProps) => {
   return (
-    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
+    <div className="flex flex-col flex-wrap gap-1.5 sm:flex-row sm:items-center sm:gap-3">
       <span className="text-text-muted w-32 shrink-0 text-[10px] font-medium tracking-widest uppercase">
         {label}
       </span>

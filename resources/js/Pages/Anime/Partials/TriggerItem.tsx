@@ -1,10 +1,10 @@
-import { Link, useForm, usePage } from "@inertiajs/react";
-import React, { useState } from "react";
-import { HiMiniSparkles } from "react-icons/hi2";
-import { LuCheck, LuChevronDown, LuX } from "react-icons/lu";
-import VoteGroup from "./VoteGroup";
-import AuthGate from "./AuthGate";
-import { getTriggerComment } from "../../../actions/App/Http/Controllers/TriggerCommentController";
+import { Link, useForm, usePage } from '@inertiajs/react';
+import React, { useState } from 'react';
+import { HiMiniSparkles } from 'react-icons/hi2';
+import { LuCheck, LuChevronDown, LuX } from 'react-icons/lu';
+import VoteGroup from './VoteGroup';
+import AuthGate from './AuthGate';
+import { getTriggerComment } from '../../../actions/App/Http/Controllers/TriggerCommentController';
 
 interface TriggerItemProps {
   triggerContent: App.DTOs.TriggerContentData;
@@ -32,16 +32,13 @@ const TriggerItem = ({
   const { auth, routes } = usePage().props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const findUserTriggerVote = userTriggerVote?.find((userVote) => {
-    if (
-      userVote.user_id === auth.user?.id &&
-      userVote.trigger_content_id === triggerContent.id
-    ) {
+  const findUserTriggerVote = userTriggerVote?.find(userVote => {
+    if (userVote.user_id === auth.user?.id && userVote.trigger_content_id === triggerContent.id) {
       return true;
     }
   });
 
-  const findAITriggerContext = aiTriggerContext?.find((triggerContext) => {
+  const findAITriggerContext = aiTriggerContext?.find(triggerContext => {
     if (triggerContext.trigger_content_id === triggerContent.id) {
       return true;
     }
@@ -49,13 +46,13 @@ const TriggerItem = ({
 
   let mapAppearsValue;
   if (findUserTriggerVote !== undefined) {
-    mapAppearsValue = findUserTriggerVote.is_appear ? "Yes" : "No";
+    mapAppearsValue = findUserTriggerVote.is_appear ? 'Yes' : 'No';
   }
 
   const { data, setData, post, errors, processing } = useForm<VoteProps>({
-    appears: mapAppearsValue || "",
-    severity: findUserTriggerVote?.severity || "",
-    framing: findUserTriggerVote?.framing || "",
+    appears: mapAppearsValue || '',
+    severity: findUserTriggerVote?.severity || '',
+    framing: findUserTriggerVote?.framing || '',
   });
 
   const handleVoteChange = (category: keyof VoteProps, option: string) => {
@@ -70,16 +67,14 @@ const TriggerItem = ({
   };
 
   const isLoggedIn = auth.user !== null;
-  const toggleTrigger = () => setIsOpen((prev) => !prev);
+  const toggleTrigger = () => setIsOpen(prev => !prev);
 
   return (
     <li
-      className={`overflow-hidden rounded-lg border ${
-        isCompact ? "border-l-2" : "border-l-4"
-      } ${
+      className={`overflow-hidden rounded-lg border ${isCompact ? 'border-l-2' : 'border-l-4'} ${
         findUserTriggerVote
-          ? "border-primary border-l-primary-dark bg-surface"
-          : "border-border bg-surface border-l-transparent"
+          ? 'border-primary border-l-primary-dark bg-surface'
+          : 'border-border bg-surface border-l-transparent'
       }`}
     >
       {/* Clickable Header Area */}
@@ -88,8 +83,8 @@ const TriggerItem = ({
         onClick={toggleTrigger}
         className={`hover:bg-surface-alt focus-visible:ring-border w-full min-w-0 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset ${
           isCompact
-            ? "flex flex-col gap-3 p-3.5 text-xs sm:grid sm:grid-cols-12 sm:items-center sm:gap-x-6 md:gap-x-8 lg:gap-x-10"
-            : "flex flex-col gap-4 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3"
+            ? 'flex flex-col gap-3 p-3.5 text-xs sm:grid sm:grid-cols-12 sm:items-center sm:gap-x-6 md:gap-x-8 lg:gap-x-10'
+            : 'flex flex-col gap-4 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3'
         }`}
       >
         {isCompact ? (
@@ -107,11 +102,11 @@ const TriggerItem = ({
                 })}
                 prefetch
                 className="text-primary shrink-0 text-[11px] font-medium hover:underline"
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               >
                 {countTriggerComments[triggerContent.id]
                   ? `Discussion (${countTriggerComments[triggerContent.id]})`
-                  : "Discussion"}
+                  : 'Discussion'}
               </Link>
             </div>
 
@@ -123,15 +118,11 @@ const TriggerItem = ({
               <div className="flex items-center gap-3">
                 <span className="text-success flex items-center gap-1 font-semibold">
                   <LuCheck />
-                  <span className="tabular-nums">
-                    {triggerContent.stats?.appear_true}
-                  </span>
+                  <span className="tabular-nums">{triggerContent.stats?.appear_true}</span>
                 </span>
                 <span className="text-accent-red flex items-center gap-1 font-semibold">
                   <LuX />
-                  <span className="tabular-nums">
-                    {triggerContent.stats?.appear_false}
-                  </span>
+                  <span className="tabular-nums">{triggerContent.stats?.appear_false}</span>
                 </span>
               </div>
             </div>
@@ -139,19 +130,19 @@ const TriggerItem = ({
             {/* Column 3: Full, Unabbreviated Severity Breakdown */}
             <div className="hidden items-center justify-between gap-2 sm:col-span-4 sm:flex md:col-span-4 lg:col-span-4">
               <span className="text-severity-mild text-xs font-medium">
-                Mild{" "}
+                Mild{' '}
                 <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Mild}
                 </strong>
               </span>
               <span className="text-severity-moderate text-xs font-medium">
-                Moderate{" "}
+                Moderate{' '}
                 <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Moderate}
                 </strong>
               </span>
               <span className="text-severity-high text-xs font-medium">
-                Severe{" "}
+                Severe{' '}
                 <strong className="text-text font-semibold tabular-nums">
                   {triggerContent.stats?.severity.Severe}
                 </strong>
@@ -163,29 +154,27 @@ const TriggerItem = ({
               {/* Mobile Fallback: Fully Spelled Out Wrapped Rows */}
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
                 <span className="text-success flex items-center gap-0.5">
-                  <LuCheck className="text-xs" />{" "}
-                  {triggerContent.stats?.appear_true}
+                  <LuCheck className="text-xs" /> {triggerContent.stats?.appear_true}
                 </span>
                 <span className="text-accent-red flex items-center gap-0.5">
-                  <LuX className="text-xs" />{" "}
-                  {triggerContent.stats?.appear_false}
+                  <LuX className="text-xs" /> {triggerContent.stats?.appear_false}
                 </span>
 
                 <div className="border-border flex flex-wrap gap-x-2 border-l pl-2.5 text-[10px]">
                   <span className="text-severity-mild">
-                    Mild:{" "}
+                    Mild:{' '}
                     <strong className="text-text font-semibold">
                       {triggerContent.stats?.severity.Mild}
                     </strong>
                   </span>
                   <span className="text-severity-moderate">
-                    Moderate:{" "}
+                    Moderate:{' '}
                     <strong className="text-text font-semibold">
                       {triggerContent.stats?.severity.Moderate}
                     </strong>
                   </span>
                   <span className="text-severity-high">
-                    Severe:{" "}
+                    Severe:{' '}
                     <strong className="text-text font-semibold">
                       {triggerContent.stats?.severity.Severe}
                     </strong>
@@ -201,7 +190,7 @@ const TriggerItem = ({
                 )}
                 <LuChevronDown
                   className={`text-text-muted text-base transition-transform duration-200 ${
-                    isOpen ? "rotate-180" : "rotate-0"
+                    isOpen ? 'rotate-180' : 'rotate-0'
                   }`}
                 />
               </div>
@@ -211,9 +200,7 @@ const TriggerItem = ({
           /* ================= COMFORTABLE VIEW LAYOUT ================= */
           <>
             <div className="min-w-0 flex-1 sm:min-w-40">
-              <p className="text-text text-sm font-semibold">
-                {triggerContent.name}
-              </p>
+              <p className="text-text text-sm font-semibold">{triggerContent.name}</p>
               <p className="text-text-muted mt-0.5 text-xs leading-relaxed">
                 {triggerContent?.description}
               </p>
@@ -224,11 +211,11 @@ const TriggerItem = ({
                 })}
                 prefetch
                 className="text-primary text-xs font-medium hover:underline"
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               >
                 {countTriggerComments[triggerContent.id]
                   ? `Discussion (${countTriggerComments[triggerContent.id]})`
-                  : "Discussion"}
+                  : 'Discussion'}
               </Link>
             </div>
 
@@ -239,19 +226,19 @@ const TriggerItem = ({
                 </span>
                 <div className="flex flex-wrap gap-x-3 gap-y-1">
                   <span className="text-severity-mild text-xs">
-                    Mild{" "}
+                    Mild{' '}
                     <strong className="font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Mild}
                     </strong>
                   </span>
                   <span className="text-severity-moderate text-xs">
-                    Moderate{" "}
+                    Moderate{' '}
                     <strong className="font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Moderate}
                     </strong>
                   </span>
                   <span className="text-severity-high text-xs">
-                    Severe{" "}
+                    Severe{' '}
                     <strong className="font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Severe}
                     </strong>
@@ -265,25 +252,25 @@ const TriggerItem = ({
                 </span>
                 <div className="flex flex-wrap gap-x-3 gap-y-1">
                   <span className="text-text-muted text-xs">
-                    Serious{" "}
+                    Serious{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.framing.Serious}
                     </strong>
                   </span>
                   <span className="text-text-muted text-xs">
-                    Neutral{" "}
+                    Neutral{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.framing.Neutral}
                     </strong>
                   </span>
                   <span className="text-text-muted text-xs">
-                    Romanticized{" "}
+                    Romanticized{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.framing.Romanticized}
                     </strong>
                   </span>
                   <span className="text-text-muted text-xs">
-                    Comedic{" "}
+                    Comedic{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.framing.Comedic}
                     </strong>
@@ -322,10 +309,8 @@ const TriggerItem = ({
                 )}
                 <LuChevronDown
                   className={`shrink-0 text-base transition-transform duration-200 ${
-                    findUserTriggerVote
-                      ? "text-primary-dark"
-                      : "text-text-muted"
-                  } ${isOpen ? "rotate-180" : "rotate-0"}`}
+                    findUserTriggerVote ? 'text-primary-dark' : 'text-text-muted'
+                  } ${isOpen ? 'rotate-180' : 'rotate-0'}`}
                 />
               </div>
             </div>
@@ -335,79 +320,66 @@ const TriggerItem = ({
 
       {/* Expanded Actions Panel */}
       {isOpen && (
-        <div className="border-border divide-border grid grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
+        <div className="border-border divide-border grid w-full min-w-0 grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
           {/* AI Automated Context */}
-          <div className="bg-primary-soft/40 flex flex-col gap-2 p-4">
+          <div className="bg-primary-soft/40 flex min-w-0 flex-col gap-2 p-4">
             <p className="text-primary-dark flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase">
               <HiMiniSparkles className="text-sm" />
               AI Context
             </p>
-            <p className="text-text-muted text-xs leading-relaxed">
+            <p className="text-text-muted text-xs leading-relaxed wrap-break-word">
               {findAITriggerContext?.ai_summary ||
-                "No AI summary is currently available. This content is awaiting evaluation."}
+                'No AI summary is currently available. This content is awaiting evaluation.'}
             </p>
           </div>
 
           {/* Voting Action Segment */}
-          <div className="flex flex-col gap-3 p-4">
+          <div className="flex min-w-0 flex-col gap-3 p-4">
             {isLoggedIn ? (
               <>
                 <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
                   Help Others Watch Safely
                 </p>
-                <form onSubmit={(e) => handleSubmit(e, triggerContent.id)}>
-                  <div className="flex flex-col gap-3">
+                <form onSubmit={e => handleSubmit(e, triggerContent.id)} className="w-full">
+                  <div className="flex w-full flex-col gap-3">
                     <VoteGroup
                       label="Does this appear?"
-                      options={["Yes", "No"]}
+                      options={['Yes', 'No']}
                       category="appears"
                       votes={data}
                       handleVoteChange={handleVoteChange}
                     />
                     {errors.appears && (
-                      <p className="text-accent-red -mt-2 text-xs">
-                        {errors.appears}
-                      </p>
+                      <p className="text-accent-red -mt-2 text-xs">{errors.appears}</p>
                     )}
 
-                    {data.appears === "Yes" && (
+                    {data.appears === 'Yes' && (
                       <>
                         <VoteGroup
                           label="Severity level"
-                          options={["Mild", "Moderate", "Severe"]}
+                          options={['Mild', 'Moderate', 'Severe']}
                           category="severity"
                           votes={data}
                           handleVoteChange={handleVoteChange}
                         />
                         {errors.severity && (
-                          <p className="text-accent-red -mt-2 text-xs">
-                            {errors.severity}
-                          </p>
+                          <p className="text-accent-red -mt-2 text-xs">{errors.severity}</p>
                         )}
                         <VoteGroup
                           label="How is it framed?"
-                          options={[
-                            "Serious",
-                            "Neutral",
-                            "Romanticized",
-                            "Comedic",
-                          ]}
+                          options={['Serious', 'Neutral', 'Romanticized', 'Comedic']}
                           category="framing"
                           votes={data}
                           handleVoteChange={handleVoteChange}
                         />
                         {errors.framing && (
-                          <p className="text-accent-red -mt-2 text-xs">
-                            {errors.framing}
-                          </p>
+                          <p className="text-accent-red -mt-2 text-xs">{errors.framing}</p>
                         )}
                       </>
                     )}
 
-                    {(data.appears === "No" ||
-                      (data.appears === "Yes" &&
-                        data.severity &&
-                        data.framing)) && (
+                    {(data.appears === 'No' ||
+                      (data.appears === 'Yes' && data.severity && data.framing)) && (
                       <div className="flex justify-end">
                         <button
                           type="submit"
@@ -436,7 +408,7 @@ const TriggerItem = ({
                               />
                             </svg>
                           )}
-                          {processing ? "Submitting..." : "Submit Vote"}
+                          {processing ? 'Submitting...' : 'Submit Vote'}
                         </button>
                       </div>
                     )}
@@ -444,10 +416,7 @@ const TriggerItem = ({
                 </form>
               </>
             ) : (
-              <AuthGate
-                loginHref={routes["login"]}
-                registerHref={routes["auth.register"]}
-              />
+              <AuthGate loginHref={routes['login']} registerHref={routes['auth.register']} />
             )}
           </div>
         </div>

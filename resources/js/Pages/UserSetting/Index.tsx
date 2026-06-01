@@ -329,7 +329,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
             <Form action="/logout" method="post">
               <button
                 type="submit"
-                className="text-accent-red hover:bg-accent-red/10 border-border bg-primary inline-flex items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium tracking-wide transition-colors hover:cursor-pointer"
+                className="text-surface border-border bg-primary inline-flex items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium tracking-wide transition-colors hover:cursor-pointer"
               >
                 Log Out
               </button>
