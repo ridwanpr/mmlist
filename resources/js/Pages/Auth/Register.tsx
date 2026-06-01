@@ -177,9 +177,12 @@ const Register = () => {
 
             <button
               type="submit"
-              className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 my-3 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none"
+              disabled={turnstileEnabled && !values['cf-turnstile-response']}
+              className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 my-3 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75"
             >
-              Create account
+              {turnstileEnabled && !values['cf-turnstile-response']
+                ? 'Verifying...'
+                : 'Create account'}
             </button>
 
             <button

@@ -163,10 +163,14 @@ const Contact = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                disabled={processing}
+                disabled={processing || (turnstileEnabled && !data['cf-turnstile-response'])}
                 className="bg-primary hover:bg-primary-dark text-surface disabled:bg-text-muted cursor-pointer rounded-xl px-5 py-2.5 text-sm font-medium tracking-wide shadow-xs transition-colors disabled:cursor-not-allowed"
               >
-                {processing ? 'Sending...' : 'Send Message'}
+                {processing
+                  ? 'Sending...'
+                  : turnstileEnabled && !data['cf-turnstile-response']
+                    ? 'Verifying...'
+                    : 'Send Message'}
               </button>
             </div>
           </form>
