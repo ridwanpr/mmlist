@@ -1,9 +1,148 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /*
  * Graphite & Crimson - Soft Balanced Palette
- * Optimized for an anime trigger-warning, discussion, and watchlist site.
  */
+
+/* manrope-200 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200;
+  src: url('../fonts/manrope-v20-latin-200.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-300 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/manrope-v20-latin-300.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/manrope-v20-latin-regular.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/manrope-v20-latin-500.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/manrope-v20-latin-600.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/manrope-v20-latin-700.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url('../fonts/manrope-v20-latin-800.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/lora-v37-latin-regular.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-italic - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../fonts/lora-v37-latin-italic.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-500 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/lora-v37-latin-500.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-500italic - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 500;
+  src: url('../fonts/lora-v37-latin-500italic.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-600 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/lora-v37-latin-600.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-600italic - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 600;
+  src: url('../fonts/lora-v37-latin-600italic.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* lora-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/lora-v37-latin-700.woff2') format('woff2');
+  /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
 
 @theme {
   /* Backgrounds (Clean Milk Light Mode) */
@@ -57,9 +196,8 @@
   /* Neutral gray: unconfirmed report status (7.56:1 - AAA) */
 
   /* Typography Font Configurations */
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-serif:
-    "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Lora', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
 }
 
 @layer base {
@@ -104,7 +242,6 @@
 
 /* Custom Markdown & Spoiler Utility Implementations */
 @layer utilities {
-
   .prose strong,
   .prose b {
     font-weight: 700;
