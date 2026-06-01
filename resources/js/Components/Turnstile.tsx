@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 
 interface TurnstileOptions {
   sitekey: string;
@@ -23,6 +23,7 @@ declare global {
     turnstile?: {
       render: (container: string | HTMLElement, options: TurnstileOptions) => string;
       remove: (widgetId: string) => void;
+      reset: (widgetId: string) => void;
     };
   }
 }
@@ -35,58 +36,70 @@ interface TurnstileProps {
   theme?: 'light' | 'dark' | 'auto';
 }
 
-export default function Turnstile({
-  siteKey,
-  onVerify,
-  onExpire,
-  onError,
-  theme = 'auto',
-}: TurnstileProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
-  const callbacksRef = useRef({ onVerify, onExpire, onError });
-
-  useEffect(() => {
-    callbacksRef.current = { onVerify, onExpire, onError };
-  });
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const scriptId = 'cloudflare-turnstile-script';
-    let script = document.getElementById(scriptId) as HTMLScriptElement;
-
-    const renderWidget = () => {
-      if (window.turnstile && containerRef.current && !widgetIdRef.current) {
-        widgetIdRef.current = window.turnstile.render(containerRef.current, {
-          sitekey: siteKey,
-          theme: theme,
-          callback: token => callbacksRef.current.onVerify(token),
-          'expired-callback': () => callbacksRef.current.onExpire?.(),
-          'error-callback': () => callbacksRef.current.onError?.(),
-        });
-      }
-    };
-
-    if (!script) {
-      script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-      script.async = true;
-      script.defer = true;
-      script.onload = renderWidget;
-      document.body.appendChild(script);
-    } else if (window.turnstile) {
-      renderWidget();
-    }
-
-    return () => {
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
-        widgetIdRef.current = null;
-      }
-    };
-  }, [siteKey, theme]);
-
-  return <div ref={containerRef} />;
+export interface TurnstileInstance {
+  reset: () => void;
 }
+
+const Turnstile = forwardRef<TurnstileInstance, TurnstileProps>(
+  ({ siteKey, onVerify, onExpire, onError, theme = 'auto' }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const widgetIdRef = useRef<string | null>(null);
+    const callbacksRef = useRef({ onVerify, onExpire, onError });
+
+    useEffect(() => {
+      callbacksRef.current = { onVerify, onExpire, onError };
+    });
+
+    useImperativeHandle(ref, () => ({
+      reset: () => {
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(widgetIdRef.current);
+        }
+      },
+    }));
+
+    useEffect(() => {
+      if (!containerRef.current) return;
+
+      const scriptId = 'cloudflare-turnstile-script';
+      let script = document.getElementById(scriptId) as HTMLScriptElement;
+
+      const renderWidget = () => {
+        if (window.turnstile && containerRef.current && !widgetIdRef.current) {
+          widgetIdRef.current = window.turnstile.render(containerRef.current, {
+            sitekey: siteKey,
+            theme: theme,
+            callback: token => callbacksRef.current.onVerify(token),
+            'expired-callback': () => callbacksRef.current.onExpire?.(),
+            'error-callback': () => callbacksRef.current.onError?.(),
+          });
+        }
+      };
+
+      if (!script) {
+        script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.onload = renderWidget;
+        document.body.appendChild(script);
+      } else if (window.turnstile) {
+        renderWidget();
+      }
+
+      return () => {
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.remove(widgetIdRef.current);
+          widgetIdRef.current = null;
+        }
+      };
+    }, [siteKey, theme]);
+
+    return <div ref={containerRef} />;
+  },
+);
+
+Turnstile.displayName = 'Turnstile';
+
+export default Turnstile;

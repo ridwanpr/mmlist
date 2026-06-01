@@ -1,9 +1,10 @@
 import type React from 'react';
+import { useRef } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 
 import FrontLayout from '../../Layouts/FrontLayout';
 import AppHead from '../../Components/AppHead';
-import Turnstile from '../../Components/Turnstile';
+import Turnstile, { type TurnstileInstance } from '../../Components/Turnstile';
 
 interface ContactFormData {
   name: string;
@@ -20,6 +21,8 @@ interface PageProps {
 
 const Contact = () => {
   const { turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
+  const turnstileRef = useRef<TurnstileInstance>(null);
+
   const { data, setData, post, processing, errors, reset, wasSuccessful } =
     useForm<ContactFormData>({
       name: '',
@@ -32,6 +35,10 @@ const Contact = () => {
     e.preventDefault();
     post('/contact', {
       onSuccess: () => reset(),
+      onError: () => {
+        turnstileRef.current?.reset();
+        setData('cf-turnstile-response', null);
+      },
     });
   };
 
@@ -137,6 +144,7 @@ const Contact = () => {
             {turnstileEnabled && (
               <div>
                 <Turnstile
+                  ref={turnstileRef}
                   siteKey={turnstileSiteKey}
                   onVerify={token => setData('cf-turnstile-response', token)}
                   onExpire={() => setData('cf-turnstile-response', null)}

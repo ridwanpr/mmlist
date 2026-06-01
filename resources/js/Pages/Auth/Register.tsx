@@ -1,11 +1,11 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 
 import InputField from '../../Components/UI/InputField';
 import AuthLayout from '../../Layouts/AuthLayout';
 import AppHead from '../../Components/AppHead';
-import Turnstile from '../../Components/Turnstile';
+import Turnstile, { type TurnstileInstance } from '../../Components/Turnstile';
 
 interface RegisterFormState {
   username: string | null;
@@ -27,6 +27,7 @@ interface PageProps {
 
 const Register = () => {
   const { routes, errors, turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const [values, setValues] = useState<RegisterFormState>({
     username: null,
@@ -46,7 +47,13 @@ const Register = () => {
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.post('/register', values, { preserveState: true });
+    router.post('/register', values, {
+      preserveState: true,
+      onError: () => {
+        turnstileRef.current?.reset();
+        setValues(prev => ({ ...prev, 'cf-turnstile-response': null }));
+      },
+    });
   };
 
   return (
@@ -153,6 +160,7 @@ const Register = () => {
             {turnstileEnabled && (
               <div>
                 <Turnstile
+                  ref={turnstileRef}
                   siteKey={turnstileSiteKey}
                   onVerify={token =>
                     setValues(prev => ({ ...prev, 'cf-turnstile-response': token }))
