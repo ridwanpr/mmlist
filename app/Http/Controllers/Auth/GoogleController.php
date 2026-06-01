@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class GoogleController extends Controller
@@ -58,7 +59,13 @@ class GoogleController extends Controller
 
             return redirect()->intended(route('user.dash.index'));
         } catch (Exception $e) {
-            return redirect('/login')->with('error', 'Google authentication failed.');
+            Log::error('Google OAuth authentication process failed.', [
+                'exception' => $e,
+            ]);
+
+            Inertia::flash('error', 'Unable to sign in with Google. Please try again.');
+
+            return redirect('/login');
         }
     }
 }
