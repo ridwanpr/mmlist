@@ -6,6 +6,7 @@ import InputField from '../../Components/UI/InputField';
 import AuthLayout from '../../Layouts/AuthLayout';
 import AppHead from '../../Components/AppHead';
 import Turnstile, { type TurnstileInstance } from '../../Components/Turnstile';
+import { redirect as redirectGoogle } from '../../actions/App/Http/Controllers/Auth/GoogleController';
 
 interface RegisterFormState {
   username: string | null;
@@ -185,12 +186,12 @@ const Register = () => {
                 : 'Create account'}
             </button>
 
-            <button
-              type="button"
+            <a
+              href={redirectGoogle.url()}
               className="border-border bg-surface hover:bg-surface-alt text-text flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition hover:cursor-pointer"
             >
               <FaGoogle /> Continue with Google
-            </button>
+            </a>
 
             <p className="text-text-muted mt-2 pt-1 text-center text-sm">
               Already have an account?{' '}

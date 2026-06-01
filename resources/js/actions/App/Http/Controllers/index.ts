@@ -1,3 +1,4 @@
+import Auth from './Auth'
 import HomeController from './HomeController'
 import BrowseController from './BrowseController'
 import AnimeController from './AnimeController'
@@ -16,7 +17,8 @@ import UserProfileController from './UserProfileController'
 import CommentHistoryController from './CommentHistoryController'
 import WatchlistImportController from './WatchlistImportController'
 const Controllers = {
-    HomeController: Object.assign(HomeController, HomeController),
+    Auth: Object.assign(Auth, Auth),
+HomeController: Object.assign(HomeController, HomeController),
 BrowseController: Object.assign(BrowseController, BrowseController),
 AnimeController: Object.assign(AnimeController, AnimeController),
 ImageProxyController: Object.assign(ImageProxyController, ImageProxyController),

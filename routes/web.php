@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnimeController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\ContactMessageController;
 use App\Http\Controllers\Backend\DashboardController;
@@ -23,6 +24,9 @@ use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\WatchlistImportController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Middleware\EncryptHistory;
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('browse', [BrowseController::class, 'index'])->name('browse.index');

@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property bool $show_nsfw
  * @property bool $is_banned
  * @property Carbon|null $birth_date
+ * @property string|null $google_id
  * @property-read \App\Models\Watchlist|\App\Models\UserRole|null $pivot
  * @property-read Collection<int, \App\Models\Role> $roles
  * @property-read int|null $roles_count
@@ -41,6 +42,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIsBanned($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
@@ -51,7 +53,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'username', 'email', 'password', 'show_nsfw', 'birth_date', 'is_banned'])]
+#[Fillable(['name', 'username', 'email', 'password', 'show_nsfw', 'birth_date', 'is_banned', 'google_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {

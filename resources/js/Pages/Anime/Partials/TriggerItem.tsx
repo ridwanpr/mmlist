@@ -331,7 +331,7 @@ const TriggerItem = ({
               <HiMiniSparkles className="text-sm" />
               AI Context
             </p>
-            <p className="text-text-muted text-xs leading-relaxed break-words">
+            <p className="text-text-muted text-xs leading-relaxed wrap-break-word">
               {findAITriggerContext?.ai_summary ||
                 'No AI summary is currently available. This content is awaiting evaluation.'}
             </p>

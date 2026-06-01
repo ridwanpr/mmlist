@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property string $relation_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Anime $anime
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeRelation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeRelation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AnimeRelation query()
