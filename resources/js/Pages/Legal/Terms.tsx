@@ -16,7 +16,7 @@ const TermsOfService = () => {
       <div className="selection:bg-primary-soft selection:text-primary mx-auto max-w-3xl px-4 py-12 font-sans">
         <header className="border-border mb-12 border-b pb-6">
           <h1 className="text-text mb-2 font-serif text-4xl font-bold">Terms of Service</h1>
-          <p className="text-text-muted text-sm">Last Updated: 30 May 2026</p>
+          <p className="text-text-muted text-sm">Last Updated: 1 June 2026</p>
         </header>
 
         <div className="text-text space-y-8 leading-relaxed">
@@ -84,7 +84,7 @@ const TermsOfService = () => {
             </p>
             <ul className="list-disc space-y-2 pl-6">
               <li>
-                Vandalisng database entries, deliberately submitting false or misleading trigger
+                Vandalizing database entries, deliberately submitting false or misleading trigger
                 warnings, or manipulating voting metrics through automation or multiple accounts.
               </li>
               <li>Harassing, abusing, or attacking other users in the comment sections.</li>
@@ -107,9 +107,11 @@ const TermsOfService = () => {
               Mamorulist is provided on an "as-is" and "as-available" basis.
             </p>
             <p>
-              All trigger warnings, safety indicators, and comments on this site are crowdsourced
-              contributions from general users. We do not guarantee the absolute accuracy,
-              completeness, or clinical validity of any warning metrics displayed on the platform.
+              The platform utilizes a combination of automated artificial intelligence tools (to
+              help with cold start early on) and crowdsourced contributions from general users. We
+              do not guarantee the absolute accuracy, completeness, or clinical validity of any
+              AI-generated context summaries or user-submitted warning metrics displayed on the
+              platform.
             </p>
             <p>
               The information provided here is for general community awareness and informational
@@ -120,7 +122,19 @@ const TermsOfService = () => {
 
           <section className="space-y-3">
             <h2 className="text-text font-serif text-2xl font-semibold">
-              5. Inquiries and Contact
+              5. Changes to These Terms
+            </h2>
+            <p>
+              We reserve the right to modify or replace these Terms of Service at any time at our
+              sole discretion. Updates will be indicated by the "Last Updated" date at the top of
+              this page. Your continued use of Mamorulist following the posting of any changes
+              constitutes formal acceptance of those new terms.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-text font-serif text-2xl font-semibold">
+              6. Inquiries and Contact
             </h2>
             <p>
               For any questions regarding these terms, or to report platform abuse or request manual

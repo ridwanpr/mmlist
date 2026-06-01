@@ -28,11 +28,10 @@ class AnimeController extends Controller
     public function show(string $slug): Response
     {
         $anime = $this->animeService->getAnimeInfo($slug);
-        // dd($anime->animeRelations);
+
         $animeRelation = $anime->animeRelations->map(fn(AnimeRelation $item) => AnimeRelationData::fromModel($item));
         $user = Auth::user();
 
-        // Convert user model to DTO to match your TypeScript interface
         $userData = $user ? UserData::fromModel($user) : null;
 
         // Check if the anime is NSFW and if the viewer is restricted
@@ -71,6 +70,8 @@ class AnimeController extends Controller
         $countComments = $this->commentService->getCommentCount('anime', $anime->id);
         $countTriggerComments = $this->commentService->getTriggerCommentsCount($anime->id);
 
+        $animeRecs = $this->animeService->getAnimeRecs($anime);
+
         return Inertia::render('Anime/Show', [
             'anime' => $anime,
             'triggers' => $triggers,
@@ -81,7 +82,8 @@ class AnimeController extends Controller
             'countComments' => $countComments,
             'user' => $userData,
             'countTriggerComments' => $countTriggerComments,
-            'animeRelation' => $animeRelation
+            'animeRelation' => $animeRelation,
+            'animeRecs' => $animeRecs
         ]);
     }
 }

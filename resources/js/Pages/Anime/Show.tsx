@@ -9,6 +9,7 @@ import { Link } from '@inertiajs/react';
 import { settingIndex } from '../../actions/App/Http/Controllers/UserDashboardController';
 import { useState } from 'react';
 import TriggerConsent from './Partials/TriggerConsent';
+import AnimeRecs from './Partials/AnimeRecs';
 
 interface ShowAnimeProps {
   anime: App.DTOs.AnimeData & { is_restricted?: boolean };
@@ -21,6 +22,7 @@ interface ShowAnimeProps {
   user: App.DTOs.UserData | null;
   countTriggerComments: Record<number, number>;
   animeRelation: App.DTOs.AnimeRelationData[];
+  animeRecs: App.DTOs.AnimeData[];
 }
 
 const ShowAnime = ({
@@ -34,6 +36,7 @@ const ShowAnime = ({
   user,
   countTriggerComments,
   animeRelation,
+  animeRecs,
 }: ShowAnimeProps) => {
   const animeTitle = anime?.title_english ?? anime?.title ?? 'Anime Details';
 
@@ -142,6 +145,8 @@ const ShowAnime = ({
             </div>
           </div>
         </div>
+
+        <AnimeRecs recs={animeRecs} />
       </div>
     </>
   );

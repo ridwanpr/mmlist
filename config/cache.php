@@ -4,6 +4,8 @@ use App\DTOs\AnimeData;
 use App\DTOs\AnimeMetaData;
 use App\DTOs\AnimeTitleData;
 use App\DTOs\AnimeTriggerData;
+use App\DTOs\TriggerContentData;
+use App\DTOs\TriggerStatsData;
 use Illuminate\Support\Str;
 
 return [
@@ -116,7 +118,7 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-cache-'),
+    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-cache-'),
 
     /*
     |--------------------------------------------------------------------------
@@ -134,6 +136,11 @@ return [
         AnimeTitleData::class,
         AnimeMetaData::class,
         AnimeTriggerData::class,
+        TriggerContentData::class,
+        TriggerStatsData::class,
+        \Carbon\Carbon::class,
+        \Carbon\CarbonImmutable::class,
+        \Illuminate\Support\Carbon::class,
     ],
 
 ];

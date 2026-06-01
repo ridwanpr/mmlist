@@ -290,6 +290,79 @@ class AnimeService
             });
     }
 
+    /**
+     * Get similar anime recommendations based on shared genres and themes with caching.
+     *
+     * @return array<int, AnimeData>
+     */
+    public function getAnimeRecs(Anime $anime, int $limit = 6): array
+    {
+        $user = Auth::user();
+        $showNsfw = $user?->show_nsfw ?? false;
+
+        $cacheKey = "anime_recs_{$anime->id}_limit_{$limit}_" . ($showNsfw ? 'nsfw' : 'sfw');
+
+        return Cache::tags(['anime', 'anime_recommendations'])
+            ->remember($cacheKey, now()->plus(days: 7), function () use ($anime, $limit, $showNsfw) {
+                // Extract IDs from already loaded relations
+                $genreIds = $anime->genres ? $anime->genres->pluck('id')->toArray() : [];
+                $themeIds = $anime->themes ? $anime->themes->pluck('id')->toArray() : [];
+
+                $query = Anime::query()
+                    ->where('animes.id', '!=', $anime->id)
+                    ->when(! $showNsfw, function ($q) {
+                        $q->where('animes.is_not_hentai', 1);
+                    });
+
+                // Apply similarity matching if the anime has genres or themes
+                if (! empty($genreIds) || ! empty($themeIds)) {
+                    $query->where(function ($q) use ($genreIds, $themeIds) {
+                        if (! empty($genreIds)) {
+                            $q->orWhereHas('genres', function ($sub) use ($genreIds) {
+                                $sub->whereIn('genres.id', $genreIds);
+                            });
+                        }
+                        if (! empty($themeIds)) {
+                            $q->orWhereHas('themes', function ($sub) use ($themeIds) {
+                                $sub->whereIn('themes.id', $themeIds);
+                            });
+                        }
+                    });
+
+                    // Count overlapping items to calculate a similarity score
+                    $query->withCount([
+                        'genres as shared_genres_count' => function ($q) use ($genreIds) {
+                            $q->whereIn('genres.id', $genreIds);
+                        },
+                        'themes as shared_themes_count' => function ($q) use ($themeIds) {
+                            $q->whereIn('themes.id', $themeIds);
+                        }
+                    ]);
+
+                    // Order by most overlapping attributes first
+                    $query->orderByRaw('(shared_genres_count + shared_themes_count) DESC');
+                }
+
+                $recIds = $query->orderBy('animes.score', 'desc')
+                    ->orderBy('animes.year', 'desc')
+                    ->limit($limit)
+                    ->pluck('id');
+
+                if ($recIds->isEmpty()) {
+                    return [];
+                }
+
+                $models = Anime::with(['genres', 'animeTriggers.triggerContent'])
+                    ->whereIn('id', $recIds)
+                    ->get()
+                    ->keyBy('id');
+
+                return $recIds->map(fn($id) => AnimeData::fromModel($models[$id]))
+                    ->values()
+                    ->all();
+            });
+    }
+
     private function buildBooleanSearch(string $input): ?string
     {
         $input = trim(mb_strtolower($input));
