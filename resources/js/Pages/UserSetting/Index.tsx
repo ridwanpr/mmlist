@@ -200,7 +200,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData & { google_id?: string 
                       </h2>
                       <p className="text-text-muted text-xs">
                         {user.google_id
-                          ? 'Create a local password to enable standard email credential login.'
+                          ? 'Create a local password to enable standard username credential login.'
                           : 'Change your current account access credentials.'}
                       </p>
                     </div>
