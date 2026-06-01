@@ -108,13 +108,13 @@ const ShowAnime = ({
   return (
     <>
       <AppHead title={animeTitle} meta={metaDescription} />
-      <div className="mx-auto mb-8 max-w-7xl p-4 font-sans lg:pt-6 lg:pb-6">
+      <div className="mx-auto mb-8 w-full max-w-7xl overflow-hidden p-4 font-sans lg:pt-6 lg:pb-6">
         <div className="mb-6">
           <Breadcrumb title={animeTitle} />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-4">
-          <div className="lg:col-span-3">
+        <div className="grid w-full gap-6 lg:grid-cols-4">
+          <div className="min-w-0 lg:col-span-3">
             <MainInfo
               anime={anime}
               userWatchlist={userWatchlist}
@@ -124,17 +124,17 @@ const ShowAnime = ({
             />
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="min-w-0 lg:col-span-1">
             <SideInfo triggers={triggers} anime={anime} />
           </div>
         </div>
 
-        <div className="border-border mt-6 border-t pt-6">
-          <div className="w-full">
+        <div className="border-border mt-6 w-full max-w-full min-w-0 overflow-hidden border-t pt-6">
+          <div className="w-full max-w-full min-w-0">
             {!isTriggerConsent && (
               <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
             )}
-            <div className={!isTriggerConsent ? 'hidden' : ''}>
+            <div className={!isTriggerConsent ? 'hidden' : 'w-full max-w-full min-w-0'}>
               <TriggerWarning
                 triggers={triggers}
                 anime={anime}

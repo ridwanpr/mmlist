@@ -71,7 +71,9 @@ const TriggerItem = ({
 
   return (
     <li
-      className={`overflow-hidden rounded-lg border ${isCompact ? 'border-l-2' : 'border-l-4'} ${
+      className={`w-full max-w-full min-w-0 overflow-hidden rounded-lg border ${
+        isCompact ? 'border-l-2' : 'border-l-4'
+      } ${
         findUserTriggerVote
           ? 'border-primary border-l-primary-dark bg-surface'
           : 'border-border bg-surface border-l-transparent'
@@ -81,7 +83,7 @@ const TriggerItem = ({
       <button
         type="button"
         onClick={toggleTrigger}
-        className={`hover:bg-surface-alt focus-visible:ring-border w-full min-w-0 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset ${
+        className={`hover:bg-surface-alt focus-visible:ring-border w-full max-w-full min-w-0 text-left transition-colors hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset ${
           isCompact
             ? 'flex flex-col gap-3 p-3.5 text-xs sm:grid sm:grid-cols-12 sm:items-center sm:gap-x-6 md:gap-x-8 lg:gap-x-10'
             : 'flex flex-col gap-4 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3'
@@ -91,8 +93,8 @@ const TriggerItem = ({
           /* ================= COMPACT VIEW LAYOUT ================= */
           <>
             {/* Column 1: Core Content Label */}
-            <div className="flex min-w-0 items-center justify-between gap-4 sm:col-span-4 sm:justify-start md:col-span-4 lg:col-span-5">
-              <span className="text-text truncate text-sm font-semibold">
+            <div className="flex w-full min-w-0 items-center justify-between gap-4 sm:col-span-4 sm:w-auto md:col-span-4 lg:col-span-5">
+              <span className="text-text min-w-0 flex-1 truncate text-sm font-semibold">
                 {triggerContent.name}
               </span>
               <Link
@@ -152,37 +154,39 @@ const TriggerItem = ({
             {/* Column 4: Status Badges & Layout Controls */}
             <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:col-span-1 sm:justify-end">
               {/* Mobile Fallback: Fully Spelled Out Wrapped Rows */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
-                <span className="text-success flex items-center gap-0.5">
-                  <LuCheck className="text-xs" /> {triggerContent.stats?.appear_true}
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
+                <span className="text-success flex shrink-0 items-center gap-0.5">
+                  <LuCheck className="text-xs" />{' '}
+                  <span className="tabular-nums">{triggerContent.stats?.appear_true}</span>
                 </span>
-                <span className="text-accent-red flex items-center gap-0.5">
-                  <LuX className="text-xs" /> {triggerContent.stats?.appear_false}
+                <span className="text-accent-red flex shrink-0 items-center gap-0.5">
+                  <LuX className="text-xs" />{' '}
+                  <span className="tabular-nums">{triggerContent.stats?.appear_false}</span>
                 </span>
 
-                <div className="border-border flex flex-wrap gap-x-2 border-l pl-2.5 text-[10px]">
-                  <span className="text-severity-mild">
+                <div className="border-border flex min-w-0 flex-wrap gap-x-2 gap-y-1 border-l pl-2.5 text-[10px]">
+                  <span className="text-severity-mild shrink-0">
                     Mild:{' '}
-                    <strong className="text-text font-semibold">
+                    <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Mild}
                     </strong>
                   </span>
-                  <span className="text-severity-moderate">
+                  <span className="text-severity-moderate shrink-0">
                     Moderate:{' '}
-                    <strong className="text-text font-semibold">
+                    <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Moderate}
                     </strong>
                   </span>
-                  <span className="text-severity-high">
+                  <span className="text-severity-high shrink-0">
                     Severe:{' '}
-                    <strong className="text-text font-semibold">
+                    <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Severe}
                     </strong>
                   </span>
                 </div>
               </div>
 
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="ml-auto flex shrink-0 items-center gap-2">
                 {findUserTriggerVote && (
                   <span className="bg-primary text-surface rounded px-1.5 py-0.5 text-[9px] font-bold tracking-wide uppercase">
                     Voted
@@ -219,7 +223,7 @@ const TriggerItem = ({
               </Link>
             </div>
 
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
                 <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
                   Severity
@@ -279,7 +283,7 @@ const TriggerItem = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between sm:shrink-0 sm:justify-normal sm:gap-4">
+            <div className="flex w-full items-center justify-between sm:w-auto sm:shrink-0 sm:justify-normal sm:gap-4">
               <div className="flex flex-col items-center gap-2">
                 <span className="text-text-muted text-[10px] font-medium tracking-widest uppercase">
                   Appears?
@@ -320,28 +324,31 @@ const TriggerItem = ({
 
       {/* Expanded Actions Panel */}
       {isOpen && (
-        <div className="border-border divide-border grid w-full min-w-0 grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
+        <div className="border-border divide-border grid w-full max-w-full min-w-0 grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
           {/* AI Automated Context */}
-          <div className="bg-primary-soft/40 flex min-w-0 flex-col gap-2 p-4">
+          <div className="bg-primary-soft/40 flex w-full min-w-0 flex-col gap-2 p-4">
             <p className="text-primary-dark flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase">
               <HiMiniSparkles className="text-sm" />
               AI Context
             </p>
-            <p className="text-text-muted text-xs leading-relaxed wrap-break-word">
+            <p className="text-text-muted text-xs leading-relaxed break-words">
               {findAITriggerContext?.ai_summary ||
                 'No AI summary is currently available. This content is awaiting evaluation.'}
             </p>
           </div>
 
           {/* Voting Action Segment */}
-          <div className="flex min-w-0 flex-col gap-3 p-4">
+          <div className="flex w-full max-w-full min-w-0 flex-col gap-3 overflow-hidden p-4">
             {isLoggedIn ? (
               <>
                 <p className="text-text-muted text-[10px] font-semibold tracking-widest uppercase">
                   Help Others Watch Safely
                 </p>
-                <form onSubmit={e => handleSubmit(e, triggerContent.id)} className="w-full">
-                  <div className="flex w-full flex-col gap-3">
+                <form
+                  onSubmit={e => handleSubmit(e, triggerContent.id)}
+                  className="w-full max-w-full"
+                >
+                  <div className="flex w-full max-w-full flex-col gap-3">
                     <VoteGroup
                       label="Does this appear?"
                       options={['Yes', 'No']}

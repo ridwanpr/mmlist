@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import React from 'react';
 
 interface RelatedAnimeListProps {
@@ -53,12 +54,12 @@ export default function RelatedAnimeList({ animeRelations }: RelatedAnimeListPro
                   )}
 
                   <div className="perfection-fix min-w-0 flex-1">
-                    <a
+                    <Link
                       href={`/anime/${relatedAnime.slug}`}
                       className="text-text hover:text-primary block truncate font-sans text-sm font-medium transition-colors duration-150"
                     >
                       {displayTitle}
-                    </a>
+                    </Link>
 
                     <div className="text-text-muted mt-0.5 flex items-center gap-1 truncate overflow-hidden font-sans text-xs whitespace-nowrap">
                       <span>{relatedAnime.type || 'Unknown'}</span>

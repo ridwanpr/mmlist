@@ -35,9 +35,9 @@ const TriggerWarning = ({
         </p>
       </div>
 
-      <div className="mx-auto mt-4 flex max-w-7xl flex-col gap-4 lg:flex-row">
+      <div className="mx-auto mt-4 flex w-full max-w-7xl min-w-0 flex-col gap-4 overflow-hidden lg:flex-row">
         {/* Trigger Category Filter */}
-        <section className="bg-surface border-border w-full self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col">
+        <section className="bg-surface border-border w-full shrink-0 self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col">
           <div className="border-border flex w-full items-end justify-between border-b pb-4">
             <div>
               <h2 className="text-text text-sm font-bold">Filter Triggers</h2>
@@ -64,7 +64,7 @@ const TriggerWarning = ({
         </section>
 
         {/* Trigger Content List */}
-        <section className="min-w-0 flex-1">
+        <section className="w-full max-w-full min-w-0 flex-1">
           <div className="border-border mb-4 flex items-center justify-between border-b pb-3">
             <h2 className="text-text font-semibold">
               {filterTrigger === 'all' ? 'Showing All Categories' : 'Filtered Content'}
@@ -97,7 +97,7 @@ const TriggerWarning = ({
           </div>
 
           {filteredTriggers?.map(category => (
-            <section key={category.id} className="mb-6">
+            <section key={category.id} className="mb-6 w-full max-w-full min-w-0">
               <div className="border-primary my-3 border-l-2 px-2">
                 <h3 className="text-text text-sm font-semibold">{category.name}</h3>
                 {viewMode === 'comfortable' && category.description && (
@@ -106,7 +106,9 @@ const TriggerWarning = ({
               </div>
 
               <ul
-                className={viewMode === 'compact' ? 'flex flex-col gap-2' : 'flex flex-col gap-4'}
+                className={`w-full max-w-full min-w-0 ${
+                  viewMode === 'compact' ? 'flex flex-col gap-2' : 'flex flex-col gap-4'
+                }`}
               >
                 {category?.triggerContents.map(triggerContent => (
                   <TriggerItem
