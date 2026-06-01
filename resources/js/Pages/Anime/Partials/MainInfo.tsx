@@ -201,6 +201,7 @@ const MainInfo = ({
             src={coverImage}
             alt="cover anime image"
             className="bg-surface aspect-3/4 w-full rounded-xl object-cover shadow-sm"
+            fetchPriority="high"
           />
 
           <div className="border-border mt-4 border-t">{metadata}</div>
