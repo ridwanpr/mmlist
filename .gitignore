@@ -28,6 +28,9 @@ Thumbs.db
 .phpstorm.meta.php
 bootstrap/ssr/
 
-# Ignore Laravel bootstrap cache files
 /bootstrap/cache/*.php
 /bootstrap/cache/*.json
+
+resources/js/actions/
+resources/js/routes/
+resources/js/wayfinder/
