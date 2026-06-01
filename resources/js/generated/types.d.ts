@@ -40,18 +40,6 @@ declare namespace App {
       readonly name: string;
       readonly url: string;
     };
-    export type AnimeRecommendationData = {
-      readonly entry: App.DTOs.AnimeRecommendationEntryData;
-      readonly url: string;
-      readonly votes: number;
-    };
-    export type AnimeRecommendationEntryData = {
-      readonly mal_id: number;
-      readonly title: string;
-      readonly url: string;
-      readonly image_url: string;
-      readonly local_slug: string | null;
-    };
     export type AnimeRelationData = {
       readonly id: number;
       readonly anime_id: number;
@@ -300,6 +288,7 @@ declare namespace App {
       readonly updatedAt: string | null;
       readonly birth_date: string | null;
       readonly is_banned: boolean | null;
+      readonly google_id: string | null;
       readonly show_nsfw: boolean | null;
     };
     export type WatchlistData = {

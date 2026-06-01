@@ -16,17 +16,24 @@ class UpdateProfileRequest extends FormRequest
 
     public function rules(): array
     {
-        $userId = $this->user()->id;
+        $user = $this->user();
 
-        return [
+        $rules = [
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'username' => ['required', 'string', 'min:3', 'max:255', Rule::unique('users')->ignore($userId)],
-            'email' => ['nullable', 'string', 'email:dns', 'max:255', Rule::unique('users')->ignore($userId), 'disposable_email'],
+            'username' => ['required', 'string', 'min:3', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['nullable', 'string', 'email:dns', 'max:255', Rule::unique('users')->ignore($user->id), 'disposable_email'],
             'birth_date' => ['nullable', 'date'],
             'show_nsfw' => ['boolean'],
-            'current_password' => ['nullable', 'required_with:password', 'current_password'],
             'password' => ['nullable', 'string', 'min:6', 'max:255', 'confirmed'],
         ];
+
+        if ($user->google_id) {
+            $rules['current_password'] = ['nullable', 'string'];
+        } else {
+            $rules['current_password'] = ['nullable', 'required_with:password', 'current_password'];
+        }
+
+        return $rules;
     }
 
     public function withValidator(Validator $validator): void

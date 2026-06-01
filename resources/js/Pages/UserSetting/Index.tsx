@@ -6,12 +6,12 @@ import { update } from '../../actions/App/Http/Controllers/UserProfileController
 import ThemeToggle from '../../Components/UI/ThemeToggle';
 import AppHead from '../../Components/AppHead';
 
-const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
+const UserSetting = ({ user }: { user: App.DTOs.UserData & { google_id?: string | null } }) => {
   const { data, setData, post, processing, errors, progress } = useForm({
     xml_file: null as File | null,
   });
 
-  const handleImportSubmit = (e: React.SubmitEvent) => {
+  const handleImportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!data.xml_file) return;
 
@@ -104,7 +104,7 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                           Email Address
                         </label>
                         <input
-                          type="type"
+                          type="text"
                           id="email"
                           name="email"
                           defaultValue={user.email ?? ''}
@@ -199,33 +199,40 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                         Security Update
                       </h2>
                       <p className="text-text-muted text-xs">
-                        Change your current account access credentials.
+                        {user.google_id
+                          ? 'Create a local password to enable standard email credential login.'
+                          : 'Change your current account access credentials.'}
                       </p>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label htmlFor="current_password" className="text-text text-sm font-medium">
-                          Previous Password
-                        </label>
-                        <input
-                          type="password"
-                          id="current_password"
-                          name="current_password"
-                          className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
-                          placeholder="Confirm your old password"
-                        />
-                        {errors.current_password && (
-                          <span className="text-accent-red mt-1 block text-xs">
-                            {errors.current_password}
-                          </span>
-                        )}
-                      </div>
+                      {!user.google_id && (
+                        <div className="flex flex-col gap-1.5">
+                          <label
+                            htmlFor="current_password"
+                            className="text-text text-sm font-medium"
+                          >
+                            Previous Password
+                          </label>
+                          <input
+                            type="password"
+                            id="current_password"
+                            name="current_password"
+                            className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+                            placeholder="Confirm your old password"
+                          />
+                          {errors.current_password && (
+                            <span className="text-accent-red mt-1 block text-xs">
+                              {errors.current_password}
+                            </span>
+                          )}
+                        </div>
+                      )}
 
                       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="password" className="text-text text-sm font-medium">
-                            New Password
+                            {user.google_id ? 'Create Password' : 'New Password'}
                           </label>
                           <input
                             type="password"
@@ -246,14 +253,14 @@ const UserSetting = ({ user }: { user: App.DTOs.UserData }) => {
                             htmlFor="password_confirmation"
                             className="text-text text-sm font-medium"
                           >
-                            Confirm New Password
+                            Confirm {user.google_id ? 'Password' : 'New Password'}
                           </label>
                           <input
                             type="password"
                             id="password_confirmation"
                             name="password_confirmation"
                             className="border-border bg-surface-alt text-text focus:border-accent-gold w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
-                            placeholder="Repeat new password"
+                            placeholder="Repeat password"
                           />
                         </div>
                       </div>

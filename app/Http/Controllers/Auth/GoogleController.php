@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -18,16 +19,20 @@ class GoogleController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            $user = User::firstOrNew([
-                'email' => $googleUser->getEmail(),
-            ]);
+            $user = User::where('google_id', $googleUser->getId())->first();
 
-            if (! $user->exists) {
+            if (! $user) {
+                $user = User::where('email', $googleUser->getEmail())->first();
+            }
+
+            if (! $user) {
+                $user = new User();
+
                 $emailPrefix = explode('@', $googleUser->getEmail())[0];
                 $baseUsername = Str::slug($emailPrefix, '');
 
@@ -43,17 +48,19 @@ class GoogleController extends Controller
                 }
 
                 $user->username = $username;
+
+                $user->password = Str::random(32);
             }
 
             $user->name = $googleUser->getName();
             $user->email = $googleUser->getEmail();
             $user->google_id = $googleUser->getId();
-
             $user->save();
 
             $user->roles()->syncWithoutDetaching(['user']);
 
             Auth::login($user);
+            $request->session()->regenerate();
 
             Inertia::flash('success', 'Login success, welcome');
 

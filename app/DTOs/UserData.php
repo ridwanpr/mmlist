@@ -17,6 +17,7 @@ readonly class UserData
         public ?string $updatedAt,
         public ?string $birth_date,
         public ?bool $is_banned,
+        public ?string $google_id,
         public ?bool $show_nsfw,
     ) {}
 
@@ -32,6 +33,7 @@ readonly class UserData
             birth_date: $model->birth_date?->format('Y-m-d') ?? null,
             is_banned: $model->is_banned ?? null,
             show_nsfw: $model->show_nsfw ?? null,
+            google_id: $model->google_id ?? null,
         );
     }
 }
