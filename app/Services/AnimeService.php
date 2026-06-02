@@ -208,33 +208,35 @@ class AnimeService
             });
     }
 
-    /**
-     * @return array<int, AnimeData>
-     */
     public function getNowAiringFromDatabase(int $limit = 12): array
     {
-        $airingIds = Anime::query()
-            ->where('airing', true)
-            ->where('year', now()->year)
-            ->where('rating', '!=', 'Rx - Hentai')
-            ->orderByRaw("animes.type = 'TV' DESC")
-            ->orderBy('animes.year', 'desc')
-            ->orderBy('animes.airing', 'desc')
-            ->orderBy('animes.score', 'desc')
-            ->orderBy('score', 'desc')
-            ->limit($limit)
-            ->pluck('id');
+        return Cache::tags(['anime', 'airing_anime_home'])
+            ->remember("now_airing_{$limit}", now()->plus(hours: 12), function () use ($limit) {
+                $airingIds = Anime::query()
+                    ->where('airing', true)
+                    ->where('year', now()->year)
+                    ->where('rating', '!=', 'Rx - Hentai')
+                    ->orderByRaw("animes.type = 'TV' DESC")
+                    ->orderBy('animes.year', 'desc')
+                    ->orderBy('animes.airing', 'desc')
+                    ->orderBy('animes.score', 'desc')
+                    ->orderBy('score', 'desc')
+                    ->limit($limit)
+                    ->pluck('id');
 
-        if ($airingIds->isEmpty()) {
-            return [];
-        }
+                if ($airingIds->isEmpty()) {
+                    return [];
+                }
 
-        $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
-            ->whereIn('id', $airingIds)
-            ->get()
-            ->keyBy('id');
+                $animes = Anime::with(['genres', 'animeTriggers.triggerContent'])
+                    ->whereIn('id', $airingIds)
+                    ->get()
+                    ->keyBy('id');
 
-        return $animes->map(fn($item) => AnimeData::fromModel($item))->values()->all();
+                return $airingIds->map(fn($id) => AnimeData::fromModel($animes[$id]))
+                    ->values()
+                    ->all();
+            });
     }
 
     public function getAnimeInfo(string $slug): Anime
