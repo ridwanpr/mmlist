@@ -26,10 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('auth', function (Request $request) {
-            return Limit::perMinute(7)->by($request->ip());
-        });
-
         Relation::enforceMorphMap([
             'anime' => Anime::class,
             'trigger_content' => TriggerContent::class,
