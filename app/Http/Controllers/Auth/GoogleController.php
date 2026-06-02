@@ -62,6 +62,8 @@ class GoogleController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
+            cookie()->queue('mamoru_is_logged_in', '1', config('session.lifetime'), '/', null, false, false);
+
             Inertia::flash('success', 'Login success, welcome');
 
             return redirect()->intended(route('user.dash.index'));

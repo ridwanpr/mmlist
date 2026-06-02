@@ -48,6 +48,8 @@ class AuthController extends Controller
         if ($this->authService->authenticate($dto)) {
             $request->session()->regenerate();
 
+            cookie()->queue('mamoru_is_logged_in', '1', config('session.lifetime'), '/', null, false, false);
+
             Inertia::flash('success', 'Login success, welcome');
 
             $userRole = $this->authService->getAuthenticatedUserRole();
@@ -69,6 +71,8 @@ class AuthController extends Controller
         $this->authService->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        cookie()->queue(cookie()->forget('mamoru_is_logged_in'));
 
         Inertia::clearHistory();
 
