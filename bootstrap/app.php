@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleInertiaRequests::class,
             CheckBannedUser::class,
-        ]);
+    ]);
         $middleware->alias([
             'role' => CheckRole::class,
         ]);

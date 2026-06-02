@@ -50,10 +50,8 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::get('register', [AuthController::class, 'register'])->name('auth.register');
 
-    Route::middleware('throttle:auth')->group(function () {
-        Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
-        Route::post('login', [AuthController::class, 'loginAction'])->name('login.action');
-    });
+    Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
+    Route::post('login', [AuthController::class, 'loginAction'])->name('login.action');
 });
 
 // ADMIN ROUTE
