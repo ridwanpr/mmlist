@@ -78,4 +78,9 @@ class AuthController extends Controller
 
         return redirect()->route('home.index');
     }
+
+    public function resetPassword()
+    {
+        return Inertia::render('Auth/ResetPassword');
+    }
 }

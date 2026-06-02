@@ -52,6 +52,8 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
     Route::post('login', [AuthController::class, 'loginAction'])->name('login.action');
+
+    Route::get('reset-password', [AuthController::class, 'resetPassword'])->name('reset-password.index');
 });
 
 // ADMIN ROUTE

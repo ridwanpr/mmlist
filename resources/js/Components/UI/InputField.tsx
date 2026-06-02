@@ -1,5 +1,5 @@
-import type React from "react";
-import { Field, Input, Label } from "@headlessui/react";
+import type React from 'react';
+import { Field, Input, Label } from '@headlessui/react';
 
 interface InputFieldProps {
   label?: string;
@@ -7,6 +7,7 @@ interface InputFieldProps {
   type: string;
   placeholder?: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 }
 
 const InputField = ({
@@ -15,6 +16,7 @@ const InputField = ({
   type,
   placeholder,
   handleChange,
+  required = false,
 }: InputFieldProps) => {
   return (
     <Field className="flex flex-col gap-1.5">
@@ -32,6 +34,7 @@ const InputField = ({
         placeholder={placeholder}
         onChange={handleChange}
         className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/70 w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
+        required={required}
       />
     </Field>
   );

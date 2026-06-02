@@ -20,6 +20,10 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI')
     ],
 
+    'brevo' => [
+        'key' => env('BREVO_API_KEY')
+    ],
+
     'turnstile' => [
         'key' => env('TURNSTILE_SITE_KEY'),
         'secret' => env('TURNSTILE_SECRET_KEY'),
