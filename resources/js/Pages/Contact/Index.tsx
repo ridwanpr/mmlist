@@ -54,6 +54,14 @@ const Contact = () => {
           </h1>
           <p className="text-text-muted text-xs">
             Send a message to the Mamorulist team for inquiries, support, or feedback.
+            Alternatively, you can email us directly at{' '}
+            <a
+              href="mailto:mamorulist@gmail.com"
+              className="text-primary font-medium transition-colors hover:underline"
+            >
+              mamorulist@gmail.com
+            </a>
+            .
           </p>
         </div>
 
