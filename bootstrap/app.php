@@ -8,6 +8,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Sentry\Laravel\Integration;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Inertia\Inertia;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -30,4 +33,16 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         Integration::handles($exceptions);
+
+        $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
+            $statusCodes = [403, 404, 500, 503];
+
+            if (!app()->environment('local') && in_array($response->getStatusCode(), $statusCodes)) {
+                return Inertia::render('Error', [
+                    'status' => $response->getStatusCode()
+                ]);
+            }
+
+            return $response;
+        });
     })->create();
