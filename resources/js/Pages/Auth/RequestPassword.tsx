@@ -1,9 +1,10 @@
 import AuthLayout from '../../Layouts/AuthLayout';
 import AppHead from '../../Components/AppHead';
-import type React from 'react';
+import React, { useRef } from 'react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { login } from '../../actions/App/Http/Controllers/AuthController';
 import { requestPasswordAction } from '../../actions/App/Http/Controllers/AuthController';
+import Turnstile, { type TurnstileInstance } from '../../Components/Turnstile';
 
 interface FlashMessages {
   success?: string;
@@ -12,15 +13,34 @@ interface FlashMessages {
   info?: string;
 }
 
-const RequestPassword = () => {
-  const { data, setData, post } = useForm({ email: '' });
+interface PageProps {
+  turnstileSiteKey: string;
+  turnstileEnabled: boolean;
+  [key: string]: unknown;
+}
 
-  // Read the flash data for this specific component
+const RequestPassword = () => {
+  const { turnstileSiteKey, turnstileEnabled } = usePage<PageProps>().props;
   const { flash } = usePage() as unknown as { flash: FlashMessages };
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const turnstileRef = useRef<TurnstileInstance>(null);
+
+  const { data, setData, post, processing, errors } = useForm({
+    email: '',
+    'cf-turnstile-response': null as string | null,
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post(requestPasswordAction.url());
+
+    post(requestPasswordAction.url(), {
+      preserveState: true,
+      onError: () => {
+        // Reset turnstile widget and local state if validation fails
+        turnstileRef.current?.reset();
+        setData('cf-turnstile-response', null);
+      },
+    });
   };
 
   return (
@@ -46,9 +66,9 @@ const RequestPassword = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="text-text mb-2 text-sm font-medium">
+              <label htmlFor="email" className="text-text mb-2 block text-sm font-medium">
                 Email
               </label>
               <input
@@ -61,21 +81,51 @@ const RequestPassword = () => {
                 value={data.email}
                 className="border-border bg-surface-alt text-text focus:border-accent-gold placeholder:text-text-muted/70 w-full rounded-xl border px-3 py-2.5 text-sm outline-hidden transition-colors"
               />
+              {errors.email && (
+                <span className="mt-1 block text-xs text-red-500">{errors.email}</span>
+              )}
             </div>
+
+            {turnstileEnabled && (
+              <div>
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={turnstileSiteKey}
+                  onVerify={token => setData('cf-turnstile-response', token)}
+                  onExpire={() => setData('cf-turnstile-response', null)}
+                />
+                {errors['cf-turnstile-response'] && (
+                  <span className="mt-1 block text-xs text-red-500">
+                    {errors['cf-turnstile-response']}
+                  </span>
+                )}
+              </div>
+            )}
+
             {flash?.success ? (
               <button
                 disabled
-                className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 mt-6 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75"
+                type="button"
+                className="bg-primary text-surface mt-2 w-full rounded-lg px-4 py-2.5 text-sm font-semibold opacity-75 disabled:cursor-not-allowed"
               >
                 Email Sent
               </button>
             ) : (
-              <button className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 mt-6 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75">
-                Submit
+              <button
+                type="submit"
+                disabled={processing || (turnstileEnabled && !data['cf-turnstile-response'])}
+                className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 mt-2 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none disabled:cursor-not-allowed disabled:opacity-75"
+              >
+                {processing
+                  ? 'Processing...'
+                  : turnstileEnabled && !data['cf-turnstile-response']
+                    ? 'Verifying...'
+                    : 'Submit'}
               </button>
             )}
           </form>
-          <p className="text-text-muted mt-2 pt-1 text-center text-sm">
+
+          <p className="text-text-muted mt-4 pt-1 text-center text-sm">
             Already have an account?{' '}
             <Link
               href={login.url()}

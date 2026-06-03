@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\SendMail;
 use App\Models\User;
+use App\Rules\Turnstile;
 use App\Services\AuthService;
 use App\Services\UserService;
 use Illuminate\Auth\Events\PasswordReset;
@@ -95,7 +96,10 @@ class AuthController extends Controller
 
     public function requestPasswordAction(Request $request)
     {
-        $validated = $request->validate(['email' => 'required|email']);
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'cf-turnstile-response' => app()->environment('local') ? ['nullable'] : ['required', new Turnstile],
+        ]);
 
         $user = $this->userService->findUserByEmail($validated['email']);
 
