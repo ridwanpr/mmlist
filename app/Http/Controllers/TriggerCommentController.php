@@ -43,7 +43,7 @@ class TriggerCommentController extends Controller
         );
 
         $triggerComments = PaginatedCommentData::fromPaginator(
-            $triggerCommentsData->through(fn (Comment $item): CommentData => CommentData::fromModel($item))
+            $triggerCommentsData->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
         );
 
         return Inertia::render('TriggerComment/Index', [
@@ -63,6 +63,13 @@ class TriggerCommentController extends Controller
             'parent_comment_id' => 'nullable|exists:comments,id',
             'slug' => ['required'],
         ]);
+
+        $tempComment = new Comment(['body' => $validated['body']]);
+
+        if (empty(trim($tempComment->body_html))) {
+            Inertia::flash('error', 'Comment not allowed');
+            return back();
+        }
 
         $user = Auth::user();
 

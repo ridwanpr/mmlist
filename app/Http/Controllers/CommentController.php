@@ -26,6 +26,13 @@ class CommentController extends Controller
             'parent_comment_id' => 'nullable|exists:comments,id',
         ]);
 
+        $tempComment = new Comment(['body' => $validated['body']]);
+
+        if (empty(trim($tempComment->body_html))) {
+            Inertia::flash('error', 'Comment not allowed');
+            return back();
+        }
+
         $user = Auth::user();
         $anime = $this->animeService->getAnimeInfo($validated['slug']);
 
@@ -57,7 +64,7 @@ class CommentController extends Controller
         $comments = $this->commentService->getComments('anime', $anime->id, $anime->id, 25, $sortBy);
 
         $paginatedComment = PaginatedCommentData::fromPaginator(
-            $comments->through(fn (Comment $item): CommentData => CommentData::fromModel($item))
+            $comments->through(fn(Comment $item): CommentData => CommentData::fromModel($item))
         );
 
         return Inertia::render('AnimeComment/Index', [
@@ -77,6 +84,13 @@ class CommentController extends Controller
     public function update(Request $request, int $commentId)
     {
         $validated = $request->validate(['body' => 'required|string']);
+
+        $tempComment = new Comment(['body' => $validated['body']]);
+
+        if (empty(trim($tempComment->body_html))) {
+            Inertia::flash('error', 'Comment not allowed');
+            return back();
+        }
 
         $this->commentService->updateComment($commentId, Auth::id(), $validated);
 

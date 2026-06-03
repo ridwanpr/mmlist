@@ -66,28 +66,84 @@ class Comment extends Model
     {
         $body = $this->body;
 
-        // Clean up Double Asterisks (**bold**)
-        $body = preg_replace('/\s*\*\*\s+([^*]+?)\*\*/', ' **$1**', $body);
-        $body = preg_replace('/\*\*([^*]+?)\s+\*\*\s*/', '**$1** ', $body);
+        // Clean up spacing around Spoilers
+        $body = preg_replace('/\s*\|\|\s+([^*]+?)\|\|/', ' ||$1||', $body);
+        $body = preg_replace('/\|\|([^*]+?)\s+\|\|\s*/', '||$1|| ', $body);
 
-        // Clean up Single Asterisks (*italics*)
-        $body = preg_replace('/\s*(?<!\*)\*\s+([^*]+?)\*(?!\*)/', ' *$1*', $body);
-        $body = preg_replace('/(?<!\*)\*([^*]+?)\s+\*(?!\*)\s*/', '*$1* ', $body);
-
-        // Clean up Spoilers (||spoiler||)
-        $body = preg_replace('/\s*\|\|\s+([^|]+?)\|\|/', ' ||$1||', $body);
-        $body = preg_replace('/\|\|([^|]+?)\s+\|\|\s*/', '||$1|| ', $body);
-
-        $html = Str::markdown($body, [
+        // Standard markdown compilation
+        $html = \Illuminate\Support\Str::markdown($body, [
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
         ]);
 
-        return preg_replace(
+        // Apply your spoiler tag replacement
+        $html = preg_replace(
             '/\|\|(.*?)\|\|/',
             '<span class="spoiler">$1</span>',
             $html
         );
+
+        return $this->sanitizeBackendHtml($html);
+    }
+
+    private function sanitizeBackendHtml(string $html): string
+    {
+        if (empty(trim($html))) {
+            return '';
+        }
+
+        $dom = new \DOMDocument();
+
+        libxml_use_internal_errors(true);
+
+        // Modern future-proof replacement for HTML-ENTITIES to handle UTF-8 properly
+        $safeHtml = mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, ~0], 'UTF-8');
+
+        $dom->loadHTML(
+            $safeHtml,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+
+        // Define allowed tags based on your exact specifications
+        $allowedTags = ['p', 'strong', 'em', 'span'];
+        $elements = $dom->getElementsByTagName('*');
+
+        // Iterate backwards to safely delete or rearrange elements dynamically
+        for ($i = $elements->length - 1; $i >= 0; $i--) {
+            $element = $elements->item($i);
+            $tagName = strtolower($element->tagName);
+
+            // If the tag isn't explicitly allowed, unwrap its contents safely
+            if (!in_array($tagName, $allowedTags)) {
+                while ($element->hasChildNodes()) {
+                    $element->parentNode->insertBefore($element->firstChild, $element);
+                }
+                $element->parentNode->removeChild($element);
+                continue;
+            }
+
+            // Clean up all attributes to block event handlers or malicious styles
+            for ($j = $element->attributes->length - 1; $j >= 0; $j--) {
+                $attr = $element->attributes->item($j);
+
+                // Safety check to ensure the attribute node exists
+                if (!$attr) {
+                    continue;
+                }
+
+                $attrName = strtolower($attr->nodeName);
+
+                // Keep only the class="spoiler" attribute declaration for your spans
+                if ($tagName === 'span' && $attrName === 'class' && $element->getAttribute('class') === 'spoiler') {
+                    continue;
+                }
+
+                $element->removeAttribute($attr->nodeName);
+            }
+        }
+
+        return trim($dom->saveHTML());
     }
 
     public function commentable(): MorphTo
