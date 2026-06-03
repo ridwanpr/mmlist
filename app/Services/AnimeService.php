@@ -27,6 +27,7 @@ class AnimeService
         $user = Auth::user();
 
         $query = Anime::query()
+            ->where('animes.approved', 1)
             ->when($user?->show_nsfw !== true, function ($q) {
                 $q->where('animes.is_not_hentai', 1);
             })->when(filled($filter['query'] ?? null), function ($q) use ($filter) {
@@ -188,6 +189,7 @@ class AnimeService
                     ->where('rating', '!=', 'Rx - Hentai')
                     ->orderByRaw("animes.type = 'TV' DESC")
                     ->orderBy('animes.score', 'desc')
+                    ->where('animes.approved', 1)
                     ->orderBy('animes.year', 'desc')
                     ->orderBy('animes.airing', 'desc')
                     ->limit($limit)
@@ -214,6 +216,7 @@ class AnimeService
             ->remember("now_airing_{$limit}", now()->plus(hours: 12), function () use ($limit) {
                 $airingIds = Anime::query()
                     ->where('airing', true)
+                    ->where('animes.approved', 1)
                     ->where('year', now()->year)
                     ->where('rating', '!=', 'Rx - Hentai')
                     ->orderByRaw("animes.type = 'TV' DESC")
