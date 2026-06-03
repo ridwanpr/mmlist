@@ -24,7 +24,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
     {
         $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
-        $remainingQuota = 800 - $dailyRequests;
+        $remainingQuota = 500 - $dailyRequests;
 
         Log::channel('gemini')->info("GenerateGeminiAdvisory: Job started. Daily requests tracked: {$dailyRequests}. Remaining quota: {$remainingQuota}.");
 

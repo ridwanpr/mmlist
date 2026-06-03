@@ -13,8 +13,8 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new FetchAiringAnime)->dailyAt(1);
-Schedule::job(new ExtractAiredData)->twiceDaily(2, 14);
-Schedule::job(new SyncAnimeRelation)->dailyAt(3);
+Schedule::job(new ExtractAiredData)->dailyAt(2);
+Schedule::job(new SyncAnimeRelation)->weekly();
 
 Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))->everyMinute();
 
