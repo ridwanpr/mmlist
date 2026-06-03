@@ -11,9 +11,17 @@
     <script>
         document.addEventListener("zarazConsentAPIReady", () => {
             const noConsentPages = ['/privacy-policy', '/terms', '/about'];
-            if (noConsentPages.includes(window.location.pathname)) {
-                zaraz.consent.modal.hide();
+            function manageModalVisibility() {
+                if (noConsentPages.includes(window.location.pathname)) {
+                    setTimeout(() => {
+                        if (typeof zaraz !== 'undefined' && zaraz.consent?.modal) {
+                            zaraz.consent.modal.hide();
+                        }
+                    }, 50);
+                }
             }
+            manageModalVisibility();
+            document.addEventListener("inertia:success", manageModalVisibility);
         });
     </script>
     <script>
