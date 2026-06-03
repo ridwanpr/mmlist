@@ -50,7 +50,6 @@ const Register = () => {
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.post('/register', values, {
-      preserveState: true,
       onError: () => {
         turnstileRef.current?.reset();
         setValues(prev => ({ ...prev, 'cf-turnstile-response': null }));

@@ -37,7 +37,6 @@ const Login = () => {
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     router.post('/login', values, {
-      preserveState: true,
       onError: () => {
         turnstileRef.current?.reset();
         setValues(prev => ({ ...prev, 'cf-turnstile-response': null }));
