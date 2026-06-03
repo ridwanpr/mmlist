@@ -9,6 +9,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
+        document.addEventListener("zarazConsentAPIReady", () => {
+            const noConsentPages = ['/privacy-policy', '/terms', '/about'];
+            if (noConsentPages.includes(window.location.pathname)) {
+                zaraz.consent.modal.hide();
+            }
+        });
+    </script>
+    <script>
         (function() {
             try {
                 const saved = document.cookie
