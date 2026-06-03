@@ -9,22 +9,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-        document.addEventListener("zarazConsentAPIReady", () => {
-            const noConsentPages = ['/privacy-policy', '/terms', '/about'];
-            function manageModalVisibility() {
-                if (noConsentPages.includes(window.location.pathname)) {
-                    setTimeout(() => {
-                        if (typeof zaraz !== 'undefined' && zaraz.consent?.modal) {
-                            zaraz.consent.modal.hide();
-                        }
-                    }, 50);
-                }
-            }
-            manageModalVisibility();
-            document.addEventListener("inertia:success", manageModalVisibility);
-        });
-    </script>
-    <script>
         (function() {
             try {
                 const saved = document.cookie
