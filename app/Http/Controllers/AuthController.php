@@ -15,9 +15,9 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
-use Password;
 
 class AuthController extends Controller
 {
@@ -89,12 +89,12 @@ class AuthController extends Controller
         return redirect()->route('home.index');
     }
 
-    public function requestPassword()
+    public function requestPassword(): Response
     {
         return Inertia::render('Auth/RequestPassword');
     }
 
-    public function requestPasswordAction(Request $request)
+    public function requestPasswordAction(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'email' => 'required|email',
@@ -136,7 +136,7 @@ class AuthController extends Controller
         return back();
     }
 
-    public function resetPassword(string $token, Request $request)
+    public function resetPassword(string $token, Request $request): Response
     {
         return Inertia::render('Auth/ResetPassword', [
             'token' => $token,
