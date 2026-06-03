@@ -22,6 +22,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
     public function handle(GeminiService $geminiService): void
     {
+        // Enforce daily API limits
         $cacheKey = 'gemini_daily_requests_' . date('Y-m-d');
         $dailyRequests = Cache::get($cacheKey, 0);
         $remainingQuota = 500 - $dailyRequests;
@@ -30,20 +31,17 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
         if ($remainingQuota <= 0) {
             Log::channel('gemini')->warning('GenerateGeminiAdvisory: Aborting job execution. Daily quota limit reached.');
-
             return;
         }
 
-        // Define total maximum items per single job run
+        // Cap batch size to remaining quota or maximum of 15 items per run
         $maxBatch = min(15, $remainingQuota);
 
-        // Allocate explicit boundaries to guarantee Phase 2 runs.
-        // If a full batch is available, Phase 1 is capped at 10, leaving 5 slots for Phase 2.
-        // If quota is low (under 5), slots are divided evenly.
+        // Divide batch: reserve slots for Phase 2 fresh items if batch size allows
         $phase1Cap = $maxBatch > 5 ? $maxBatch - 5 : (int) floor($maxBatch / 2);
-
         $currentYear = (int) date('Y');
 
+        // Map database trigger names to their primary IDs
         $dbTriggerContents = TriggerContent::pluck('id', 'name')->toArray();
         $availableTriggerNames = array_keys($dbTriggerContents);
         $totalTriggerCount = count($dbTriggerContents);
@@ -53,7 +51,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
         $processedCount = 0;
 
         // -------------------------------------------------------------------------
-        // Phase 1: Gap-fill (Prioritized) : Capped to reserve slots for Phase 2
+        // Phase 1: Gap-fill existing advisories missing new trigger mappings
         // -------------------------------------------------------------------------
         $gapAnimes = Anime::whereNotNull('ai_advisory')
             ->where('ai_advisory', '!=', GeminiService::FALLBACK_ADVISORY)
@@ -70,7 +68,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->limit($phase1Cap)
             ->get();
 
-        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 1 (Gap-fill) found ' . $gapAnimes->count() . ' candidates matching discrepancy criteria.');
+        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 1 (Gap-fill) found ' . $gapAnimes->count() . ' candidates.');
 
         foreach ($gapAnimes as $anime) {
             if ($processedCount >= $phase1Cap) {
@@ -78,20 +76,21 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 break;
             }
 
+            // Find triggers already recorded for this anime
             $existingTriggerIds = AnimeTriggerContext::where('anime_id', $anime->id)
                 ->pluck('trigger_content_id')
                 ->flip()
                 ->all();
 
+            // Isolate only the missing trigger names to send to the API
             $missingTriggerNames = array_keys(
                 array_filter($dbTriggerContents, fn($id) => ! isset($existingTriggerIds[$id]))
             );
 
-            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Current Context Count: " . count($existingTriggerIds) . " / {$totalTriggerCount} | Missing Triggers Count: " . count($missingTriggerNames));
+            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 1 processing -> ID: {$anime->id} | Title: {$anime->title} | Missing Triggers Count: " . count($missingTriggerNames));
 
             if (empty($missingTriggerNames)) {
-                Log::channel('gemini')->info("GenerateGeminiAdvisory: Skipping Anime ID {$anime->id}. Discrepancy resolved dynamically via concurrent process.");
-
+                Log::channel('gemini')->info("GenerateGeminiAdvisory: Skipping Anime ID {$anime->id}. Discrepancy resolved by concurrent run.");
                 continue;
             }
 
@@ -105,20 +104,22 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                Log::channel('gemini')->error("GenerateGeminiAdvisory: Phase 1 gap-fill failed for Anime ID {$anime->id}: " . $e->getMessage());
+                // Abort entire job if the fallback infrastructure chain completely fails
+                Log::channel('gemini')->critical("GenerateGeminiAdvisory: Infrastructure chain failed in Phase 1 for Anime ID {$anime->id}. Aborting job.");
+                Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
+                return;
             }
         }
 
         // -------------------------------------------------------------------------
-        // Phase 2: Fresh anime (Guaranteed to have remaining slots from the total batch)
+        // Phase 2: Process completely fresh anime records
         // -------------------------------------------------------------------------
         $remainingSlots = $maxBatch - $processedCount;
         Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 1 complete. Processed: {$processedCount}. Remaining slots for Phase 2: {$remainingSlots}.");
 
         if ($remainingSlots <= 0) {
             Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
-            Log::channel('gemini')->info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2 fresh anime processing.');
-
+            Log::channel('gemini')->info('GenerateGeminiAdvisory: Job complete. No open slots remaining for Phase 2.');
             return;
         }
 
@@ -132,7 +133,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
             ->limit($remainingSlots)
             ->get();
 
-        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 2 (Fresh) found ' . $newAnimes->count() . ' eligible candidates.');
+        Log::channel('gemini')->info('GenerateGeminiAdvisory: Phase 2 (Fresh) found ' . $newAnimes->count() . ' candidates.');
 
         foreach ($newAnimes as $anime) {
             if ($processedCount >= $maxBatch) {
@@ -140,7 +141,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 break;
             }
 
-            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title} | Type: {$anime->type} | Year: {$anime->year} | Airing: {$anime->airing} | Score: {$anime->score}");
+            Log::channel('gemini')->info("GenerateGeminiAdvisory: Phase 2 processing -> ID: {$anime->id} | Title: {$anime->title}");
 
             try {
                 $result = $geminiService->generateAnimeAdvisory($anime->title, $availableTriggerNames, $anime->rating);
@@ -154,8 +155,11 @@ class GenerateGeminiAdvisory implements ShouldQueue
                 $processedCount++;
                 sleep(2);
             } catch (\Exception $e) {
-                Log::channel('gemini')->error("GenerateGeminiAdvisory: Phase 2 failed for Anime ID {$anime->id}: " . $e->getMessage());
+                // Abort job and flag current item with fallback state if entire infrastructure fails
+                Log::channel('gemini')->critical("GenerateGeminiAdvisory: Infrastructure chain failed in Phase 2 for Anime ID {$anime->id}. Aborting job.");
                 $anime->update(['ai_advisory' => GeminiService::FALLBACK_ADVISORY]);
+                Cache::put($cacheKey, $dailyRequests + $processedCount, now()->addHours(24));
+                return;
             }
         }
 
@@ -165,6 +169,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
 
     private function syncTriggerContexts(int $animeId, array $matchedTriggers, array $dbTriggerContents, array $evaluatedTriggerNames): void
     {
+        // Key summaries by trigger name for fast array lookups
         $matchedMap = [];
         foreach ($matchedTriggers as $matched) {
             $name = $matched['trigger_name'] ?? '';
@@ -174,6 +179,7 @@ class GenerateGeminiAdvisory implements ShouldQueue
             }
         }
 
+        // Loop through all evaluated triggers and insert summaries or static fallbacks
         $insertedCount = 0;
         foreach ($evaluatedTriggerNames as $name) {
             if (array_key_exists($name, $dbTriggerContents)) {

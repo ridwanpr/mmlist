@@ -12,15 +12,11 @@ use Illuminate\Support\Facades\Log;
 class GeminiService
 {
     public const FALLBACK_ADVISORY = 'Insufficient data to provide a reliable advisory.';
-
     public const FALLBACK_CONTEXT = 'No significant content found for this trigger.';
 
     private string $apiKey;
-
     private string $apiKey2;
-
     private string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/';
-
     private string $systemInstruction;
 
     public function __construct()
@@ -61,10 +57,7 @@ class GeminiService
     }
 
     /**
-     * Generate content advisory and localized trigger contexts.
-     *
-     * @param  array<string>  $availableTriggers
-     * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
+     * Executes the API cascade: Key 1 -> Key 2 -> Gemma Fallback before throwing total execution failure.
      */
     public function generateAnimeAdvisory(string $title, array $availableTriggers, ?string $rating = null): array
     {
@@ -81,6 +74,9 @@ class GeminiService
         $response = null;
         $key1CircuitOpen = Cache::get('gemini_key1_circuit_open', false);
 
+        // -------------------------------------------------------------------------
+        // Route 1: Try Primary Key using gemini-3.1-flash-lite
+        // -------------------------------------------------------------------------
         if ($key1CircuitOpen) {
             Log::channel('gemini')->info("Gemini key 1 circuit open — skipping directly to secondary key for {$title}.");
         } else {
@@ -102,6 +98,9 @@ class GeminiService
             }
         }
 
+        // -------------------------------------------------------------------------
+        // Route 2: Try Secondary Key using gemini-3.1-flash-lite
+        // -------------------------------------------------------------------------
         if ($key1CircuitOpen || ! $response || $response->status() === 429 || $response->serverError()) {
             $status = $response ? $response->status() : ($key1CircuitOpen ? 'Circuit Open' : 'Timeout');
             Log::channel('gemini')->warning("Gemini API unavailable (Status: {$status}) for {$title}. Retrying with secondary API key.");
@@ -118,6 +117,9 @@ class GeminiService
                 Log::channel('gemini')->warning("Gemini secondary key timed out for {$title}. Falling back to Gemma 4 31B.");
             }
 
+            // -------------------------------------------------------------------------
+            // Route 3: Final fallback using gemma-4-31b-it on Secondary Key
+            // -------------------------------------------------------------------------
             try {
                 $fallbackResponse = $this->callApi('gemma-4-31b-it', $prompt, timeout: 60, apiKey: $this->apiKey2);
 
@@ -136,7 +138,7 @@ class GeminiService
     }
 
     /**
-     * Make HTTP request to the API gateway.
+     * Executes HTTP POST payload request to Google's API gateway endpoint.
      */
     private function callApi(string $model, string $prompt, int $timeout = 30, ?string $apiKey = null): Response
     {
@@ -147,6 +149,7 @@ class GeminiService
             'temperature' => 0.2,
         ];
 
+        // Apply structured JSON schema requirements only if using Gemini models
         if (! str_starts_with($model, 'gemma-')) {
             $generationConfig['responseMimeType'] = 'application/json';
             $generationConfig['thinkingConfig'] = ['thinkingLevel' => 'minimal'];
@@ -194,7 +197,7 @@ class GeminiService
     }
 
     /**
-     * Extract raw text string from response payload blocks.
+     * Extracts and aggregates plain text response parts while excluding thinking process tokens.
      */
     private function extractText(array $json): string
     {
@@ -215,9 +218,7 @@ class GeminiService
     }
 
     /**
-     * Clean up and decode raw text block into a structured array representation.
-     *
-     * @return array{ai_advisory: string, matched_triggers: array<array{trigger_name: string, ai_summary: string}>}
+     * Strips Markdown block formatting tags and returns decoded data payload arrays.
      */
     private function parseJsonOutput(string $rawText): array
     {
@@ -229,7 +230,7 @@ class GeminiService
         $decoded = json_decode(trim($cleaned), true);
 
         if (! is_array($decoded) || ! isset($decoded['ai_advisory'])) {
-            Log::channel('gemini')->error('Failed to decode valid JSON content structural layout. Raw Output: ' . $rawText);
+            Log::channel('gemini')->error('Failed to decode valid JSON content layout. Raw Output: ' . $rawText);
 
             return ['ai_advisory' => self::FALLBACK_ADVISORY, 'matched_triggers' => []];
         }
