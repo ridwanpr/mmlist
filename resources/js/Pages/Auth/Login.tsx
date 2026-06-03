@@ -7,6 +7,7 @@ import AuthLayout from '../../Layouts/AuthLayout';
 import AppHead from '../../Components/AppHead';
 import Turnstile, { type TurnstileInstance } from '../../Components/Turnstile';
 import { redirect as redirectGoogle } from '../../actions/App/Http/Controllers/Auth/GoogleController';
+import { requestPassword } from '../../actions/App/Http/Controllers/AuthController';
 
 interface PageProps {
   routes: Record<string, string>;
@@ -92,7 +93,7 @@ const Login = () => {
               )}
               <div className="mt-1 text-right">
                 <Link
-                  href="#"
+                  href={requestPassword.url()}
                   className="text-primary hover:text-primary-dark text-xs font-medium transition-colors hover:cursor-pointer"
                 >
                   Forgot password?

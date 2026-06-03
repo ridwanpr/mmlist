@@ -43,7 +43,7 @@ class UserService
             ->onEachSide(1)
             ->withQueryString();
 
-        $userDto = $users->through(fn (User $item) => UserData::fromModel($item));
+        $userDto = $users->through(fn(User $item) => UserData::fromModel($item));
 
         return PaginatedUserData::fromPaginator($userDto);
     }
@@ -62,5 +62,10 @@ class UserService
             'birth_date' => $data['birth_date'],
             'is_banned' => $data['is_banned'] == 1 ? true : false,
         ]);
+    }
+
+    public function findUserByEmail(string $email)
+    {
+        return User::where('email', $email)->first();
     }
 }

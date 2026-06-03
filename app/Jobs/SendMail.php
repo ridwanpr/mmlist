@@ -13,33 +13,29 @@ class SendMail implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(
         protected string $receiverEmail,
-        protected string $receiverName
+        protected string $receiverName,
+        protected string $subject,
+        protected string $htmlContent
     ) {}
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         $client = new Brevo(apiKey: config('services.brevo.key'));
 
         $client->transactionalEmails->sendTransacEmail(
             new SendTransacEmailRequest([
-                'subject' => 'Hello from Brevo!',
-                'htmlContent' => '<html><body><p>Hello,</p><p>This is my first transactional email.</p></body></html>',
+                'subject' => $this->subject,
+                'htmlContent' => $this->htmlContent,
                 'sender' => new SendTransacEmailRequestSender([
-                    'name' => 'Mamorulist ',
+                    'name' => 'Mamorulist',
                     'email' => 'no-reply@mamorulist.com',
                 ]),
                 'to' => [
                     new SendTransacEmailRequestToItem([
-                        'email' => 'johndoe@example.com',
-                        'name' => 'John Doe',
+                        'email' => $this->receiverEmail,
+                        'name' => $this->receiverName,
                     ]),
                 ],
             ])

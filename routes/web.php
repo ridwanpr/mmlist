@@ -53,7 +53,11 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [AuthController::class, 'registerAction'])->name('auth.register.action');
     Route::post('login', [AuthController::class, 'loginAction'])->name('login.action');
 
-    Route::get('reset-password', [AuthController::class, 'resetPassword'])->name('reset-password.index');
+    Route::get('request-password', [AuthController::class, 'requestPassword'])->name('request-password.index');
+    Route::post('request-password', [AuthController::class, 'requestPasswordAction'])->name('request-password.store');
+
+    Route::get('reset-password/{token}', [AuthController::class, 'resetPassword'])->name('reset-password.index');
+    Route::post('reset-password', [AuthController::class, 'resetPasswordAction'])->name('reset-password.store');
 });
 
 // ADMIN ROUTE
