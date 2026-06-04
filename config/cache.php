@@ -5,6 +5,7 @@ use App\DTOs\AnimeMetaData;
 use App\DTOs\AnimeTitleData;
 use App\DTOs\AnimeTriggerData;
 use App\DTOs\TriggerContentData;
+use App\DTOs\UserData;
 use App\DTOs\TriggerStatsData;
 use Illuminate\Support\Str;
 
@@ -136,6 +137,7 @@ return [
         AnimeTitleData::class,
         AnimeMetaData::class,
         AnimeTriggerData::class,
+        UserData::class,
         TriggerContentData::class,
         TriggerStatsData::class,
         \Carbon\Carbon::class,
