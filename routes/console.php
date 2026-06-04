@@ -16,7 +16,9 @@ Schedule::job(new FetchAiringAnime)->dailyAt(1);
 Schedule::job(new ExtractAiredData)->dailyAt(2);
 Schedule::job(new SyncAnimeRelation)->weekly();
 
-Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))->everyMinute();
+Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))
+    ->everyMinute()
+    ->between('2:00', '4:00');
 
 Artisan::command('extract:fromto', function () {
     $this->info('Dispatching extraction job to the queue...');
