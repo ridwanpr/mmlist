@@ -6,7 +6,7 @@ import { show } from '../../../actions/App/Http/Controllers/AnimeController';
 
 type AnimeListProps = {
   watchlists: App.DTOs.PaginatedWatchlistData;
-  viewMode: 'list' | 'grid';
+  viewMode: string;
   setSelectedWatchlist: React.Dispatch<SetStateAction<App.DTOs.WatchlistData | null>>;
   handleEditWatchlist: (watchlist: App.DTOs.WatchlistData | null) => void;
   handleDeleteWatchlist: (watchlistId: number) => void;

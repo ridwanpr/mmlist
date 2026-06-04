@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import type React from 'react';
 import { router, useForm } from '@inertiajs/react';
 import FrontLayout from '../../Layouts/FrontLayout';
@@ -48,6 +48,23 @@ export type EditWatchlistForm = {
   completed_at: string | null;
 };
 
+// External store configuration to safely read localStorage in SSR environments
+const subscribeViewMode = (callback: () => void) => {
+  window.addEventListener('storage', callback);
+  window.addEventListener('watchlist_view_mode_updated', callback);
+  return () => {
+    window.removeEventListener('storage', callback);
+    window.removeEventListener('watchlist_view_mode_updated', callback);
+  };
+};
+
+const getViewModeSnapshot = () => {
+  if (typeof window === 'undefined') return 'list';
+  return localStorage.getItem('watchlist_view_mode') === 'grid' ? 'grid' : 'list';
+};
+
+const getServerViewModeSnapshot = () => 'list';
+
 const Watchlist = ({
   watchlists,
   status,
@@ -62,10 +79,12 @@ const Watchlist = ({
   const [searchQuery, setSearchQuery] = useState(search || '');
   const [selectedWatchlist, setSelectedWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
   const [editWatchlist, setEditWatchlist] = useState<App.DTOs.WatchlistData | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>(() => {
-    const savedView = localStorage.getItem('watchlist_view_mode');
-    return savedView === 'grid' ? 'grid' : 'list';
-  });
+
+  const viewMode = useSyncExternalStore(
+    subscribeViewMode,
+    getViewModeSnapshot,
+    getServerViewModeSnapshot,
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -88,9 +107,10 @@ const Watchlist = ({
     return () => clearTimeout(timer);
   }, [searchQuery, search]);
 
-  useEffect(() => {
-    localStorage.setItem('watchlist_view_mode', viewMode);
-  }, [viewMode]);
+  const handleViewModeChange = (mode: 'list' | 'grid') => {
+    localStorage.setItem('watchlist_view_mode', mode);
+    window.dispatchEvent(new Event('watchlist_view_mode_updated'));
+  };
 
   const handleChangeTab = (tab: string) => {
     const currentParams = Object.fromEntries(new URLSearchParams(window.location.search).entries());
@@ -192,7 +212,7 @@ const Watchlist = ({
 
                 <div className="border-border bg-surface flex items-center rounded-lg border p-0.5 shadow-xs">
                   <button
-                    onClick={() => setViewMode('list')}
+                    onClick={() => handleViewModeChange('list')}
                     title="List View"
                     className={`cursor-pointer rounded-md p-1.5 transition-colors ${
                       viewMode === 'list'
@@ -203,7 +223,7 @@ const Watchlist = ({
                     <LuList size={16} />
                   </button>
                   <button
-                    onClick={() => setViewMode('grid')}
+                    onClick={() => handleViewModeChange('grid')}
                     title="Grid Cover View"
                     className={`cursor-pointer rounded-md p-1.5 transition-colors ${
                       viewMode === 'grid'

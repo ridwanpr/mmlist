@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   LuFlame,
   LuTv,
@@ -62,47 +62,47 @@ const SearchSection = ({
 }: SearchSectionProps) => {
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [fromAiring, setFromAiring] = useState('');
-  const [toAiring, setToAiring] = useState('');
-  const [selectedSeason, setSelectedSeason] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [selectedRating, setSelectedRating] = useState('');
-
-  const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>({});
-  const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>({});
-  const [triggerStates, setTriggerStates] = useState<Record<number, FilterStatus>>({});
-
-  useEffect(() => {
+  // Safely initialize state directly using initialization functions
+  const getParam = (key: string, fallback: string) => {
+    if (typeof window === 'undefined') return fallback;
     const params = new URLSearchParams(window.location.search);
+    return params.get(key) || fallback || '';
+  };
 
-    setSearchQuery(params.get('query') || filters.query || '');
-    setFromAiring(params.get('from_airing') || filters.from_airing || '');
-    setToAiring(params.get('to_airing') || filters.to_airing || '');
-    setSelectedSeason(params.get('season') || filters.season || '');
-    setSelectedType(params.get('type') || filters.type || '');
-    setSelectedRating(params.get('rating') || filters.rating || '');
+  const parseArrayParam = (key: string) => {
+    if (typeof window === 'undefined') return [];
+    const params = new URLSearchParams(window.location.search);
+    const val = params.get(key);
+    return val ? val.split(',') : [];
+  };
 
-    const parseArrayParam = (key: string) => {
-      const val = params.get(key);
-      return val ? val.split(',') : [];
-    };
+  const [searchQuery, setSearchQuery] = useState(() => getParam('query', filters.query));
+  const [fromAiring, setFromAiring] = useState(() => getParam('from_airing', filters.from_airing));
+  const [toAiring, setToAiring] = useState(() => getParam('to_airing', filters.to_airing));
+  const [selectedSeason, setSelectedSeason] = useState(() => getParam('season', filters.season));
+  const [selectedType, setSelectedType] = useState(() => getParam('type', filters.type));
+  const [selectedRating, setSelectedRating] = useState(() => getParam('rating', filters.rating));
 
+  const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>(() => {
     const initialGenres: Record<number, FilterStatus> = {};
     parseArrayParam('genres_include').forEach(id => (initialGenres[Number(id)] = 'include'));
     parseArrayParam('genres_exclude').forEach(id => (initialGenres[Number(id)] = 'exclude'));
-    setGenreStates(initialGenres);
+    return initialGenres;
+  });
 
+  const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>(() => {
     const initialThemes: Record<number, FilterStatus> = {};
     parseArrayParam('themes_include').forEach(id => (initialThemes[Number(id)] = 'include'));
     parseArrayParam('themes_exclude').forEach(id => (initialThemes[Number(id)] = 'exclude'));
-    setThemeStates(initialThemes);
+    return initialThemes;
+  });
 
+  const [triggerStates, setTriggerStates] = useState<Record<number, FilterStatus>>(() => {
     const initialTriggers: Record<number, FilterStatus> = {};
     parseArrayParam('triggers_include').forEach(id => (initialTriggers[Number(id)] = 'include'));
     parseArrayParam('triggers_exclude').forEach(id => (initialTriggers[Number(id)] = 'exclude'));
-    setTriggerStates(initialTriggers);
-  }, [filters]);
+    return initialTriggers;
+  });
 
   const handleToggleFilter = (id: number, field: 'genres' | 'themes' | 'triggers') => {
     const map = { genres: setGenreStates, themes: setThemeStates, triggers: setTriggerStates };
@@ -132,7 +132,7 @@ const SearchSection = ({
     if (e) e.preventDefault();
     const currentParams = new URLSearchParams(window.location.search);
 
-    const params: Record<string, any> = {
+    const params: Record<string, string | undefined> = {
       query: searchQuery || undefined,
       sort: currentParams.get('sort') || undefined,
       order: currentParams.get('order') || undefined,
