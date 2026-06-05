@@ -33,13 +33,13 @@ const Contact = () => {
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-    post('/contact', {
-      onSuccess: () => reset(),
-      onError: () => {
-        turnstileRef.current?.reset();
-        setData('cf-turnstile-response', null);
-      },
-    });
+    // post('/contact', {
+    //   onSuccess: () => reset(),
+    //   onError: () => {
+    //     turnstileRef.current?.reset();
+    //     setData('cf-turnstile-response', null);
+    //   },
+    // });
   };
 
   return (
