@@ -25,7 +25,7 @@ const Home = ({ nowAiring, topAnime, staffPick, latestComments, latestVotes }: H
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />
       <RecentComment latestComments={latestComments} />
-      <RecentVotes latestVotes={latestVotes} />
+      {/* <RecentVotes latestVotes={latestVotes} /> */}
     </>
   );
 };
