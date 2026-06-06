@@ -37,6 +37,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const isAllAges = animeData?.rating === 'G - All Ages';
   const isExplicit = animeData?.rating === 'Rx - Hentai';
+  const isRPlus = animeData?.rating === 'R+ - Mild Nudity';
 
   let yesVotes = 0;
   let noVotes = 0;
@@ -78,12 +79,20 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     }
 
     if (!hasTrigger) {
+      // If it's R+ but has no triggers, keep it neutral instead of green
+      if (isRPlus) {
+        return {
+          border: 'border-border/60',
+          text: 'text-text-muted/70',
+        };
+      }
       return {
         border: 'border-success/30',
         text: 'text-success',
       };
     }
 
+    // Bumped thresholds for trigger severity
     if (yesVotes < 5) {
       return {
         border: 'border-severity-unverified/40',
@@ -236,15 +245,19 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   <span
                     className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
                   >
-                    {totalVotes === 0 && 'No Reports'}
-                    {totalVotes > 0 && !hasTrigger && 'Voted Safe'}
-                    {hasTrigger && `${yesVotes} Trigger Reports`}
+                    {hasTrigger
+                      ? `${yesVotes} Trigger Reports`
+                      : isRPlus
+                        ? 'Rated R+ (Nudity)'
+                        : totalVotes === 0
+                          ? 'No Reports'
+                          : 'Voted Safe'}
                   </span>
 
                   <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
                     {totalVotes === 0
                       ? '0 reports submitted'
-                      : `From ${totalVotes.toLocaleString()} total votes`}
+                      : `From ${totalVotes.toLocaleString('en-US')} total votes`}
                   </span>
                 </>
               )}
