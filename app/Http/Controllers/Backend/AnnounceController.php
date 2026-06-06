@@ -11,7 +11,15 @@ class AnnounceController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::latest()->get();
+        $announcements = Announcement::latest()->get()->map(function ($announce) {
+            return [
+                'id' => $announce->id,
+                'title' => $announce->title,
+                'body' => $announce->body,
+                'created_at' => $announce->created_at->format('M j, Y'),
+            ];
+        });
+
         return Inertia::render('Backend/Announce/Index', [
             'announcements' => $announcements
         ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Announcement;
 use App\Services\CommentService;
 use App\Services\WatchlistService;
 use Illuminate\Http\Request;
@@ -29,6 +30,9 @@ class HandleInertiaRequests extends Middleware
                 'user.dash.index' => route('user.dash.index'),
                 'watchlist.store' => route('watchlist.store'),
             ],
+            'latestAnnouncement' => function () {
+                return Announcement::latest()->first(['id', 'title']);
+            },
             'turnstileSiteKey' => config('services.turnstile.key'),
             'turnstileEnabled' => !app()->environment('local'),
             'currentRoute' => optional($request->route())->getName(),

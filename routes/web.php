@@ -25,6 +25,7 @@ use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\WatchlistImportController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Middleware\EncryptHistory;
+use App\Http\Controllers\AnnouncementController;
 
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
@@ -46,6 +47,8 @@ Route::post('contact', [ContactController::class, 'store'])->name('contact.store
 Route::get('privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy.index');
 Route::get('terms', [LegalController::class, 'terms'])->name('terms.index');
 Route::get('about', [LegalController::class, 'about'])->name('about.index');
+
+Route::get('/announcement/{announcement}', [AnnouncementController::class, 'show'])->name('front.announcement.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');

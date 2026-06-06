@@ -49,7 +49,7 @@ const Index = ({ announcements = [] }: Props) => {
                 <p className="text-text-muted mt-2 text-sm whitespace-pre-wrap">{announce.body}</p>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-text-muted text-xs">
-                    Published on {new Date(announce.created_at).toLocaleDateString()}
+                    Published on {announce.created_at}{' '}
                   </span>
                 </div>
               </div>

@@ -1,11 +1,12 @@
-import { usePage } from "@inertiajs/react";
-import React, { useEffect } from "react";
-import { toast, Toaster } from "sonner";
+import { usePage } from '@inertiajs/react';
+import React, { useEffect } from 'react';
+import { toast, Toaster } from 'sonner';
 
-import DekstopNav from "../Components/DekstopNav";
-import Footer from "../Components/Footer";
-import MobileNav from "../Components/MobileNav";
-import AnalyticsWrapper from "../Components/AnalyticsWrapper";
+import DekstopNav from '../Components/DekstopNav';
+import Footer from '../Components/Footer';
+import MobileNav from '../Components/MobileNav';
+import AnalyticsWrapper from '../Components/AnalyticsWrapper';
+import AnnouncementBanner from '../Components/AnnouncementBanner';
 
 interface FrontLayoutProps {
   children: React.ReactNode;
@@ -18,8 +19,17 @@ interface FlashMessages {
   info?: string;
 }
 
+interface SharedProps {
+  flash: FlashMessages;
+  latestAnnouncement?: {
+    id: number;
+    title: string;
+  } | null;
+}
+
 const FrontLayout = ({ children }: FrontLayoutProps) => {
-  const { flash } = usePage() as unknown as { flash: FlashMessages };
+  // Extract both flash and latestAnnouncement from Inertia props
+  const { flash, latestAnnouncement } = usePage().props as unknown as SharedProps;
 
   useEffect(() => {
     if (!flash) return;
@@ -37,22 +47,23 @@ const FrontLayout = ({ children }: FrontLayoutProps) => {
         closeButton
         toastOptions={{
           className:
-            "font-sans !bg-surface !text-text border !border-border shadow-xl rounded-xl p-4 !w-fit !min-w-[240px] !max-w-md",
+            'font-sans !bg-surface !text-text border !border-border shadow-xl rounded-xl p-4 !w-fit !min-w-[240px] !max-w-md',
           classNames: {
-            success: "!border-l-4 !border-l-success [&_svg]:!text-success",
-            error: "!border-l-4 !border-l-accent-red [&_svg]:!text-accent-red",
-            warning:
-              "!border-l-4 !border-l-accent-gold [&_svg]:!text-accent-gold",
-            info: "!border-l-4 !border-l-primary [&_svg]:!text-primary",
-            description: "text-text-muted",
-            closeButton:
-              "!bg-surface !text-text-muted !border-border hover:!text-text",
+            success: '!border-l-4 !border-l-success [&_svg]:!text-success',
+            error: '!border-l-4 !border-l-accent-red [&_svg]:!text-accent-red',
+            warning: '!border-l-4 !border-l-accent-gold [&_svg]:!text-accent-gold',
+            info: '!border-l-4 !border-l-primary [&_svg]:!text-primary',
+            description: 'text-text-muted',
+            closeButton: '!bg-surface !text-text-muted !border-border hover:!text-text',
           },
         }}
       />
 
       <AnalyticsWrapper>
         <div className="bg-background relative flex min-h-screen flex-col">
+          {/* Banner injected at the very top of the page */}
+          <AnnouncementBanner announcement={latestAnnouncement} />
+
           <div>
             <DekstopNav />
           </div>

@@ -36,8 +36,7 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const studio = animeData?.studios?.[0]?.name || animeData?.source || '';
 
   const isAllAges = animeData?.rating === 'G - All Ages';
-  const isExplicit =
-    animeData?.rating === 'Rx - Hentai' || animeData?.rating === 'R+ - Mild Nudity';
+  const isExplicit = animeData?.rating === 'Rx - Hentai';
 
   let yesVotes = 0;
   let noVotes = 0;

@@ -140,17 +140,25 @@ const ShowAnime = ({
                   warnings or community safety voting.
                 </p>
               </div>
-            ) : anime.rating === 'Rx - Hentai' || anime.rating === 'R+ - Mild Nudity' ? (
-              <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-rose-500/30 bg-rose-500/10 p-8 text-center text-rose-600 dark:text-rose-500">
+            ) : anime.rating === 'Rx - Hentai' ? (
+              <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-rose-500/30 bg-rose-500/10 p-8 text-center text-rose-600 dark:text-rose-400">
                 <h2 className="mb-3 text-xl font-bold tracking-wide">Explicit Content</h2>
                 <p className="text-sm leading-relaxed">
-                  This anime is officially rated <strong>{anime.rating}</strong>. Because it is
-                  inherently intended for mature audiences and contains explicit material, community
-                  trigger voting is disabled to prevent redundant or inaccurate reports.
+                  This anime is officially rated <strong>Rx - Hentai</strong>. Because it is
+                  inherently intended for mature audiences and contains explicit sexual material,
+                  community trigger voting is disabled.
                 </p>
               </div>
             ) : (
               <>
+                {/* Optional: Add a subtle advisory for R+ shows to guide your voters */}
+                {anime.rating === 'R+ - Mild Nudity' && (
+                  <div className="bg-surface-alt border-border text-text-muted mb-4 rounded-lg border p-3 text-center text-xs">
+                    This show is officially rated R+ for nudity. Please focus your votes on
+                    unrelated triggers (e.g., violence, abuse, phobias).
+                  </div>
+                )}
+
                 {!isTriggerConsent && (
                   <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
                 )}
