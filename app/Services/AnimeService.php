@@ -145,18 +145,30 @@ class AnimeService
             })->select('id'));
         }
 
-        $allowedSortColumns = ['title', 'year', 'score', 'airing', 'is_tv_priority'];
+        $allowedSortColumns = ['title', 'year', 'score', 'airing', 'is_tv_priority', 'trigger_report'];
+
         $query->when(
             ! empty($sort['sort']) && in_array($sort['sort'], $allowedSortColumns, true),
             function ($q) use ($sort) {
                 $direction = strtolower($sort['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-                $q->orderBy('animes.' . $sort['sort'], $direction);
+
+                if ($sort['sort'] === 'trigger_report') {
+                    $q->withCount(['animeTriggers' => function ($query) {
+                        $query->where('is_appear', true);
+                    }])
+                        ->orderBy('anime_triggers_count', $direction);
+                } else {
+                    $q->orderBy('animes.' . $sort['sort'], $direction);
+                }
             },
             function ($q) {
-                $q->orderBy('animes.is_tv_priority', 'desc')
+                $q->withCount(['animeTriggers' => function ($query) {
+                    $query->where('is_appear', true);
+                }])
+                    ->orderBy('anime_triggers_count', 'desc')
+                    ->orderBy('animes.is_tv_priority', 'desc')
                     ->orderBy('animes.year', 'desc')
-                    ->orderBy('animes.airing', 'desc')
-                    ->orderBy('animes.score', 'desc');
+                    ->orderBy('animes.airing', 'desc');
             }
         );
 

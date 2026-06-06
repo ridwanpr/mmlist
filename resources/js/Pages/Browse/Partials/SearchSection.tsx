@@ -104,6 +104,12 @@ const SearchSection = ({
     return initialTriggers;
   });
 
+  const [sortOption, setSortOption] = useState(() => {
+    const currentSort = getParam('sort', '');
+    const currentOrder = getParam('order', '');
+    return currentSort && currentOrder ? `${currentSort}-${currentOrder}` : '';
+  });
+
   const handleToggleFilter = (id: number, field: 'genres' | 'themes' | 'triggers') => {
     const map = { genres: setGenreStates, themes: setThemeStates, triggers: setTriggerStates };
     const setTarget = map[field];
@@ -128,14 +134,14 @@ const SearchSection = ({
     }
   };
 
-  const handleApplyFilter = (e?: React.FormEvent) => {
+  const handleApplyFilter = (e?: React.SubmitEvent) => {
     if (e) e.preventDefault();
-    const currentParams = new URLSearchParams(window.location.search);
+    const [sortParam, orderParam] = sortOption ? sortOption.split('-') : [undefined, undefined];
 
     const params: Record<string, string | undefined> = {
       query: searchQuery || undefined,
-      sort: currentParams.get('sort') || undefined,
-      order: currentParams.get('order') || undefined,
+      sort: sortParam,
+      order: orderParam,
       from_airing: fromAiring || undefined,
       to_airing: toAiring || undefined,
       season: selectedSeason || undefined,
@@ -177,6 +183,7 @@ const SearchSection = ({
     setSearchQuery('');
     setGenreStates({});
     setThemeStates({});
+    setSortOption('');
     setTriggerStates({});
     setFromAiring('');
     setToAiring('');
@@ -277,6 +284,65 @@ const SearchSection = ({
                     {year.map(yr => (
                       <option key={yr} value={yr}>
                         {yr}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Sorting & Specifications */}
+              <div>
+                <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
+                  <LuDatabase className="text-primary size-4" />
+                  <span>Sorting & Specifications</span>
+                </label>
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                  <select
+                    value={sortOption}
+                    onChange={e => setSortOption(e.target.value)}
+                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+                  >
+                    <option value="">Default Sorting</option>
+                    <option value="trigger_report-desc">Most Triggers Reported</option>
+                    <option value="trigger_report-asc">Least Triggers Reported</option>
+                    <option value="year-desc">Newest First</option>
+                    <option value="year-asc">Oldest First</option>
+                    <option value="title-asc">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
+                  </select>
+                  <select
+                    value={selectedSeason}
+                    onChange={e => setSelectedSeason(e.target.value)}
+                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
+                  >
+                    <option value="">All Seasons</option>
+                    {season.map(s => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={selectedType}
+                    onChange={e => setSelectedType(e.target.value)}
+                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+                  >
+                    <option value="">All Types</option>
+                    {type.map(t => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={selectedRating}
+                    onChange={e => setSelectedRating(e.target.value)}
+                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
+                  >
+                    <option value="">All Ratings</option>
+                    {rating.map(r => (
+                      <option key={r} value={r}>
+                        {r}
                       </option>
                     ))}
                   </select>
