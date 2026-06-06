@@ -89,38 +89,10 @@ export const SideInfo = ({ triggers, anime }: SideInfoProps) => {
           </div>
 
           <div className="bg-background flex items-center justify-between rounded px-3 py-2">
-            <span className="text-text/90 text-sm font-medium">Total Reviews</span>
+            <span className="text-text/90 text-sm font-medium">Total Votes</span>
             <span className="text-text text-xs font-bold">{stats.totalReports}</span>
           </div>
         </div>
-
-        {stats.mostUsedTrigger && (
-          <div className="bg-background mt-4 rounded p-3">
-            <div className="text-text-muted text-[11px] font-semibold tracking-wider uppercase">
-              Primary Descriptor
-            </div>
-            <div className="relative mt-1 overflow-hidden">
-              {/* Overlay Layer */}
-              {!isRevealed && (
-                <button
-                  onClick={() => setIsRevealed(true)}
-                  className="bg-background/90 text-text hover:bg-background/95 absolute inset-0 z-10 flex cursor-pointer items-center justify-center text-xs font-medium transition-colors"
-                >
-                  Click to view tag
-                </button>
-              )}
-              <div className={!isRevealed ? 'blur-sm select-none' : ''}>
-                <div className="text-text text-sm font-bold">
-                  {stats.mostUsedTrigger?.name ?? 'None'}
-                </div>
-                <div className="text-text-muted text-xs">
-                  {stats.mostUsedTrigger?.animeTriggers?.filter(item => item.is_appear).length ?? 0}{' '}
-                  community confirmations
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="border-primary/20 bg-primary-soft rounded-lg border p-5 text-center shadow-sm">
