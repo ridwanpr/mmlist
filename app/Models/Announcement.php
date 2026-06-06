@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Announcement extends Model
 {
-    protected $guarded = [];
+    protected $table = 'announcements';
+    protected $fillable = ['title', 'body'];
 }

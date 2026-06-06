@@ -35,8 +35,9 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const studio = animeData?.studios?.[0]?.name || animeData?.source || '';
 
-  // Check if the anime is rated G - All Ages
   const isAllAges = animeData?.rating === 'G - All Ages';
+  const isExplicit =
+    animeData?.rating === 'Rx - Hentai' || animeData?.rating === 'R+ - Mild Nudity';
 
   let yesVotes = 0;
   let noVotes = 0;
@@ -56,7 +57,13 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const hasTrigger = totalVotes > 0 && yesRatio >= 0.15;
 
   const getStatusStyle = () => {
-    // Immediately return the safe styling if it's rated G
+    if (isExplicit) {
+      return {
+        border: 'border-severity-severe/50',
+        text: 'text-severity-severe',
+      };
+    }
+
     if (isAllAges) {
       return {
         border: 'border-success/30',
@@ -212,6 +219,17 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   </span>
                   <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
                     Officially Rated G
+                  </span>
+                </>
+              ) : isExplicit ? (
+                <>
+                  <span
+                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
+                  >
+                    Explicit Content
+                  </span>
+                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
+                    Officially Rated {animeData?.rating?.split(' - ')[0]}
                   </span>
                 </>
               ) : (

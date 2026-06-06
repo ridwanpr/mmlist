@@ -15,6 +15,7 @@ import {
 import { index as userIndex } from '../actions/App/Http/Controllers/Backend/ManageUserController';
 import { index as commentIndex } from '../actions/App/Http/Controllers/Backend/ManageCommentController';
 import { index as contactIndex } from '../actions/App/Http/Controllers/Backend/ContactMessageController';
+import { index as announceIndex } from '../actions/App/Http/Controllers/Backend/AnnounceController';
 
 import SidebarLink from './UI/SidebarLink';
 
@@ -78,7 +79,7 @@ const AdminSidebar = ({ isOpen }: AdminSidebarProps) => {
             <LuMessageSquareWarning size={18} /> Contact Message
           </SidebarLink>
 
-          <SidebarLink href="#" routeName="announcements.index">
+          <SidebarLink href={announceIndex.url()} routeName="announce.index">
             <LuMegaphone size={18} /> Announcement
           </SidebarLink>
 

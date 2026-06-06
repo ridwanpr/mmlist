@@ -349,52 +349,6 @@ const SearchSection = ({
                 </div>
               </div>
 
-              {/* Specifications */}
-              <div>
-                <label className="text-text mb-2 flex items-center gap-1.5 font-serif text-sm font-medium">
-                  <LuDatabase className="text-primary size-4" />
-                  <span>Specifications</span>
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  <select
-                    value={selectedSeason}
-                    onChange={e => setSelectedSeason(e.target.value)}
-                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs uppercase outline-hidden transition-colors"
-                  >
-                    <option value="">All Seasons</option>
-                    {season.map(s => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={selectedType}
-                    onChange={e => setSelectedType(e.target.value)}
-                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
-                  >
-                    <option value="">All Types</option>
-                    {type.map(t => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={selectedRating}
-                    onChange={e => setSelectedRating(e.target.value)}
-                    className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
-                  >
-                    <option value="">All Ratings</option>
-                    {rating.map(r => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
               {/* Genres */}
               <div>
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2">

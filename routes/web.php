@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\AnnounceController;
 use App\Http\Controllers\Backend\ContactMessageController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ManageAnimeController;
@@ -76,6 +77,10 @@ Route::prefix('admin')
         Route::delete('comment/{id}', [ManageCommentController::class, 'destroy'])->name('manage-comment.delete');
 
         Route::get('contact-message', [ContactMessageController::class, 'index'])->name('contact-message.index');
+
+        Route::get('announce', [AnnounceController::class, 'index'])->name('announce.index');
+        Route::get('announce/create', [AnnounceController::class, 'create'])->name('announce.create');
+        Route::post('announce', [AnnounceController::class, 'store'])->name('announce.store');
     });
 
 Route::middleware(['auth', EncryptHistory::class])->group(function () {

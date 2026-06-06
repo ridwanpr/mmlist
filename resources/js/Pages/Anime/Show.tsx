@@ -140,6 +140,15 @@ const ShowAnime = ({
                   warnings or community safety voting.
                 </p>
               </div>
+            ) : anime.rating === 'Rx - Hentai' || anime.rating === 'R+ - Mild Nudity' ? (
+              <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-rose-500/30 bg-rose-500/10 p-8 text-center text-rose-600 dark:text-rose-500">
+                <h2 className="mb-3 text-xl font-bold tracking-wide">Explicit Content</h2>
+                <p className="text-sm leading-relaxed">
+                  This anime is officially rated <strong>{anime.rating}</strong>. Because it is
+                  inherently intended for mature audiences and contains explicit material, community
+                  trigger voting is disabled to prevent redundant or inaccurate reports.
+                </p>
+              </div>
             ) : (
               <>
                 {!isTriggerConsent && (
