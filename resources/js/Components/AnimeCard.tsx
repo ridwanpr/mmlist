@@ -34,11 +34,12 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     <Link
       href={`/anime/${animeData.slug}`}
       prefetch={['click']}
-      className="group mb-4 block lg:mb-0"
+      className="group mb-3 block lg:mb-0"
     >
-      <div className="border-border bg-surface relative flex h-48 overflow-hidden rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5">
-        {/* Cover */}
-        <div className="bg-surface-alt relative w-32 shrink-0 overflow-hidden">
+      {/* Changed height from h-48 to h-36 for a dense, compact layout */}
+      <div className="border-border bg-surface relative flex h-36 overflow-hidden rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5">
+        {/* Cover: Adjusted from w-32 to w-24 to maintain a 2:3 aspect ratio at h-36 */}
+        <div className="bg-surface-alt relative w-24 shrink-0 overflow-hidden">
           <img
             src={proxyImage(animeData?.images.webp.image_url || animeData?.images.jpg.image_url)}
             alt={title ? `${title} cover` : ''}
@@ -48,45 +49,45 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
           />
         </div>
 
-        {/* Content Box */}
-        <div className="flex min-w-0 flex-1 flex-col p-3.5">
-          {/* Title Header */}
+        {/* Content Box: Tightened padding to p-3 */}
+        <div className="flex min-w-0 flex-1 flex-col p-3">
+          {/* Title Header: Reduced bottom margin */}
           <h3
-            className="text-text mb-2 line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
+            className="text-text mb-1 line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
             title={title}
           >
             {title}
           </h3>
 
-          {/* Vertical Metadata Stack */}
-          <div className="text-text-muted flex flex-col gap-0.5 font-sans text-[11px] font-medium">
+          {/* Vertical Metadata Stack: Tightened text line gaps */}
+          <div className="text-text-muted flex flex-col gap-0 font-sans text-[11px] leading-tight font-medium">
             {formatType && (
-              <span className="text-primary font-semibold tracking-wider uppercase">
+              <span className="text-primary mb-0.5 text-[10px] font-bold tracking-wider uppercase">
                 {formatType}
               </span>
             )}
             {seasonYear && <span>{seasonYear}</span>}
             {episodeCount && <span>{episodeCount}</span>}
             {studio && (
-              <span className="truncate" title={studio}>
+              <span className="text-text-muted/80 truncate" title={studio}>
                 {studio}
               </span>
             )}
           </div>
 
-          {/* Genres pinned cleanly to the bottom */}
+          {/* Genres pinned cleanly to the absolute bottom */}
           {genres.length > 0 && (
-            <div className="mt-auto flex flex-wrap items-center gap-1.5">
+            <div className="mt-auto flex flex-wrap items-center gap-1">
               {genres.map((g, i) => (
                 <span
                   key={i}
-                  className="bg-surface-alt text-text-muted border-border/60 rounded-md border px-2 py-0.5 font-sans text-[10px] font-semibold"
+                  className="bg-surface-alt text-text-muted border-border/50 rounded px-1.5 py-0.5 font-sans text-[9px] font-semibold"
                 >
                   {g.name}
                 </span>
               ))}
               {(animeData?.genres?.length ?? 0) > 2 && (
-                <span className="text-text-muted/50 pl-0.5 font-sans text-[10px] font-bold">
+                <span className="text-text-muted/50 pl-0.5 font-sans text-[9px] font-bold">
                   +{animeData.genres!.length - 2}
                 </span>
               )}
