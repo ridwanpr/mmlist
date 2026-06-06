@@ -276,13 +276,13 @@ class AnimeService
     {
         $triggersFromDb = MasterTrigger::with([
             'triggerContents' => function ($query) {
-                $query->orderBy('importance', 'desc');
+                $query->orderBy('importance', 'asc');
             },
             'triggerContents.animeTriggers' => function ($query) use ($animeId) {
                 $query->where('anime_id', $animeId);
             },
         ])
-            ->orderBy('importance', 'desc')->get();
+            ->orderBy('importance', 'asc')->get();
 
         return $triggersFromDb->map(fn(MasterTrigger $trigger) => TriggerData::fromModel($trigger));
     }
