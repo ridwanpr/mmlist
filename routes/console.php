@@ -17,7 +17,7 @@ Schedule::job(new ExtractAiredData)->dailyAt(2);
 Schedule::job(new SyncAnimeRelation)->weekly();
 
 Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))
-    ->everyMinute()
+    ->cron('* * */2 * *')
     ->between('2:00', '4:00');
 
 Artisan::command('extract:fromto', function () {
