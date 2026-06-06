@@ -30,8 +30,19 @@ class HandleInertiaRequests extends Middleware
                 'user.dash.index' => route('user.dash.index'),
                 'watchlist.store' => route('watchlist.store'),
             ],
-            'latestAnnouncement' => function () {
-                return Announcement::latest()->first(['id', 'title']);
+            'latestAnnouncement' => function () use ($request) {
+                $latest = Announcement::latest()->first(['id', 'title']);
+
+                if (!$latest) {
+                    return null;
+                }
+
+                // If the user's cookie matches this announcement ID, hide it
+                if ($request->cookie('dismissed_announcement') == $latest->id) {
+                    return null;
+                }
+
+                return $latest;
             },
             'turnstileSiteKey' => config('services.turnstile.key'),
             'turnstileEnabled' => !app()->environment('local'),
