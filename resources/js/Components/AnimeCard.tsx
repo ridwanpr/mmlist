@@ -10,23 +10,16 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const { proxyImage } = useImageProxy();
 
   const season = animeData?.season?.toLowerCase();
-
   const seasonYear = (() => {
     const s = season ? season.charAt(0).toUpperCase() + season.slice(1) : '';
     const y = animeData?.year ? String(animeData.year) : '';
-
     if (s && y) return `${s} ${y}`;
     if (s) return s;
     if (y) return y;
-
     return null;
   })();
 
   const genres = animeData?.genres?.slice(0, 2) ?? [];
-
-  const metaParts = [seasonYear, animeData?.episodes ? `${animeData.episodes} eps` : null].filter(
-    Boolean,
-  );
 
   const title =
     animeData?.titles?.find(t => t.type === 'English')?.title ||
@@ -34,101 +27,8 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
     'Untitled';
 
   const studio = animeData?.studios?.[0]?.name || animeData?.source || '';
-
-  const isAllAges = animeData?.rating === 'G - All Ages';
-  const isExplicit = animeData?.rating === 'Rx - Hentai';
-  const isRPlus = animeData?.rating === 'R+ - Mild Nudity';
-
-  let yesVotes = 0;
-  let noVotes = 0;
-
-  // We can skip counting if it's all ages, but keeping it ensures
-  // background metrics stay accurate if needed elsewhere.
-  animeData?.triggers?.forEach(trigger => {
-    if (trigger.is_appear) {
-      yesVotes++;
-    } else {
-      noVotes++;
-    }
-  });
-
-  const totalVotes = yesVotes + noVotes;
-  const yesRatio = totalVotes > 0 ? yesVotes / totalVotes : 0;
-  const hasTrigger = totalVotes > 0 && yesRatio >= 0.15;
-
-  const getStatusStyle = () => {
-    if (isExplicit) {
-      return {
-        border: 'border-severity-severe/50',
-        text: 'text-severity-severe',
-      };
-    }
-
-    if (isAllAges) {
-      return {
-        border: 'border-success/30',
-        text: 'text-success',
-      };
-    }
-
-    if (totalVotes === 0) {
-      return {
-        border: 'border-border/60',
-        text: 'text-text-muted/70',
-      };
-    }
-
-    if (!hasTrigger) {
-      // If it's R+ but has no triggers, keep it neutral instead of green
-      if (isRPlus) {
-        return {
-          border: 'border-border/60',
-          text: 'text-text-muted/70',
-        };
-      }
-      return {
-        border: 'border-success/30',
-        text: 'text-success',
-      };
-    }
-
-    // Bumped thresholds for trigger severity
-    if (yesVotes < 5) {
-      return {
-        border: 'border-severity-unverified/40',
-        text: 'text-severity-unverified',
-      };
-    }
-
-    if (yesVotes < 15) {
-      return {
-        border: 'border-severity-mild/40',
-        text: 'text-severity-mild',
-      };
-    }
-
-    if (yesVotes < 30) {
-      return {
-        border: 'border-severity-moderate/40',
-        text: 'text-severity-moderate',
-      };
-    }
-
-    if (yesVotes < 50) {
-      return {
-        border: 'border-severity-high/40',
-        text: 'text-severity-high',
-      };
-    }
-
-    // 50 or more yes votes
-    return {
-      border: 'border-severity-severe/50',
-      text: 'text-severity-severe',
-    };
-  };
-
-  const statusStyle = getStatusStyle();
+  const formatType = animeData?.type;
+  const episodeCount = animeData?.episodes ? `${animeData.episodes} eps` : null;
 
   return (
     <Link
@@ -146,56 +46,37 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             loading={index >= 11 ? 'lazy' : 'eager'}
             className="h-full w-full object-cover"
           />
-
-          {animeData?.type && (
-            <span className="absolute bottom-2 left-2 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white uppercase">
-              {animeData.type}
-            </span>
-          )}
         </div>
 
-        {/* Content */}
-        <div className="flex min-w-0 flex-1 flex-col justify-between p-3.5">
-          {/* Header */}
-          <div className="space-y-1">
-            <h3
-              className="text-text line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
-              title={title}
-            >
-              {title}
-            </h3>
+        {/* Content Box */}
+        <div className="flex min-w-0 flex-1 flex-col p-3.5">
+          {/* Title Header */}
+          <h3
+            className="text-text mb-2 line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
+            title={title}
+          >
+            {title}
+          </h3>
 
-            <div className="text-text-muted flex flex-wrap items-center gap-x-1.5 font-sans text-[11px] font-medium">
-              {metaParts.map((part, i) => (
-                <span key={i} className="flex items-center">
-                  {i > 0 && (
-                    <span
-                      aria-hidden="true"
-                      className="bg-border mx-1.5 h-1 w-1 shrink-0 rounded-full"
-                    />
-                  )}
-                  {part}
-                </span>
-              ))}
-
-              {studio && (
-                <>
-                  <span
-                    aria-hidden="true"
-                    className="bg-border mx-1.5 h-1 w-1 shrink-0 rounded-full"
-                  />
-
-                  <span className="max-w-30 truncate" title={studio}>
-                    {studio}
-                  </span>
-                </>
-              )}
-            </div>
+          {/* Vertical Metadata Stack */}
+          <div className="text-text-muted flex flex-col gap-0.5 font-sans text-[11px] font-medium">
+            {formatType && (
+              <span className="text-primary font-semibold tracking-wider uppercase">
+                {formatType}
+              </span>
+            )}
+            {seasonYear && <span>{seasonYear}</span>}
+            {episodeCount && <span>{episodeCount}</span>}
+            {studio && (
+              <span className="truncate" title={studio}>
+                {studio}
+              </span>
+            )}
           </div>
 
-          {/* Genres */}
+          {/* Genres pinned cleanly to the bottom */}
           {genres.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="mt-auto flex flex-wrap items-center gap-1.5">
               {genres.map((g, i) => (
                 <span
                   key={i}
@@ -204,7 +85,6 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
                   {g.name}
                 </span>
               ))}
-
               {(animeData?.genres?.length ?? 0) > 2 && (
                 <span className="text-text-muted/50 pl-0.5 font-sans text-[10px] font-bold">
                   +{animeData.genres!.length - 2}
@@ -212,57 +92,6 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
               )}
             </div>
           )}
-
-          {/* Footer */}
-          <div
-            className={`bg-surface-alt/70 flex items-center justify-between rounded-lg border px-2.5 py-1.5 ${statusStyle.border}`}
-          >
-            <div className="flex min-w-0 flex-col">
-              {isAllAges ? (
-                <>
-                  <span
-                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
-                  >
-                    Safe for All Ages
-                  </span>
-                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
-                    Officially Rated G
-                  </span>
-                </>
-              ) : isExplicit ? (
-                <>
-                  <span
-                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
-                  >
-                    Explicit Content
-                  </span>
-                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
-                    Officially Rated {animeData?.rating?.split(' - ')[0]}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span
-                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
-                  >
-                    {hasTrigger
-                      ? `${yesVotes} Trigger Reports`
-                      : isRPlus
-                        ? 'Rated R+ (Nudity)'
-                        : totalVotes === 0
-                          ? 'No Reports'
-                          : 'Voted Safe'}
-                  </span>
-
-                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
-                    {totalVotes === 0
-                      ? '0 reports submitted'
-                      : `From ${totalVotes.toLocaleString('en-US')} total votes`}
-                  </span>
-                </>
-              )}
-            </div>
-          </div>
         </div>
       </div>
     </Link>

@@ -29,9 +29,9 @@ const TriggerWarning = ({
   return (
     <>
       <div className="mt-4">
-        <h1 className="text-text font-semibold">Trigger Warning</h1>
+        <h1 className="text-text font-semibold">Content Guide</h1>
         <p className="text-text-muted text-sm">
-          Click each trigger to see detail and vote. Might contain spoiler.
+          Click each item to see detail and vote. Might contain spoiler.
         </p>
       </div>
 
@@ -40,8 +40,8 @@ const TriggerWarning = ({
         <section className="bg-surface border-border w-full shrink-0 self-start rounded-lg border p-4 lg:flex lg:w-72 lg:flex-col">
           <div className="border-border flex w-full items-end justify-between border-b pb-4">
             <div>
-              <h2 className="text-text text-sm font-bold">Filter Triggers</h2>
-              <p className="text-text-muted mt-0.5 text-xs">Click to filter trigger by category</p>
+              <h2 className="text-text text-sm font-bold">Filter Content</h2>
+              <p className="text-text-muted mt-0.5 text-xs">Click to filter by category</p>
             </div>
           </div>
           <div className="mt-4 flex flex-col gap-3">

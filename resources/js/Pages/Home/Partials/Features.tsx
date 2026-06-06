@@ -5,19 +5,19 @@ const features = [
     icon: LuSearch,
     title: "Search and Discover",
     description:
-      "Find any anime and see community-rated trigger warnings before you start.",
+      "Find any anime and see community-rated content guide before you start.",
   },
   {
     icon: LuShieldCheck,
-    title: "Detailed Trigger Info",
+    title: "Detailed Content Guide",
     description:
-      "See which triggers appear and how frequently based on real user experiences.",
+      "See which content appear and how frequently based on real user experiences.",
   },
   {
     icon: LuUsers,
     title: "Community Driven",
     description:
-      "Vote, review, and help others by sharing your experiences with trigger content.",
+      "Vote, review, and help others by sharing your experiences with this content.",
   },
   {
     icon: LuBookmark,

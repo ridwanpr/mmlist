@@ -17,7 +17,7 @@ const DiscussionList = ({ paginatedComments }: DiscussionListProps) => {
     <>
       <AppHead
         title="Community"
-        meta="Join latest anime and trigger content warnings discussion and write comments on mamorulist"
+        meta="Join latest anime and content guide discussion and write comments on mamorulist"
       />
 
       <section className="bg-surface border-border border-b font-sans">

@@ -29,13 +29,13 @@ const Hero = ({ staffPick }: HeroProps) => {
         <div className="grid gap-6 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-12">
           <div className="max-w-xl">
             <h1 className="text-text font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
-              Anime <span className="text-primary">trigger</span>
+              <span className="text-primary">Anime</span> Database
               <br />
-              warnings.
+              Content Guide
             </h1>
 
             <p className="text-text mt-3 text-sm leading-7 sm:text-[15px]">
-              Check crowdsourced content warnings before watching and track your personal library.
+              Check content inside an anime before watching and track your personal library.
             </p>
           </div>
 

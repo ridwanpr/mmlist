@@ -33,7 +33,7 @@ const TriggerStat = ({ triggerStatData }: TriggerStatProps) => {
   if (totalReports === 0) {
     return (
       <section
-        aria-label="Trigger report summary"
+        aria-label="Content report summary"
         className="mb-6 border-b pb-5"
         style={{ borderColor: "var(--color-border)" }}
       >

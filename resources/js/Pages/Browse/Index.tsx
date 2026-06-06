@@ -45,7 +45,7 @@ const Browse = ({
     <>
       <AppHead
         title="Browse Anime"
-        meta="Browse our comprehensive anime database. Filter series by specific trigger warnings, search for content flags, and find safe shows to add to your list."
+        meta="Browse our comprehensive anime database. Filter series by specific content, search for content flags, and find safe shows to add to your list."
       />
       <div className="mb-8">
         <SearchSection

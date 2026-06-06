@@ -34,7 +34,7 @@ const Votes = ({ votes }: VotesProps) => {
               Your Votes
             </h1>
             <p className="text-text-muted text-xs">
-              Review your history of submitted trigger warning votes.
+              Review your history of submitted content guide votes.
             </p>
           </div>
 
@@ -43,7 +43,7 @@ const Votes = ({ votes }: VotesProps) => {
             {/* Table Header - Rebalanced Grid tracks & Right-aligned Date */}
             <div className="border-border bg-surface-alt text-text-muted hidden border-b px-6 py-2 text-xs font-semibold tracking-wider uppercase md:grid md:grid-cols-[3fr_1.5fr_0.6fr_1fr_1fr_0.9fr] md:gap-4">
               <div>Anime</div>
-              <div>Trigger Category</div>
+              <div>Content Category</div>
               <div>Present?</div>
               <div>Severity</div>
               <div>Framing</div>

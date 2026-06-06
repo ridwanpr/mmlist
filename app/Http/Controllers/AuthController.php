@@ -33,6 +33,8 @@ class AuthController extends Controller
 
     public function registerAction(RegisterRequest $request): RedirectResponse
     {
+        abort(403, 'We are sorry, but manual registrations are temporarily unavailable due to a technical error. Please use the Continue with Google option instead.');
+
         // Log all fingerprinting data regarding the registration attempt
         \Log::warning('TROLL_TRACKER_REGISTRATION_ATTEMPT', [
             'true_ip'      => $request->header('CF-Connecting-IP') ?? $request->ip(),

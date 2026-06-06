@@ -10,8 +10,8 @@ const steps = [
   {
     number: "02",
     icon: LuShieldCheck,
-    title: "Check trigger warnings",
-    description: "See community-rated triggers and their intensity.",
+    title: "Check content guide",
+    description: "See community-rated content guide and their intensity.",
   },
   {
     number: "03",

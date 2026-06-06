@@ -36,7 +36,7 @@ const RecentVotes = ({ latestVotes }: RecentVotesProps) => {
           {/* Desktop Table Header */}
           <div className="border-border bg-surface-alt text-text-muted hidden border-b px-6 py-3 text-xs font-semibold tracking-wider uppercase md:grid md:grid-cols-[2.5fr_1.5fr_0.7fr_1fr_1.2fr_1fr_0.8fr] md:gap-4">
             <div>Anime</div>
-            <div>Trigger</div>
+            <div>Content</div>
             <div>Present?</div>
             <div>Severity</div>
             <div>Framing</div>

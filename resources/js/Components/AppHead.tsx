@@ -11,7 +11,7 @@ const AppHead = ({ title, meta }: AppHeadProps) => {
       <title>
         {title
           ? `${title} - Mamorulist`
-          : "Anime Trigger Warnings & Database | Mamorulist"}
+          : "Anime Content Guide & Database | Mamorulist"}
       </title>
       <meta
         // eslint-disable-next-line react/no-unknown-property
@@ -20,7 +20,7 @@ const AppHead = ({ title, meta }: AppHeadProps) => {
         content={
           meta
             ? `${meta}`
-            : "Find anime trigger warnings and community-rated content flags on Mamorulist. Search your favorite series and safely manage your anime watchlist"
+            : "Find anime content guide and community-rated content flags on Mamorulist. Search your favorite series and safely manage your anime watchlist"
         }
       />
     </Head>

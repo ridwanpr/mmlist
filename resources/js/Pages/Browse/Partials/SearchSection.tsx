@@ -199,7 +199,7 @@ const SearchSection = ({
       <div className="mx-auto max-w-7xl p-4 lg:pt-4">
         <h1 className="text-text mb-2 font-serif text-2xl font-bold">Browse Anime</h1>
         <p className="text-text-muted mb-4">
-          Find anime and view trigger warnings to make informed choices.
+          Find anime and view content guide to make informed choices.
         </p>
 
         <form onSubmit={handleApplyFilter}>
@@ -303,8 +303,8 @@ const SearchSection = ({
                     className="border-border bg-surface-alt text-text focus:border-primary w-full rounded-xl border px-3 py-2 text-xs outline-hidden transition-colors"
                   >
                     <option value="">Default Sorting</option>
-                    <option value="trigger_report-desc">Most Triggers Reported</option>
-                    <option value="trigger_report-asc">Least Triggers Reported</option>
+                    <option value="trigger_report-desc">Most Content Reported</option>
+                    <option value="trigger_report-asc">Least Content Reported</option>
                     <option value="year-desc">Newest First</option>
                     <option value="year-asc">Oldest First</option>
                     <option value="title-asc">Title (A-Z)</option>
@@ -413,14 +413,14 @@ const SearchSection = ({
                 </div>
               </div>
 
-              {/* Trigger Warnings Grid Block */}
+              {/* Content Guide Grid Block */}
               <div>
                 <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
                   {/* Stacks label and disclaimer neatly on the left */}
                   <div className="flex flex-col gap-0.5">
                     <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
                       <LuTriangleAlert className="text-primary size-4" />
-                      <span>Trigger Content Flags</span>
+                      <span>Content Filter</span>
                     </label>
                     <span className="text-text-muted text-[11px]">
                       AI flags are used until community data grows. Accuracy may vary.

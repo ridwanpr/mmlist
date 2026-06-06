@@ -103,7 +103,7 @@ const ShowAnime = ({
   }
 
   const shortTitle = animeTitle.length > 60 ? `${animeTitle.slice(0, 60)}...` : animeTitle;
-  const metaDescription = `View community-voted trigger warnings, severity ratings, and framing metrics for ${shortTitle} on Mamorulist.`;
+  const metaDescription = `View community-voted content guide, severity ratings, and framing metrics for ${shortTitle} on Mamorulist.`;
 
   return (
     <>
@@ -145,8 +145,7 @@ const ShowAnime = ({
                 <h2 className="mb-3 text-xl font-bold tracking-wide">Explicit Content</h2>
                 <p className="text-sm leading-relaxed">
                   This anime is officially rated <strong>Rx - Hentai</strong>. Because it is
-                  inherently intended for mature audiences and contains explicit sexual material,
-                  community trigger voting is disabled.
+                  inherently intended for mature audiences and contains explicit sexual material.
                 </p>
               </div>
             ) : (

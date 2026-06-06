@@ -162,8 +162,8 @@ const TriggerComment = ({
   return (
     <>
       <AppHead
-        title={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} Trigger Discussion`}
-        meta={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} trigger content warnings discussion`}
+        title={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} Content Guide Discussion`}
+        meta={`${anime.title.slice(0, 60) || anime.title_english?.slice(0, 60)} content guide discussion`}
       />
       <div>
         <div className="mx-auto mb-8 max-w-7xl px-4 py-6">

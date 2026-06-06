@@ -19,8 +19,8 @@ const Home = ({ nowAiring, topAnime, staffPick, latestComments, latestVotes }: H
   return (
     <>
       <AppHead
-        title="Track Anime Trigger Warnings & Watchlists"
-        meta="Welcome to Mamorulist, the community-driven anime trigger warning database. Search safety flags, check content warnings, and manage your watchlist."
+        title="Track Anime Watchlist & Check Content Guide"
+        meta="Welcome to Mamorulist, the community-driven anime content guide database. Search anime, check content guides, and manage your watchlist."
       />
       <Hero staffPick={staffPick} />
       <AnimeList nowAiring={nowAiring} topAnime={topAnime} />

@@ -61,7 +61,7 @@ const Register = () => {
     <>
       <AppHead
         title="Register"
-        meta="Register for a Mamorulist account. Create your personalized anime watchlist, rate trigger warnings, and contribute to our community database."
+        meta="Register for a Mamorulist account. Create your personalized anime watchlist, check content guide, and contribute to our community database."
       />
       <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="bg-surface border-border w-full max-w-md rounded-xl border p-5 shadow-sm">
