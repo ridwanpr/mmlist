@@ -29,9 +29,9 @@ const Hero = ({ staffPick }: HeroProps) => {
         <div className="grid gap-6 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-12">
           <div className="max-w-xl">
             <h1 className="text-text font-serif text-4xl leading-[0.92] font-black tracking-tighter sm:text-5xl lg:text-6xl">
-              <span className="text-primary">Anime</span> Database
+              <span className="text-primary">Anime</span> Content
               <br />
-              Content Guide
+              Guide Database
             </h1>
 
             <p className="text-text mt-3 text-sm leading-7 sm:text-[15px]">
