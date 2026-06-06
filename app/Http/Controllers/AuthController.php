@@ -33,7 +33,9 @@ class AuthController extends Controller
 
     public function registerAction(RegisterRequest $request): RedirectResponse
     {
-        abort(403, 'We are sorry, but manual registrations are temporarily unavailable due to a technical error. Please use the Continue with Google option instead.');
+        Inertia::flash('error', 'We are sorry, but manual registrations are temporarily unavailable due to a technical error. Please use the Continue with Google option instead.');
+
+        return back();
 
         // Log all fingerprinting data regarding the registration attempt
         \Log::warning('TROLL_TRACKER_REGISTRATION_ATTEMPT', [
