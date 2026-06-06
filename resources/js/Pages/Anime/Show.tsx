@@ -131,18 +131,31 @@ const ShowAnime = ({
 
         <div className="border-border mt-6 w-full max-w-full min-w-0 overflow-hidden border-t pt-6">
           <div className="w-full max-w-full min-w-0">
-            {!isTriggerConsent && (
-              <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
+            {anime.rating === 'G - All Ages' ? (
+              <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center text-emerald-600 dark:text-emerald-400">
+                <h2 className="mb-3 text-xl font-bold tracking-wide">Safe for All Ages</h2>
+                <p className="text-sm leading-relaxed">
+                  This anime is officially rated <strong>G - All Ages</strong>. It is generally
+                  appropriate for all audiences and does not contain content that requires trigger
+                  warnings or community safety voting.
+                </p>
+              </div>
+            ) : (
+              <>
+                {!isTriggerConsent && (
+                  <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
+                )}
+                <div className={!isTriggerConsent ? 'hidden' : 'w-full max-w-full min-w-0'}>
+                  <TriggerWarning
+                    triggers={triggers}
+                    anime={anime}
+                    userTriggerVote={userTriggerVote}
+                    aiTriggerContext={aiTriggerContext}
+                    countTriggerComments={countTriggerComments}
+                  />
+                </div>
+              </>
             )}
-            <div className={!isTriggerConsent ? 'hidden' : 'w-full max-w-full min-w-0'}>
-              <TriggerWarning
-                triggers={triggers}
-                anime={anime}
-                userTriggerVote={userTriggerVote}
-                aiTriggerContext={aiTriggerContext}
-                countTriggerComments={countTriggerComments}
-              />
-            </div>
           </div>
         </div>
 

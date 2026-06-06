@@ -1,5 +1,5 @@
-import { Link } from "@inertiajs/react";
-import { useImageProxy } from "../utils/image-proxy";
+import { Link } from '@inertiajs/react';
+import { useImageProxy } from '../utils/image-proxy';
 
 interface AnimeCardProps {
   animeData: App.DTOs.AnimeData;
@@ -12,8 +12,8 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   const season = animeData?.season?.toLowerCase();
 
   const seasonYear = (() => {
-    const s = season ? season.charAt(0).toUpperCase() + season.slice(1) : "";
-    const y = animeData?.year ? String(animeData.year) : "";
+    const s = season ? season.charAt(0).toUpperCase() + season.slice(1) : '';
+    const y = animeData?.year ? String(animeData.year) : '';
 
     if (s && y) return `${s} ${y}`;
     if (s) return s;
@@ -24,22 +24,26 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
 
   const genres = animeData?.genres?.slice(0, 2) ?? [];
 
-  const metaParts = [
-    seasonYear,
-    animeData?.episodes ? `${animeData.episodes} eps` : null,
-  ].filter(Boolean);
+  const metaParts = [seasonYear, animeData?.episodes ? `${animeData.episodes} eps` : null].filter(
+    Boolean,
+  );
 
   const title =
-    animeData?.titles?.find((t) => t.type === "English")?.title ||
+    animeData?.titles?.find(t => t.type === 'English')?.title ||
     animeData?.titles?.[0]?.title ||
-    "Untitled";
+    'Untitled';
 
-  const studio = animeData?.studios?.[0]?.name || animeData?.source || "";
+  const studio = animeData?.studios?.[0]?.name || animeData?.source || '';
+
+  // Check if the anime is rated G - All Ages
+  const isAllAges = animeData?.rating === 'G - All Ages';
 
   let yesVotes = 0;
   let noVotes = 0;
 
-  animeData?.triggers?.forEach((trigger) => {
+  // We can skip counting if it's all ages, but keeping it ensures
+  // background metrics stay accurate if needed elsewhere.
+  animeData?.triggers?.forEach(trigger => {
     if (trigger.is_appear) {
       yesVotes++;
     } else {
@@ -48,56 +52,64 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   });
 
   const totalVotes = yesVotes + noVotes;
-
   const yesRatio = totalVotes > 0 ? yesVotes / totalVotes : 0;
   const hasTrigger = totalVotes > 0 && yesRatio >= 0.15;
 
   const getStatusStyle = () => {
+    // Immediately return the safe styling if it's rated G
+    if (isAllAges) {
+      return {
+        border: 'border-success/30',
+        text: 'text-success',
+      };
+    }
+
     if (totalVotes === 0) {
       return {
-        border: "border-border/60",
-        text: "text-text-muted/70",
+        border: 'border-border/60',
+        text: 'text-text-muted/70',
       };
     }
 
     if (!hasTrigger) {
       return {
-        border: "border-success/30",
-        text: "text-success",
+        border: 'border-success/30',
+        text: 'text-success',
       };
     }
 
-    if (yesVotes < 3) {
+    if (yesVotes < 5) {
       return {
-        border: "border-severity-unverified/40",
-        text: "text-severity-unverified",
+        border: 'border-severity-unverified/40',
+        text: 'text-severity-unverified',
       };
     }
 
-    if (yesVotes < 7) {
+    if (yesVotes < 15) {
       return {
-        border: "border-severity-mild/40",
-        text: "text-severity-mild",
+        border: 'border-severity-mild/40',
+        text: 'text-severity-mild',
       };
     }
 
-    if (yesVotes < 13) {
+    if (yesVotes < 30) {
       return {
-        border: "border-severity-moderate/40",
-        text: "text-severity-moderate",
+        border: 'border-severity-moderate/40',
+        text: 'text-severity-moderate',
       };
     }
 
-    if (yesVotes < 25) {
+    if (yesVotes < 50) {
       return {
-        border: "border-severity-high/40",
-        text: "text-severity-high",
+        border: 'border-severity-high/40',
+        text: 'text-severity-high',
       };
     }
 
+    // 50 or more yes votes
     return {
-      border: "border-severity-severe/50",
-      text: "text-severity-severe",
+      border: 'border-severity-severe/50',
+      text: 'text-severity-severe',
     };
   };
 
@@ -106,20 +118,17 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   return (
     <Link
       href={`/anime/${animeData.slug}`}
-      prefetch={["click"]}
+      prefetch={['click']}
       className="group mb-4 block lg:mb-0"
     >
       <div className="border-border bg-surface relative flex h-48 overflow-hidden rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5">
         {/* Cover */}
         <div className="bg-surface-alt relative w-32 shrink-0 overflow-hidden">
           <img
-            src={proxyImage(
-              animeData?.images.webp.image_url ||
-                animeData?.images.jpg.image_url,
-            )}
-            alt={title ? `${title} cover` : ""}
+            src={proxyImage(animeData?.images.webp.image_url || animeData?.images.jpg.image_url)}
+            alt={title ? `${title} cover` : ''}
             decoding="async"
-            loading={index >= 11 ? "lazy" : "eager"}
+            loading={index >= 11 ? 'lazy' : 'eager'}
             className="h-full w-full object-cover"
           />
 
@@ -194,19 +203,34 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
             className={`bg-surface-alt/70 flex items-center justify-between rounded-lg border px-2.5 py-1.5 ${statusStyle.border}`}
           >
             <div className="flex min-w-0 flex-col">
-              <span
-                className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
-              >
-                {totalVotes === 0 && "No Reports"}
-                {totalVotes > 0 && !hasTrigger && "Voted Safe"}
-                {hasTrigger && `${yesVotes} Trigger Reports`}
-              </span>
+              {isAllAges ? (
+                <>
+                  <span
+                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
+                  >
+                    Safe for All Ages
+                  </span>
+                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
+                    Officially Rated G
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span
+                    className={`font-sans text-[11px] font-bold tracking-tight ${statusStyle.text}`}
+                  >
+                    {totalVotes === 0 && 'No Reports'}
+                    {totalVotes > 0 && !hasTrigger && 'Voted Safe'}
+                    {hasTrigger && `${yesVotes} Trigger Reports`}
+                  </span>
 
-              <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
-                {totalVotes === 0
-                  ? "0 reports submitted"
-                  : `From ${totalVotes.toLocaleString()} total votes`}
-              </span>
+                  <span className="text-text-muted/60 mt-px truncate font-sans text-[10px]">
+                    {totalVotes === 0
+                      ? '0 reports submitted'
+                      : `From ${totalVotes.toLocaleString()} total votes`}
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>
