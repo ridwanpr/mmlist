@@ -136,8 +136,7 @@ const ShowAnime = ({
                 <h2 className="mb-3 text-xl font-bold tracking-wide">Safe for All Ages</h2>
                 <p className="text-sm leading-relaxed">
                   This anime is officially rated <strong>G - All Ages</strong>. It is generally
-                  appropriate for all audiences and does not contain content that requires trigger
-                  warnings or community safety voting.
+                  appropriate for all audiences.
                 </p>
               </div>
             ) : anime.rating === 'Rx - Hentai' ? (
@@ -150,14 +149,6 @@ const ShowAnime = ({
               </div>
             ) : (
               <>
-                {/* Optional: Add a subtle advisory for R+ shows to guide your voters */}
-                {anime.rating === 'R+ - Mild Nudity' && (
-                  <div className="bg-surface-alt border-border text-text-muted mb-4 rounded-lg border p-3 text-center text-xs">
-                    This show is officially rated R+ for nudity. Please focus your votes on
-                    unrelated triggers (e.g., violence, abuse, phobias).
-                  </div>
-                )}
-
                 {!isTriggerConsent && (
                   <TriggerConsent handleRevealTrigger={() => setIsTriggerConsent(true)} />
                 )}
