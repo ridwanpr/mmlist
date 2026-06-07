@@ -423,7 +423,7 @@ const SearchSection = ({
                       <span>Content Filter</span>
                     </label>
                     <span className="text-text-muted text-[11px]">
-                      AI flags are used until community data grows. Accuracy may vary.
+                      Filters are determined by community voting consensus.
                     </span>
                   </div>
 
