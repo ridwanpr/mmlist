@@ -131,11 +131,11 @@ const ShowAnime = ({
 
         <div className="border-border mt-6 w-full max-w-full min-w-0 overflow-hidden border-t pt-6">
           <div className="w-full max-w-full min-w-0">
-            {anime.rating === 'G - All Ages' ? (
+            {anime.rating === 'G - All Ages' || anime.rating === 'PG - Children' ? (
               <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center text-emerald-600 dark:text-emerald-400">
                 <h2 className="mb-3 text-xl font-bold tracking-wide">Safe for All Ages</h2>
                 <p className="text-sm leading-relaxed">
-                  This anime is officially rated <strong>G - All Ages</strong>. It is generally
+                  This anime is officially rated <strong>{anime.rating}</strong>. It is generally
                   appropriate for all audiences.
                 </p>
               </div>
