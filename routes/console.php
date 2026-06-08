@@ -12,8 +12,8 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::job(new FetchAiringAnime)->dailyAt(1);
-Schedule::job(new ExtractAiredData)->dailyAt(2);
+Schedule::job(new FetchAiringAnime)->weekly();
+Schedule::job(new ExtractAiredData)->cron('* * */2 * *');
 Schedule::job(new SyncAnimeRelation)->weekly();
 
 Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))

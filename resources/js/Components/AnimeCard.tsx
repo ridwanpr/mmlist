@@ -20,12 +20,10 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
   })();
 
   const genres = animeData?.genres?.slice(0, 2) ?? [];
-
   const title =
     animeData?.titles?.find(t => t.type === 'English')?.title ||
     animeData?.titles?.[0]?.title ||
     'Untitled';
-
   const studio = animeData?.studios?.[0]?.name || animeData?.source || '';
   const formatType = animeData?.type;
   const episodeCount = animeData?.episodes ? `${animeData.episodes} eps` : null;
@@ -36,9 +34,9 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
       prefetch={['click']}
       className="group mb-3 block lg:mb-0"
     >
-      {/* Changed height from h-48 to h-36 for a dense, compact layout */}
-      <div className="border-border bg-surface relative flex h-36 overflow-hidden rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5">
-        {/* Cover: Adjusted from w-32 to w-24 to maintain a 2:3 aspect ratio at h-36 */}
+      {/* Container */}
+      <div className="border-border bg-surface hover:border-text-muted/30 relative flex h-36 overflow-hidden rounded-xl border transition-colors duration-100">
+        {/* Cover */}
         <div className="bg-surface-alt relative w-24 shrink-0 overflow-hidden">
           <img
             src={proxyImage(animeData?.images.webp.image_url || animeData?.images.jpg.image_url)}
@@ -49,45 +47,58 @@ const AnimeCard = ({ animeData, index }: AnimeCardProps) => {
           />
         </div>
 
-        {/* Content Box: Tightened padding to p-3 */}
+        {/* Content Box */}
         <div className="flex min-w-0 flex-1 flex-col p-3">
-          {/* Title Header: Reduced bottom margin */}
+          {/* Title Header */}
           <h3
-            className="text-text mb-1 line-clamp-1 font-sans text-sm font-bold tracking-tight md:text-[0.95rem]"
+            className="text-text mb-1.5 line-clamp-2 font-sans text-sm leading-tight font-bold tracking-tight md:text-[0.95rem]"
             title={title}
           >
             {title}
           </h3>
 
-          {/* Vertical Metadata Stack: Tightened text line gaps */}
-          <div className="text-text-muted flex flex-col gap-0 font-sans text-[11px] leading-tight font-medium">
-            {formatType && (
-              <span className="text-primary mb-0.5 text-[10px] font-bold tracking-wider uppercase">
-                {formatType}
-              </span>
+          <div className="flex flex-col gap-1 font-sans">
+            {(formatType || episodeCount) && (
+              <div className="flex items-center gap-2 text-[10px] leading-none font-medium">
+                {formatType && (
+                  <span className="text-primary font-bold tracking-wider uppercase">
+                    {formatType}
+                  </span>
+                )}
+                {formatType && episodeCount && (
+                  <span className="bg-text-muted/20 h-2.5 w-px shrink-0" />
+                )}
+                {episodeCount && <span className="text-text-muted">{episodeCount}</span>}
+              </div>
             )}
-            {seasonYear && <span>{seasonYear}</span>}
-            {episodeCount && <span>{episodeCount}</span>}
-            {studio && (
-              <span className="text-text-muted/80 truncate" title={studio}>
-                {studio}
-              </span>
+
+            {(seasonYear || studio) && (
+              <div className="text-text-muted/80 flex items-center gap-2 text-[10px] leading-none font-medium">
+                {seasonYear && <span>{seasonYear}</span>}
+                {seasonYear && studio && (
+                  <span className="bg-text-muted/20 h-2.5 w-px shrink-0" /> 
+                )}
+                {studio && (
+                  <span className="text-text-muted/60 max-w-37.5 truncate" title={studio}>
+                    {studio}
+                  </span>
+                )}
+              </div>
             )}
           </div>
 
-          {/* Genres pinned cleanly to the absolute bottom */}
           {genres.length > 0 && (
             <div className="mt-auto flex flex-wrap items-center gap-1">
               {genres.map((g, i) => (
                 <span
                   key={i}
-                  className="bg-surface-alt text-text-muted border-border/50 rounded px-1.5 py-0.5 font-sans text-[9px] font-semibold"
+                  className="bg-surface-alt text-text-muted border-border/50 rounded border px-1.5 py-0.5 font-sans text-[9px] font-semibold"
                 >
                   {g.name}
                 </span>
               ))}
               {(animeData?.genres?.length ?? 0) > 2 && (
-                <span className="text-text-muted/50 pl-0.5 font-sans text-[9px] font-bold">
+                <span className="text-text-muted/40 pl-0.5 font-sans text-[9px] font-bold">
                   +{animeData.genres!.length - 2}
                 </span>
               )}

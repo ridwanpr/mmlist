@@ -157,7 +157,7 @@ class CommentService
     {
         return Comment::with(['user', 'anime', 'commentable', 'parent', 'parent.user'])
             ->where('user_id', $userId)
-            ->orderBy('comments.created_at', 'asc')
+            ->orderBy('comments.created_at', 'desc')
             ->paginate($paginateLimit);
     }
 

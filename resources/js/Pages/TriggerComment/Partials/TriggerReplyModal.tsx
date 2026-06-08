@@ -103,7 +103,7 @@ const TriggerReplyModal = ({
                 {repliedComment.parent_comment_user}
               </p>
               <div
-                className="prose prose-sm text-text mt-1 mb-0 max-w-none text-xs whitespace-pre-wrap md:text-sm"
+                className="prose prose-sm text-text mt-1 mb-0 max-w-none text-xs whitespace-pre-wrap md:text-sm line-clamp-3"
                 onClick={(e) => {
                   const target = e.target as HTMLElement;
                   if (target.classList.contains("spoiler")) {
