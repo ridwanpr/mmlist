@@ -39,7 +39,7 @@ const Register = () => {
           <div className="space-y-4">
             <a
               href={redirectGoogle.url()}
-              className="border-border bg-surface hover:bg-surface-alt text-text flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition hover:cursor-pointer"
+              className="bg-primary text-surface hover:bg-primary-dark focus:ring-primary/25 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition hover:cursor-pointer focus:ring-4 focus:outline-none"
             >
               <FaGoogle /> Continue with Google
             </a>
