@@ -21,7 +21,9 @@ const Footer = () => {
           </div>
 
           <nav aria-label="Footer Navigation" className="flex flex-wrap gap-x-8 gap-y-2">
-            <ul className="flex gap-4">
+            <ul className="flex items-center gap-4">
+              {' '}
+              {/* Added items-center here */}
               <li>
                 <Link
                   href={about.url()}
@@ -43,10 +45,21 @@ const Footer = () => {
               <li>
                 <a
                   href="https://status.mamorulist.com/"
-                  target="__blank"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-primary-dark hover:text-primary text-sm transition-colors"
                 >
                   Status
+                </a>
+              </li>
+              <li className="flex items-center">
+                <a
+                  href="https://sociabuzz.com/mamorulist/donate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-primary text-surface rounded border px-3 py-1 text-xs font-semibold"
+                >
+                  Donate
                 </a>
               </li>
             </ul>
