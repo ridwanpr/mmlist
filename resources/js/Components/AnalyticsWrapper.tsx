@@ -6,21 +6,21 @@ interface AnalyticsWrapperProps {
 }
 
 const AnalyticsWrapper = ({ children }: AnalyticsWrapperProps) => {
-  useEffect(() => {
-    if (import.meta.env.PROD) {
-      import('disable-devtool')
-        .then(module => {
-          const DisableDevtool = module.default;
-          DisableDevtool({
-            disableMenu: false,
-            clearLog: true,
-          });
-        })
-        .catch(error => {
-          //
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (import.meta.env.PROD) {
+  //     import('disable-devtool')
+  //       .then(module => {
+  //         const DisableDevtool = module.default;
+  //         DisableDevtool({
+  //           disableMenu: false,
+  //           clearLog: true,
+  //         });
+  //       })
+  //       .catch(error => {
+  //         //
+  //       });
+  //   }
+  // }, []);
 
   return <>{children}</>;
 };
