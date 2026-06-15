@@ -34,6 +34,7 @@ class BrowseController extends Controller
             'themes_exclude'   => $request->query('themes_exclude'),
             'triggers_include' => $request->query('triggers_include'),
             'triggers_exclude' => $request->query('triggers_exclude'),
+            'trigger_mode'     => $request->query('trigger_mode', 'community'),
         ];
 
         $sort = [
@@ -65,6 +66,9 @@ class BrowseController extends Controller
                 'themes_exclude'   => $filter['themes_exclude'] ?? '',
                 'triggers_include' => $filter['triggers_include'] ?? '',
                 'triggers_exclude' => $filter['triggers_exclude'] ?? '',
+                'trigger_mode'     => $filter['trigger_mode'],
+                'sort'             => $sort['sort'] ?? '',
+                'order'            => $sort['order'] ?? '',
             ],
         ]);
     }

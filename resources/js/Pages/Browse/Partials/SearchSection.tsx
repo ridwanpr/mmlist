@@ -33,6 +33,9 @@ interface SearchSectionProps {
     themes_exclude: string;
     triggers_include: string;
     triggers_exclude: string;
+    trigger_mode: string;
+    sort?: string;
+    order?: string;
   };
 }
 
@@ -62,51 +65,55 @@ const SearchSection = ({
 }: SearchSectionProps) => {
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
 
-  // Safely initialize state directly using initialization functions
-  const getParam = (key: string, fallback: string) => {
-    if (typeof window === 'undefined') return fallback;
-    const params = new URLSearchParams(window.location.search);
-    return params.get(key) || fallback || '';
-  };
+  const parseFilterString = (val?: string) => (val ? val.split(',') : []);
 
-  const parseArrayParam = (key: string) => {
-    if (typeof window === 'undefined') return [];
-    const params = new URLSearchParams(window.location.search);
-    const val = params.get(key);
-    return val ? val.split(',') : [];
-  };
+  const [triggerMode, setTriggerMode] = useState<'community' | 'ai'>(
+    () => (filters.trigger_mode as 'community' | 'ai') || 'community',
+  );
 
-  const [searchQuery, setSearchQuery] = useState(() => getParam('query', filters.query));
-  const [fromAiring, setFromAiring] = useState(() => getParam('from_airing', filters.from_airing));
-  const [toAiring, setToAiring] = useState(() => getParam('to_airing', filters.to_airing));
-  const [selectedSeason, setSelectedSeason] = useState(() => getParam('season', filters.season));
-  const [selectedType, setSelectedType] = useState(() => getParam('type', filters.type));
-  const [selectedRating, setSelectedRating] = useState(() => getParam('rating', filters.rating));
+  const [searchQuery, setSearchQuery] = useState(filters.query || '');
+  const [fromAiring, setFromAiring] = useState(filters.from_airing || '');
+  const [toAiring, setToAiring] = useState(filters.to_airing || '');
+  const [selectedSeason, setSelectedSeason] = useState(filters.season || '');
+  const [selectedType, setSelectedType] = useState(filters.type || '');
+  const [selectedRating, setSelectedRating] = useState(filters.rating || '');
 
   const [genreStates, setGenreStates] = useState<Record<number, FilterStatus>>(() => {
     const initialGenres: Record<number, FilterStatus> = {};
-    parseArrayParam('genres_include').forEach(id => (initialGenres[Number(id)] = 'include'));
-    parseArrayParam('genres_exclude').forEach(id => (initialGenres[Number(id)] = 'exclude'));
+    parseFilterString(filters.genres_include).forEach(
+      id => (initialGenres[Number(id)] = 'include'),
+    );
+    parseFilterString(filters.genres_exclude).forEach(
+      id => (initialGenres[Number(id)] = 'exclude'),
+    );
     return initialGenres;
   });
 
   const [themeStates, setThemeStates] = useState<Record<number, FilterStatus>>(() => {
     const initialThemes: Record<number, FilterStatus> = {};
-    parseArrayParam('themes_include').forEach(id => (initialThemes[Number(id)] = 'include'));
-    parseArrayParam('themes_exclude').forEach(id => (initialThemes[Number(id)] = 'exclude'));
+    parseFilterString(filters.themes_include).forEach(
+      id => (initialThemes[Number(id)] = 'include'),
+    );
+    parseFilterString(filters.themes_exclude).forEach(
+      id => (initialThemes[Number(id)] = 'exclude'),
+    );
     return initialThemes;
   });
 
   const [triggerStates, setTriggerStates] = useState<Record<number, FilterStatus>>(() => {
     const initialTriggers: Record<number, FilterStatus> = {};
-    parseArrayParam('triggers_include').forEach(id => (initialTriggers[Number(id)] = 'include'));
-    parseArrayParam('triggers_exclude').forEach(id => (initialTriggers[Number(id)] = 'exclude'));
+    parseFilterString(filters.triggers_include).forEach(
+      id => (initialTriggers[Number(id)] = 'include'),
+    );
+    parseFilterString(filters.triggers_exclude).forEach(
+      id => (initialTriggers[Number(id)] = 'exclude'),
+    );
     return initialTriggers;
   });
 
   const [sortOption, setSortOption] = useState(() => {
-    const currentSort = getParam('sort', '');
-    const currentOrder = getParam('order', '');
+    const currentSort = filters.sort || '';
+    const currentOrder = filters.order || '';
     return currentSort && currentOrder ? `${currentSort}-${currentOrder}` : '';
   });
 
@@ -134,7 +141,7 @@ const SearchSection = ({
     }
   };
 
-  const handleApplyFilter = (e?: React.SubmitEvent) => {
+  const handleApplyFilter = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const [sortParam, orderParam] = sortOption ? sortOption.split('-') : [undefined, undefined];
 
@@ -147,6 +154,7 @@ const SearchSection = ({
       season: selectedSeason || undefined,
       type: selectedType || undefined,
       rating: selectedRating || undefined,
+      trigger_mode: triggerMode !== 'community' ? triggerMode : undefined,
     };
 
     const genresInclude = Object.keys(genreStates).filter(
@@ -190,6 +198,7 @@ const SearchSection = ({
     setSelectedSeason('');
     setSelectedType('');
     setSelectedRating('');
+    setTriggerMode('community');
 
     router.get('/browse', {}, { preserveState: true, preserveScroll: true });
   };
@@ -415,24 +424,53 @@ const SearchSection = ({
 
               {/* Content Guide Grid Block */}
               <div>
-                <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
-                  {/* Stacks label and disclaimer neatly on the left */}
-                  <div className="flex flex-col gap-0.5">
+                <div className="border-border/50 mb-3 flex flex-col gap-2 border-b pb-2.5">
+                  <div className="flex items-center justify-between gap-4">
                     <label className="text-text flex items-center gap-1.5 font-serif text-sm font-medium">
                       <LuTriangleAlert className="text-primary size-4" />
                       <span>Content Filter</span>
                     </label>
-                    <span className="text-text-muted text-[11px]">
-                      Filters are determined by community voting consensus.
-                    </span>
+
+                    <div className="bg-surface-alt border-border flex shrink-0 rounded-lg border p-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setTriggerMode('community')}
+                        className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition-all sm:px-3 sm:py-1.5 ${
+                          triggerMode === 'community'
+                            ? 'bg-surface text-text shadow-xs ring-1 ring-black/5 dark:ring-white/5'
+                            : 'text-text-muted hover:text-text'
+                        }`}
+                      >
+                        Community
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTriggerMode('ai')}
+                        className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition-all sm:px-3 sm:py-1.5 ${
+                          triggerMode === 'ai'
+                            ? 'bg-surface text-text shadow-xs ring-1 ring-black/5 dark:ring-white/5'
+                            : 'text-text-muted hover:text-text'
+                        }`}
+                      >
+                        AI
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Interactive instructions on the right */}
-                  <span className="text-text-muted text-[11px] sm:text-right">
-                    Click once to filter by warning (+), twice to completely exclude (-)
-                  </span>
+                  {/* Bottom Row: Informational Text stacks on mobile, splits out on desktop */}
+                  <div className="text-text-muted flex flex-col gap-1 text-[11px] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                    <span>
+                      Determined by{' '}
+                      {triggerMode === 'ai' ? 'AI, Accuracy may vary' : 'community voting consensus.'}
+                    </span>
+                    <span className="sm:text-right">
+                      Click once to filter (+), twice to exclude (-)
+                    </span>
+                  </div>
                 </div>
-                <div className="border-border bg-surface-alt/40 max-h-48 overflow-y-auto rounded-xl border p-3">
+
+                {/* Filter Items Container */}
+                <div className="border-border bg-surface-alt/40 mt-2 max-h-48 overflow-y-auto rounded-xl border p-3">
                   <div className="flex flex-wrap gap-2">
                     {triggerContents.map(trigger => {
                       const status = triggerStates[trigger.id];

@@ -86,31 +86,53 @@ class AnimeService
         }
 
         $flagString = 'No significant content found for this trigger.';
+        $triggerMode = $filter['trigger_mode'] ?? 'community';
 
-        // Triggers Include (Consensus Voting: True Votes > False Votes)
+        // Triggers Include
         if (! empty($filter['triggers_include'])) {
             $includeIds = is_array($filter['triggers_include']) ? $filter['triggers_include'] : explode(',', $filter['triggers_include']);
             foreach ($includeIds as $id) {
-                $query->whereIn('animes.id', function ($q) use ($id) {
-                    $q->select('anime_id')
-                        ->from('anime_triggers')
-                        ->where('trigger_content_id', $id)
-                        ->groupBy('anime_id')
-                        ->havingRaw('SUM(CASE WHEN is_appear = 1 THEN 1 ELSE -1 END) > 0');
-                });
+                if ($triggerMode === 'ai') {
+                    $query->whereIn('animes.id', function ($q) use ($id, $flagString) {
+                        $q->select('anime_id')
+                            ->from('anime_trigger_contexts')
+                            ->where('trigger_content_id', $id)
+                            ->whereNotNull('ai_summary')
+                            ->where('ai_summary', '!=', $flagString);
+                    });
+                } else {
+                    $query->whereIn('animes.id', function ($q) use ($id) {
+                        $q->select('anime_id')
+                            ->from('anime_triggers')
+                            ->where('trigger_content_id', $id)
+                            ->groupBy('anime_id')
+                            ->havingRaw('SUM(CASE WHEN is_appear = 1 THEN 1 ELSE -1 END) > 0');
+                    });
+                }
             }
         }
 
-        // Triggers Exclude (Consensus Voting: Exclude if True Votes > False Votes)
+        // Triggers Exclude
         if (! empty($filter['triggers_exclude'])) {
             $excludeIds = is_array($filter['triggers_exclude']) ? $filter['triggers_exclude'] : explode(',', $filter['triggers_exclude']);
-            $query->whereNotIn('animes.id', function ($q) use ($excludeIds) {
-                $q->select('anime_id')
-                    ->from('anime_triggers')
-                    ->whereIn('trigger_content_id', $excludeIds)
-                    ->groupBy('anime_id', 'trigger_content_id')
-                    ->havingRaw('SUM(CASE WHEN is_appear = 1 THEN 1 ELSE -1 END) > 0');
-            });
+
+            if ($triggerMode === 'ai') {
+                $query->whereNotIn('animes.id', function ($q) use ($excludeIds, $flagString) {
+                    $q->select('anime_id')
+                        ->from('anime_trigger_contexts')
+                        ->whereIn('trigger_content_id', $excludeIds)
+                        ->whereNotNull('ai_summary')
+                        ->where('ai_summary', '!=', $flagString);
+                });
+            } else {
+                $query->whereNotIn('animes.id', function ($q) use ($excludeIds) {
+                    $q->select('anime_id')
+                        ->from('anime_triggers')
+                        ->whereIn('trigger_content_id', $excludeIds)
+                        ->groupBy('anime_id', 'trigger_content_id')
+                        ->havingRaw('SUM(CASE WHEN is_appear = 1 THEN 1 ELSE -1 END) > 0');
+                });
+            }
         }
 
         if (! empty($filter['genres_include'])) {

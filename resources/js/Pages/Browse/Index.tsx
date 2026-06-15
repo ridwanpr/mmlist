@@ -27,6 +27,7 @@ interface BrowseProps {
     themes_exclude: string;
     triggers_include: string;
     triggers_exclude: string;
+    trigger_mode: string;
   };
 }
 
