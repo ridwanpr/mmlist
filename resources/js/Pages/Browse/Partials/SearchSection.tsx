@@ -461,7 +461,7 @@ const SearchSection = ({
                   <div className="text-text-muted flex flex-col gap-1 text-[11px] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                     <span>
                       Determined by{' '}
-                      {triggerMode === 'ai' ? 'AI, Accuracy may vary' : 'community voting consensus.'}
+                      {triggerMode === 'ai' ? 'AI, accuracy may vary' : 'community voting consensus.'}
                     </span>
                     <span className="sm:text-right">
                       Click once to filter (+), twice to exclude (-)
