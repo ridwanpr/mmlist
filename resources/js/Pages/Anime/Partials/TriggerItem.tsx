@@ -1,6 +1,6 @@
 import { Link, useForm, usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { HiMiniSparkles } from 'react-icons/hi2';
+import { HiMiniSparkles className="text-sm" } from 'react-icons/hi2';
 import { LuCheck, LuChevronDown, LuX } from 'react-icons/lu';
 import VoteGroup from './VoteGroup';
 import AuthGate from './AuthGate';
@@ -128,7 +128,7 @@ const TriggerItem = ({
               </div>
             </div>
 
-            {/* Column 3: Balanced UI Placeholder or Severity List */}
+            {/* Column 3: Severity Breakdown or Consensus Statement */}
             <div className="hidden items-center sm:col-span-4 sm:flex md:col-span-4 lg:col-span-4">
               {isAppearingMajority ? (
                 <div className="flex w-full justify-between gap-2">
@@ -152,11 +152,13 @@ const TriggerItem = ({
                   </span>
                 </div>
               ) : totalVotes > 0 ? (
-                <span className="border-border bg-surface-alt text-text-muted rounded border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                <span className="border-success/20 bg-success/10 text-success rounded border px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase">
                   Not Present
                 </span>
               ) : (
-                <span className="text-text-muted text-xs italic">No community reports yet</span>
+                <span className="text-text-muted text-xs italic">
+                  No community reports yet
+                </span>
               )}
             </div>
 
@@ -165,10 +167,12 @@ const TriggerItem = ({
               {/* Mobile Fallback */}
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
                 <span className="text-success flex shrink-0 items-center gap-0.5">
-                  <LuCheck className="text-xs" /> <span className="tabular-nums">{appearTrue}</span>
+                  <LuCheck className="text-xs" />{' '}
+                  <span className="tabular-nums">{appearTrue}</span>
                 </span>
                 <span className="text-accent-red flex shrink-0 items-center gap-0.5">
-                  <LuX className="text-xs" /> <span className="tabular-nums">{appearFalse}</span>
+                  <LuX className="text-xs" />{' '}
+                  <span className="tabular-nums">{appearFalse}</span>
                 </span>
 
                 <div className="border-border flex min-w-0 flex-wrap border-l pl-2.5 text-[10px]">
@@ -194,9 +198,7 @@ const TriggerItem = ({
                       </span>
                     </div>
                   ) : totalVotes > 0 ? (
-                    <span className="text-text-muted text-[9px] font-medium uppercase">
-                      Not Present
-                    </span>
+                    <span className="text-success font-semibold text-[9px] tracking-wide uppercase">Not Present</span>
                   ) : (
                     <span className="text-text-muted italic">No reports</span>
                   )}
@@ -303,11 +305,15 @@ const TriggerItem = ({
                 </>
               ) : (
                 <div className="flex items-center py-1">
-                  <span className="border-border bg-surface-alt text-text-muted rounded border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
-                    {totalVotes > 0
-                      ? 'NOT PRESENT'
-                      : 'No community reports yet'}
-                  </span>
+                  {totalVotes > 0 ? (
+                    <span className="border-success/20 bg-success/10 text-success rounded border px-2.5 py-0.5 text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1">
+                      Consensus: Not Present
+                    </span>
+                  ) : (
+                    <span className="text-text-muted text-xs italic">
+                      No community reports registered yet.
+                    </span>
+                  )}
                 </div>
               )}
             </div>
