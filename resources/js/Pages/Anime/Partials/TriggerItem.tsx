@@ -33,15 +33,11 @@ const TriggerItem = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const findUserTriggerVote = userTriggerVote?.find(userVote => {
-    if (userVote.user_id === auth.user?.id && userVote.trigger_content_id === triggerContent.id) {
-      return true;
-    }
+    return userVote.user_id === auth.user?.id && userVote.trigger_content_id === triggerContent.id;
   });
 
   const findAITriggerContext = aiTriggerContext?.find(triggerContext => {
-    if (triggerContext.trigger_content_id === triggerContent.id) {
-      return true;
-    }
+    return triggerContext.trigger_content_id === triggerContent.id;
   });
 
   let mapAppearsValue;
@@ -69,6 +65,11 @@ const TriggerItem = ({
   const isLoggedIn = auth.user !== null;
   const toggleTrigger = () => setIsOpen(prev => !prev);
 
+  const appearTrue = triggerContent.stats?.appear_true ?? 0;
+  const appearFalse = triggerContent.stats?.appear_false ?? 0;
+  const totalVotes = appearTrue + appearFalse;
+  const isAppearingMajority = appearTrue > appearFalse;
+
   return (
     <li
       className={`w-full max-w-full min-w-0 overflow-hidden rounded-lg border ${
@@ -79,7 +80,6 @@ const TriggerItem = ({
           : 'border-border bg-surface border-l-transparent'
       }`}
     >
-      {/* Clickable Header Area */}
       <button
         type="button"
         onClick={toggleTrigger}
@@ -90,9 +90,8 @@ const TriggerItem = ({
         }`}
       >
         {isCompact ? (
-          /* ================= COMPACT VIEW LAYOUT ================= */
           <>
-            {/* Column 1: Core Content Label */}
+            {/* Column 1: Core Label */}
             <div className="flex w-full min-w-0 items-center justify-between gap-4 sm:col-span-4 sm:w-auto md:col-span-4 lg:col-span-5">
               <span className="text-text min-w-0 flex-1 truncate text-sm font-semibold">
                 {triggerContent.name}
@@ -112,7 +111,7 @@ const TriggerItem = ({
               </Link>
             </div>
 
-            {/* Column 2: Total Community Voting Metrics */}
+            {/* Column 2: Voting Metrics */}
             <div className="hidden items-center gap-4 sm:col-span-3 sm:flex md:col-span-3 lg:col-span-2">
               <span className="text-text-muted shrink-0 text-[10px] font-bold tracking-wider uppercase">
                 Appears?
@@ -120,69 +119,87 @@ const TriggerItem = ({
               <div className="flex items-center gap-3">
                 <span className="text-success flex items-center gap-1 font-semibold">
                   <LuCheck />
-                  <span className="tabular-nums">{triggerContent.stats?.appear_true}</span>
+                  <span className="tabular-nums">{appearTrue}</span>
                 </span>
                 <span className="text-accent-red flex items-center gap-1 font-semibold">
                   <LuX />
-                  <span className="tabular-nums">{triggerContent.stats?.appear_false}</span>
+                  <span className="tabular-nums">{appearFalse}</span>
                 </span>
               </div>
             </div>
 
-            {/* Column 3: Full, Unabbreviated Severity Breakdown */}
-            <div className="hidden items-center justify-between gap-2 sm:col-span-4 sm:flex md:col-span-4 lg:col-span-4">
-              <span className="text-severity-mild text-xs font-medium">
-                Mild{' '}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.severity.Mild}
-                </strong>
-              </span>
-              <span className="text-severity-moderate text-xs font-medium">
-                Moderate{' '}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.severity.Moderate}
-                </strong>
-              </span>
-              <span className="text-severity-high text-xs font-medium">
-                Severe{' '}
-                <strong className="text-text font-semibold tabular-nums">
-                  {triggerContent.stats?.severity.Severe}
-                </strong>
-              </span>
-            </div>
-
-            {/* Column 4: Status Badges & Layout Controls */}
-            <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:col-span-1 sm:justify-end">
-              {/* Mobile Fallback: Fully Spelled Out Wrapped Rows */}
-              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
-                <span className="text-success flex shrink-0 items-center gap-0.5">
-                  <LuCheck className="text-xs" />{' '}
-                  <span className="tabular-nums">{triggerContent.stats?.appear_true}</span>
-                </span>
-                <span className="text-accent-red flex shrink-0 items-center gap-0.5">
-                  <LuX className="text-xs" />{' '}
-                  <span className="tabular-nums">{triggerContent.stats?.appear_false}</span>
-                </span>
-
-                <div className="border-border flex min-w-0 flex-wrap gap-x-2 gap-y-1 border-l pl-2.5 text-[10px]">
-                  <span className="text-severity-mild shrink-0">
-                    Mild:{' '}
+            {/* Column 3: Balanced UI Placeholder or Severity List */}
+            <div className="hidden items-center sm:col-span-4 sm:flex md:col-span-4 lg:col-span-4">
+              {isAppearingMajority ? (
+                <div className="flex w-full justify-between gap-2">
+                  <span className="text-severity-mild text-xs font-medium">
+                    Mild{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Mild}
                     </strong>
                   </span>
-                  <span className="text-severity-moderate shrink-0">
-                    Moderate:{' '}
+                  <span className="text-severity-moderate text-xs font-medium">
+                    Moderate{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Moderate}
                     </strong>
                   </span>
-                  <span className="text-severity-high shrink-0">
-                    Severe:{' '}
+                  <span className="text-severity-high text-xs font-medium">
+                    Severe{' '}
                     <strong className="text-text font-semibold tabular-nums">
                       {triggerContent.stats?.severity.Severe}
                     </strong>
                   </span>
+                </div>
+              ) : totalVotes > 0 ? (
+                <span className="border-border bg-surface-alt text-text-muted rounded border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                  Not Present
+                </span>
+              ) : (
+                <span className="text-text-muted text-xs italic">No community reports yet</span>
+              )}
+            </div>
+
+            {/* Column 4: Status Badges & Controls */}
+            <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:col-span-1 sm:justify-end">
+              {/* Mobile Fallback */}
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-medium sm:hidden">
+                <span className="text-success flex shrink-0 items-center gap-0.5">
+                  <LuCheck className="text-xs" /> <span className="tabular-nums">{appearTrue}</span>
+                </span>
+                <span className="text-accent-red flex shrink-0 items-center gap-0.5">
+                  <LuX className="text-xs" /> <span className="tabular-nums">{appearFalse}</span>
+                </span>
+
+                <div className="border-border flex min-w-0 flex-wrap border-l pl-2.5 text-[10px]">
+                  {isAppearingMajority ? (
+                    <div className="flex flex-wrap gap-x-2 gap-y-1">
+                      <span className="text-severity-mild shrink-0">
+                        Mild:{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Mild}
+                        </strong>
+                      </span>
+                      <span className="text-severity-moderate shrink-0">
+                        Moderate:{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Moderate}
+                        </strong>
+                      </span>
+                      <span className="text-severity-high shrink-0">
+                        Severe:{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Severe}
+                        </strong>
+                      </span>
+                    </div>
+                  ) : totalVotes > 0 ? (
+                    <span className="text-text-muted text-[9px] font-medium uppercase">
+                      Not Present
+                    </span>
+                  ) : (
+                    <span className="text-text-muted italic">No reports</span>
+                  )}
                 </div>
               </div>
 
@@ -223,64 +240,76 @@ const TriggerItem = ({
               </Link>
             </div>
 
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
-                <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
-                  Severity
-                </span>
-                <div className="flex flex-wrap gap-x-3 gap-y-1">
-                  <span className="text-severity-mild text-xs">
-                    Mild{' '}
-                    <strong className="font-semibold tabular-nums">
-                      {triggerContent.stats?.severity.Mild}
-                    </strong>
-                  </span>
-                  <span className="text-severity-moderate text-xs">
-                    Moderate{' '}
-                    <strong className="font-semibold tabular-nums">
-                      {triggerContent.stats?.severity.Moderate}
-                    </strong>
-                  </span>
-                  <span className="text-severity-high text-xs">
-                    Severe{' '}
-                    <strong className="font-semibold tabular-nums">
-                      {triggerContent.stats?.severity.Severe}
-                    </strong>
-                  </span>
-                </div>
-              </div>
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
+              {isAppearingMajority ? (
+                <>
+                  <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
+                    <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
+                      Severity
+                    </span>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                      <span className="text-severity-mild text-xs">
+                        Mild{' '}
+                        <strong className="font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Mild}
+                        </strong>
+                      </span>
+                      <span className="text-severity-moderate text-xs">
+                        Moderate{' '}
+                        <strong className="font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Moderate}
+                        </strong>
+                      </span>
+                      <span className="text-severity-high text-xs">
+                        Severe{' '}
+                        <strong className="font-semibold tabular-nums">
+                          {triggerContent.stats?.severity.Severe}
+                        </strong>
+                      </span>
+                    </div>
+                  </div>
 
-              <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
-                <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
-                  Framing
-                </span>
-                <div className="flex flex-wrap gap-x-3 gap-y-1">
-                  <span className="text-text-muted text-xs">
-                    Serious{' '}
-                    <strong className="text-text font-semibold tabular-nums">
-                      {triggerContent.stats?.framing.Serious}
-                    </strong>
-                  </span>
-                  <span className="text-text-muted text-xs">
-                    Neutral{' '}
-                    <strong className="text-text font-semibold tabular-nums">
-                      {triggerContent.stats?.framing.Neutral}
-                    </strong>
-                  </span>
-                  <span className="text-text-muted text-xs">
-                    Romanticized{' '}
-                    <strong className="text-text font-semibold tabular-nums">
-                      {triggerContent.stats?.framing.Romanticized}
-                    </strong>
-                  </span>
-                  <span className="text-text-muted text-xs">
-                    Comedic{' '}
-                    <strong className="text-text font-semibold tabular-nums">
-                      {triggerContent.stats?.framing.Comedic}
-                    </strong>
+                  <div className="xs:flex-row xs:items-baseline xs:gap-3 flex flex-col gap-1">
+                    <span className="text-text-muted w-14 shrink-0 text-[10px] font-medium tracking-widest uppercase">
+                      Framing
+                    </span>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                      <span className="text-text-muted text-xs">
+                        Serious{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.framing.Serious}
+                        </strong>
+                      </span>
+                      <span className="text-text-muted text-xs">
+                        Neutral{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.framing.Neutral}
+                        </strong>
+                      </span>
+                      <span className="text-text-muted text-xs">
+                        Romanticized{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.framing.Romanticized}
+                        </strong>
+                      </span>
+                      <span className="text-text-muted text-xs">
+                        Comedic{' '}
+                        <strong className="text-text font-semibold tabular-nums">
+                          {triggerContent.stats?.framing.Comedic}
+                        </strong>
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center py-1">
+                  <span className="border-border bg-surface-alt text-text-muted rounded border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                    {totalVotes > 0
+                      ? 'Community consensus specifies this content is absent.'
+                      : 'No community reports registered yet.'}
                   </span>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="flex w-full items-center justify-between sm:w-auto sm:shrink-0 sm:justify-normal sm:gap-4">
@@ -291,13 +320,13 @@ const TriggerItem = ({
                 <div className="flex gap-3">
                   <div className="flex w-10 flex-col items-center gap-0.5">
                     <strong className="text-success font-semibold tabular-nums">
-                      {triggerContent.stats?.appear_true}
+                      {appearTrue}
                     </strong>
                     <LuCheck className="text-success" />
                   </div>
                   <div className="flex w-10 flex-col items-center gap-0.5">
                     <strong className="text-accent-red font-semibold tabular-nums">
-                      {triggerContent.stats?.appear_false}
+                      {appearFalse}
                     </strong>
                     <LuX className="text-accent-red" />
                   </div>
@@ -325,7 +354,7 @@ const TriggerItem = ({
       {/* Expanded Actions Panel */}
       {isOpen && (
         <div className="border-border divide-border grid w-full max-w-full min-w-0 grid-cols-1 divide-y border-t md:grid-cols-[1fr_2fr] md:divide-x md:divide-y-0">
-          {/* AI Automated Context */}
+          {/* AI Context */}
           <div className="bg-primary-soft/40 flex w-full min-w-0 flex-col gap-2 p-4">
             <p className="text-primary-dark flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase">
               <HiMiniSparkles className="text-sm" />
