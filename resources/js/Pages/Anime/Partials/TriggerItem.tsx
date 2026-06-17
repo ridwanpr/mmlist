@@ -1,6 +1,6 @@
 import { Link, useForm, usePage } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { HiMiniSparkles className="text-sm" } from 'react-icons/hi2';
+import { HiMiniSparkles } from 'react-icons/hi2';
 import { LuCheck, LuChevronDown, LuX } from 'react-icons/lu';
 import VoteGroup from './VoteGroup';
 import AuthGate from './AuthGate';
