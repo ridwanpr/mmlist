@@ -305,8 +305,8 @@ const TriggerItem = ({
                 <div className="flex items-center py-1">
                   <span className="border-border bg-surface-alt text-text-muted rounded border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
                     {totalVotes > 0
-                      ? 'Community consensus specifies this content is absent.'
-                      : 'No community reports registered yet.'}
+                      ? 'NOT PRESENT'
+                      : 'No community reports yet'}
                   </span>
                 </div>
               )}
