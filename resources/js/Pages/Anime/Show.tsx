@@ -103,7 +103,7 @@ const ShowAnime = ({
   }
 
   const shortTitle = animeTitle.length > 60 ? `${animeTitle.slice(0, 60)}...` : animeTitle;
-  const metaDescription = `View community-voted content guide, severity ratings, and framing metrics for ${shortTitle} on Mamorulist.`;
+  const metaDescription = `View community content guide, trigger warnings, and content advisory for ${shortTitle} on Mamorulist.`;
 
   return (
     <>
