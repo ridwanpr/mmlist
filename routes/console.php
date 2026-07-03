@@ -14,7 +14,7 @@ Artisan::command('inspire', function () {
 
 Schedule::job(new FetchAiringAnime)->weekly();
 Schedule::job(new ExtractAiredData)->cron('* * */2 * *');
-Schedule::job(new SyncAnimeRelation)->weekly();
+// Schedule::job(new SyncAnimeRelation)->weekly();
 
 Schedule::job((new GenerateGeminiAdvisory)->onQueue('gemini'))
     ->cron('* * */2 * *')
