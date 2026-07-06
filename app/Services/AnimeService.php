@@ -61,11 +61,11 @@ class AnimeService
         }
 
         $query->when(array_key_exists('airing', $filter) && ! is_null($filter['airing']), function ($q) use ($filter) {
-            $q->where('animes.airing', (bool) $filter['airing'])->where('animes.year', 2026);
+            $q->where('animes.airing', (bool) $filter['airing']);
         });
 
         $query->when(array_key_exists('upcoming', $filter) && ! is_null($filter['upcoming']), function ($q) {
-            $q->where('animes.year', '>', 2026);
+            $q->where('animes.year', '>', now()->year);
         });
 
         if (! empty($filter['from_airing'])) {

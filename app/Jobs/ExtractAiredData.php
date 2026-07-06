@@ -37,7 +37,7 @@ class ExtractAiredData implements ShouldQueue
             if ($from) {
                 $updateData['season'] = $this->deriveSeason($from);
                 $updateData['year'] = $from->year;
-                $updateData['airing'] = $this->deriveAiring($anime->status, $from, $to);
+                // $updateData['airing'] = $this->deriveAiring($anime->status, $from, $to);
             }
 
             $anime->update($updateData);

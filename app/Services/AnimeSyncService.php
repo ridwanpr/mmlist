@@ -82,16 +82,36 @@ class AnimeSyncService
     /**
      * @param  array<int, int>  $activeMalIds
      */
-    public function cleanupStaleAiringAnime(array $activeMalIds): void
-    {
-        if (empty($activeMalIds)) {
-            return;
-        }
+     public function cleanupStaleAiringAnime(array $activeMalIds): void
+     {
+         if (empty($activeMalIds)) {
+             return;
+         }
 
-        Anime::where('airing', true)
-            ->whereNotIn('mal_id', $activeMalIds)
-            ->update(['airing' => false]);
-    }
+         // Find anime we think are airing, but are missing from the current seasonal payload
+         $droppedAnime = Anime::where('airing', true)
+             ->whereNotIn('mal_id', $activeMalIds)
+             ->get();
+
+         foreach ($droppedAnime as $anime) {
+             // Respect Jikan rate limits (max 60 req/min)
+             sleep(2);
+
+             $response = Http::get(config('app.jikan_url') . "/anime/{$anime->mal_id}");
+
+             if ($response->successful()) {
+                 $apiData = $response->json();
+                 $isActuallyAiring = $apiData['data']['airing'] ?? false;
+
+                 if (! $isActuallyAiring) {
+                     $anime->update(['airing' => false]);
+                     Log::info("Verified and marked {$anime->title} (MAL: {$anime->mal_id}) as no longer airing.");
+                 }
+             } else {
+                 Log::warning("Failed to verify airing status for MAL ID {$anime->mal_id} during cleanup.");
+             }
+         }
+     }
 
     /**
      * @param  array<int, AnimeData>  $animeApiData
