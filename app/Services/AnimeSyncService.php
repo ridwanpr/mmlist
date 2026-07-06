@@ -90,7 +90,7 @@ class AnimeSyncService
 
          // Find anime we think are airing, but are missing from the current seasonal payload
          $droppedAnime = Anime::where('airing', true)
-             ->whereNotIn('mal_id', $activeMalIds)
+            //  ->whereNotIn('mal_id', $activeMalIds)
              ->get();
 
          foreach ($droppedAnime as $anime) {
