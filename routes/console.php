@@ -27,3 +27,11 @@ Artisan::command('extract:fromto', function () {
 
     $this->info('Job dispatched! Make sure your queue worker is running.');
 })->purpose('Extract aired JSON data to dedicated columns');
+
+Artisan::command('fetch:airing', function () {
+    $this->info('Dispatching extraction job to the queue...');
+
+    FetchAiringAnime::dispatch();
+
+    $this->info('Job dispatched! Make sure your queue worker is running.');
+})->purpose('Fetch airing anime dispatched');
