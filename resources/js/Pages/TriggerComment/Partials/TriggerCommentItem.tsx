@@ -1,5 +1,4 @@
 import { LuHeart, LuPencil, LuReply, LuTrash2 } from 'react-icons/lu';
-import TimeAgo from '../../../Components/TimeAgo';
 import QuoteBlock from '../../../Components/QuoteBlock';
 
 type TriggerCommentItemProps = {
@@ -51,10 +50,6 @@ const TriggerCommentItem = ({
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline gap-2">
               <span className="text-primary text-sm font-semibold">{comment.user?.name ?? ''}</span>
-
-              <span className="text-text-muted text-xs">
-                <TimeAgo dateString={comment.createdAt} />
-              </span>
             </div>
 
             {comment.parent && (

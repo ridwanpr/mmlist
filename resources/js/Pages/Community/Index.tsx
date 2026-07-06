@@ -62,9 +62,6 @@ const DiscussionList = ({ paginatedComments }: DiscussionListProps) => {
                         <span className="text-text truncate font-serif text-xs font-bold md:text-sm">
                           {comment.user?.name || ''}
                         </span>
-                        <span className="text-text-muted shrink-0 text-[10px]">
-                          <TimeAgo dateString={comment.createdAt} />
-                        </span>
                       </div>
 
                       {/* Breadcrumb Navigation Line */}

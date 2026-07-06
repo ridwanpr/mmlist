@@ -12,7 +12,6 @@ import QuoteBlock from '../../../Components/QuoteBlock';
 import FormComment from './FormComment';
 import Sorting from '../../../Components/Sorting';
 import ReplyFormModal from './ReplyFormModal';
-import TimeAgo from '../../../Components/TimeAgo';
 import EditFormModal from './EditFormModal';
 
 type DiscussionProps = {
@@ -186,10 +185,6 @@ const Discussion = ({ anime, paginatedComment, sortBy }: DiscussionProps) => {
                 <div className="flex items-baseline gap-2">
                   <span className="text-primary text-sm font-semibold">
                     {comment.user?.name ?? ''}
-                  </span>
-
-                  <span className="text-text-muted text-xs">
-                    <TimeAgo dateString={comment.createdAt} />
                   </span>
                 </div>
 

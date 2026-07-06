@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import TimeAgo from '../../../Components/TimeAgo';
 import { getAnimeComment } from '../../../actions/App/Http/Controllers/CommentController';
 import { getTriggerComment } from '../../../actions/App/Http/Controllers/TriggerCommentController';
 import QuoteBlock from '../../../Components/QuoteBlock';
@@ -43,9 +42,6 @@ const RecentComment = ({ latestComments }: RecentCommentProps) => {
                     <div className="flex items-baseline justify-between gap-2">
                       <span className="text-text truncate font-serif text-xs font-bold md:text-sm">
                         {comment.user?.name || ''}
-                      </span>
-                      <span className="text-text-muted shrink-0 text-[10px]">
-                        <TimeAgo dateString={comment.createdAt} />
                       </span>
                     </div>
 

@@ -73,9 +73,6 @@ const Comment = ({ anime, topComments, countComments }: CommentProps) => {
             >
               <div className="mb-1 flex items-baseline gap-2">
                 <span className="text-text text-sm font-bold">{comment.user?.name}</span>
-                <span className="text-text-muted text-[11px]">
-                  <TimeAgo dateString={comment.createdAt} />
-                </span>
                 <span className="text-text-muted ml-auto flex items-center gap-1 text-[11px]">
                   <LuHeart className="size-4" />
                   {comment.upvotes - comment.downvotes}

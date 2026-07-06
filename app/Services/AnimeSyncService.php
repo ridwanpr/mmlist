@@ -102,9 +102,10 @@ class AnimeSyncService
              if ($response->successful()) {
                  $apiData = $response->json();
                  $isActuallyAiring = $apiData['data']['airing'] ?? false;
+                 $status = $apiData['data']['status'];
 
                  if (! $isActuallyAiring) {
-                     $anime->update(['airing' => false]);
+                     $anime->update(['airing' => false, 'status' => $status]);
                      Log::info("Verified and marked {$anime->title} (MAL: {$anime->mal_id}) as no longer airing.");
                  }
              } else {
